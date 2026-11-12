@@ -1,0 +1,5 @@
+# Large evidence videos are never stored.
+validation/evidence/**/*.mp4
+validation/evidence/**/*.mov
+__pycache__/
+*.pyc

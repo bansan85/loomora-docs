@@ -1,0 +1,65 @@
+[
+  {
+    "id": "S1",
+    "question": "Does a MinGW-w64 C++11 static library, linked into a MinGW-w64 Win32 executable, run on Windows 2000 SP4?",
+    "status": "open",
+    "result": "",
+    "adr": ""
+  },
+  {
+    "id": "S2",
+    "question": "Does modern Clang + osxcross + the 10.6 SDK run on 10.6; does Xcode 5.1.1 build and deploy to iOS 5?",
+    "status": "open",
+    "result": "",
+    "adr": ""
+  },
+  {
+    "id": "S3",
+    "question": "Does NDK r16b + the scripted APK build run on an Android 2.3 emulator (all four ABIs)?",
+    "status": "open",
+    "result": "",
+    "adr": ""
+  },
+  {
+    "id": "S4",
+    "question": "Does the manylinux2010 build need only glibc <= 2.12 and run on a 2010-era distribution?",
+    "status": "open",
+    "result": "",
+    "adr": ""
+  },
+  {
+    "id": "S5",
+    "question": "Does the JavaScript build run on IE 9 / Firefox 8 / Chrome 15 / Safari 5.1 / Opera 11.5; modern Emscripten or fastcomp 1.39.20?",
+    "status": "open",
+    "result": "",
+    "adr": ""
+  },
+  {
+    "id": "S6",
+    "question": "Does the backend compile with strict C++11 under GCC and Clang and export only C symbols, with every exception caught at the C boundary?",
+    "status": "open",
+    "result": "",
+    "adr": ""
+  },
+  {
+    "id": "S7",
+    "question": "Can the 10.6 SDK and Xcode 5.1.1 be obtained legitimately?",
+    "status": "open",
+    "result": "",
+    "adr": ""
+  },
+  {
+    "id": "S8",
+    "question": "Can WinUI 3 call a C++11 loomora.dll, and does Compose accept minSdk 21?",
+    "status": "open",
+    "result": "",
+    "adr": ""
+  },
+  {
+    "id": "S9",
+    "question": "Do Windows 7 -> 11 accept the Windows 2000-targeted Win32 executable (all versions)?",
+    "status": "open",
+    "result": "",
+    "adr": ""
+  }
+]
