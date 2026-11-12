@@ -37,8 +37,8 @@
   {
     "id": "S6",
     "question": "Does the backend compile with strict C++11 under GCC and Clang and export only C symbols, with every exception caught at the C boundary?",
-    "status": "open",
-    "result": "",
+    "status": "confirmed",
+    "result": "Confirmed on Linux (WSL Ubuntu 24.04, libstdc++): tools/check_std.py passes with g++ 13.3.0 and clang++ 23.1.5. Checked for each: all 6 core/src/*.cpp compile with -std=c++11 -pedantic-errors -Wall -Wextra -Werror; loomora.h compiles as C89 (-std=c89 -pedantic-errors, gcc 13.3.0 / clang 23.1.5) and as C++98; a shared library built with -fvisibility=hidden exports exactly the 6 loomora_* C functions (nm -D --defined-only), with the C++ runtime linked dynamically and statically (-static-libstdc++ -static-libgcc); core/tests/boundary_check.cpp makes every allocation of every loomora_* call fail in turn (28 failures injected with GCC, 30 with Clang) and no exception escapes. Finding: -fvisibility=hidden alone is NOT enough, libstdc++ marks namespace std as default visibility and std template instantiations leaked into the exports (4 with g++, 16 with clang++); fixed with a link-time export list (core/loomora.map, core/loomora.exp for macOS) that CMake and check_std.py apply to the shared library. Not checked: strict C++11 with clang on Windows (clang 23.1.1 uses the MSVC STL, which needs C++14: the checker reports it as skipped; only the C89/C++98 header checks ran there), libc++, MSVC, Windows DLL exports (__declspec macros untested), macOS exports (loomora.exp untested), and the old compilers of the oldest platforms (S1-S4).",
     "adr": ""
   },
   {
