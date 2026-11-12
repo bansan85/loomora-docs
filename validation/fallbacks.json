@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": "builtin-expect",
+    "description": "Branch prediction hint __builtin_expect through LOOMORA_LIKELY / LOOMORA_UNLIKELY (used in core/src/c_api.cpp); the fallback is the plain condition, with identical behaviour.",
+    "macro": "LOOMORA_HAS_BUILTIN_EXPECT",
+    "min_compiler": "gcc 3.0, clang 1.0 (any compiler defining __GNUC__ or __clang__)",
+    "platform_ids": [],
+    "reason": "Compilers without __builtin_expect (MSVC, unknown compilers) take the fallback. platform_ids stays empty until the platform records exist (T059, T087) and the per-platform compiler is known (T115)."
+  },
+  {
+    "id": "cxx17-nodiscard",
+    "description": "[[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty attribute, so the discarded-result warning is lost but behaviour is identical.",
+    "macro": "LOOMORA_HAS_CXX17_NODISCARD",
+    "min_compiler": "C++17 mode (__cplusplus >= 201703L or _MSVC_LANG >= 201703L): gcc 7, clang 3.9, msvc 19.11 (VS 2017 15.3)",
+    "platform_ids": [],
+    "reason": "The backend is built as strict C++11 on every Legacy target (and as C++14 where MSVC or the CMake clang/MSVC STL combination imposes it), so those builds take the fallback; only a build in C++17 mode or later uses [[nodiscard]]. platform_ids stays empty until the platform records exist (T059, T087, T115)."
+  }
+]
