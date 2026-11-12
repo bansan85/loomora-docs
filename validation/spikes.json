@@ -3,7 +3,7 @@
     "id": "S1",
     "question": "Does a MinGW-w64 C++11 static library, linked into a MinGW-w64 Win32 executable, run on Windows 2000 SP4?",
     "status": "open",
-    "result": "",
+    "result": "Open, not run on Windows 2000. Build check (2026-11-12): MinGW-w64 GCC 13 (win32 thread model, msvcrt) in WSL Ubuntu-24.04 builds the i686 Win32 UI; its imports are GDI32, KERNEL32, MSVCRT, USER32. The function-level import list contains GetThreadId (Windows Vista / Server 2003 and later), pulled in by gthr-win32.o of libgcc 13: the executable is expected not to load on Windows 2000 and XP until this is fixed (older GCC / MinGW-w64, or a libgcc without that import). Fallback candidates are listed in research R6.",
     "adr": ""
   },
   {
