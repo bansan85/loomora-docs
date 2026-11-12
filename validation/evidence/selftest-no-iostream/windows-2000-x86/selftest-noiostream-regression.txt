@@ -1,0 +1,34 @@
+Regression runs of loomora_selftest after <iostream> was removed from core/tests/selftest.cpp and
+the GetThreadId shim of ADR 0002 was added to the 32-bit MinGW-w64 selftest (core/tests/CMakeLists.txt).
+Base commit cb84e40 plus the working-tree changes of this task. Host: Windows 11 Pro, 64-bit.
+
+1. Default host build (clang++, CMake + Ninja, build/, Debug), Windows 11 host
+   $ cmake --build build
+   $ ctest --test-dir build
+   1/2 Test #1: selftest ........ Passed
+   2/2 Test #2: loomora_tests ... Passed
+   100% tests passed out of 2
+
+2. loomora_selftest.exe, i686 (cmake/toolchains/mingw-w64-win2000-i686.cmake, MinGW-w64 GCC 13 win32),
+   run on the Windows 11 host (x86 program under WOW64)
+   sha256 638449ff8e1aeb77a2905d5f5403b2843dc9f766c2f5a138b3bc0574403cdb89 (the program run on the
+   Windows 2000 VM, see selftest-noiostream-vm-run.json)
+   output: all passed
+   exit code: 0
+
+3. loomora_selftest.exe, x86_64 (cmake/toolchains/mingw-w64-win-x86_64.cmake, MinGW-w64 GCC 13 win32),
+   built in WSL (under $HOME) and run on the Windows 11 host
+   sha256 67799b400e1c741788f5f977ea1f93054d7238061e9e49a91b99c3e0b922595e (629857 bytes for the
+   i686 one, 623159 for this one)
+   output: all passed
+   exit code: 0
+   tools/check_imports.py --arch x64: ok, 70 imports from 2 DLLs, all on the Windows XP x64 /
+   Server 2003 x64 allowlist (14 resting on entries marked 'verify', GetThreadId among them: the x64
+   build does not use the shim, which is only linked into 32-bit builds)
+
+4. Linux (WSL Ubuntu-24.04, gcc, CMake + Ninja, Release, Catch2 tests on)
+   $ cmake --build <dir> ; ctest --test-dir <dir>
+   100% tests passed, 0 tests failed out of 2 (selftest, loomora_tests)
+   loomora_selftest: all passed, exit code 0
+   $ python3 tools/check_std.py
+   Summary: 0 failure(s), 2 compiler(s) with a strict C++11 compile check, 0 skipped step(s)
