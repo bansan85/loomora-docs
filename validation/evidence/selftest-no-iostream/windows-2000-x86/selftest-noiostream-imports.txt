@@ -1,0 +1,19 @@
+tools/check_imports.py --arch x86 --list on the programs built by tools/guest/build_selftest.sh
+(the allowlist is tools/win2000_imports.json, Windows 2000 SP4)
+
+== loomora_selftest.exe (629857 bytes, sha256 638449ff8e1aeb77a2905d5f5403b2843dc9f766c2f5a138b3bc0574403cdb89)
+$ python3 tools/check_imports.py --arch x86 --list --objdump i686-w64-mingw32-objdump out/windows-legacy/guest/loomora_selftest.exe
+kernel32.dll (25): CloseHandle DeleteCriticalSection EnterCriticalSection FreeLibrary GetLastError GetModuleHandleA GetModuleHandleW GetProcAddress InitializeCriticalSection IsDBCSLeadByteEx LeaveCriticalSection LoadLibraryA LoadLibraryW MultiByteToWideChar SetLastError SetUnhandledExceptionFilter Sleep TlsAlloc TlsFree TlsGetValue TlsSetValue TryEnterCriticalSection VirtualProtect VirtualQuery WideCharToMultiByte
+msvcrt.dll (42): __getmainargs __initenv __mb_cur_max __p__commode __p__fmode __set_app_type __setusermatherr _amsg_exit _cexit _errno _initterm _iob _onexit _read abort atoi calloc exit fprintf fputc fputs free fwrite getenv localeconv malloc memchr memcmp memcpy memmove memset realloc setlocale signal strchr strcmp strerror strlen strncmp strtoul vfprintf wcslen
+ok: out/windows-legacy/guest/loomora_selftest.exe (x86): 67 imports from 2 DLLs, all on the Windows 2000 SP4 allowlist (0 to verify)
+exit status 0
+
+== loomora_selftest-noshim.exe (626464 bytes, sha256 2f1f22af7460908068e50b08e6de9b3291348078ddddfde11a954bc5f2c175b9)
+$ python3 tools/check_imports.py --arch x86 --list --objdump i686-w64-mingw32-objdump out/windows-legacy/guest/loomora_selftest-noshim.exe
+kernel32.dll (26): CloseHandle DeleteCriticalSection EnterCriticalSection FreeLibrary GetLastError GetModuleHandleA GetModuleHandleW GetProcAddress GetThreadId InitializeCriticalSection IsDBCSLeadByteEx LeaveCriticalSection LoadLibraryA LoadLibraryW MultiByteToWideChar SetLastError SetUnhandledExceptionFilter Sleep TlsAlloc TlsFree TlsGetValue TlsSetValue TryEnterCriticalSection VirtualProtect VirtualQuery WideCharToMultiByte
+msvcrt.dll (42): __getmainargs __initenv __mb_cur_max __p__commode __p__fmode __set_app_type __setusermatherr _amsg_exit _cexit _errno _initterm _iob _onexit _read abort atoi calloc exit fprintf fputc fputs free fwrite getenv localeconv malloc memchr memcmp memcpy memmove memset realloc setlocale signal strchr strcmp strerror strlen strncmp strtoul vfprintf wcslen
+FAIL kernel32.dll!GetThreadId is not on the Windows 2000 SP4 allowlist (tools/win2000_imports.json)
+To resolve: look the function up in the Microsoft documentation (Requirements, 'Minimum supported client'). If the system the executable is meant for already has it, add it to tools/win2000_imports.json with that value, a 'used_by' and a 'confidence' ('documented', or 'verify' when unsure). Otherwise it must not be imported: load it at run time with GetProcAddress, or satisfy the reference inside the executable as docs/adr/0002 does for GetThreadId, or change the library or toolchain that references it. Do not add it just to make the build pass.
+out/windows-legacy/guest/loomora_selftest-noshim.exe (x86): 1 import(s) outside the Windows 2000 SP4 allowlist
+exit status 1
+

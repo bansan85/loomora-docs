@@ -1,0 +1,59 @@
+{
+  "steps": [
+    {
+      "step": "after start",
+      "processes": 1,
+      "output": "PROCESSES 1\r\nPROCESS loomora.exe pid=1100 WorkingSetSize_KB=1068 PageFileUsage_B=241664",
+      "screenshot": {
+        "path": "validation/evidence/windows-2000-x86/window-1-initial.png",
+        "sha256": "8117f6192448f9e0232a05724ebef5f20f0503f2399a9240fafb1cbe74c1376e",
+        "bytes": 12604
+      }
+    },
+    {
+      "step": "Home then Shift+End (selection of the prefilled text)",
+      "screenshot": {
+        "path": "validation/evidence/windows-2000-x86/window-2-selected.png",
+        "sha256": "9f9e932c89607f9f569dd13f835244c7e8713831bd0315005ce5e618bc69c616",
+        "bytes": 12623
+      }
+    },
+    {
+      "step": "VBoxManage controlvm keyboardputstring Marie",
+      "screenshot": {
+        "path": "validation/evidence/windows-2000-x86/window-3-keyboardputstring.png",
+        "sha256": "4fd242098a2ce1c268c7eaacd62a0fab760bf4fae2274e24481c41a0ce0eceb3",
+        "bytes": 12630
+      }
+    },
+    {
+      "step": "Home, Shift+End, then M a r i e as physical keys",
+      "screenshot": {
+        "path": "validation/evidence/windows-2000-x86/window-4-typed-marie.png",
+        "sha256": "300eeb38c44e102737676c15f6203db70e957f1c69d6b4259ec06ff111fdd751",
+        "bytes": 12618
+      }
+    },
+    {
+      "step": "Alt+F4",
+      "processes": 0,
+      "output": "PROCESSES 0",
+      "screenshot": {
+        "path": "validation/evidence/windows-2000-x86/window-5-closed.png",
+        "sha256": "445e2d2c79bc742645fceb65a14988563d849fafe03e466f37934db3ff48ff73",
+        "bytes": 12796
+      }
+    }
+  ],
+  "processes_before": {
+    "count": 0,
+    "output": "PROCESSES 0"
+  },
+  "start": {
+    "pid": 1100,
+    "command": "loomora.exe (no arguments, no --probe)"
+  },
+  "guest_keyboard_layout_preload1": "0000040c",
+  "typed_with": "scancodes of the physical keys that type M a r i e on a French (AZERTY) layout",
+  "processes_after": 0
+}

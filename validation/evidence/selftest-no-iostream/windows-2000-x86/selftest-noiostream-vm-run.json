@@ -1,0 +1,40 @@
+{
+  "system": "Windows 2000 build 2195, no service pack, VirtualBox VM (see vm-environment.json)",
+  "guest_product": "Windows 2000",
+  "guest_service_pack": "",
+  "method": "bat in a new guest folder; errorlevel and stdout come back through VBoxManage guestcontrol run (launcher machinery of tools/run_vectors.py)",
+  "programs": {
+    "loomora_selftest.exe": {
+      "bytes": 629857,
+      "sha256": "638449ff8e1aeb77a2905d5f5403b2843dc9f766c2f5a138b3bc0574403cdb89",
+      "output": [
+        "all passed"
+      ],
+      "exit_code": 0
+    },
+    "loomora_selftest-noshim.exe": {
+      "bytes": 626464,
+      "sha256": "2f1f22af7460908068e50b08e6de9b3291348078ddddfde11a954bc5f2c175b9",
+      "exit_code": 128
+    }
+  },
+  "system_dll_sha256": {
+    "kernel32.dll": "0cefaba4a3274bc77550cfb65d43318a502a4881687d8e3960e10391934bd382",
+    "user32.dll": "58a0b89ceaa02b100b8d2366c3f99db999415ff43c610da10b5c18311c4fcca5",
+    "gdi32.dll": "c82bf3ca428b7858d554b59b2538e6f20d3e532cf6500898e2568764799f9319",
+    "advapi32.dll": "b218311886490d4c7ce8a9bb6c218d5ad05ae943ae669ae901864cf1e3dca029",
+    "ntdll.dll": "8e01fe098b2de7913fb3d61226354e52f48bef9b2413514fd17b197c50a4184b",
+    "psapi.dll": "5b11285908e93e3a7cae4ebe4189870003f0cc7b044dfe0f97e5976649a155f4",
+    "msvcrt.dll": "d7cea69a98579d928e534070f5293e80ed7df38baf611b20717ef55aa1344a18"
+  },
+  "vm_state_before": {
+    "VMState": "running",
+    "VMStateChangeTime": "2026-11-12T22:24:39.814000000"
+  },
+  "vm_state_after": {
+    "VMState": "running",
+    "VMStateChangeTime": "2026-11-12T22:24:39.814000000"
+  },
+  "guest_folder_removed": true,
+  "cleanup_bat_removed": true
+}

@@ -1,0 +1,36 @@
+{
+  "input": "Zoé Hélène çà 日本語 שלום 😀",
+  "input_code_points": [
+    "0x5a",
+    "0x6f",
+    "0xe9",
+    "0x20",
+    "0x48",
+    "0xe9",
+    "0x6c",
+    "0xe8",
+    "0x6e",
+    "0x65",
+    "0x20",
+    "0xe7",
+    "0xe0",
+    "0x20",
+    "0x65e5",
+    "0x672c",
+    "0x8a9e",
+    "0x20",
+    "0x5e9",
+    "0x5dc",
+    "0x5d5",
+    "0x5dd",
+    "0x20",
+    "0x1f600"
+  ],
+  "pid": 952,
+  "screenshot": {
+    "path": "validation/evidence/windows-2000-x86/window-6-nonascii-probe.png",
+    "sha256": "37b8cf39e3a97dca75acf2ecfe5cc8f78ca60797678edc600edd34208b2e4dfe",
+    "bytes": 16554
+  },
+  "processes_after": 0
+}

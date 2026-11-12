@@ -1,0 +1,5 @@
+--- loomora_selftest.exe
+all passed
+exitcode=0
+--- loomora_selftest-noshim.exe
+exitcode=128

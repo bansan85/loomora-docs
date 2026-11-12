@@ -1,0 +1,1 @@
+{"schema":1,"platform_id":"windows-2000-x86","ui_variant":"legacy","input":"Coucou","message":"Bonjour Coucou","greeting_matches":true,"core":"cpp","compiler":"gcc 13-win32","displayed":true,"display_ms":10,"peak_rss_kb":1084,"eol_warning_shown":true,"disabled_features":["dpi-awareness","dark-mode"],"timestamp_utc":"2026-11-12T23:01:20Z"}

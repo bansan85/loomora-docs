@@ -1,0 +1,490 @@
+{
+  "series": {
+    "default": {
+      "runs": 10,
+      "all_ok": true,
+      "exit_statuses": [
+        0
+      ],
+      "display_ms": {
+        "n": 10,
+        "min": 3,
+        "median": 10.0,
+        "max": 13
+      },
+      "peak_rss_kb": {
+        "n": 10,
+        "min": 1084,
+        "median": 1084.0,
+        "max": 1084
+      },
+      "guest_wall_ms": {
+        "n": 10,
+        "min": 2002,
+        "median": 2013.0,
+        "max": 2023
+      },
+      "leftover_loomora_exe": [
+        0
+      ],
+      "messages": [
+        "Bonjour Coucou"
+      ],
+      "platform_ids": [
+        "windows-2000-x86"
+      ],
+      "eol_warning_shown": [
+        true
+      ],
+      "disabled_features": [
+        "dpi-awareness,dark-mode"
+      ]
+    },
+    "marie": {
+      "runs": 10,
+      "all_ok": true,
+      "exit_statuses": [
+        0
+      ],
+      "display_ms": {
+        "n": 10,
+        "min": 4,
+        "median": 9.0,
+        "max": 13
+      },
+      "peak_rss_kb": {
+        "n": 10,
+        "min": 1084,
+        "median": 1084.0,
+        "max": 1084
+      },
+      "guest_wall_ms": {
+        "n": 10,
+        "min": 2002,
+        "median": 2013.0,
+        "max": 2023
+      },
+      "leftover_loomora_exe": [
+        0
+      ],
+      "messages": [
+        "Bonjour Marie"
+      ],
+      "platform_ids": [
+        "windows-2000-x86"
+      ],
+      "eol_warning_shown": [
+        true
+      ],
+      "disabled_features": [
+        "dpi-awareness,dark-mode"
+      ]
+    }
+  },
+  "executable": {
+    "path": "out/windows-legacy/x86/loomora.exe",
+    "bytes": 694005,
+    "sha256": "16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e"
+  },
+  "runs": {
+    "default": [
+      {
+        "run": 1,
+        "exit_status": 0,
+        "guest_wall_ms": 2013,
+        "host_elapsed_ms": 2268,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 10,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Coucou",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 2,
+        "exit_status": 0,
+        "guest_wall_ms": 2013,
+        "host_elapsed_ms": 2282,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 12,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Coucou",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 3,
+        "exit_status": 0,
+        "guest_wall_ms": 2013,
+        "host_elapsed_ms": 2333,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 10,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Coucou",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 4,
+        "exit_status": 0,
+        "guest_wall_ms": 2002,
+        "host_elapsed_ms": 2280,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 3,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Coucou",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 5,
+        "exit_status": 0,
+        "guest_wall_ms": 2013,
+        "host_elapsed_ms": 2294,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 13,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Coucou",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 6,
+        "exit_status": 0,
+        "guest_wall_ms": 2003,
+        "host_elapsed_ms": 2344,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 4,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Coucou",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 7,
+        "exit_status": 0,
+        "guest_wall_ms": 2002,
+        "host_elapsed_ms": 2271,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 6,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Coucou",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 8,
+        "exit_status": 0,
+        "guest_wall_ms": 2003,
+        "host_elapsed_ms": 2273,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 5,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Coucou",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 9,
+        "exit_status": 0,
+        "guest_wall_ms": 2023,
+        "host_elapsed_ms": 2345,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 11,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Coucou",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 10,
+        "exit_status": 0,
+        "guest_wall_ms": 2023,
+        "host_elapsed_ms": 2280,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 13,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Coucou",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      }
+    ],
+    "marie": [
+      {
+        "run": 1,
+        "exit_status": 0,
+        "guest_wall_ms": 2023,
+        "host_elapsed_ms": 2291,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 12,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Marie",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 2,
+        "exit_status": 0,
+        "guest_wall_ms": 2013,
+        "host_elapsed_ms": 2343,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 12,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Marie",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 3,
+        "exit_status": 0,
+        "guest_wall_ms": 2013,
+        "host_elapsed_ms": 2270,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 9,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Marie",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 4,
+        "exit_status": 0,
+        "guest_wall_ms": 2003,
+        "host_elapsed_ms": 2286,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 5,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Marie",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 5,
+        "exit_status": 0,
+        "guest_wall_ms": 2003,
+        "host_elapsed_ms": 2342,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 6,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Marie",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 6,
+        "exit_status": 0,
+        "guest_wall_ms": 2013,
+        "host_elapsed_ms": 2272,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 13,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Marie",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 7,
+        "exit_status": 0,
+        "guest_wall_ms": 2002,
+        "host_elapsed_ms": 2282,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 7,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Marie",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 8,
+        "exit_status": 0,
+        "guest_wall_ms": 2013,
+        "host_elapsed_ms": 2339,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 4,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Marie",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 9,
+        "exit_status": 0,
+        "guest_wall_ms": 2023,
+        "host_elapsed_ms": 2297,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 11,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Marie",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      },
+      {
+        "run": 10,
+        "exit_status": 0,
+        "guest_wall_ms": 2022,
+        "host_elapsed_ms": 2282,
+        "leftover_loomora_exe": 0,
+        "problems": [],
+        "display_ms": 9,
+        "peak_rss_kb": 1084,
+        "message": "Bonjour Marie",
+        "platform_id": "windows-2000-x86",
+        "greeting_matches": true,
+        "eol_warning_shown": true,
+        "disabled_features": [
+          "dpi-awareness",
+          "dark-mode"
+        ]
+      }
+    ]
+  },
+  "vm_before": {
+    "name": "Windows 2000",
+    "ostype": "Windows 2000",
+    "memory": "168",
+    "vram": "16",
+    "cpus": "1",
+    "chipset": "piix3",
+    "firmware": "BIOS",
+    "hpet": "off",
+    "storagecontrollertype0": "PIIX4",
+    "nic1": "nat",
+    "VMState": "running",
+    "VMStateChangeTime": "2026-11-12T22:24:39.814000000",
+    "GuestAdditionsVersion": "6.1.18 r142142",
+    "GuestAdditionsRunLevel": "3",
+    "CurrentSnapshotName": "Claude"
+  },
+  "vm_after": {
+    "name": "Windows 2000",
+    "ostype": "Windows 2000",
+    "memory": "168",
+    "vram": "16",
+    "cpus": "1",
+    "chipset": "piix3",
+    "firmware": "BIOS",
+    "hpet": "off",
+    "storagecontrollertype0": "PIIX4",
+    "nic1": "nat",
+    "VMState": "running",
+    "VMStateChangeTime": "2026-11-12T22:24:39.814000000",
+    "GuestAdditionsVersion": "6.1.18 r142142",
+    "GuestAdditionsRunLevel": "3",
+    "CurrentSnapshotName": "Claude"
+  },
+  "note": "guest_wall_ms is measured inside the guest by runw.exe with GetTickCount (10 to 16 ms resolution) from CreateProcessW to the exit, and includes the 2 s of probe mode; host_elapsed_ms also includes the VBoxManage calls and is not a measurement of the program"
+}

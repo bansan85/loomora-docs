@@ -1,0 +1,21 @@
+{
+  "loomora_selftest.exe": {
+    "sha256": "f9f0872cb37009b4cdcf6d5fad485017b39b22de5903cc82de4d0b234ade3623",
+    "errorlevel": 128
+  },
+  "loomora_selftest-noshim.exe": {
+    "sha256": "920d45b5676363026a68f8296978678748a9c53229d11f048c618deefe2b7a87",
+    "errorlevel": 128
+  },
+  "plain.exe": {
+    "sha256": "68f8fead2126479fc7132dcc0d24a642990649aba44b64c2e2355502f0bbf095",
+    "output": [
+      "plain.exe: ran"
+    ],
+    "errorlevel": 0
+  },
+  "vista.exe": {
+    "sha256": "a5145bc5776f5de6501bb7533b5450e6d43a6353fa2dd1df3780e8d9c99b4ae5",
+    "errorlevel": 128
+  }
+}

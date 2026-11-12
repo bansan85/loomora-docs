@@ -1,0 +1,28 @@
+Windows 2000 build 2195 (no service pack), VirtualBox VM: export tables of the DLLs copied from C:\WINNT\system32 to a folder outside the repository (Microsoft binaries are not committed).
+System DLL sha256 (compare with dll-exports-check.json):
+  0cefaba4a3274bc77550cfb65d43318a502a4881687d8e3960e10391934bd382 kernel32.dll
+  58a0b89ceaa02b100b8d2366c3f99db999415ff43c610da10b5c18311c4fcca5 user32.dll
+  c82bf3ca428b7858d554b59b2538e6f20d3e532cf6500898e2568764799f9319 gdi32.dll
+  b218311886490d4c7ce8a9bb6c218d5ad05ae943ae669ae901864cf1e3dca029 advapi32.dll
+  8e01fe098b2de7913fb3d61226354e52f48bef9b2413514fd17b197c50a4184b ntdll.dll
+  5b11285908e93e3a7cae4ebe4189870003f0cc7b044dfe0f97e5976649a155f4 psapi.dll
+  d7cea69a98579d928e534070f5293e80ed7df38baf611b20717ef55aa1344a18 msvcrt.dll
+
+== every function of the x86 allowlist is exported by these DLLs (check_imports --verify-dlls) ==
+gdi32.dll: 543 exports, 8 of 8 allowlist functions confirmed
+kernel32.dll: 823 exports, 44 of 44 allowlist functions confirmed
+msvcrt.dll: 779 exports, 44 of 44 allowlist functions confirmed
+user32.dll: 695 exports, 21 of 21 allowlist functions confirmed
+Windows 2000 build 2195 in a VirtualBox VM, allowlist Windows 2000 SP4: 117 function(s) confirmed exported, 0 not confirmed
+result: every allowlist function is exported
+
+== every import of loomora_selftest.exe against these DLLs (check_imports --against) ==
+kernel32.dll: 25 imported functions, 25 exported by the system DLL (823 exports)
+msvcrt.dll: 42 imported functions, 42 exported by the system DLL (779 exports)
+result: 67 imports from 2 DLLs, 0 not exported, 0 unparsed
+
+== every import of loomora_selftest-noshim.exe against these DLLs (check_imports --against) ==
+NOT EXPORTED kernel32.dll!GetThreadId by the kernel32.dll in <folder of the copied DLLs>
+kernel32.dll: 26 imported functions, 25 exported by the system DLL (823 exports)
+msvcrt.dll: 42 imported functions, 42 exported by the system DLL (779 exports)
+result: 68 imports from 2 DLLs, 1 not exported, 0 unparsed

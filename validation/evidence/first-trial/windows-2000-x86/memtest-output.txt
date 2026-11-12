@@ -1,0 +1,7 @@
+memtest.exe (source memtest.c, sha256 dff145ec79739d75b4316ead8f83c714871dae812f762d67d47b0ca455473cb3): GetProcessMemoryInfo of a process that touches 8 MB with VirtualAlloc
+start                        ok=1 peakWS=596 KB  WS=596 KB  pagefile=176 KB  peakpagefile=176 KB faults=146
+after VirtualAlloc 8 MB      ok=1 peakWS=628 KB  WS=628 KB  pagefile=8384 KB  peakpagefile=8384 KB faults=154
+touched, sum=2048
+after touching 8 MB          ok=1 peakWS=8840 KB  WS=8840 KB  pagefile=8384 KB  peakpagefile=8384 KB faults=2205
+after free                   ok=1 peakWS=8840 KB  WS=640 KB  pagefile=184 KB  peakpagefile=8384 KB faults=2205
+after user32+gdi32           ok=1 peakWS=8840 KB  WS=724 KB  pagefile=204 KB  peakpagefile=8384 KB faults=2226
