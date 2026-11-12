@@ -1,0 +1,3 @@
+# Evidence files are referenced by their sha256 in validation/verdicts/*.json:
+# never convert their line endings (core.autocrlf would change the hash on Windows).
+* -text

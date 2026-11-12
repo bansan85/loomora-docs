@@ -1,0 +1,1 @@
+{"schema":1,"platform_id":"linux-ubuntu-24.04-x86_64","ui_variant":"modern","input":"Coucou","message":"Bonjour Coucou","greeting_matches":true,"core":"cpp","compiler":"gcc 13.3.0","displayed":true,"display_ms":247,"peak_rss_kb":37524,"eol_warning_shown":false,"disabled_features":[],"timestamp_utc":"2026-11-12T20:47:04Z"}

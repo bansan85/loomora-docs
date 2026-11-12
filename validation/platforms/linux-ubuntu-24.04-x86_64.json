@@ -1,0 +1,19 @@
+{
+  "id": "linux-ubuntu-24.04-x86_64",
+  "family": "linux",
+  "os_name": "Ubuntu",
+  "os_version": "24.04.5 LTS (Noble Numbat)",
+  "arch": "x86_64",
+  "release_date": "2024-04-25",
+  "age_years": 2.55,
+  "is_floor": false,
+  "in_scope": true,
+  "environment": "vm",
+  "environment_detail": "WSL2 distribution Ubuntu-24.04 with WSLg, on a Windows 11 host (10.0.26300.9974): WSL 3.0.5.0, WSLg 1.0.79, Microsoft WSL2 kernel 6.18.58.1-microsoft-standard-WSL2. This is a Linux userland in WSL2's lightweight utility VM, not a bare-metal install and not a full distribution boot with a desktop session (the window captures show the client area only, no title bar or window decorations). The GTK application normally talks to the WSLg Wayland compositor (default GDK display class: GdkWaylandDisplay, DISPLAY=:0 and WAYLAND_DISPLAY=wayland-0 both set); XWayland is available for X11 clients. Resources visible in the VM: 8 logical CPUs (Intel Core i5-8300H @ 2.30GHz host), 20003 MB of memory. Build and run happen in the home folder of the distribution (~/loomora-build), the repository being read through /mnt/h.",
+  "eol": false,
+  "kernel": "6.18.58.1-microsoft-standard-WSL2 (uname -r); a vendor kernel, so the kernel part of the Linux end-of-life rule of loomora_is_eol is evaluated on 6.18, which the backend does not treat as end of life",
+  "glibc": "2.39 (ldd --version: Ubuntu GLIBC 2.39-0ubuntu8.12)",
+  "gtk_version": "3.24.41 (pkg-config gtk+-3.0; libgtk-3-0t64 3.24.41-4ubuntu1.3)",
+  "compiler": "gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04.1), meson 1.3.2, ninja 1.11.1",
+  "release_date_source": "distro-info-data (/usr/share/distro-info/ubuntu.csv in the distribution): release 2024-04-25 for 24.04 LTS; age_years = days from that date to the trial date 2026-11-12 divided by 365.25"
+}

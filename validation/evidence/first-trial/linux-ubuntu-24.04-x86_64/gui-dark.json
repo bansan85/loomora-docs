@@ -1,0 +1,47 @@
+{
+  "xid": "0xa00003",
+  "window_found_after_s": 0.108,
+  "theme": "Adwaita:dark",
+  "shot_initial": [
+    "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/window-dark-1-initial.png",
+    480,
+    240,
+    {
+      "background_rgb": [
+        53,
+        53,
+        53
+      ],
+      "text_rgb": [
+        238,
+        238,
+        236
+      ],
+      "ratio": 10.56
+    }
+  ],
+  "keys_sent_to_shot_ms": 501,
+  "shot_typed": [
+    "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/window-dark-2-typed-marie.png",
+    480,
+    240,
+    {
+      "background_rgb": [
+        53,
+        53,
+        53
+      ],
+      "text_rgb": [
+        238,
+        238,
+        236
+      ],
+      "ratio": 10.56
+    }
+  ],
+  "close_returncode": 0,
+  "close_to_exit_ms": 4,
+  "stderr": "",
+  "stdout": "",
+  "leftover": []
+}
