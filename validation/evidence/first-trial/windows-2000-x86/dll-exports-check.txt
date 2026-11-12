@@ -1,0 +1,29 @@
+Windows 2000 build 2195 (no service pack), VirtualBox VM: export tables read from C:\WINNT\system32 (copies kept outside the repository)
+DLLs found: advapi32.dll=yes, dwmapi.dll=NO, gdi32.dll=yes, kernel32.dll=yes, msvcrt.dll=yes, ntdll.dll=yes, psapi.dll=yes, user32.dll=yes
+
+== 1. every function of the x86 allowlist (tools/win2000_imports.json) ==
+gdi32.dll: 543 exports, 8 of 8 allowlist functions confirmed
+kernel32.dll: 823 exports, 44 of 44 allowlist functions confirmed
+msvcrt.dll: 779 exports, 44 of 44 allowlist functions confirmed
+user32.dll: 695 exports, 21 of 21 allowlist functions confirmed
+Windows 2000 build 2195 in a VirtualBox VM, allowlist Windows 2000 SP4: 117 function(s) confirmed exported, 0 not confirmed
+result: every allowlist function is exported
+
+== 2. every import of out/windows-legacy/x86/loomora.exe against the DLLs ==
+gdi32.dll: 8 imported functions, 8 exported by the system DLL (543 exports)
+kernel32.dll: 39 imported functions, 39 exported by the system DLL (823 exports)
+msvcrt.dll: 44 imported functions, 44 exported by the system DLL (779 exports)
+user32.dll: 21 imported functions, 21 exported by the system DLL (695 exports)
+result: 112 imports from 4 DLLs, 0 not exported, 0 unparsed
+
+== 3. functions looked up at run time (LoadLibrary / GetProcAddress) ==
+user32.dll     SetProcessDPIAware       dll present exported NO      absent -> feature 'dpi-awareness' disabled
+user32.dll     SystemParametersInfoW    dll present exported yes     absent -> feature 'high-contrast-query' disabled
+advapi32.dll   RegOpenKeyExW            dll present exported yes     used to read AppsUseLightTheme
+advapi32.dll   RegQueryValueExW         dll present exported yes     used to read AppsUseLightTheme
+advapi32.dll   RegCloseKey              dll present exported yes     used to read AppsUseLightTheme
+psapi.dll      GetProcessMemoryInfo     dll present exported yes     absent -> feature 'peak-memory' disabled, peak_rss_kb -1
+ntdll.dll      RtlGetVersion            dll present exported yes     absent -> GetVersionExW
+kernel32.dll   GetVersionExW            dll present exported yes     fallback of RtlGetVersion
+kernel32.dll   GetNativeSystemInfo      dll present exported NO      absent -> GetSystemInfo (no WOW64 on Windows 2000)
+dwmapi.dll     DwmSetWindowAttribute    dll ABSENT  exported n/a     dark title bar, only when the dark theme is on

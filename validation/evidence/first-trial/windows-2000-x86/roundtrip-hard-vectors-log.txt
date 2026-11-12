@@ -1,0 +1,29 @@
+run_vectors windows-2000-x86 legacy: 25 vector(s) to run, 0 skipped (hard.json, written by roundtrip-vectors-gen.py)
+launcher: VirtualBox VM 'Windows 2000' (168 MB RAM), guest Windows 2000 5.0.2195 service pack 'none reported', guest user 'name', folder C:\Documents and Settings\name\loomora-vectors, reused out/windows-legacy/x86/loomora.exe (694005 bytes, sha256 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e)
+ok   empty (exact, 0 chars)  2.3s
+ok   marie (exact, 5 chars)  2.3s
+ok   emoji (exact, 11 chars)  2.3s
+ok   cjk (exact, 8 chars)  2.3s
+ok   rtl (exact, 16 chars)  2.3s
+ok   combining (exact, 10 chars)  2.3s
+ok   quotes (exact, 11 chars)  2.3s
+ok   only_quote (exact, 1 chars)  2.3s
+ok   two_quotes (exact, 2 chars)  2.3s
+ok   backslashes (exact, 11 chars)  2.3s
+ok   bs_quote (exact, 13 chars)  2.3s
+ok   trailing_bs (exact, 3 chars)  2.3s
+ok   percent (exact, 27 chars)  2.3s
+ok   shell_meta (exact, 20 chars)  2.4s
+ok   spaces (exact, 20 chars)  2.3s
+ok   only_space (exact, 1 chars)  2.3s
+ok   looks_like_option (exact, 28 chars)  2.3s
+ok   tab_nl (exact, 8 chars)  2.3s
+ok   ctrl (exact, 5 chars)  2.3s
+ok   separators (exact, 13 chars)  2.3s
+ok   bmp_edge (exact, 3 chars)  2.3s
+ok   long_1100_e_acute (truncated, 1100 chars)  2.3s
+ok   long_1000_cjk (exact, 1000 chars)  2.4s
+ok   long_1500_quote_bs (truncated, 1500 chars)  2.3s
+ok   long_ascii_with_emoji (truncated, 1003 chars)  2.3s
+summary: 25 vector(s) run, 25 passed, 0 failed, 0 skipped; 3 truncated to 1000 UTF-16 units; 57.7 s with 1 worker(s)
+result: PASSED

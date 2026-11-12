@@ -1,0 +1,9 @@
+--- loomora_selftest.exe
+errorlevel=128
+--- loomora_selftest-noshim.exe
+errorlevel=128
+--- plain.exe
+plain.exe: ran
+errorlevel=0
+--- vista.exe
+errorlevel=128

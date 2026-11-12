@@ -1,0 +1,23 @@
+{
+  "name": "Windows 2000",
+  "ostype": "Windows 2000",
+  "memory": "168",
+  "vram": "16",
+  "cpus": "1",
+  "chipset": "piix3",
+  "firmware": "BIOS",
+  "hpet": "off",
+  "storagecontrollertype0": "PIIX4",
+  "nic1": "nat",
+  "VMState": "running",
+  "VMStateChangeTime": "2026-11-12T22:24:39.814000000",
+  "GuestAdditionsVersion": "6.1.18 r142142",
+  "GuestAdditionsRunLevel": "3",
+  "CurrentSnapshotName": "Claude",
+  "vboxmanage_version": "7.2.22r175245",
+  "host": "Windows-11-10.0.26300-SP0",
+  "guest_property_OS_Product": "Windows 2000",
+  "guest_property_OS_Release": "5.0.2195",
+  "guest_property_OS_ServicePack": "",
+  "guest_property_OS_Version": ""
+}

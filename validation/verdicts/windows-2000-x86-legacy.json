@@ -1,0 +1,294 @@
+{
+  "platform_id": "windows-2000-x86",
+  "ui_variant": "legacy",
+  "status": "ok_restricted",
+  "restrictions": [
+    "The system is Windows 2000 build 2195 RTM with NO service pack, not Windows 2000 SP4: this verdict says nothing about SP4 (the plan, research R6, spike S1 and task T066 name SP4). The system DLLs read here are the RTM ones (kernel32.dll 5.0.2191.1, user32.dll 5.0.2180.1, msvcrt.dll 6.1.8637.0, dated 1999-12-07); SP4 replaces them with later builds, so the export tables confirmed here (tools/win2000_imports.json, confidence verified-on-vm) are those of RTM. Exports only grow from RTM to SP4, which makes a missing function on SP4 unlikely, but that was not checked.",
+    "Only one machine and one configuration, and an emulated one: VirtualBox 7.2.22 on a Windows 11 host, 1 vCPU, 168 MB RAM, VirtualBox Graphics Adapter 800x600x32 at 96 DPI, English (US) system with a French AZERTY keyboard layout for the user. No real hardware (physical chipset, display driver, input devices), no other Windows 2000 installation, language, edition (Server, Advanced Server) or hardware. Timings and memory are those of this VM: display_ms 3 to 13 ms and a constant peak_rss_kb of 1084 over the 20 '--probe' runs are not figures for real hardware.",
+    "Typing was exercised through the virtual keyboard of VirtualBox, not by a person: 'VBoxManage controlvm keyboardputstring Marie' assumes a US layout and the guest layout is French AZERTY, so it typed '?qrie' (the window then read 'Bonjour ?qrie', window-3-keyboardputstring.png); 'Marie' was then typed with the scancodes of the physical keys that give M, a, r, i, e on AZERTY (Home, Shift+End to select the prefilled text first) and the window read 'Marie' / 'Bonjour Marie' (window-4-typed-marie.png). The update delay of the greeting (User Story 1: within 1 second) was NOT measured: a screenshot is taken 1.5 s after the keys and shows the label already updated. No input method (IME), no clipboard paste, no typing of accented or non-Latin characters with the keyboard (those were only given through --probe-input), no mouse click on the field or on the close button (the window was closed with Alt+F4, scancodes).",
+    "The 1,000-character limit of the EDIT control was not tried with the keyboard on this system (no 1,100 keystrokes); text given by --probe-input bypasses that limit and is cut by the application itself (probe.cpp): the three vectors longer than 1,000 UTF-16 units (limit_4096_ascii, limit_4096_two_byte_chars, and in the extra battery 1,100 and 1,500 characters and 998 'a' + an emoji) were cut at 1,000 units without splitting a surrogate pair, as expected.",
+    "Glyph drawing: the probe checks the text of the greeting, and tools/run_vectors.py checks it character for character (15 of 15 reference vectors and 25 of 25 extra hard vectors), but this system's fonts do not draw everything. In a probe-mode window with 'Zoé Hélène çà 日本語 שלום 😀' (window-6-nonascii-probe.png, viewed by the author of the trial) the accented Latin letters are drawn correctly, the three CJK characters appear as three narrow missing-glyph boxes, the emoji (two UTF-16 units) as two such boxes, and the Hebrew letters are drawn (their order on screen was not checked). Nothing is garbled in the string itself.",
+    "No high contrast scheme, no DPI above 96 and no dark theme were tried: HKCU HighContrast Flags 126 (off), Win32_DisplayConfiguration.LogPixels 96, the AppsUseLightTheme value does not exist on this system. The Legacy UI took the skipped-feature path for two optional features, 'dpi-awareness' (user32.dll of this system does not export SetProcessDPIAware) and 'dark-mode' (no AppsUseLightTheme value), and displayed normally; 'high-contrast-query' (SystemParametersInfoW is exported) and 'peak-memory' (psapi.dll and GetProcessMemoryInfo exist) were available. The 4.5:1 contrast ratio of ui-contract item 2 was not measured (system colours are used).",
+    "The backend self-test could not be run on this system (spike S1 / T066 asks for it): loomora_selftest cross-built with cmake/toolchains/mingw-w64-win2000-i686.cmake imports KERNEL32!GetThreadId and four Vista-only condition-variable functions (InitializeConditionVariable, SleepConditionVariableCS, WakeConditionVariable, WakeAllConditionVariable) through libgcc.a(gthr-win32-cond.o) and libgcc.a(gthr-win32.o), pulled in by its use of <iostream>; the loader of this system refuses it (errorlevel 128, nothing printed), with the GetThreadId shim of ADR 0002 linked as well (selftest-run.json, same as the control program vista.exe). The Legacy UI executable, which links the same backend library libloomora.a but no iostream, does not have these imports and runs; so the backend is exercised here only through the UI (probe, 15 + 25 vectors).",
+    "The verdict covers the x86 executable out/windows-legacy/x86/loomora.exe (sha256 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e) as built at commit d7f84de with MinGW-w64 GCC 13; it was started with CreateProcessW from a guest helper (tools/guest/runw.c, built with the same compiler), not by a double click in Explorer or from a command prompt typed by a person, and the guest processes were counted with WMI (Windows 2000 has no tasklist or taskkill). The helper's own run of the window without --probe used --nowait.",
+    "No procedure document exists yet for this trial (validation/procedures/windows.md is task T109), so the verdict carries no 'reproduction' path; the commands are in the 'notes' field and the driver script is part of the evidence.",
+    "The platform record windows-2000-x86 has no deliverable record of its own: the build writes validation/deliverables/windows-x86-legacy.json under the platform id windows-x86 (same executable), which tools/validate_records.py reports as a warning, as for the Windows 11 verdict."
+  ],
+  "disabled_features": [
+    "dpi-awareness (user32.dll of this system does not export SetProcessDPIAware; no DPI virtualisation exists before Windows Vista, the window is drawn at 96 DPI)",
+    "dark-mode (no AppsUseLightTheme value on this system: no dark theme setting for applications; system colours used)"
+  ],
+  "evidence": [
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/probe-default-run1.json",
+      "sha256": "15a17383354c2d543bd0f9081cffc770cb06cc41d3408307c056dfc356cdcec0",
+      "kind": "probe",
+      "description": "First of 10 runs of '--probe' on Windows 2000 build 2195: message \"Bonjour Coucou\", platform_id windows-2000-x86, greeting_matches true, eol_warning_shown true, disabled_features [dpi-awareness, dark-mode], display_ms and peak_rss_kb as in the series."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/probe-marie-run1.json",
+      "sha256": "e61a7e1c3137cbda57b5b9aba846071cdb4dacf7ca20273b088c1b27cc62b9be",
+      "kind": "probe",
+      "description": "First of 10 runs of '--probe --probe-input Marie': message \"Bonjour Marie\"."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/probe-default-runs.jsonl",
+      "sha256": "1d3dd8ade405826de66395c6bd9310eaa54cdfea94c5a7ab62695afd3269d301",
+      "kind": "probe-series",
+      "description": "The 10 probe lines of '--probe' (one per line, each read from loomora-probe.json in the guest): display_ms 3 to 13 (median 10), peak_rss_kb 1084 in all 10."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/probe-marie-runs.jsonl",
+      "sha256": "a1c1604133c01cac8d6fd6e46d859561278f9934c61dfd6dd0c71acba0741c23",
+      "kind": "probe-series",
+      "description": "The 10 probe lines of '--probe --probe-input Marie': display_ms 4 to 13 (median 9), peak_rss_kb 1084 in all 10."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/trial-measurements.json",
+      "sha256": "ef9ebf4004f7346b33de6a40c7515e41fe57f7efa38096636c1f317b8a0ac79a",
+      "kind": "measurements",
+      "description": "Per run of the 20 probe runs: exit status (all 0), process lifetime measured in the guest (2002 to 2023 ms, includes the 2 s of probe mode, GetTickCount resolution 10 to 16 ms), count of loomora.exe processes alive after each run (WMI; always 0), check_probe result (no problem), display_ms, peak_rss_kb, message, platform_id, disabled_features and eol_warning_shown; statistics; size and sha256 of the executable; VM state before and after (unchanged)."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/vm-environment.json",
+      "sha256": "2a33ab8223fe6315391f6606830a25ddb24b9b37c04a0470e6a14b77e5a0b98b",
+      "kind": "environment",
+      "description": "VM settings read with 'VBoxManage showvminfo --machinereadable' (168 MB, 1 CPU, PIIX3, PIIX4 IDE, NAT, state running, state change time unchanged), VBoxManage 7.2.22r175245, host Windows 11 10.0.26300, Guest Additions properties of the guest OS (Windows 2000, 5.0.2195, no service pack)."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/guest-facts-output.txt",
+      "sha256": "0409c470fe6c87276e8560ef04b9e1763d94ed88c50f5d15272049cbe68dde6a",
+      "kind": "environment",
+      "description": "Output of guest-facts.vbs in the guest: registry (ProductName Microsoft Windows 2000, CurrentBuildNumber 2195, no CSDVersion, ACP 1252, user layout 0000040c French, HighContrast Flags 126, no AppsUseLightTheme), WMI (Microsoft Windows 2000 Professional 5.0.2195, ServicePackMajorVersion 0, 175,620,096 bytes RAM, VirtualBox, 800x600x32, LogPixels 96) and the versions of the system DLLs."
+    },
+    {
+      "path": "tools/trials/windows-2000-x86/guest-facts.vbs",
+      "sha256": "ce7171bb69dd73e28a477d568401cc887ac67206aa6bff4c0f205f4f139a820f",
+      "kind": "script",
+      "description": "The read-only VBScript that produced guest-facts-output.txt."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/dll-exports-check.txt",
+      "sha256": "7aa2727c31ffc4945f7cb7d04925450f7384cd3fccbc2b77f27ba7dcca8fbad1",
+      "kind": "check-log",
+      "description": "Export tables of the Windows 2000 kernel32, user32, gdi32, advapi32, ntdll, psapi, msvcrt (dwmapi.dll is absent) read with tools/check_imports.py: all 117 functions of the x86 allowlist exported (0 missing), all 112 imports of loomora.exe exported (0 missing), and the table of the functions looked up at run time (SetProcessDPIAware and GetNativeSystemInfo are not exported by this system; the others are)."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/dll-exports-check.json",
+      "sha256": "46d5da4976d95bbfce35dca8c62a9b3458dd9d76c487ee30454de337e5996479",
+      "kind": "check-data",
+      "description": "The same result as data: size, sha256 and export counts of each DLL (the Microsoft DLLs themselves are not committed), the allowlist functions and the executable imports checked, the dynamic targets."
+    },
+    {
+      "path": "tools/trials/windows-2000-x86/memtest.c",
+      "sha256": "7e5499d9706284afb4f62412112558af200e2380f4d478fa0dbe2e419a15eefd",
+      "kind": "source",
+      "description": "Source of the control program memtest.exe: GetProcessMemoryInfo before and after touching 8 MB allocated with VirtualAlloc."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/memtest-output.txt",
+      "sha256": "c53e8061cc2e75f9f1a84cb377320b31553193919c6f015db2dfe31f0df4f361",
+      "kind": "check-log",
+      "description": "Output of memtest.exe on this system: peakWS 596 KB at start, 8840 KB after touching 8 MB, kept after the free, so GetProcessMemoryInfo reports plausible and responsive numbers on Windows 2000; a bare process counts about 600 KB."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/wmi-memory-poll.txt",
+      "sha256": "178cf1d9ee65e706881034fe5bcf884d41d65b9989cc7d399461ddf945531dec",
+      "kind": "check-log",
+      "description": "Independent measure of the peak_rss_kb of a running loomora.exe: WMI Win32_Process polled every 300 ms from another process gives WorkingSetSize = PeakWorkingSetSize = 1,093,632 bytes (1068 KB) while the probe line of that same run says peak_rss_kb 1084: the figure is plausible (the working set of a Windows 2000 process only counts the pages it touched)."
+    },
+    {
+      "path": "tools/trials/windows-2000-x86/guest-memory-poll.vbs",
+      "sha256": "126e29be9ebe1ea94bb1a64b43c64144d56a87d14d2f14c4369c92e8ebe6aaf2",
+      "kind": "script",
+      "description": "The read-only VBScript that polled the process memory through WMI."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/gui-run.json",
+      "sha256": "5e29adb5ad16cfe8dbf829ae346299ad74bc649a5714dc386069d9fbaeb82c7b",
+      "kind": "gui-run",
+      "description": "Window run without --probe: started with CreateProcessW (no argument), one loomora.exe process; screenshots of the guest screen; Home + Shift+End then 'VBoxManage controlvm keyboardputstring Marie' (typed '?qrie' because the guest layout is French AZERTY); Home + Shift+End then the scancodes of the AZERTY keys M, a, r, i, e (typed 'Marie'); Alt+F4; 0 loomora.exe processes afterwards (WMI). Records the guest keyboard layout read from the registry."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/window-1-initial.png",
+      "sha256": "8117f6192448f9e0232a05724ebef5f20f0503f2399a9240fafb1cbe74c1376e",
+      "kind": "screenshot",
+      "description": "Guest screen (800x600, VBoxManage controlvm screenshotpng) right after the start of loomora.exe without --probe: title bar 'Loomora', the end-of-life banner 'Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection.' on three lines, the field 'Coucou' and the centred label 'Bonjour Coucou', all in the system font, nothing cut or overlapping."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/window-2-selected.png",
+      "sha256": "9f9e932c89607f9f569dd13f835244c7e8713831bd0315005ce5e618bc69c616",
+      "kind": "screenshot",
+      "description": "After Home and Shift+End sent as scancodes: the text 'Coucou' of the field is selected (the field has the focus)."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/window-3-keyboardputstring.png",
+      "sha256": "4fd242098a2ce1c268c7eaacd62a0fab760bf4fae2274e24481c41a0ce0eceb3",
+      "kind": "screenshot",
+      "description": "After 'VBoxManage controlvm keyboardputstring Marie' replaced the selection: the field reads '?qrie' and the label 'Bonjour ?qrie' (US scancodes typed on a French AZERTY layout); shows that the label follows what is typed and documents the layout mismatch."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/window-4-typed-marie.png",
+      "sha256": "300eeb38c44e102737676c15f6203db70e957f1c69d6b4259ec06ff111fdd751",
+      "kind": "screenshot",
+      "description": "After the scancodes of the physical keys that type M, a, r, i, e on AZERTY: the field reads 'Marie' and the label 'Bonjour Marie'."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/window-5-closed.png",
+      "sha256": "445e2d2c79bc742645fceb65a14988563d849fafe03e466f37934db3ff48ff73",
+      "kind": "screenshot",
+      "description": "After Alt+F4: the window is gone and the desktop is empty; the WMI process list was empty too (gui-run.json)."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/glyphs-run.json",
+      "sha256": "665501994fa4b9c4ce345d261bd6772e0da07cbd0798e8ba28ab9d8b1046369b",
+      "kind": "gui-run",
+      "description": "Probe-mode window started with the input 'Zoé Hélène çà 日本語 שלום 😀' (code points listed), photographed 0.8 s after the start; 0 loomora.exe processes 3 s later."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/window-6-nonascii-probe.png",
+      "sha256": "37b8cf39e3a97dca75acf2ecfe5cc8f78ca60797678edc600edd34208b2e4dfe",
+      "kind": "screenshot",
+      "description": "The window of glyphs-run.json: accented letters drawn, the three CJK characters and the emoji (two UTF-16 units) as missing-glyph boxes, Hebrew letters drawn; the same text is in the field and in the label."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/run-vectors-windows-2000-x86-legacy-log.txt",
+      "sha256": "8491e9954e31d9b6836138d2f2bf8f0dad17d122e0e49a3cff60f03b96e537e4",
+      "kind": "run_vectors-log",
+      "description": "Log of 'python tools/run_vectors.py windows-2000-x86 legacy --evidence-dir ...' (SC-011, FR-027): 15 valid vectors run in the Windows 2000 VM, 15 passed, 0 failed, 16 error or API-only vectors skipped as designed, 2 vectors (4,096 bytes) truncated to the 1,000 UTF-16 units of the limit, result PASSED. Tab, newline and U+0001 (vector control_characters), quotes, backslashes, emoji, the ZWJ sequence, CJK, right-to-left text and the empty string reached the executable unchanged."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/run-vectors-windows-2000-x86-legacy-probe-lines.tsv",
+      "sha256": "8a6c19b761a6e4dca0eb2b6c3afeded685060dad9efdce30791333b57840e65d",
+      "kind": "run_vectors-probe-lines",
+      "description": "The probe line of each of the 15 vectors, as '<vector id><TAB><probe line>': display_ms 2 to 15 (median 12), peak_rss_kb 1084 to 1160."
+    },
+    {
+      "path": "tools/trials/windows-2000-x86/roundtrip-vectors-gen.py",
+      "sha256": "b9ee2376de8ffb75e1fac026c2d067c3f04f7feb5cc995c2f73953bffdf5a1e7",
+      "kind": "script",
+      "description": "Generator of the extra battery of 25 hard texts used to check the command-line round trip (emoji, ZWJ sequence and flags, CJK, right-to-left, combining marks, quotes and backslashes in every position, %PATH%, shell metacharacters, option-like text, tab and newline, control characters, U+2028, U+2029, BOM, soft hyphen, BMP edge code points, 1,100 and 1,500 characters, an emoji at the limit)."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/roundtrip-hard-vectors-log.txt",
+      "sha256": "817899b8b9e22ee65bdc2f91a31633b98d7323ad461cbe9e87aa4b962ad63495",
+      "kind": "run_vectors-log",
+      "description": "Log of tools/run_vectors.py windows-2000-x86 legacy with the 25 hard texts: 25 passed, 0 failed, 3 truncated to 1,000 UTF-16 units; the input and the message of every probe line equal the text given, character for character."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/roundtrip-hard-vectors-probe-lines.tsv",
+      "sha256": "2ab00790df171e2e0f16dad47b602f54e2bb5e6d12b05fc2bcd39bb472aa3a2b",
+      "kind": "run_vectors-probe-lines",
+      "description": "The 25 probe lines of the extra battery: display_ms 5 to 14, peak_rss_kb 1084 to 1140."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/selftest-output.txt",
+      "sha256": "7ed3c42ad94c3ba979ccb66371108f5421ed8967339f0d602ffc278b85265c60",
+      "kind": "check-log",
+      "description": "Output of selftest.bat in the guest: loomora_selftest.exe and loomora_selftest-noshim.exe (cross-built by tools/guest/build_selftest.sh) end with errorlevel 128 and print nothing, plain.exe prints 'plain.exe: ran', errorlevel 0, vista.exe (imports InitializeConditionVariable) ends with errorlevel 128 and prints nothing."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-2000-x86/selftest-run.json",
+      "sha256": "fee829f42d7c46826308b521b02ccc9ddd120e5dd8e478f12bb13eebe452214d",
+      "kind": "check-data",
+      "description": "The same as data, with the sha256 of the four programs."
+    },
+    {
+      "path": "tools/trials/windows-2000-x86/loader-control.sh",
+      "sha256": "55e63c782ff0ed6bb0305ddc46ae85bb3fdd71186a1302595f650b20cdb5904a",
+      "kind": "script",
+      "description": "Builds the two control programs (plain.exe, vista.exe) used to show what the loader of this system does with an import it does not export."
+    },
+    {
+      "path": "tools/trials/windows-2000-x86/guest-procs.vbs",
+      "sha256": "92522b2e06235c2f855cd9650b620cbc4cfc1cfe617a6a39ac202b6ff9c14c16",
+      "kind": "script",
+      "description": "The read-only VBScript that counts the loomora.exe, runw.exe and loomora_selftest processes through WMI (Windows 2000 has no tasklist or taskkill)."
+    },
+    {
+      "path": "tools/trials/windows-2000-x86/trial-driver.py",
+      "sha256": "ac48fc08b43bf34543ee106e35328a9c9c53cfcec6cfd9d392352427b809ae71",
+      "kind": "script",
+      "description": "The driver that produced vm-environment.json, guest-facts-output.txt, dll-exports-check.*, the probe series, trial-measurements.json, memtest-output.txt, wmi-memory-poll.txt, gui-run.json, the window captures, glyphs-run.json and selftest-*; run from the repository root with 'python tools/trials/windows-2000-x86/trial-driver.py [step ...]'."
+    }
+  ],
+  "measurements": {
+    "trial_date": "2026-11-12 (host local time; the last runs finished after midnight, on 2026-11-13); the guest clock is not synchronised",
+    "scope": "Windows 2000 build 2195, NO service pack (RTM), in one VirtualBox 7.2.22 VM: this verdict says nothing about Windows 2000 SP4, real hardware or any other Windows version",
+    "executable": {
+      "name": "loomora.exe",
+      "size_bytes": 694005,
+      "sha256": "16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e",
+      "path": "out/windows-legacy/x86/loomora.exe",
+      "run": "natively in the guest (32-bit Windows 2000), platform_id windows-2000-x86",
+      "imports": "112 imported functions from gdi32, kernel32, msvcrt, user32, every one exported by the DLLs of this system (0 missing); 117 of 117 functions of the x86 allowlist exported"
+    },
+    "display_ms": {
+      "probe_default_n10": {
+        "n": 10,
+        "min": 3,
+        "median": 10.0,
+        "max": 13
+      },
+      "probe_input_Marie_n10": {
+        "n": 10,
+        "min": 4,
+        "median": 9.0,
+        "max": 13
+      },
+      "run_vectors_15_runs": {
+        "min": 2,
+        "median": 12,
+        "max": 15
+      },
+      "definition": "time from the start of WinMain to the first WM_PAINT of the main window (probe.cpp, QueryPerformanceCounter)",
+      "threshold": "SC-001: first frame under 3000 ms; the slowest run of any series was 15 ms"
+    },
+    "peak_rss_kb": {
+      "probe_default_n10": {
+        "n": 10,
+        "min": 1084,
+        "median": 1084.0,
+        "max": 1084
+      },
+      "probe_input_Marie_n10": {
+        "n": 10,
+        "min": 1084,
+        "median": 1084.0,
+        "max": 1084
+      },
+      "run_vectors_15_runs": {
+        "min": 1084,
+        "median": 1092,
+        "max": 1160
+      },
+      "source": "PeakWorkingSetSize through GetProcessMemoryInfo (psapi.dll, loaded at run time), read by the application itself",
+      "cross_check": "plausible, not a defect: memtest.exe shows the API tracks a known 8 MB allocation (peak 596 KB -> 8840 KB) and WMI reports a working set of 1068 KB for a running loomora.exe (probe: 1084 KB); a Windows 2000 process only counts the pages it touched, and the figure is the same in every run"
+    },
+    "process_lifetime_ms": {
+      "probe_default_n10": {
+        "n": 10,
+        "min": 2002,
+        "median": 2013.0,
+        "max": 2023
+      },
+      "probe_input_Marie_n10": {
+        "n": 10,
+        "min": 2002,
+        "median": 2013.0,
+        "max": 2023
+      },
+      "note": "measured in the guest by runw.exe (GetTickCount, 10 to 16 ms resolution) from CreateProcessW to the exit, includes the 2 s of probe mode"
+    },
+    "exit": "20 of 20 probe runs and the 15 + 25 run_vectors runs exited with status 0 and wrote a valid probe line (check_probe); 0 loomora.exe processes were alive after any of the 20 probe runs (WMI count in the guest, after each run); the window run closed with Alt+F4 left 0 processes",
+    "message_check": "message \"Bonjour Coucou\" in 10 of 10 '--probe' runs and \"Bonjour Marie\" in 10 of 10 '--probe-input Marie' runs, greeting_matches true; platform_id windows-2000-x86, eol_warning_shown true and disabled_features [dpi-awareness, dark-mode] in all 20 runs",
+    "vectors": "tools/run_vectors.py windows-2000-x86 legacy: 15 valid vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped, 2 truncated to 1,000 UTF-16 units. Extra battery of 25 hard texts: 25 passed. Not representable on this path: only a NUL character (a Windows command line is a NUL-terminated string; no vector has one, plan_vectors skips it). Tabs, newlines, control characters, U+2028/U+2029, a byte order mark, quotes, backslashes, % and shell characters, emoji (also outside the BMP), the empty string and 1,500-character texts are carried unchanged by the CreateProcessW helper",
+    "typed_input": "virtual keyboard scancodes: field 'Marie' and label 'Bonjour Marie' (screenshot); keyboardputstring typed '?qrie' because of the AZERTY guest layout",
+    "end_of_life_banner": "shown by the real shipped build on a real end-of-life system (Windows 2000): window-1-initial.png, eol_warning_shown true in all 20 probe runs"
+  },
+  "decision": "keep",
+  "sources": [
+    "eol-windows-10"
+  ],
+  "notes": "Windows 2000 trial of the Windows Legacy UI (x86 executable) in a VirtualBox VM, 2026-11-12, on the platform described in validation/platforms/windows-2000-x86.json (Windows 2000 build 2195, NO service pack). It covers the Windows 2000 part of T088, the Windows 2000 evidence of T094 and spike S1 / T066 for what it names; it is the Legacy floor CANDIDATE for the Windows family only for what was actually tested on this VM (FR-005: the oldest platform on which the greeting really displays), and says nothing about SP4. What works on this system: the executable loads (112 of 112 imports exported), shows the window with the end-of-life banner, 'Bonjour Coucou', updates to 'Bonjour Marie' when typed with the virtual keyboard, takes the skipped-feature path for DPI awareness and dark mode, writes a valid probe line (20 of 20 runs, 15 + 25 of 40 vectors), exits cleanly after 2 s and with Alt+F4, and leaves no process. What does not: the backend self-test loomora_selftest cannot be loaded (Vista-only imports from libgcc's condition-variable code, see the restrictions), and the guest's fonts do not draw CJK or emoji. Commands (repository root, Windows 11 host, VM already running and logged on; LOOMORA_VM_NAME, LOOMORA_VM_USER and LOOMORA_VM_PASSWORD only needed if they differ from 'Windows 2000', 'name' and empty): 'wsl -d Ubuntu-24.04 --cd <repo> -- python3 tools/build.py windows legacy', 'python tools/trials/windows-2000-x86/trial-driver.py' (facts, exports, runs, memory, gui, glyphs, selftest; the selftest step needs 'sh tools/guest/build_selftest.sh' and 'sh tools/trials/windows-2000-x86/loader-control.sh' in WSL first), 'python tools/run_vectors.py windows-2000-x86 legacy --evidence-dir validation/evidence/first-trial/windows-2000-x86/', and 'python tools/check_imports.py --verify-dlls <folder of the copied system DLLs>'. How the guest is driven: the old Guest Additions (6.1.18) do not pass command-line arguments to a guest program, and Windows Script Host 5.1 (WshShell.Run) converts the command line to the ANSI code page ('?' for every other character, measured) and expands %VARIABLES%, so each run copies cmdline.txt (UTF-16LE) and runs run.bat, which starts tools/guest/runw.c (kernel32 only, 5.5 KB); it reads the command line, calls CreateProcessW, waits and prints the exit status, the probe line and the leftover process count back through VBoxManage guestcontrol run. The guest folder created for the trial (C:\\Documents and Settings\\name\\loomora-vectors) was deleted afterwards; the VM was left running as found, no snapshot was restored. The text files of this evidence folder keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256."
+}
