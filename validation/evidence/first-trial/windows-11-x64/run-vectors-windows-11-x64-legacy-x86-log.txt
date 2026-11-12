@@ -1,0 +1,35 @@
+run_vectors windows-11-x64 legacy: 15 vector(s) to run, 16 skipped (H:\repos\loomora\core\tests\vectors.json)
+skip too_long_4097_ascii                expects error -1 (not enterable in a UI field)
+skip too_long_4098_two_byte_chars       expects error -1 (not enterable in a UI field)
+skip invalid_overlong_two_byte          expects error -3 (not enterable in a UI field)
+skip invalid_overlong_three_byte        expects error -3 (not enterable in a UI field)
+skip invalid_surrogate                  expects error -3 (not enterable in a UI field)
+skip invalid_above_10ffff               expects error -3 (not enterable in a UI field)
+skip invalid_byte_ff                    expects error -3 (not enterable in a UI field)
+skip invalid_lone_continuation          expects error -3 (not enterable in a UI field)
+skip invalid_truncated_sequence         expects error -3 (not enterable in a UI field)
+skip invalid_after_valid_text           expects error -3 (not enterable in a UI field)
+skip null_pointer                       expects error -3 (not enterable in a UI field)
+skip capacity_too_small                 expects error -2 (not enterable in a UI field)
+skip capacity_one_byte_short            expects error -2 (not enterable in a UI field)
+skip capacity_zero                      expects error -2 (not enterable in a UI field)
+skip capacity_exact                     API-only case (explicit buffer capacity)
+skip capacity_exact_empty_input         API-only case (explicit buffer capacity)
+launcher: Windows legacy x86: out/windows-legacy/x86/loomora.exe (694005 bytes, sha256 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e)
+ok   empty (exact, 0 chars)  2.2s
+ok   ascii (exact, 6 chars)  2.2s
+ok   ascii_punctuation (exact, 11 chars)  2.3s
+ok   accented (exact, 9 chars)  2.4s
+ok   cjk (exact, 8 chars)  2.4s
+ok   right_to_left_arabic (exact, 5 chars)  2.3s
+ok   right_to_left_hebrew (exact, 4 chars)  2.3s
+ok   emoji (exact, 1 chars)  2.4s
+ok   emoji_zwj_sequence (exact, 5 chars)  2.2s
+ok   combining_characters (exact, 6 chars)  2.3s
+ok   control_characters (exact, 6 chars)  2.3s
+ok   one_thousand_ascii (exact, 1000 chars)  2.3s
+ok   one_thousand_two_byte_chars (exact, 1000 chars)  2.3s
+ok   limit_4096_ascii (truncated, 4096 chars)  2.2s
+ok   limit_4096_two_byte_chars (truncated, 2048 chars)  2.2s
+summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 UTF-16 units; 9.3 s with 4 worker(s)
+result: PASSED

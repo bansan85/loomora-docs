@@ -1,0 +1,44 @@
+{
+  "arch": "x64",
+  "greeting_seen_after_ms": 70,
+  "pid": 19444,
+  "window_title": "Loomora",
+  "window_class": "LoomoraWin",
+  "children": [
+    {
+      "class": "Edit",
+      "text": "Coucou"
+    },
+    {
+      "class": "Static",
+      "text": "Bonjour Coucou"
+    }
+  ],
+  "initial": {
+    "edit": "Coucou",
+    "static": "Bonjour Coucou"
+  },
+  "em_getlimittext": 1000,
+  "screenshot_initial": [
+    420,
+    200
+  ],
+  "typed_marie": {
+    "edit": "Marie",
+    "static": "Bonjour Marie",
+    "ms_from_first_char_to_static_read": 16.32
+  },
+  "screenshot_marie": [
+    420,
+    200
+  ],
+  "typed_1100_x": {
+    "edit_length": 1000,
+    "static_length": 1008,
+    "static_equals_prefix_plus_edit": true
+  },
+  "exit_status": 0,
+  "close_to_exit_ms": 13,
+  "loomora_processes_before": 0,
+  "loomora_processes_after": 0
+}
