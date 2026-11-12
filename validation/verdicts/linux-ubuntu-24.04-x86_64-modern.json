@@ -1,0 +1,197 @@
+{
+  "platform_id": "linux-ubuntu-24.04-x86_64",
+  "ui_variant": "modern",
+  "status": "ok_restricted",
+  "restrictions": [
+    "Typing was exercised with synthetic key events, not by a person with a real keyboard in the real window: the window was started with GDK_BACKEND=x11 (XWayland) and GDK_CORE_DEVICE_EVENTS=1 and Ctrl+A then M, a, r, i, e were sent to it with XSendEvent; the label then showed \"Bonjour Marie\" in the capture taken 501-507 ms after the first key was sent (upper bound for the update delay, to be compared with the 1 s of User Story 1). The default GDK backend of this system is Wayland, which was not driven this way; real keyboard input, input methods and the IME path were not tested.",
+    "The end-of-life GtkInfoBar was not exercised: the WSL2 kernel 6.18.58.1 is not end of life for the backend, so eol_warning_shown was false in every run and the warning (FR-013, ui-contract item 3) was never displayed on Linux. It stays unverified at run time until a run on a kernel the backend treats as end of life.",
+    "Dark theme and high contrast were only forced through GTK_THEME (Adwaita:dark, HighContrast, HighContrastInverse), not through the system settings (gsettings color-scheme, the accessibility high-contrast switch, the Ubuntu Yaru theme): this distribution has only the Default and Emacs themes installed besides the themes built into GTK, and no desktop session of a full distribution was involved (WSLg only). The contrast ratio measured on the captured pixels of the greeting label (WCAG formula, most contrasting pixel against the most frequent colour of the label band) was 11.61 (default), 10.56 (Adwaita:dark), 13.88 (HighContrast) and 11.88 (HighContrastInverse), all above 4.5:1, but the HighContrast theme rendered by GTK 3.24 is mild-looking and is not a proof for the real high-contrast mode of a desktop.",
+    "Screenshots are captures of the window client area only (Gdk pixbuf of the X11 window under XWayland, 480x240): no title bar, no window decoration, no desktop, no screen recording. The probe runs use the default (Wayland) backend while the screenshots use the X11 backend, so no screenshot shows the exact process of the timing runs. 'displayed' in the probe record comes from the application's own first draw callback; that the compositor put the pixels on a screen was not independently checked.",
+    "Only GTK 3.24.41 was run. The GTK 3.10 API subset is enforced at compile time (GDK_VERSION_MIN_REQUIRED/MAX_ALLOWED = 3.10, no warning), but the executable was never run on a real GTK 3.10, so the lower limit of this UI is not verified here.",
+    "Only one environment was exercised: Ubuntu 24.04.5 in WSL2 with WSLg on a Windows 11 host, x86_64. Not tested: bare metal or a full VM boot, other distributions (the Ubuntu 22.04 and other targets of T059 have no record), other desktops, real GPU or software-rendering differences, Linux ARM. The timings and memory figures are those of this WSL2 virtual machine.",
+    "The rendering of the glyphs of the non-ASCII vectors (accents, CJK, right-to-left Arabic and Hebrew, emoji, combining characters) was not looked at: tools/run_vectors.py checks the text of the probe line (message and input, UTF-8, greeting_matches), not what the fonts of this system draw. Only the \"Coucou\" and \"Marie\" labels were seen in captures.",
+    "No procedure document exists yet for this trial (validation/procedures/linux.md is task T111), so the verdict carries no 'reproduction' path; the commands used are in the 'notes' field."
+  ],
+  "disabled_features": [],
+  "evidence": [
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/probe-default-run1.json",
+      "sha256": "e998f2649c63e8c00a3297e75319ff432b442500231b231238791efce26b3f9b",
+      "kind": "probe",
+      "description": "First of 10 runs of 'loomora-gtk3 --probe': message \"Bonjour Coucou\", display_ms 247 (the slowest of the series), peak_rss_kb 37524."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/probe-marie-run1.json",
+      "sha256": "279fa3ac467c6e801378ce168f568e81404ce6b3abf2d67d0e1799eac899ce2d",
+      "kind": "probe",
+      "description": "First of 10 runs of 'loomora-gtk3 --probe --probe-input Marie': message \"Bonjour Marie\", display_ms 105, peak_rss_kb 37260."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/probe-default-runs.jsonl",
+      "sha256": "028f89b64715ee97c7f95a8f4bdfa812a2ab75a4010eb1ee794824bacaab294a",
+      "kind": "probe-series",
+      "description": "The 10 probe lines of '--probe' (one per line): display_ms 110 to 247."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/probe-marie-runs.jsonl",
+      "sha256": "e00137edebcd1e1bbd68fa5a7ccf20802a66b8a26c48559e5af9703246aad1e0",
+      "kind": "probe-series",
+      "description": "The 10 probe lines of '--probe --probe-input Marie': display_ms 105 to 138."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/trial-measurements.json",
+      "sha256": "7e2b10b7eba0ccdf20cc2c540a315e5d626a511b1043f2dd301663b04df6989d",
+      "kind": "measurements",
+      "description": "Per run of the 20 probe runs: exit status (all 0), standard error (all empty, 0 bytes), one stdout line each, wall time of the process (2104 to 2359 ms, includes the 2 s of probe mode), pgrep for a leftover loomora-gtk3 process after each exit (none), executable size and sha256."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/run-vectors-linux-ubuntu-24.04-x86_64-modern-log.txt",
+      "sha256": "dae7faab7cf8c6af63ea21a9a2d5ad0ec9e5ac48d5ed0a0b4c5e8095779f1b14",
+      "kind": "run_vectors-log",
+      "description": "Log of 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --evidence-dir ...' (SC-011, FR-027): 15 valid vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped as designed, 2 vectors truncated to the 1,000-character limit of the field, result PASSED."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/run-vectors-linux-ubuntu-24.04-x86_64-modern-probe-lines.tsv",
+      "sha256": "5b7b5d662d45085c7681c80ceb5ebe04c782ad07b8619c3826e217a2c4203842",
+      "kind": "run_vectors-probe-lines",
+      "description": "The probe line of each of the 15 vectors, as '<vector id><TAB><probe line>'."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-default-1-initial.png",
+      "sha256": "e77bb703b3f5534ec4bd33553c303ef371450bf94edf881f01d102e762419a70",
+      "kind": "screenshot",
+      "description": "Real window (client area, X11 backend under XWayland, default theme) right after start: field \"Coucou\" and greeting \"Bonjour Coucou\"."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-default-2-typed-marie.png",
+      "sha256": "42c7aca925e5c048caf8651c7c5d8cf242cc1a6a2c37645d69da1ff2c9d51fc8",
+      "kind": "screenshot",
+      "description": "Same window after the synthetic keys Ctrl+A, M, a, r, i, e: field \"Marie\", greeting \"Bonjour Marie\" (captured 507 ms after the first key was sent)."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/gui-default.json",
+      "sha256": "0a277b86b410973b07732e2d1e407bb1ab3b5557ea1624bb1771c98dd0e0193b",
+      "kind": "gui-run",
+      "description": "Record of the window run with the default theme: 507 ms from the first key to the capture, window closed with a WM_DELETE_WINDOW client message, exit status 0 after 4 ms, standard error empty, no leftover process, contrast ratio 11.61."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-dark-1-initial.png",
+      "sha256": "da7b16111871fd581849b6b2c54f30c1278c9dae4979b684db33dab3240840e2",
+      "kind": "screenshot",
+      "description": "Window with GTK_THEME=Adwaita:dark right after start."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-dark-2-typed-marie.png",
+      "sha256": "c7f770ba8ef50516bc76463532fadab894251016abbaceb2fb348dd04b948dfa",
+      "kind": "screenshot",
+      "description": "Window with GTK_THEME=Adwaita:dark after the synthetic typing of Marie: \"Bonjour Marie\", light text on a dark background."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/gui-dark.json",
+      "sha256": "b93dae870ee361af959fd4e4393fe82fdf248d4496ee0c2a71783d4dad719c6c",
+      "kind": "gui-run",
+      "description": "Record of the Adwaita:dark run: 501 ms from the first key to the capture, exit status 0, standard error empty, no leftover process, contrast ratio 10.56."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-highcontrast-1-initial.png",
+      "sha256": "bd6c93827e03e73a9fb38623cba45786a6efc7dec9af620d621b5d962b56a4c0",
+      "kind": "screenshot",
+      "description": "Window with GTK_THEME=HighContrast right after start."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-highcontrast-2-typed-marie.png",
+      "sha256": "de643276932d6ad785a364c41bb0e94b316616d2e0c39285ae83b69ee4db6cfe",
+      "kind": "screenshot",
+      "description": "Window with GTK_THEME=HighContrast after the synthetic typing of Marie."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/gui-highcontrast.json",
+      "sha256": "d8c41c67c41ea071eef3db77b9c6121ebef0b993f77f5789b20fb6d32fa4c8a0",
+      "kind": "gui-run",
+      "description": "Record of the HighContrast run: 504 ms from the first key to the capture, exit status 0, standard error empty, no leftover process, contrast ratio 13.88."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-highcontrast-inverse-1-initial.png",
+      "sha256": "2bd01249fcbc94566665cba168095eb398159d7f47c19e580f2126f0411c5f91",
+      "kind": "screenshot",
+      "description": "Window with GTK_THEME=HighContrastInverse right after start."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-highcontrast-inverse-2-typed-marie.png",
+      "sha256": "ff920dfd3ed3bc2bd6c864b6d135dc4768f7e08b7df31931f59323be1038a0ba",
+      "kind": "screenshot",
+      "description": "Window with GTK_THEME=HighContrastInverse after the synthetic typing of Marie."
+    },
+    {
+      "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/gui-highcontrast-inverse.json",
+      "sha256": "680e7c5bda14a9c3b55cdbb137c3b9f317a3a06170890c03ef0aa324e6f73aab",
+      "kind": "gui-run",
+      "description": "Record of the HighContrastInverse run: 504 ms from the first key to the capture, exit status 0, standard error empty, no leftover process, contrast ratio 11.88."
+    }
+  ],
+  "measurements": {
+    "trial_date": "2026-11-12",
+    "executable": {
+      "name": "loomora-gtk3",
+      "size_bytes": 296848,
+      "sha256": "5bd33f1d990d01c13c19773523d491f3e0a4f806287133657dba9f81f16c12dd",
+      "built_from_commit": "99a9c70 (working tree clean for core/ and ui/; the GTK UI files date from commit c06345c)",
+      "dynamic_dependencies": "6 DT_NEEDED entries, GTK 3 and system libraries; libstdc++ and libgcc linked statically; highest glibc symbol version GLIBC_2.38"
+    },
+    "display_ms": {
+      "scenario_probe_default_n10": {
+        "min": 110,
+        "median": 140,
+        "max": 247
+      },
+      "scenario_probe_input_Marie_n10": {
+        "min": 105,
+        "median": 111,
+        "max": 138
+      },
+      "all_20_runs": {
+        "min": 105,
+        "median": 118,
+        "max": 247
+      },
+      "run_vectors_15_runs_4_in_parallel": {
+        "min": 101,
+        "median": 185,
+        "max": 388
+      },
+      "threshold": "SC-001: first frame under 3000 ms; the slowest run of any series was 388 ms"
+    },
+    "peak_rss_kb": {
+      "all_20_runs": {
+        "min": 37260,
+        "median": 37576,
+        "max": 37784
+      },
+      "run_vectors_15_runs": {
+        "min": 37272,
+        "max": 52096,
+        "note": "the largest value comes from the 1,000-character inputs, 4,096-byte vectors truncated to 1,000 characters included"
+      },
+      "source": "VmHWM of /proc/self/status read by the application itself (probe record field peak_rss_kb)"
+    },
+    "process_wall_time_ms": {
+      "all_20_runs": {
+        "min": 2104,
+        "median": 2148,
+        "max": 2359
+      },
+      "note": "includes the 2 s that probe mode waits before exiting by itself"
+    },
+    "exit": "20 of 20 probe runs and the 15 run_vectors runs exited with status 0 and empty standard error; no loomora-gtk3 process was left after any of the 20 runs (pgrep); the four window runs were closed with WM_DELETE_WINDOW and exited with status 0 in about 4 ms with empty standard error",
+    "typed_input": "message \"Bonjour Marie\" for --probe-input Marie in 10 of 10 runs with greeting_matches true; in the real window \"Bonjour Marie\" visible in the capture 501 to 507 ms after the first synthetic key (4 themes)",
+    "contrast_ratio_greeting_label": {
+      "default": 11.61,
+      "Adwaita:dark": 10.56,
+      "HighContrast": 13.88,
+      "HighContrastInverse": 11.88,
+      "requirement": "ui-contract item 2: at least 4.5:1"
+    }
+  },
+  "decision": "keep",
+  "notes": "Environment: WSL2 distribution Ubuntu-24.04 with WSLg, see validation/platforms/linux-ubuntu-24.04-x86_64.json. Commands used (from the repository root, Windows host, Git Bash): 'python tools/build.py linux modern' (build in ~/loomora-build under the distribution home, up to date, no change to the deliverable record), then 20 launches of ~/loomora-build/linux-modern/loomora-gtk3 --probe [--probe-input Marie] with the stdout, stderr, exit status and leftover processes recorded, then 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --evidence-dir validation/evidence/<change>/linux-ubuntu-24.04-x86_64/', then four runs of the window without --probe, driven by a small Python script (Gdk pixbuf capture of the X11 window, XSendEvent key events, WM_DELETE_WINDOW client message) with GDK_BACKEND=x11, GDK_CORE_DEVICE_EVENTS=1 and GTK_THEME unset, Adwaita:dark, HighContrast, HighContrastInverse. That driver script is not part of the repository. The first run of the '--probe' series was also its slowest (247 ms). The text files of this evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256."
+}
