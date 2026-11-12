@@ -124,5 +124,50 @@
     "title": "Visual Studio for Windows XP targets",
     "accessed": "2026-11-12",
     "claim": "Recent Visual Studio no longer targets Windows XP"
+  },
+  {
+    "id": "eol-windows-10",
+    "url": "https://learn.microsoft.com/en-us/lifecycle/products/windows-10-home-and-pro",
+    "title": "Microsoft Lifecycle: Windows 10 Home and Pro",
+    "accessed": "2026-11-12",
+    "claim": "Threshold for Windows: NT major <= 10 is end of life (loomora_is_eol, core/src/eol.cpp). Windows 10 reached end of support on 2025-10-14.",
+    "verified": "yes",
+    "note": "The page was fetched over HTTP on 2026-11-12 (status 200) and its text states that Windows 10 reaches end of support on October 14, 2025. Extended Security Updates and LTSC editions are not taken into account."
+  },
+  {
+    "id": "eol-windows-11",
+    "url": "https://learn.microsoft.com/en-us/lifecycle/products/windows-11-home-and-pro",
+    "title": "Microsoft Lifecycle: Windows 11 Home and Pro",
+    "accessed": "2026-11-12",
+    "claim": "Threshold for Windows: Windows 11 (passed as 11.0) is still in support on 2026-11-12.",
+    "verified": "yes",
+    "note": "The page was fetched over HTTP on 2026-11-12 (status 200) and lists Windows 11 Home and Pro as 'In Support' with version 26H2 supported until 2028-10-10."
+  },
+  {
+    "id": "eol-apple-security",
+    "url": "https://support.apple.com/en-us/100100",
+    "title": "Apple security releases",
+    "accessed": "2026-11-12",
+    "claim": "Thresholds for macOS (major <= 14 is end of life) and iOS (major <= 17 is end of life): Apple patches only the latest releases.",
+    "verified": "partial",
+    "note": "The page was fetched over HTTP on 2026-11-12 (status 200). Its latest entries (2026-11-09) patch macOS 15, 26 and 27 and iOS 18, 26 and 27; the last macOS Sonoma 14 release listed is 14.8.9 of 2026-08-06, and no iOS 17 release appeared in the entries read. Apple publishes no formal support policy, so the cut-offs are an inference from the list of patched releases, not a vendor statement."
+  },
+  {
+    "id": "eol-android-security",
+    "url": "https://source.android.com/docs/security/bulletin/asb-overview",
+    "title": "Android Security Bulletins overview",
+    "accessed": "2026-11-12",
+    "claim": "Threshold for Android: marketing version <= 13 is end of life (14 and later still receive security bulletins).",
+    "verified": "no",
+    "note": "UNVERIFIED claim: the URL answered with HTTP status 200 on 2026-11-12 and the bulletin index lists per-release bulletin pages (Android 12L to 16), but the cut-off at Android 13 was not confirmed from the page content. Confirm against the latest monthly bulletin before relying on it."
+  },
+  {
+    "id": "eol-kernel-releases",
+    "url": "https://www.kernel.org/category/releases.html",
+    "title": "The Linux Kernel Archives: releases and longterm EOL dates",
+    "accessed": "2026-11-12",
+    "claim": "Threshold for Linux: kernel < 5.10 is end of life; 5.10 is the oldest longterm branch still maintained (listed with an end of life of December 2026).",
+    "verified": "partial",
+    "note": "The page was fetched over HTTP on 2026-11-12 (status 200). The extracted text lists the longterm branches 5.10, 5.15, 6.1 and 6.6 with their projected end of life (5.10: December 2026) and no longer lists 5.4. The table of the page was read from stripped HTML, not rendered. 5.10 ends next month, so the threshold must be revisited in 2027."
   }
 ]
