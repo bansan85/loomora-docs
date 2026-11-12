@@ -1,0 +1,128 @@
+[
+  {
+    "id": "cpp-compiler-support",
+    "url": "https://en.cppreference.com/w/cpp/compiler_support/11",
+    "title": "C++11 compiler support (cppreference)",
+    "accessed": "2026-11-12",
+    "claim": "Which compilers support C++11 features"
+  },
+  {
+    "id": "msvc-std-switch",
+    "url": "https://learn.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version",
+    "title": "MSVC language standard switch /std",
+    "accessed": "2026-11-12",
+    "claim": "MSVC has no /std:c++11; the minimum is /std:c++14"
+  },
+  {
+    "id": "ndk-revisions",
+    "url": "https://developer.android.com/ndk/downloads/revision_history",
+    "title": "Android NDK revision history",
+    "accessed": "2026-11-12",
+    "claim": "NDK r16b is the last to target API 9 (Android 2.3) as planned"
+  },
+  {
+    "id": "ndk-r25",
+    "url": "https://android-developers.googleblog.com/2022/10/android-ndk-r25-released.html",
+    "title": "Android NDK r25 note on API levels",
+    "accessed": "2026-11-12",
+    "claim": "Recent NDKs raise the minimum API level"
+  },
+  {
+    "id": "osxcross",
+    "url": "https://github.com/tpoechtrager/osxcross",
+    "title": "osxcross",
+    "accessed": "2026-11-12",
+    "claim": "Clang cross-toolchain targeting macOS from Linux with an Apple SDK"
+  },
+  {
+    "id": "mingw-w64",
+    "url": "https://www.mingw-w64.org/",
+    "title": "MinGW-w64",
+    "accessed": "2026-11-12",
+    "claim": "GCC toolchain for Windows, targetable at old _WIN32_WINNT values"
+  },
+  {
+    "id": "pep-571",
+    "url": "https://peps.python.org/pep-0571/",
+    "title": "PEP 571 manylinux2010",
+    "accessed": "2026-11-12",
+    "claim": "manylinux2010 baseline is glibc 2.12"
+  },
+  {
+    "id": "zig-cross",
+    "url": "https://ziglang.org/learn/overview/#cross-compiling-is-a-first-class-use-case",
+    "title": "Zig cross-compilation",
+    "accessed": "2026-11-12",
+    "claim": "Zig as an alternative cross-compiler"
+  },
+  {
+    "id": "emscripten-settings",
+    "url": "https://emscripten.org/docs/tools_reference/settings_reference.html",
+    "title": "Emscripten settings reference",
+    "accessed": "2026-11-12",
+    "claim": "WASM and LEGACY_VM_SUPPORT settings"
+  },
+  {
+    "id": "emscripten-wasm",
+    "url": "https://emscripten.org/docs/compiling/WebAssembly.html",
+    "title": "Emscripten compiler support / asm.js removal",
+    "accessed": "2026-11-12",
+    "claim": "Current Emscripten no longer emits asm.js; fastcomp 1.39.20 is the last asm.js-capable release"
+  },
+  {
+    "id": "catch2",
+    "url": "https://github.com/catchorg/Catch2",
+    "title": "Catch2",
+    "accessed": "2026-11-12",
+    "claim": "Catch2 v2 single-header test framework"
+  },
+  {
+    "id": "cmake-presets",
+    "url": "https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html",
+    "title": "CMake presets",
+    "accessed": "2026-11-12",
+    "claim": "CMakePresets.json format"
+  },
+  {
+    "id": "winappsdk-support",
+    "url": "https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/support",
+    "title": "Windows App SDK support and requirements",
+    "accessed": "2026-11-12",
+    "claim": "WinUI 3 requires Windows 10 1809 or later"
+  },
+  {
+    "id": "compose-setup",
+    "url": "https://developer.android.com/develop/ui/compose/compiler",
+    "title": "Jetpack Compose compiler setup",
+    "accessed": "2026-11-12",
+    "claim": "Compose compiler setup and requirements"
+  },
+  {
+    "id": "androidx-versions",
+    "url": "https://developer.android.com/jetpack/androidx/versions",
+    "title": "AndroidX versions (default minSdk)",
+    "accessed": "2026-11-12",
+    "claim": "Default minSdk of AndroidX libraries"
+  },
+  {
+    "id": "gtk3-reference",
+    "url": "https://docs.gtk.org/gtk3/",
+    "title": "GTK 3 reference",
+    "accessed": "2026-11-12",
+    "claim": "GTK 3 API reference"
+  },
+  {
+    "id": "apple-deployment-targets",
+    "url": "https://developer.apple.com/forums/thread/763782",
+    "title": "Apple forum - deployment targets with Xcode 16",
+    "accessed": "2026-11-12",
+    "claim": "Recent Xcode raises the minimum deployment targets"
+  },
+  {
+    "id": "vs-xp-targets",
+    "url": "https://learn.microsoft.com/is-is/cpp/build/configuring-programs-for-windows-xp?view=msvc-170",
+    "title": "Visual Studio for Windows XP targets",
+    "accessed": "2026-11-12",
+    "claim": "Recent Visual Studio no longer targets Windows XP"
+  }
+]
