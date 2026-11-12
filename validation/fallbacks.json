@@ -14,5 +14,37 @@
     "min_compiler": "C++17 mode (__cplusplus >= 201703L or _MSVC_LANG >= 201703L): gcc 7, clang 3.9, msvc 19.11 (VS 2017 15.3)",
     "platform_ids": [],
     "reason": "The backend is built as strict C++11 on every Legacy target (and as C++14 where MSVC or the CMake clang/MSVC STL combination imposes it), so those builds take the fallback; only a build in C++17 mode or later uses [[nodiscard]]. platform_ids stays empty until the platform records exist (T059, T087, T115)."
+  },
+  {
+    "id": "dark-mode",
+    "description": "Dark theme of the Windows Legacy UI (ui/legacy/windows-win32/dynfeatures.cpp): when the user's \"apps use light theme\" setting (HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\\AppsUseLightTheme, read through advapi32 loaded at run time) is 0 and no high contrast scheme is on, the window and its controls use dark colours (text 14:1 on the background) and, through dwmapi!DwmSetWindowAttribute when it exists, a dark title bar. The fallback is the colours of the system, which every Windows version applies by itself.",
+    "macro": "LOOMORA_FEATURE_DARK_MODE",
+    "min_compiler": "not a compiler feature: looked up at run time, any compiler; needs the AppsUseLightTheme setting (Windows 10, build 1607 or 1703 to verify, and Windows 11); a dark title bar needs Windows 10 version 1809 or later",
+    "platform_ids": [],
+    "reason": "Windows 2000 to 8.1 have no dark theme setting for applications: the value is missing, the feature is skipped and \"dark-mode\" is added to disabled_features of the probe record; the greeting stays legible with the system colours. Exercised on Windows 11 only (light and dark). platform_ids stays empty until the Windows platform records exist (T088): the deliverable ids windows-x86 and windows-x64 are not platform records."
+  },
+  {
+    "id": "dpi-awareness",
+    "description": "DPI awareness of the Windows Legacy UI: SetProcessDPIAware (user32) is looked up at run time and called before the window exists, the layout and the GUI font are then scaled to the system DPI. The fallback is not to call it.",
+    "macro": "LOOMORA_FEATURE_DPI_AWARENESS",
+    "min_compiler": "not a compiler feature: looked up at run time, any compiler; SetProcessDPIAware exists since Windows Vista",
+    "platform_ids": [],
+    "reason": "Windows 2000 and XP do not export SetProcessDPIAware: the call is skipped and \"dpi-awareness\" is added to disabled_features. Nothing is lost there, those systems do not virtualize the DPI, so the program already sees the real one (the layout is still scaled by it). Only the system level is requested: a window moved to a monitor of another DPI is stretched by the system. Exercised on Windows 11 at 100% only. platform_ids stays empty until the Windows platform records exist (T088)."
+  },
+  {
+    "id": "high-contrast-query",
+    "description": "High contrast query of the Windows Legacy UI: SystemParametersInfoW(SPI_GETHIGHCONTRAST), looked up at run time in user32; when a high contrast scheme is on, the dark theme of the UI is not applied and the system colours stay. The fallback is to assume no high contrast scheme.",
+    "macro": "LOOMORA_FEATURE_HIGH_CONTRAST_QUERY",
+    "min_compiler": "not a compiler feature: looked up at run time, any compiler; SPI_GETHIGHCONTRAST is available since Windows 2000",
+    "platform_ids": [],
+    "reason": "Every Windows of the range (2000 to 11) is believed to export SystemParametersInfoW with this action, so the skip is a defensive path that is not expected to be taken; it is declared because the code can take it. The controls use system colours by default, so a high contrast scheme is respected even without the query. Not exercised with a high contrast scheme on. platform_ids stays empty until the Windows platform records exist (T088)."
+  },
+  {
+    "id": "peak-memory",
+    "description": "Peak memory of the Windows Legacy UI in probe mode: GetProcessMemoryInfo (PeakWorkingSetSize) from psapi.dll, loaded from the system directory at run time. The fallback is peak_rss_kb = -1 in loomora_probe_record, which the record shows as null.",
+    "macro": "LOOMORA_FEATURE_PEAK_MEMORY",
+    "min_compiler": "not a compiler feature: looked up at run time, any compiler; psapi.dll is part of Windows 2000 and later",
+    "platform_ids": [],
+    "reason": "The measure is best effort (ui-contract.md): when psapi.dll or the function is absent the probe record has a null peak_rss_kb and \"peak-memory\" in disabled_features. Not expected on Windows 2000 SP4 and later (psapi.dll ships with it, to verify on a real system); the skip path was not exercised. platform_ids stays empty until the Windows platform records exist (T088)."
   }
 ]
