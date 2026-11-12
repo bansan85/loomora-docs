@@ -1,0 +1,256 @@
+{
+  "platform_id": "windows-11-x64",
+  "ui_variant": "legacy",
+  "status": "ok_restricted",
+  "restrictions": [
+    "Typing was exercised with Win32 messages, not by a person with a real keyboard: the Edit control received EM_SETSEL then the WM_CHAR messages M, a, r, i, e (SendMessageW from another process) and the Static control was read back with WM_GETTEXT (\"Bonjour Marie\", 16.3 ms after the first message on x64, 15.4 ms on x86, an upper bound for the update delay compared with the 1 s of User Story 1). Real key events, the focus and caret behaviour, input methods (IME), clipboard paste and drag and drop were not tested. The 1,000-character limit was checked by sending 1,100 WM_CHAR messages (EM_GETLIMITTEXT 1000, Edit length 1000); text given by --probe-input bypasses that limit and is cut by the application itself.",
+    "The end-of-life warning (FR-013, ui-contract item 3) was not exercised: Windows 11 26H2 is in support (validation/sources.json eol-windows-11), so eol_warning_shown was false in all 40 probe runs and no banner exists in the window (one Static only). The check 'warning on every end-of-life system' of T088 has no case on this platform; the only earlier display of the banner (T073) was with a test-only build reporting Windows 7, outside this trial.",
+    "No skipped-feature path was exercised: every optional feature (dark mode, DPI awareness, high-contrast query, GetProcessMemoryInfo) exists on Windows 11, so disabled_features was empty in all 40 probe runs and the fallbacks of validation/fallbacks.json were never taken. disabled_features is therefore recorded empty for Windows 11 only.",
+    "Only the default appearance was looked at: light theme (AppsUseLightTheme = 1), high contrast off (high-contrast flags 126, HCF_HIGHCONTRASTON not set), system DPI 96 (100%). The dark theme, a high-contrast scheme, DPI scaling above 100%, per-monitor DPI and the dark title bar were not exercised in this trial, and the 4.5:1 contrast ratio of ui-contract item 2 was not measured on the captured pixels (the controls use the system colours).",
+    "The screenshots are PrintWindow captures of the window (420x200, title bar included, empty shadow corners), not screen recordings and not an independent view of the physical screen; 'displayed' and display_ms in the probe record come from the application's own first WM_PAINT. The glyph rendering of the non-ASCII vectors (accents, CJK, right-to-left, emoji, combining characters) was not looked at: tools/run_vectors.py checks the text of the probe line, not what the fonts of this system draw; only \"Coucou\" and \"Marie\" were seen in captures.",
+    "Only one Windows version and one machine: Windows 11 26H2 (10.0.26300.9974), French (fr-FR), x64, on a physical MSI laptop whose Windows runs on top of the Microsoft hypervisor. Not tested: Windows 11 ARM64, Windows 10 and every older Windows (8.1, 7, Vista, XP, 2000), a native 32-bit Windows (the x86 exe only ran under WOW64 on this 64-bit system, which is why it reports platform_id windows-11-x64 like the x64 exe), other languages, other machines or virtualised hosts. Timings and memory are those of this laptop, from 20 runs per executable (plus 15 vector runs each), enough for a min / median / max, not for a distribution.",
+    "This trial says nothing about the Legacy floor: Windows 11 is the newest system of the Windows Legacy ladder and the 'oldest working Windows' of FR-005 / SC-002 / SC-009 is not determined by it. The Windows 2000 SP4 / XP / Vista / 7 / 8.1 / 10 runs of T088, spike S1 (T066) and the 'verify' entries of the import allowlist remain open; no run of either executable on a system older than this Windows 11 is recorded.",
+    "No procedure document exists yet for this trial (validation/procedures/windows.md is task T109), so the verdict carries no 'reproduction' path; the commands used are in the 'notes' field and the driver script is part of the evidence.",
+    "The executables were started from a scratch copy in the Windows temp folder (one copy per run) so that loomora-probe.json files could not collide; they were built by 'wsl -d Ubuntu-24.04 -- python3 tools/build.py windows legacy' (up to date, sha256 below) and closed by a WM_CLOSE message, not by a click on the close button. The deliverable records of the build are validation/deliverables/windows-x64-legacy.json and windows-x86-legacy.json, whose platform ids do not match the platform id of this record (windows-11-x64); the mismatch is a warning of tools/validate_records.py, not changed here."
+  ],
+  "disabled_features": [],
+  "evidence": [
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/probe-default-x64-run1.json",
+      "sha256": "1fae1730554bc285a282e3b1eccb25842832f8dc7323ce1c331f342e559b607e",
+      "kind": "probe",
+      "description": "First of 10 runs of the x64 exe 'loomora.exe --probe': message \"Bonjour Coucou\", platform_id windows-11-x64, display_ms 52, peak_rss_kb 14224."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/probe-marie-x64-run1.json",
+      "sha256": "d2fe5a69712bd246e628fb99ee569f640fcc1085a6ba12901fa13e0d84b5584e",
+      "kind": "probe",
+      "description": "First of 10 runs of the x64 exe '--probe --probe-input Marie': message \"Bonjour Marie\", display_ms 44, peak_rss_kb 13356."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/probe-default-x86-run1.json",
+      "sha256": "eebf166ad9c7297af09caa95ac1893eb3a36855c428a5b06fb07cd9e15dcf1d9",
+      "kind": "probe",
+      "description": "First of 10 runs of the x86 exe (under WOW64) '--probe': message \"Bonjour Coucou\", platform_id windows-11-x64 (the exe reports the architecture of the operating system), display_ms 55, peak_rss_kb 13632."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/probe-marie-x86-run1.json",
+      "sha256": "a78f2ff1f16fffd46e1b34f6887808ab27dd7bd6fee429f84e9bb9ef7ccee94c",
+      "kind": "probe",
+      "description": "First of 10 runs of the x86 exe '--probe --probe-input Marie': message \"Bonjour Marie\", display_ms 47, peak_rss_kb 13048."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/probe-default-x64-runs.jsonl",
+      "sha256": "9b2964e031e76a799af95903c82c10ac45721f9e0f94955a31e8e4099c724712",
+      "kind": "probe-series",
+      "description": "The 10 probe lines of the x64 exe '--probe' (one per line, each read from loomora-probe.json): display_ms 42 to 66."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/probe-marie-x64-runs.jsonl",
+      "sha256": "9b226f4d4a8fb2545e72df860cec98308e584c4cf78f728af5aeab80feada35d",
+      "kind": "probe-series",
+      "description": "The 10 probe lines of the x64 exe '--probe --probe-input Marie': display_ms 44 to 53."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/probe-default-x86-runs.jsonl",
+      "sha256": "2837a82b2c1bc80f03a4d4feb5f6c39c4da0a3f71a64185597e373f23cc7731e",
+      "kind": "probe-series",
+      "description": "The 10 probe lines of the x86 exe '--probe' (one per line, each read from loomora-probe.json): display_ms 46 to 58."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/probe-marie-x86-runs.jsonl",
+      "sha256": "c5e02e9b804e0b463920ae9923c3e64b5793586a87b734bc76be70e4aade7cf7",
+      "kind": "probe-series",
+      "description": "The 10 probe lines of the x86 exe '--probe --probe-input Marie': display_ms 47 to 63."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/trial-measurements.json",
+      "sha256": "55416b0553a6a624e16e35d354606ac6d95e3f4fec2beea911665d14c2921b37",
+      "kind": "measurements",
+      "description": "Per run of the 40 probe runs (20 per exe): exit status (all 0), standard output and standard error sizes (all 0 bytes: the GUI exe has no console), wall time of the process (x64 2057 to 2186 ms, x86 2058 to 2194 ms, includes the 2 s of probe mode), probe file size, check_probe result (no problem), display_ms, peak_rss_kb, message, platform_id, disabled_features, eol_warning_shown and the count of loomora.exe processes (tasklist) before and after each run (always 0 after), with the size and sha256 of both executables."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/host-environment.json",
+      "sha256": "afaee99e162067838d08f10c6a9de3b32e16eb4d9fd4da3dda1a393c4b4a6072",
+      "kind": "environment",
+      "description": "Measured environment of the trial host: cmd ver, registry CurrentVersion, Get-ComputerInfo and CIM records (computer system, processor, video controller), system DPI 96, AppsUseLightTheme 1 (light theme), high contrast flags 126 (HCF_HIGHCONTRASTON not set)."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/gui-x64.json",
+      "sha256": "d4cde11a6fdfb8511bb0eb60cc040ed36208f1fcd22e0bf3cc71f7d3acac43e4",
+      "kind": "gui-run",
+      "description": "Window run of the x64 exe without --probe, driven with Win32 messages: window \"Loomora\" (class LoomoraWin) with one Edit (\"Coucou\", EM_GETLIMITTEXT 1000) and one Static (\"Bonjour Coucou\", seen 70 ms after CreateProcess, polled every 5 ms); EM_SETSEL + 5 WM_CHAR messages 'Marie' -> Edit \"Marie\", Static \"Bonjour Marie\" read back 16.3 ms after the first message; 1,100 WM_CHAR 'x' -> Edit length 1000 and Static = \"Bonjour \" + Edit; WM_CLOSE -> exit status 0 after 13 ms; no leftover process."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/window-x64-1-initial.png",
+      "sha256": "3668adf5abb2adab76133bf0a9170cd6ca5ec8de0ea1405ad06b32576a4b65bb",
+      "kind": "screenshot",
+      "description": "PrintWindow capture (420x200, whole top-level window including the title bar; the black corners are the window shadow area PrintWindow leaves empty) of the x64 exe right after start: Edit \"Coucou\", Static \"Bonjour Coucou\"."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/window-x64-2-typed-marie.png",
+      "sha256": "43153f6d44e2d2b4141fafb6fb8e3aeed3d6abc29476818c8f7ae27a0e14d74e",
+      "kind": "screenshot",
+      "description": "Same window of the x64 exe after the WM_CHAR messages M, a, r, i, e: Edit \"Marie\", Static \"Bonjour Marie\"."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/gui-x86.json",
+      "sha256": "c21ecbdae46ae63709fb7e5c41fb15c21f09cb9f7ac6ece52b4c83f630c7a616",
+      "kind": "gui-run",
+      "description": "Window run of the x86 exe without --probe, driven with Win32 messages: window \"Loomora\" (class LoomoraWin) with one Edit (\"Coucou\", EM_GETLIMITTEXT 1000) and one Static (\"Bonjour Coucou\", seen 86 ms after CreateProcess, polled every 5 ms); EM_SETSEL + 5 WM_CHAR messages 'Marie' -> Edit \"Marie\", Static \"Bonjour Marie\" read back 15.4 ms after the first message; 1,100 WM_CHAR 'x' -> Edit length 1000 and Static = \"Bonjour \" + Edit; WM_CLOSE -> exit status 0 after 25 ms; no leftover process."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/window-x86-1-initial.png",
+      "sha256": "3668adf5abb2adab76133bf0a9170cd6ca5ec8de0ea1405ad06b32576a4b65bb",
+      "kind": "screenshot",
+      "description": "PrintWindow capture (420x200, whole top-level window including the title bar; the black corners are the window shadow area PrintWindow leaves empty) of the x86 exe right after start: Edit \"Coucou\", Static \"Bonjour Coucou\"."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/window-x86-2-typed-marie.png",
+      "sha256": "ed710d6e50a51b026f1212e6158792a6345ba23efd70c3313d48e68a9ff7c841",
+      "kind": "screenshot",
+      "description": "Same window of the x86 exe after the WM_CHAR messages M, a, r, i, e: Edit \"Marie\", Static \"Bonjour Marie\"."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/run-vectors-windows-11-x64-legacy-x64-log.txt",
+      "sha256": "f776fb6baf179b54c77a75c227893254793a53002e95d45f783e6e40ed70e919",
+      "kind": "run_vectors-log",
+      "description": "Log of 'python tools/run_vectors.py windows-11-x64 legacy --arch x64 --evidence-dir ...' (SC-011, FR-027): 15 valid vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped as designed, 2 vectors (4,096 bytes) truncated to the 1,000 UTF-16 units of the EDIT limit, result PASSED. Tab, newline and U+0001 (vector control_characters), quotes, backslashes, emoji and the empty string went through the CreateProcess command line unchanged."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/run-vectors-windows-11-x64-legacy-x64-probe-lines.tsv",
+      "sha256": "26825ef68995a9106a0471d46491e5916ab0ed2ce0a62c59f3eac3d10bcfbcb1",
+      "kind": "run_vectors-probe-lines",
+      "description": "The probe line of each of the 15 vectors of the x64 exe, as '<vector id><TAB><probe line>': display_ms 45 to 110 (4 instances in parallel), peak_rss_kb 11824 to 14420."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/run-vectors-windows-11-x64-legacy-x86-log.txt",
+      "sha256": "5384a97640b4be474d92267ab3a0793a48f9e25c25f7c1b8009eb581b1b3c2c3",
+      "kind": "run_vectors-log",
+      "description": "Log of 'python tools/run_vectors.py windows-11-x64 legacy --arch x86 --evidence-dir ...' (SC-011, FR-027): 15 valid vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped as designed, 2 vectors (4,096 bytes) truncated to the 1,000 UTF-16 units of the EDIT limit, result PASSED. Tab, newline and U+0001 (vector control_characters), quotes, backslashes, emoji and the empty string went through the CreateProcess command line unchanged."
+    },
+    {
+      "path": "validation/evidence/first-trial/windows-11-x64/run-vectors-windows-11-x64-legacy-x86-probe-lines.tsv",
+      "sha256": "fa71cce246f9d43c3b8cf11d704f686f1766668e4ade73a7704846ee1237fbb8",
+      "kind": "run_vectors-probe-lines",
+      "description": "The probe line of each of the 15 vectors of the x86 exe, as '<vector id><TAB><probe line>': display_ms 55 to 127 (4 instances in parallel), peak_rss_kb 11548 to 13800."
+    },
+    {
+      "path": "tools/trials/windows-11-x64/trial-driver.py",
+      "sha256": "9442cb89af22691f7e63342d36e29bba2db0f2b73c76951a3b143011ff33278a",
+      "kind": "script",
+      "description": "The driver that produced trial-measurements.json, host-environment.json, gui-*.json, the window captures and the probe series (ctypes Win32 calls: EnumWindows, SendMessageW with WM_GETTEXT, EM_SETSEL, WM_CHAR, WM_CLOSE, PrintWindow; subprocess for the exe); run from the repository root with 'python tools/trials/windows-11-x64/trial-driver.py'."
+    }
+  ],
+  "measurements": {
+    "trial_date": "2026-11-12",
+    "scope": "Windows 11 only: this verdict says nothing about the Legacy floor (Windows 2000) nor about any other Windows version",
+    "executables": {
+      "x64": {
+        "name": "loomora.exe",
+        "size_bytes": 701774,
+        "sha256": "2c6c3ed9b1cc20b546e43b703e239c44742220e6c4c414ee54135d3ad89f8866",
+        "path": "out/windows-legacy/x64/loomora.exe",
+        "run": "natively; probe platform_id windows-11-x64"
+      },
+      "x86": {
+        "name": "loomora.exe",
+        "size_bytes": 694005,
+        "sha256": "16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e",
+        "path": "out/windows-legacy/x86/loomora.exe",
+        "run": "under WOW64; probe platform_id windows-11-x64 (the exe reports the architecture of the operating system)"
+      },
+      "built_from_commit": "d3755cc (working tree clean for ui/ and core/; rebuilt with tools/build.py windows legacy, 'ninja: no work to do', hashes unchanged)",
+      "imports": "4 DLLs (gdi32, kernel32, msvcrt, user32); statically linked libstdc++ and libgcc; see the deliverable records for the import counts"
+    },
+    "display_ms": {
+      "x64_probe_default_n10": {
+        "min": 42,
+        "median": 52.5,
+        "max": 66
+      },
+      "x64_probe_input_Marie_n10": {
+        "min": 44,
+        "median": 46.0,
+        "max": 53
+      },
+      "x86_probe_default_n10": {
+        "min": 46,
+        "median": 51.0,
+        "max": 58
+      },
+      "x86_probe_input_Marie_n10": {
+        "min": 47,
+        "median": 53.5,
+        "max": 63
+      },
+      "all_40_runs": {
+        "min": 42,
+        "median": 50.0,
+        "max": 66
+      },
+      "run_vectors_15_runs_4_in_parallel_x64": {
+        "min": 45,
+        "median": 83,
+        "max": 110
+      },
+      "run_vectors_15_runs_4_in_parallel_x86": {
+        "min": 55,
+        "median": 65,
+        "max": 127
+      },
+      "definition": "time from the start of WinMain to the first WM_PAINT of the main window (probe.cpp, QueryPerformanceCounter)",
+      "threshold": "SC-001: first frame under 3000 ms; the slowest run of any series was 127 ms",
+      "greeting_seen_by_poll_ms_after_createprocess": {
+        "x64": 70,
+        "x86": 86,
+        "note": "one window run each, polled every 5 ms from another process: an upper bound that includes process start-up"
+      }
+    },
+    "peak_rss_kb": {
+      "x64_20_runs": {
+        "min": 13284,
+        "median": 13360.0,
+        "max": 14224
+      },
+      "x86_20_runs": {
+        "min": 13036,
+        "median": 13052.0,
+        "max": 13632
+      },
+      "run_vectors_15_runs_x64": {
+        "min": 11824,
+        "median": 14296,
+        "max": 14420
+      },
+      "run_vectors_15_runs_x86": {
+        "min": 11548,
+        "median": 13556,
+        "max": 13800
+      },
+      "source": "PeakWorkingSetSize through GetProcessMemoryInfo, read by the application itself (probe record field peak_rss_kb)"
+    },
+    "process_wall_time_ms": {
+      "x64_20_runs": {
+        "min": 2057,
+        "median": 2076.0,
+        "max": 2186
+      },
+      "x86_20_runs": {
+        "min": 2058,
+        "median": 2079.0,
+        "max": 2194
+      },
+      "note": "includes the 2 s that probe mode waits before exiting by itself and the process start-up"
+    },
+    "exit": "40 of 40 probe runs and the 30 run_vectors runs exited with status 0, empty standard output (the GUI exe has no console) and empty standard error; the probe line came from loomora-probe.json next to the exe; no loomora.exe process was left after any of the 40 runs (tasklist after each run); the two window runs closed with WM_CLOSE exited with status 0 after 13 ms (x64) and 25 ms (x86) with no leftover process",
+    "message_check": "message \"Bonjour Coucou\" in 20 of 20 '--probe' runs and \"Bonjour Marie\" in 20 of 20 '--probe-input Marie' runs, greeting_matches true, every line valid against probe-result.schema.json (tools/check_probe.py); disabled_features empty and eol_warning_shown false in all 40 runs",
+    "vectors": "tools/run_vectors.py windows-11-x64 legacy --arch x64 and --arch x86: 15 valid vectors run per exe, 15 passed, 0 failed, 16 error or API-only vectors skipped (the backend tests cover them), 2 truncated to 1,000 UTF-16 units; nothing in vectors.json is unrepresentable on a Windows command line except a NUL, which no vector contains",
+    "typed_input": "Win32 messages: Edit \"Marie\" and Static \"Bonjour Marie\" for both exes; Edit limit 1000, 1,100 characters typed give 1000"
+  },
+  "decision": "keep",
+  "sources": [
+    "eol-windows-11"
+  ],
+  "notes": "Windows 11 trial of the Windows Legacy UI, on the physical host described in validation/platforms/windows-11-x64.json, 2026-11-12. It covers only the Windows 11 part of T088 and the Windows 11 evidence of T094; it says nothing about the Legacy floor (Windows 2000) and does not determine the oldest working Windows (FR-005). Commands (repository root, Windows host): 'wsl -d Ubuntu-24.04 --cd <repo> -- python3 tools/build.py windows legacy' (up to date), 'python tools/trials/windows-11-x64/trial-driver.py' (40 probe runs, two window runs, host measurements), then 'python tools/run_vectors.py windows-11-x64 legacy --arch x64 --evidence-dir validation/evidence/<change>/windows-11-x64/' and the same with '--arch x86'. The x86 executable ran under WOW64 and reports the id of the operating system architecture (windows-11-x64); the Windows launcher of tools/run_vectors.py copies the exe to a scratch folder per run, starts it through CreateProcess with an argument list (UTF-16 command line built by Python), waits for the exit and reads loomora-probe.json; its 1,000-character expectation counts UTF-16 units (a character outside the BMP counts as two and is never cut), which no current vector exercises (checked once with a temporary vectors file outside the repository: 999 'a' + emoji gives 999 units kept, 998 'a' + emoji gives 1000). The text files of this evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256."
+}

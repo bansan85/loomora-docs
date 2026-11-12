@@ -1,0 +1,19 @@
+{
+  "id": "windows-11-x64",
+  "family": "windows",
+  "os_name": "Windows 11 Pro",
+  "os_version": "10.0.26300.9974 (version 26H2, build 26300, UBR 9974), French (fr-FR), 64-bit",
+  "arch": "x86_64",
+  "release_date": "2021-10-05",
+  "age_years": 5.1,
+  "is_floor": false,
+  "in_scope": true,
+  "environment": "physical",
+  "environment_detail": "Physical laptop, not a virtual machine: Micro-Star International GL63 8RD (board MS-16P6, BIOS American Megatrends E16P6IMS.109), Intel Core i5-8300H @ 2.30GHz (8 logical CPUs), 25,606,975,488 bytes of RAM, Intel UHD Graphics 630 (1920x1080) and NVIDIA GeForce GTX 1050 Ti, system DPI 96 (100%). The machine reports a hypervisor (Win32_ComputerSystem.HypervisorPresent = True) because this Windows 11 itself runs on top of the Microsoft hypervisor as its root partition (WSL2 is installed on it); the system manufacturer, model and BIOS are those of the real MSI machine, not of a hypervisor, so every figure of the trial is that of a physical host with the hypervisor layer underneath. Measured on 2026-11-12 with 'cmd /c ver' (Microsoft Windows [version 10.0.26300.9974]), [System.Environment]::OSVersion (10.0.26300.0), Get-ComputerInfo (OsName Microsoft Windows 11 Professionnel, OsVersion 10.0.26300, OsBuildNumber 26300, OsArchitecture 64 bits, WindowsVersion 2009 (a stale value of the registry key, the DisplayVersion is 26H2), CsSystemType x64-based PC), the registry key CurrentVersion (DisplayVersion 26H2, CurrentBuild 26300, UBR 9974; ProductName still reads 'Windows 10 Pro', as on every Windows 11) and Win32_ComputerSystem / Win32_Processor / Win32_VideoController; raw values in validation/evidence/first-trial/windows-11-x64/host-environment.json. Windows Legacy UI executables built in WSL2 Ubuntu-24.04 with MinGW-w64 GCC 13 (win32 thread model) and started on this host: the x64 executable natively, the x86 executable under WOW64.",
+  "eol": false,
+  "edition": "Professional (Windows 11 Pro)",
+  "language": "fr-FR",
+  "hardware": "MSI GL63 8RD, Intel Core i5-8300H, 24 GiB RAM (25,606,975,488 bytes)",
+  "release_date_source": "General availability of Windows 11 (build 22000, 2021-10-05), taken from the author's knowledge, not from a page re-read for this record; the installed build 26300 (26H2) is a later feature version whose own release date was not looked up. age_years = days from 2021-10-05 to the trial date 2026-11-12 divided by 365.25, rounded to 0.1.",
+  "eol_source": "validation/sources.json eol-windows-11: Windows 11 version 26H2 in support on 2026-11-12; the backend (loomora_is_eol) does not treat 11.0 as end of life, and eol_warning_shown was false in every run."
+}
