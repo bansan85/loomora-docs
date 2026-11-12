@@ -1,0 +1,18 @@
+{
+  "platform_id": "linux-ubuntu-24.04-x86_64",
+  "ui_variant": "modern",
+  "cpp_std": "c++11",
+  "compiler": "gcc-13.3.0",
+  "target": "x86_64-linux-gnu",
+  "output": "native",
+  "ui_language": "c",
+  "ui_toolkit": "gtk+-3.0 3.24.41 (3.10 API subset)",
+  "ui_compiler": "gcc-13.3.0",
+  "artifact": {
+    "name": "loomora-gtk3",
+    "size": 296848
+  },
+  "disabled_features": [],
+  "fallbacks": [],
+  "notes": "meson + ninja (ui/modern/linux-gtk3/meson.build); static libloomora.a built from core/src with -std=c++11; libstdc++ and libgcc linked statically, GTK 3 and the system libraries dynamically; artifact copied to out/linux-modern/."
+}
