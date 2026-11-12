@@ -14,5 +14,5 @@
   },
   "disabled_features": [],
   "fallbacks": [],
-  "notes": "cmake + ninja (ui/legacy/windows-win32/CMakeLists.txt) with cmake/toolchains/mingw-w64-win-x86_64.cmake; static libloomora.a built from core/src with -std=c++11; -static, libstdc++ and libgcc linked statically; GCC thread model win32; imported DLLs: gdi32.dll, kernel32.dll, msvcrt.dll, user32.dll (names only: the function-level check and the run on Windows 2000 are spike S1 / T066); meant for Windows XP x64 -> 11, not verified on any of them by this build; artifact copied to out/windows-legacy/x64/."
+  "notes": "cmake + ninja (ui/legacy/windows-win32/CMakeLists.txt) with cmake/toolchains/mingw-w64-win-x86_64.cmake; static libloomora.a built from core/src with -std=c++11; -static, libstdc++ and libgcc linked statically; GCC thread model win32; imported DLLs: gdi32.dll, kernel32.dll, msvcrt.dll, user32.dll; 91 imported functions, each on the Windows XP x64 / Server 2003 x64 allowlist of tools/win2000_imports.json (tools/check_imports.py; entries marked verify are unconfirmed); KERNEL32!GetThreadId is imported (XP x64 has it, so the toolchain output is unchanged, ADR 0002); meant for Windows XP x64 -> 11, not verified on any of them by this build (the run on Windows 2000 is spike S1 / T066); artifact copied to out/windows-legacy/x64/."
 }
