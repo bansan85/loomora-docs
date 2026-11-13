@@ -1,0 +1,17 @@
+{
+  "scenario": "startup-wayland",
+  "env": {},
+  "argv": [],
+  "xid": "0x0",
+  "still_running_before_close": true,
+  "close_method": "SIGTERM",
+  "exit_status": -15,
+  "close_to_exit_ms": 3,
+  "stdout": "",
+  "stderr_bytes": 0,
+  "stderr": "",
+  "leftover_after_exit": [],
+  "shots": {},
+  "observation_s": 6,
+  "note": "default GDK backend (Wayland under WSLg): no screenshot, closed with SIGTERM"
+}
