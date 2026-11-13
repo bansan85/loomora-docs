@@ -6,15 +6,16 @@
   "target": "x86_64-linux-gnu",
   "output": "native",
   "ui_language": "c",
-  "ui_toolkit": "gtk+-3.0 3.24.41 (3.10 API subset)",
+  "ui_toolkit": "gtk+-3.0 3.24.41 (3.10 floor, newer features by macro)",
   "ui_compiler": "gcc-13.3.0",
   "artifact": {
     "name": "loomora-gtk3",
-    "size": 53736
+    "size": 54016
   },
   "disabled_features": [],
   "fallbacks": [
-    "cxx17-nodiscard"
+    "cxx17-nodiscard",
+    "gtk4-ui"
   ],
   "notes": "meson + ninja (ui/modern/linux-gtk3/meson.build); static libloomora.a built from core/src with -std=c++11; libstdc++, libgcc, GTK 3 and the system libraries linked dynamically (the meson option static_cxx_runtime links the C++ runtime statically for a distribution that lacks it, ADR 0004); artifact copied to out/linux-modern/."
 }
