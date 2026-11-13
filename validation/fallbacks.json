@@ -5,31 +5,39 @@
     "macro": "LOOMORA_HAS_BUILTIN_EXPECT",
     "min_compiler": "gcc 3.0, clang 1.0 (any compiler defining __GNUC__ or __clang__)",
     "platform_ids": [],
-    "reason": "Compilers without __builtin_expect (MSVC, unknown compilers) take the fallback. platform_ids stays empty until the platform records exist (T059, T087) and the per-platform compiler is known (T115)."
+    "reason": "Compilers without __builtin_expect (MSVC, unknown compilers) take the fallback. No platform of validation/platforms/ takes it: the three of them build with GCC (MinGW-w64 GCC 13 for Windows, GCC 13 for Linux), which has __builtin_expect."
   },
   {
     "id": "cxx17-nodiscard",
     "description": "[[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty attribute, so the discarded-result warning is lost but behaviour is identical.",
     "macro": "LOOMORA_HAS_CXX17_NODISCARD",
     "min_compiler": "C++17 mode (__cplusplus >= 201703L or _MSVC_LANG >= 201703L): gcc 7, clang 3.9, msvc 19.11 (VS 2017 15.3)",
-    "platform_ids": [],
-    "reason": "The backend is built as strict C++11 on every Legacy target (and as C++14 where MSVC or the CMake clang/MSVC STL combination imposes it), so those builds take the fallback; only a build in C++17 mode or later uses [[nodiscard]]. platform_ids stays empty until the platform records exist (T059, T087, T115)."
+    "platform_ids": [
+      "windows-2000-x86",
+      "windows-11-x64",
+      "linux-ubuntu-24.04-x86_64"
+    ],
+    "reason": "The backend is built as strict C++11 on every Legacy target (and as C++14 where MSVC or the CMake clang/MSVC STL combination imposes it), so those builds take the fallback; only a build in C++17 mode or later uses [[nodiscard]]. All three platform records take it: their builds are strict C++11 (cpp_std of the deliverable records)."
   },
   {
     "id": "dark-mode",
     "description": "Dark theme of the Windows Legacy UI (ui/legacy/windows-win32/dynfeatures.cpp): when the user's \"apps use light theme\" setting (HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\\AppsUseLightTheme, read through advapi32 loaded at run time) is 0 and no high contrast scheme is on, the window and its controls use dark colours (text 14:1 on the background) and, through dwmapi!DwmSetWindowAttribute when it exists, a dark title bar. The fallback is the colours of the system, which every Windows version applies by itself.",
     "macro": "LOOMORA_FEATURE_DARK_MODE",
     "min_compiler": "not a compiler feature: looked up at run time, any compiler; needs the AppsUseLightTheme setting (Windows 10, build 1607 or 1703 to verify, and Windows 11); a dark title bar needs Windows 10 version 1809 or later",
-    "platform_ids": [],
-    "reason": "Windows 2000 to 8.1 have no dark theme setting for applications: the value is missing, the feature is skipped and \"dark-mode\" is added to disabled_features of the probe record; the greeting stays legible with the system colours. Exercised on Windows 11 only (light and dark). platform_ids stays empty until the Windows platform records exist (T088): the deliverable ids windows-x86 and windows-x64 are not platform records."
+    "platform_ids": [
+      "windows-2000-x86"
+    ],
+    "reason": "Windows 2000 to 8.1 have no dark theme setting for applications: the value is missing, the feature is skipped and \"dark-mode\" is added to disabled_features of the probe record; the greeting stays legible with the system colours. Exercised on Windows 11 only (light and dark). Taken by windows-2000-x86 (Windows 2000 build 2195: \"dark-mode\" in disabled_features of its probe records, validation/evidence/first-trial/windows-2000-x86/); not taken by windows-11-x64 (disabled_features empty in 40 probe runs)."
   },
   {
     "id": "dpi-awareness",
     "description": "DPI awareness of the Windows Legacy UI: SetProcessDPIAware (user32) is looked up at run time and called before the window exists, the layout and the GUI font are then scaled to the system DPI. The fallback is not to call it.",
     "macro": "LOOMORA_FEATURE_DPI_AWARENESS",
     "min_compiler": "not a compiler feature: looked up at run time, any compiler; SetProcessDPIAware exists since Windows Vista",
-    "platform_ids": [],
-    "reason": "Windows 2000 and XP do not export SetProcessDPIAware: the call is skipped and \"dpi-awareness\" is added to disabled_features. Nothing is lost there, those systems do not virtualize the DPI, so the program already sees the real one (the layout is still scaled by it). Only the system level is requested: a window moved to a monitor of another DPI is stretched by the system. Exercised on Windows 11 at 100% only. platform_ids stays empty until the Windows platform records exist (T088)."
+    "platform_ids": [
+      "windows-2000-x86"
+    ],
+    "reason": "Windows 2000 and XP do not export SetProcessDPIAware: the call is skipped and \"dpi-awareness\" is added to disabled_features. Nothing is lost there, those systems do not virtualize the DPI, so the program already sees the real one (the layout is still scaled by it). Only the system level is requested: a window moved to a monitor of another DPI is stretched by the system. Exercised on Windows 11 at 100% only. Taken by windows-2000-x86 (\"dpi-awareness\" in disabled_features of its probe records, validation/evidence/first-trial/windows-2000-x86/); not taken by windows-11-x64 (disabled_features empty in 40 probe runs)."
   },
   {
     "id": "high-contrast-query",
@@ -37,7 +45,7 @@
     "macro": "LOOMORA_FEATURE_HIGH_CONTRAST_QUERY",
     "min_compiler": "not a compiler feature: looked up at run time, any compiler; SPI_GETHIGHCONTRAST is available since Windows 2000",
     "platform_ids": [],
-    "reason": "Every Windows of the range (2000 to 11) is believed to export SystemParametersInfoW with this action, so the skip is a defensive path that is not expected to be taken; it is declared because the code can take it. The controls use system colours by default, so a high contrast scheme is respected even without the query. Not exercised with a high contrast scheme on. platform_ids stays empty until the Windows platform records exist (T088)."
+    "reason": "Every Windows of the range (2000 to 11) is believed to export SystemParametersInfoW with this action, so the skip is a defensive path that is not expected to be taken; it is declared because the code can take it. The controls use system colours by default, so a high contrast scheme is respected even without the query. Not exercised with a high contrast scheme on. No platform of validation/platforms/ takes it: SystemParametersInfoW answered on Windows 2000 build 2195 and on Windows 11 (the probe records do not list it)."
   },
   {
     "id": "peak-memory",
@@ -45,6 +53,53 @@
     "macro": "LOOMORA_FEATURE_PEAK_MEMORY",
     "min_compiler": "not a compiler feature: looked up at run time, any compiler; psapi.dll is part of Windows 2000 and later",
     "platform_ids": [],
-    "reason": "The measure is best effort (ui-contract.md): when psapi.dll or the function is absent the probe record has a null peak_rss_kb and \"peak-memory\" in disabled_features. Not expected on Windows 2000 SP4 and later (psapi.dll ships with it, to verify on a real system); the skip path was not exercised. platform_ids stays empty until the Windows platform records exist (T088)."
+    "reason": "The measure is best effort (ui-contract.md): when psapi.dll or the function is absent the probe record has a null peak_rss_kb and \"peak-memory\" in disabled_features. Not expected on Windows 2000 SP4 and later (psapi.dll ships with it, to verify on a real system); the skip path was not exercised. No platform of validation/platforms/ takes it: psapi.dll answered on Windows 2000 build 2195 and on Windows 11 (the probe records do not list it)."
+  },
+  {
+    "id": "win2000-getthreadid-shim",
+    "description": "Link-time shim of KERNEL32!GetThreadId in the Windows 2000 executables (ui/legacy/windows-win32/getthreadid_shim.cpp, linked into loomora.exe and loomora_selftest.exe only by the toolchain of the Windows 2000 build). It satisfies the reference of libgcc's gthr-win32.o inside the executable so that the import table does not name GetThreadId, and calls the real function at run time when kernel32 has it. The path without the fallback, which every other target takes, is the system's own GetThreadId through the import table.",
+    "macro": "LOOMORA_TARGET_WIN2000",
+    "min_compiler": "not a compiler feature: the CMake variable LOOMORA_TARGET_WIN2000, set by cmake/toolchains/mingw-w64-win2000-i686.cmake and read by ui/legacy/windows-win32/CMakeLists.txt and core/tests/CMakeLists.txt (a compile-time switch for a target-wide limit); needed with MinGW-w64 GCC 13 and its win32 thread model, a libgcc that does not reference GetThreadId would not need it",
+    "platform_ids": [
+      "windows-2000-x86"
+    ],
+    "reason": "GetThreadId exists since Windows Vista and Windows Server 2003 SP1, so Windows 2000 and Windows XP x86 do not export it and their loader refuses an executable whose import table names it (adr/0002). Before adr/0004 the shim was keyed on 32-bit MinGW builds; it is now keyed on the Windows 2000 toolchain only, so the x64 build (XP x64 and later have the function) and any other 32-bit build keep the real import. Verified 2026-11-13 on the Windows 2000 build 2195 VM: loomora_selftest, built with the shim by the Windows 2000 toolchain, prints \"all passed\" (exit 0), while the control built without it is still refused by the loader (exit 128); the run is not stored (CLAUDE.md: a re-run); the first proof is in validation/evidence/selftest-no-iostream/windows-2000-x86/."
+  },
+  {
+    "id": "selftest-no-iostream",
+    "description": "Output of core/tests/selftest.cpp through std::fputs of <cstdio> instead of std::cout of <iostream>, selected by the compile definition LOOMORA_AVOID_IOSTREAM. The iostream initialisation of a static libstdc++ pulls the thread-support code of libgcc (gthr-win32-cond.o) into the program, which imports Vista-only KERNEL32 functions (InitializeConditionVariable, SleepConditionVariableCS, WakeConditionVariable, WakeAllConditionVariable). Behaviour is identical, only the stream differs.",
+    "macro": "LOOMORA_AVOID_IOSTREAM",
+    "min_compiler": "not a compiler feature: a compile definition set by both MinGW-w64 toolchain files (cmake/toolchains/mingw-w64-win2000-i686.cmake and mingw-w64-win-x86_64.cmake, floors older than Windows Vista) and by tools/guest/build_selftest.sh; GCC 13 with a static libstdc++ and the win32 thread model. The host build (clang with the MSVC STL) and the Linux builds do not define it and use <iostream>.",
+    "platform_ids": [
+      "windows-2000-x86",
+      "windows-11-x64"
+    ],
+    "reason": "Both Windows toolchains target a floor older than Vista: Windows 2000 (i686) and Windows XP x64 (x86_64), and the x86_64 selftest with <iostream> was measured to import the same four Vista-only functions (tools/check_imports.py --arch x64, 2026-11-13), so it would not load on XP x64 either. windows-11-x64 is listed because its deliverable is the x86_64 build of that toolchain, whose selftest takes the fallback although Windows 11 itself would run <iostream>; there is no platform record for XP x64. std::printf is not an alternative: MinGW-w64 maps it to __mingw_vfprintf, which imports msvcrt _lock and _unlock, absent from the allowlist. Verified 2026-11-13: the selftest built with the fallback prints \"all passed\" on the Windows 2000 VM and on Windows 11 (x86_64 build), and has no import outside the allowlist of its architecture; the host builds (clang on Windows, g++ on Linux) use <iostream> and pass ctest."
+  },
+  {
+    "id": "message-font",
+    "description": "Font of the controls of the Windows Legacy UI (ui/legacy/windows-win32/dynfeatures.cpp): the message font of the system, SystemParametersInfoW(SPI_GETNONCLIENTMETRICS).lfMessageFont looked up at run time in user32 (Segoe UI 9 pt on Windows Vista and later, the older size of NONCLIENTMETRICS is tried when the Vista one is refused). The fallback is the stock DEFAULT_GUI_FONT (MS Shell Dlg 8 pt) scaled to the system DPI by the program.",
+    "macro": "LOOMORA_FEATURE_MESSAGE_FONT",
+    "min_compiler": "not a compiler feature: looked up at run time, any compiler; SPI_GETNONCLIENTMETRICS is available since Windows 2000",
+    "platform_ids": [],
+    "reason": "Every Windows of the range (2000 to 11) is believed to answer SPI_GETNONCLIENTMETRICS, so the skip is a defensive path that is not expected to be taken; it is declared because the code can take it, and \"message-font\" is then added to disabled_features. Before adr/0004 the stock GUI font was used on every Windows, which is the font of Windows 2000 and looks dated on Vista and later. Not exercised: the skip path, and any DPI above 100%. On the Windows 2000 VM and on Windows 11 the call succeeds (no \"message-font\" in disabled_features of 15 + 30 probe runs); the controls get MS Sans Serif 8 pt there and Segoe UI 9 pt (lfHeight -12 at 96 DPI) on Windows 11."
+  },
+  {
+    "id": "visual-styles",
+    "description": "Visual styles of the EDIT and STATIC controls of the Windows Legacy UI: the manifest (ui/legacy/windows-win32/loomora.manifest) depends on Common Controls 6, which the loader of Windows XP and later honours. The fallback is the classic look of the controls, with no change of behaviour.",
+    "macro": "LOOMORA_MANIFEST_COMCTL6",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the manifest dependency): read by the loader of Windows XP and later, ignored by Windows 2000, which has no side-by-side assemblies",
+    "platform_ids": [
+      "windows-2000-x86"
+    ],
+    "reason": "Windows 2000 ignores manifests altogether, so its controls keep the classic look, which is the only look it has; the manifest was kept empty of every entry before adr/0004 only because of that system. Windows 11 draws the themed EDIT (light and dark, both executables) and Windows 2000 the classic one, the 15 vectors passing on both (screenshots in validation/evidence/adr-0004/). Not run on Windows XP to 8.1."
+  },
+  {
+    "id": "static-cxx-runtime-linux",
+    "description": "C++ runtime of the GTK Modern UI executable (ui/modern/linux-gtk3): the meson option static_cxx_runtime (default false) links libstdc++ and libgcc statically. The default is the distribution's libstdc++.so.6 and libgcc_s.so.1.",
+    "macro": "LOOMORA_STATIC_CXX_RUNTIME",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the meson option static_cxx_runtime): the default needs libstdc++.so.6 from GCC 5 or later (GLIBCXX_3.4.21) on the target distribution; the option is for one that has none or an older one",
+    "platform_ids": [],
+    "reason": "ADR 0001 rule 4 links the C++ runtime statically where the platform has none or an old one. No platform of validation/platforms/ is in that case, so the default is dynamic; see adr/0004 for the sizes and symbol versions measured. Measured on Ubuntu 24.04 (GCC 13.3, glibc 2.39), same objects linked both ways by tools/trials/linux-ubuntu-24.04-x86_64/gtk-floor-and-runtime-check.sh: the dynamic default is 53,736 bytes (the size of the meson build) and asks for GLIBC_2.34 and GLIBCXX_3.4.21; the static runtime is 296,952 bytes (296,848 in the earlier meson build) and asks for GLIBC_2.38, because libstdc++.a of this toolchain was built against a newer glibc. On this platform the static link is therefore the more restrictive choice, not the safer one."
   }
 ]

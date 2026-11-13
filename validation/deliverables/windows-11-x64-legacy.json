@@ -6,13 +6,16 @@
   "target": "x86_64-w64-mingw32",
   "output": "native",
   "ui_language": "c++",
-  "ui_toolkit": "Win32 API (user32, gdi32), EDIT + STATIC controls, _WIN32_WINNT=0x0500, no MFC, no common controls",
+  "ui_toolkit": "Win32 API (user32, gdi32), EDIT + STATIC controls, _WIN32_WINNT=0x0502, no MFC, Common Controls 6 visual styles through the manifest (ignored before Windows XP)",
   "ui_compiler": "mingw-w64-gcc-13-win32",
   "artifact": {
     "name": "loomora.exe",
-    "size": 701774
+    "size": 703383
   },
   "disabled_features": [],
-  "fallbacks": [],
-  "notes": "Deliverable of platform windows-11-x64 (validation/platforms/windows-11-x64.json). cmake + ninja (ui/legacy/windows-win32/CMakeLists.txt) with cmake/toolchains/mingw-w64-win-x86_64.cmake; static libloomora.a built from core/src with -std=c++11; -static, libstdc++ and libgcc linked statically; GCC thread model win32; imported DLLs: gdi32.dll, kernel32.dll, msvcrt.dll, user32.dll; 116 imported functions, each on the Windows XP x64 / Server 2003 x64 allowlist of tools/win2000_imports.json (tools/check_imports.py; entries marked verify are unconfirmed, entries marked verified-on-vm were read in the export tables of the real system named in the file); KERNEL32!GetThreadId is imported (XP x64 has it, so the toolchain output is unchanged, ADR 0002); meant for Windows XP x64 -> 11, not verified on any of them by this build (the run on Windows 2000 is spike S1 / T066); artifact copied to out/windows-legacy/x64/.; artifact sha256 2c6c3ed9b1cc20b546e43b703e239c44742220e6c4c414ee54135d3ad89f8866. The i686 executable of the same build (loomora.exe, 694005 bytes, sha256 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e, out/windows-legacy/x86/) also runs on this 64-bit system under WOW64; the verdict of this platform says what was run."
+  "fallbacks": [
+    "cxx17-nodiscard",
+    "selftest-no-iostream"
+  ],
+  "notes": "Deliverable of platform windows-11-x64 (validation/platforms/windows-11-x64.json). cmake + ninja (ui/legacy/windows-win32/CMakeLists.txt) with cmake/toolchains/mingw-w64-win-x86_64.cmake; static libloomora.a built from core/src with -std=c++11; -static, libstdc++ and libgcc linked statically; GCC thread model win32; imported DLLs: gdi32.dll, kernel32.dll, msvcrt.dll, user32.dll; 116 imported functions, each on the Windows XP x64 / Server 2003 x64 allowlist of tools/win2000_imports.json (tools/check_imports.py; entries marked verify are unconfirmed, entries marked verified-on-vm were read in the export tables of the real system named in the file); KERNEL32!GetThreadId is imported (XP x64 has it, so the toolchain output is unchanged, ADR 0002); meant for Windows XP x64 -> 11, not verified on any of them by this build (the run on Windows 2000 is spike S1 / T066); artifact copied to out/windows-legacy/x64/.; artifact sha256 14176610f254480949d361816a8a9581502ee4ec04bdb04854bed33d08d1349a. The i686 executable of the same build (loomora.exe, 696127 bytes, sha256 67a695c888aa5deec4bba94638fcb8ba190314ee34ccecf8da1143a0447455a0, out/windows-legacy/x86/) also runs on this 64-bit system under WOW64; the verdict of this platform says what was run."
 }

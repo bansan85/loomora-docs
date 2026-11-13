@@ -1,0 +1,18 @@
+Executables behind the screenshots and runs in this folder (docs/adr/0004-fallback-per-case.md).
+
+before-*  (window screenshots, host)  clean rebuild of commit 3867bfc, the tree before the ADR:
+  x64/loomora.exe  701774 bytes,                     sha256 cf16f939df9d8a5914883c1c0c7da3fdddc5168b151e7b9f8ddb5633784e497a
+  x86/loomora.exe  694005 bytes,                     sha256 1caee2553c59cc37b3f322ae2ef27dbeb938102591a9bdd89c4eb6808047baf7
+  These are NOT the executables of the earlier trial (x64 2c6c3ed9...8866, x86 16e78596...7494e,
+  verdict windows-11-x64-legacy): the MinGW-w64 linker stamps the build time in the PE header, so
+  every build has another hash. The source is the same.
+
+after-*   and the run-vectors-* files: the build of this change:
+  x64/loomora.exe  703383 bytes, sha256 14176610f254480949d361816a8a9581502ee4ec04bdb04854bed33d08d1349a
+  x86/loomora.exe  696127 bytes, sha256 67a695c888aa5deec4bba94638fcb8ba190314ee34ccecf8da1143a0447455a0
+  (the x86 one runs under WOW64 on this host)
+
+Window screenshots: python validation/evidence/windows-11-x64/adr-0004/shoot-window.py EXE LABEL OUTDIR [dark]
+(PrintWindow capture of the window, 96 DPI host; "dark" sets AppsUseLightTheme to 0 for the run and
+restores the old value). The JSON next to each pair gives the font handed to the controls
+(WM_GETFONT): "MS Shell Dlg" -11 before, "Segoe UI" -12 after.
