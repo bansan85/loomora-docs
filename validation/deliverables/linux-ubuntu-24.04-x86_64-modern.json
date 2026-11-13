@@ -10,7 +10,7 @@
   "ui_compiler": "gcc-13.3.0",
   "artifact": {
     "name": "loomora-gtk3",
-    "size": 296848
+    "size": 296952
   },
   "disabled_features": [],
   "fallbacks": [],

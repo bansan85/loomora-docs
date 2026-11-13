@@ -1,0 +1,194 @@
+{
+ "accents": {
+  "png": "/home/legar/loomora-build-glyphs/shots/before-accents.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "Zoé Hélène çà ñ ü ø ß",
+   "message": "Bonjour Zoé Hélène çà ñ ü ø ß",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 100,
+   "peak_rss_kb": 25776,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:14:40Z"
+  }
+ },
+ "cjk": {
+  "png": "/home/legar/loomora-build-glyphs/shots/before-cjk.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "日本語 中文 한국어",
+   "message": "Bonjour 日本語 中文 한국어",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 58,
+   "peak_rss_kb": 26056,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:14:42Z"
+  }
+ },
+ "emoji": {
+  "png": "/home/legar/loomora-build-glyphs/shots/before-emoji.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "😀 👨‍👩‍👧 🇫🇷 👍🏽",
+   "message": "Bonjour 😀 👨‍👩‍👧 🇫🇷 👍🏽",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 69,
+   "peak_rss_kb": 25868,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:14:44Z"
+  }
+ },
+ "rtl": {
+  "png": "/home/legar/loomora-build-glyphs/shots/before-rtl.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "שלום עולם مرحبا بالعالم",
+   "message": "Bonjour שלום עולם مرحبا بالعالم",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 52,
+   "peak_rss_kb": 26048,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:14:46Z"
+  }
+ },
+ "combining": {
+  "png": "/home/legar/loomora-build-glyphs/shots/before-combining.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "é ä ñ ộ ก็ कि",
+   "message": "Bonjour é ä ñ ộ ก็ कि",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 67,
+   "peak_rss_kb": 26800,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:14:48Z"
+  }
+ },
+ "symbols": {
+  "png": "/home/legar/loomora-build-glyphs/shots/before-symbols.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "€ © ™ → ← ∑ ∞ ≠ ┌─┐ ✓ ✂ ☺ ♥",
+   "message": "Bonjour € © ™ → ← ∑ ∞ ≠ ┌─┐ ✓ ✂ ☺ ♥",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 63,
+   "peak_rss_kb": 25684,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:14:51Z"
+  }
+ },
+ "latinext": {
+  "png": "/home/legar/loomora-build-glyphs/shots/before-latinext.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "Łódź Čeština Ğ ő ǅ Ɛ ẞ",
+   "message": "Bonjour Łódź Čeština Ğ ő ǅ Ɛ ẞ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 55,
+   "peak_rss_kb": 25900,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:14:53Z"
+  }
+ },
+ "long": {
+  "png": "/home/legar/loomora-build-glyphs/shots/before-long.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit 日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+   "message": "Bonjour Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit 日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 65,
+   "peak_rss_kb": 25920,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:14:55Z"
+  }
+ }
+}

@@ -1,0 +1,314 @@
+{
+ "accents": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-accents.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "Zoé Hélène çà ñ ü ø ß",
+   "message": "Bonjour Zoé Hélène çà ñ ü ø ß",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 66,
+   "peak_rss_kb": 26536,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:23Z"
+  }
+ },
+ "cjk": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-cjk.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "日本語 中文 한국어",
+   "message": "Bonjour 日本語 中文 한국어",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 67,
+   "peak_rss_kb": 30232,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:25Z"
+  }
+ },
+ "emoji": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-emoji.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "😀 👨‍👩‍👧 🇫🇷 👍🏽",
+   "message": "Bonjour 😀 👨‍👩‍👧 🇫🇷 👍🏽",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 70,
+   "peak_rss_kb": 27604,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:27Z"
+  }
+ },
+ "rtl": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-rtl.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "שלום עולם مرحبا بالعالم",
+   "message": "Bonjour שלום עולם مرحبا بالعالم",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 65,
+   "peak_rss_kb": 27168,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:30Z"
+  }
+ },
+ "combining": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-combining.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "é ä ñ ộ ก็ कि",
+   "message": "Bonjour é ä ñ ộ ก็ कि",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 82,
+   "peak_rss_kb": 29000,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:32Z"
+  }
+ },
+ "symbols": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-symbols.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "€ © ™ → ← ∑ ∞ ≠ ┌─┐ ✓ ✂ ☺ ♥",
+   "message": "Bonjour € © ™ → ← ∑ ∞ ≠ ┌─┐ ✓ ✂ ☺ ♥",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 64,
+   "peak_rss_kb": 26892,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:34Z"
+  }
+ },
+ "latinext": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-latinext.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "Łódź Čeština Ğ ő ǅ Ɛ ẞ",
+   "message": "Bonjour Łódź Čeština Ğ ő ǅ Ɛ ẞ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 62,
+   "peak_rss_kb": 26620,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:33Z"
+  }
+ },
+ "asc60": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-asc60.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "message": "Bonjour abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 74,
+   "peak_rss_kb": 26240,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:35Z"
+  }
+ },
+ "asc120": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-asc120.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "message": "Bonjour abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 59,
+   "peak_rss_kb": 26400,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:38Z"
+  }
+ },
+ "asc250": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-asc250.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "message": "Bonjour abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 69,
+   "peak_rss_kb": 26524,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:40Z"
+  }
+ },
+ "cjk30": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-cjk30.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+   "message": "Bonjour 日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 67,
+   "peak_rss_kb": 29660,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:42Z"
+  }
+ },
+ "max1000": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-max1000.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi ",
+   "message": "Bonjour abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 86,
+   "peak_rss_kb": 26284,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:44Z"
+  }
+ },
+ "long": {
+  "png": "/home/legar/loomora-build-glyphs/shots/after-noto-long.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit 日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+   "message": "Bonjour Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit 日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 76,
+   "peak_rss_kb": 29916,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-12T23:20:46Z"
+  }
+ }
+}
