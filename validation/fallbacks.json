@@ -101,5 +101,31 @@
     "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the meson option static_cxx_runtime): the default needs libstdc++.so.6 from GCC 5 or later (GLIBCXX_3.4.21) on the target distribution; the option is for one that has none or an older one",
     "platform_ids": [],
     "reason": "ADR 0001 rule 4 links the C++ runtime statically where the platform has none or an old one. No platform of validation/platforms/ is in that case, so the default is dynamic; see adr/0004 for the sizes and symbol versions measured. Measured on Ubuntu 24.04 (GCC 13.3, glibc 2.39), same objects linked both ways by tools/trials/linux-ubuntu-24.04-x86_64/gtk-floor-and-runtime-check.sh: the dynamic default is 53,736 bytes (the size of the meson build) and asks for GLIBC_2.34 and GLIBCXX_3.4.21; the static runtime is 296,952 bytes (296,848 in the earlier meson build) and asks for GLIBC_2.38, because libstdc++.a of this toolchain was built against a newer glibc. On this platform the static link is therefore the more restrictive choice, not the safer one."
+  },
+  {
+    "id": "gtk-label-xalign",
+    "description": "Alignment of the text of the wrapped end-of-life warning label of the Linux Modern UI (ui/modern/linux-gtk3/main.c, set_label_text_start): gtk_label_set_xalign(label, 0) when the GTK headers are 3.16 or later (every GTK 4 header too). The fallback is gtk_misc_set_alignment(label, 0, 0.5) of the 3.10 API (GtkMisc, deprecated in 3.14 and removed in GTK 4); the text is left-aligned the same way in both, mirrored in a right-to-left locale.",
+    "macro": "LOOMORA_GTK_HAS_LABEL_XALIGN",
+    "min_compiler": "gtk 3.16 headers: GTK_CHECK_VERSION(3, 16, 0) and GDK_VERSION_MAX_ALLOWED >= GDK_VERSION_3_16 (ui/modern/linux-gtk3/gtk_compat.h); always on with GTK 4 headers. Not a compiler feature.",
+    "platform_ids": [],
+    "reason": "Headers older than GTK 3.16 (a distribution of 2014 or 2015 such as Ubuntu 14.04, GTK 3.10) and the floor build (-Dgtk_floor=true, GDK_VERSION_MAX_ALLOWED pinned to 3.10) take the GtkMisc fallback. No platform of validation/platforms/ takes it: linux-ubuntu-24.04-x86_64 has GTK 3.24.41 headers and takes the modern path. The fallback path was compiled and run only through the floor build on that platform (GTK 3.24 runtime, not a real GTK 3.10); a real GTK 3.10 system was not tried."
+  },
+  {
+    "id": "gtk-overlay-scrolling",
+    "description": "Scrollbar of the greeting of the Linux Modern UI (ui/modern/linux-gtk3/main.c, create_scroller): gtk_scrolled_window_set_overlay_scrolling(scroller, FALSE) when the GTK headers are 3.16 or later (every GTK 4 header too), so that the scrollbar stays visible beside the text of a long greeting. The fallback is not to call it: GTK 3.10 has no overlay scrollbars, its scrollbar is always visible and takes room, which is what the call restores on newer GTK (the default there is an overlay hidden until the pointer moves).",
+    "macro": "LOOMORA_GTK_HAS_OVERLAY_SCROLLING",
+    "min_compiler": "gtk 3.16 headers: GTK_CHECK_VERSION(3, 16, 0) and GDK_VERSION_MAX_ALLOWED >= GDK_VERSION_3_16 (ui/modern/linux-gtk3/gtk_compat.h); always on with GTK 4 headers. Not a compiler feature.",
+    "platform_ids": [],
+    "reason": "Headers older than GTK 3.16 and the floor build take the fallback; the greeting then has the scrollbar of the toolkit in use (always visible on a real 3.10, an overlay hidden until hover on a 3.16+ runtime). No platform of validation/platforms/ takes it: linux-ubuntu-24.04-x86_64 builds with GTK 3.24.41 headers and takes the modern path. Visible difference measured with screenshots in WSLg: the floor build shows no scrollbar on a 1,000-character greeting, the default build shows one."
+  },
+  {
+    "id": "gtk4-ui",
+    "description": "GTK 4 branch of the Linux Modern UI (ui/modern/linux-gtk3/main.c, gtk_compat.h, gtk_compat.c), selected at build time by the meson option -Dgtk_api=4 (dependency gtk4 instead of gtk+-3.0) and in the code by GTK_MAJOR_VERSION >= 4 (LOOMORA_GTK4): the same window content with the GTK 4 API (gtk_window_set_child, gtk_box_append, margins, GtkEditable text, a GMainLoop, the first display taken from the after-paint signal of the frame clock). The fallback is the GTK 3 UI, which is the default build. Differences of the GTK 4 branch: the end-of-life warning is a plain box (warning icon, text, close button) because GtkInfoBar is deprecated since 4.10 and has no replacement, so it has no warning background; the display time of the probe is the end of the first painted frame instead of the first draw.",
+    "macro": "LOOMORA_GTK4",
+    "min_compiler": "gtk 4.0 headers (GTK_MAJOR_VERSION >= 4), built with -Dgtk_api=4; tried with GTK 4.14.5 and GCC 13.3. Not a compiler feature.",
+    "platform_ids": [
+      "linux-ubuntu-24.04-x86_64"
+    ],
+    "reason": "GTK 4 is opt-in (-Dgtk_api=3 is the default), so every deliverable takes the GTK 3 path, linux-ubuntu-24.04-x86_64 included even though its libgtk-4-dev is installed: the GTK 3 UI is the one of all the trials, the floor of the UI is GTK 3.10 and a system without GTK 4 stays served. On GTK 4.14.5 in WSLg the branch builds without a warning, passes the 15 reference vectors and the probe checks; the Mesa EGL warnings it prints on standard error under WSLg (\"libEGL warning\" lines, 134 bytes on the X11 backend, 265 on the default Wayland backend) come from the OpenGL renderer, not from the UI; on the Wayland backend they disappear with GSK_RENDERER=cairo or LIBGL_ALWAYS_SOFTWARE=1. The GTK 4 build has no trial verdict."
   }
 ]
