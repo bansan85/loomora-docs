@@ -11,7 +11,8 @@
     "Only one Windows version and one machine: Windows 11 26H2 (10.0.26300.9974), French (fr-FR), x64, on a physical MSI laptop whose Windows runs on top of the Microsoft hypervisor. Not tested: Windows 11 ARM64, Windows 10 and every older Windows (8.1, 7, Vista, XP, 2000), a native 32-bit Windows (the x86 exe only ran under WOW64 on this 64-bit system, which is why it reports platform_id windows-11-x64 like the x64 exe), other languages, other machines or virtualised hosts. Timings and memory are those of this laptop, from 20 runs per executable (plus 15 vector runs each), enough for a min / median / max, not for a distribution.",
     "This trial says nothing about the Legacy floor: Windows 11 is the newest system of the Windows Legacy ladder and the 'oldest working Windows' of FR-005 / SC-002 / SC-009 is not determined by it. The Windows 2000 SP4 / XP / Vista / 7 / 8.1 / 10 runs of T088, spike S1 (T066) and the 'verify' entries of the import allowlist remain open; no run of either executable on a system older than this Windows 11 is recorded.",
     "No procedure document exists yet for this trial (validation/procedures/windows.md is task T109), so the verdict carries no 'reproduction' path; the commands used are in the 'notes' field and the driver script is part of the evidence.",
-    "The executables were started from a scratch copy in the Windows temp folder (one copy per run) so that loomora-probe.json files could not collide; they were built by 'wsl -d Ubuntu-24.04 -- python3 tools/build.py windows legacy' (up to date, sha256 below) and closed by a WM_CLOSE message, not by a click on the close button. The deliverable record of this platform is validation/deliverables/windows-11-x64-legacy.json (the x64 executable; the x86 executable that was also run here under WOW64 is named in its notes), written by 'tools/build.py windows legacy' from the platform record."
+    "The executables were started from a scratch copy in the Windows temp folder (one copy per run) so that loomora-probe.json files could not collide; they were built by 'wsl -d Ubuntu-24.04 -- python3 tools/build.py windows legacy' (up to date, sha256 below) and closed by a WM_CLOSE message, not by a click on the close button. The deliverable record of this platform is validation/deliverables/windows-11-x64-legacy.json (the x64 executable; the x86 executable that was also run here under WOW64 is named in its notes), written by 'tools/build.py windows legacy' from the platform record.",
+    "Re-run after adr/0004-fallback-per-case.md (2026-11-13), same host: the executables of the evidence listed before this entry are x64 sha256 2c6c3ed9b1cc20b546e43b703e239c44742220e6c4c414ee54135d3ad89f8866 (701774 bytes) and x86 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e; the executables now built are x64 14176610f254480949d361816a8a9581502ee4ec04bdb04854bed33d08d1349a (703383 bytes) and x86 67a695c888aa5deec4bba94638fcb8ba190314ee34ccecf8da1143a0447455a0 (696127 bytes). RE-VERIFIED on the new ones: 15 of 15 vectors each (x64 natively, x86 under WOW64, disabled_features empty), identical function-level import tables (112 and 116 imports, none added or removed) and the import check, loomora_selftest of both architectures 'all passed' (built without <iostream> by the MinGW toolchains), window screenshots in light AND dark theme for both executables (themed EDIT through Common Controls 6, Segoe UI 9 pt instead of MS Shell Dlg 8 pt; text, dark colours and 'Bonjour Marie' unchanged). The 96 DPI host is the only one, so DPI above 100% with the new font, high contrast and Windows versions other than 11 were NOT tried. NOT re-run: the two 10-run probe series, the typing of 1,100 characters, the host-environment measurements. Stored: only the light and dark window captures of the new look and the import comparison (validation/evidence/adr-0004/windows-11-x64/); the vector logs and the before captures of this re-run are not stored (CLAUDE.md: evidence is stored only when it proves something new)."
   ],
   "disabled_features": [],
   "evidence": [
@@ -140,6 +141,102 @@
       "sha256": "9442cb89af22691f7e63342d36e29bba2db0f2b73c76951a3b143011ff33278a",
       "kind": "script",
       "description": "The driver that produced trial-measurements.json, host-environment.json, gui-*.json, the window captures and the probe series (ctypes Win32 calls: EnumWindows, SendMessageW with WM_GETTEXT, EM_SETSEL, WM_CHAR, WM_CLOSE, PrintWindow; subprocess for the exe); run from the repository root with 'python tools/trials/windows-11-x64/trial-driver.py'."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/compare-imports-output.txt",
+      "sha256": "260d0c27b41bb9b962ef12351147a1e4d715169d7c8449cd2254d6a62ae2d93a",
+      "kind": "check-log",
+      "description": "Function-level import tables before and after the ADR (x86 112 = 112, x64 116 = 116, none added or removed) and the import check of both executables and both selftests."
+    },
+    {
+      "path": "tools/trials/windows-11-x64/compare-imports.py",
+      "sha256": "dfbc941393cbf425a1bc0ae3455e30459da640bef7da1ddba66762c0a3599809",
+      "kind": "script",
+      "description": "Driver of compare-imports-output.txt (objdump of the MinGW-w64 toolchain through WSL, tools/check_imports.py)."
+    },
+    {
+      "path": "tools/trials/windows-11-x64/shoot-window.py",
+      "sha256": "74673b80b026b23064f5cac817793bc56db25ef3c4fccc25a7ae3b93869de1d7",
+      "kind": "script",
+      "description": "Driver of the window screenshots and of the font read-back (WM_GETFONT): starts the executable, captures with PrintWindow, types Marie with WM_CHAR, closes; 'dark' sets AppsUseLightTheme to 0 for the run and restores it."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/shots-executables.txt",
+      "sha256": "819c11427af6ea76aa5bdbed8552e9c4f550c459797b4bd3b99e6e889a0a371d",
+      "kind": "environment",
+      "description": "Which executable (size, sha256) produced which file of this folder."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x64-light-1-initial.png",
+      "sha256": "1461c549b27fb9e46f4de36a2beaeb22d7d7280fba10974170677a686187c038",
+      "kind": "screenshot",
+      "description": "PrintWindow capture, rebuilt executable, light theme, x64 executable, initial window (96 DPI host)."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x64-light-2-typed-marie.png",
+      "sha256": "9a7ab1afb11beace7e8844ac20736125f2897214a72252653aba319b2c8ad33b",
+      "kind": "screenshot",
+      "description": "Same window after typing Marie (WM_CHAR): 'Bonjour Marie'."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x64-light.json",
+      "sha256": "a03dffceec0f5ac019fa641a65db24539312e22b409aee4e7d17efec001b1d96",
+      "kind": "gui-run",
+      "description": "Fonts of the EDIT and STATIC controls (WM_GETFONT + GetObject), texts and exit status of that window run: Segoe UI -12."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x64-dark-1-initial.png",
+      "sha256": "34fd8a283bfa5c3e2a05aee67b45173d6981e06813cd296d38f6337039183b93",
+      "kind": "screenshot",
+      "description": "PrintWindow capture, rebuilt executable, dark theme, x64 executable, initial window (96 DPI host)."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x64-dark-2-typed-marie.png",
+      "sha256": "621059b1c7da1a1f2d13f65b9d4d3fdef0ae500142f09a8830bb3a695c254b4d",
+      "kind": "screenshot",
+      "description": "Same window after typing Marie (WM_CHAR): 'Bonjour Marie'."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x64-dark.json",
+      "sha256": "00b287d9539518f92f7600ac08e5f85385612d598642148a4334e9bae5c1acf9",
+      "kind": "gui-run",
+      "description": "Fonts of the EDIT and STATIC controls (WM_GETFONT + GetObject), texts and exit status of that window run: Segoe UI -12."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x86-light-1-initial.png",
+      "sha256": "b85427e3e500e7442243dd785333d1e6ada7fdcfaa999dc1c7fb865f995630db",
+      "kind": "screenshot",
+      "description": "PrintWindow capture, rebuilt executable, light theme, x86 executable, initial window (96 DPI host)."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x86-light-2-typed-marie.png",
+      "sha256": "63735bdc31c1bcfa2158d01501590f5152f4bfce64ed3c1f10369b78a621b675",
+      "kind": "screenshot",
+      "description": "Same window after typing Marie (WM_CHAR): 'Bonjour Marie'."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x86-light.json",
+      "sha256": "b1b41e3f30325a10c8e9840cae547b0b3c2c871d94285e6a69cd447a53de51a7",
+      "kind": "gui-run",
+      "description": "Fonts of the EDIT and STATIC controls (WM_GETFONT + GetObject), texts and exit status of that window run: Segoe UI -12."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x86-dark-1-initial.png",
+      "sha256": "a84bb46754158d05261d3aa7a17b86b179d8031ab7182cf6036f322f9bdf21df",
+      "kind": "screenshot",
+      "description": "PrintWindow capture, rebuilt executable, dark theme, x86 executable, initial window (96 DPI host)."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x86-dark-2-typed-marie.png",
+      "sha256": "915e6ed19331a850d8450b368df8eeb5d5b541f2247907ba6c3f96790ccf70e9",
+      "kind": "screenshot",
+      "description": "Same window after typing Marie (WM_CHAR): 'Bonjour Marie'."
+    },
+    {
+      "path": "validation/evidence/adr-0004/windows-11-x64/after-x86-dark.json",
+      "sha256": "10470aa00c7f62f56380d32f9376e9605c675f0610af28fec4f088abff5dc6ff",
+      "kind": "gui-run",
+      "description": "Fonts of the EDIT and STATIC controls (WM_GETFONT + GetObject), texts and exit status of that window run: Segoe UI -12."
     }
   ],
   "measurements": {
@@ -252,5 +349,5 @@
   "sources": [
     "eol-windows-11"
   ],
-  "notes": "Windows 11 trial of the Windows Legacy UI, on the physical host described in validation/platforms/windows-11-x64.json, 2026-11-12. It covers only the Windows 11 part of T088 and the Windows 11 evidence of T094; it says nothing about the Legacy floor (Windows 2000) and does not determine the oldest working Windows (FR-005). Commands (repository root, Windows host): 'wsl -d Ubuntu-24.04 --cd <repo> -- python3 tools/build.py windows legacy' (up to date), 'python tools/trials/windows-11-x64/trial-driver.py' (40 probe runs, two window runs, host measurements), then 'python tools/run_vectors.py windows-11-x64 legacy --arch x64 --evidence-dir validation/evidence/<change>/windows-11-x64/' and the same with '--arch x86'. The x86 executable ran under WOW64 and reports the id of the operating system architecture (windows-11-x64); the Windows launcher of tools/run_vectors.py copies the exe to a scratch folder per run, starts it through CreateProcess with an argument list (UTF-16 command line built by Python), waits for the exit and reads loomora-probe.json; its 1,000-character expectation counts UTF-16 units (a character outside the BMP counts as two and is never cut), which no current vector exercises (checked once with a temporary vectors file outside the repository: 999 'a' + emoji gives 999 units kept, 998 'a' + emoji gives 1000). The text files of this evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256."
+  "notes": "Windows 11 trial of the Windows Legacy UI, on the physical host described in validation/platforms/windows-11-x64.json, 2026-11-12. It covers only the Windows 11 part of T088 and the Windows 11 evidence of T094; it says nothing about the Legacy floor (Windows 2000) and does not determine the oldest working Windows (FR-005). Commands (repository root, Windows host): 'wsl -d Ubuntu-24.04 --cd <repo> -- python3 tools/build.py windows legacy' (up to date), 'python tools/trials/windows-11-x64/trial-driver.py' (40 probe runs, two window runs, host measurements), then 'python tools/run_vectors.py windows-11-x64 legacy --arch x64 --evidence-dir validation/evidence/<change>/windows-11-x64/' and the same with '--arch x86'. The x86 executable ran under WOW64 and reports the id of the operating system architecture (windows-11-x64); the Windows launcher of tools/run_vectors.py copies the exe to a scratch folder per run, starts it through CreateProcess with an argument list (UTF-16 command line built by Python), waits for the exit and reads loomora-probe.json; its 1,000-character expectation counts UTF-16 units (a character outside the BMP counts as two and is never cut), which no current vector exercises (checked once with a temporary vectors file outside the repository: 999 'a' + emoji gives 999 units kept, 998 'a' + emoji gives 1000). The text files of this evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256. ADR 0004 (2026-11-13): the earlier evidence was produced with executables x64 2c6c3ed9...f8866 and x86 16e78596...7494e; the rebuilt ones (x64 14176610...49a, x86 67a695c8...5a0) were re-verified, see the last restriction; the new look captures are in validation/evidence/adr-0004/windows-11-x64/, the re-run vector logs are not stored."
 }

@@ -1,0 +1,18 @@
+{
+ "label": "after-x64-light",
+ "dark": false,
+ "edit_font": {
+  "face": "Segoe UI",
+  "lfHeight": -12,
+  "weight": 400
+ },
+ "static_font": {
+  "face": "Segoe UI",
+  "lfHeight": -12,
+  "weight": 400
+ },
+ "edit_text": "Coucou",
+ "static_text": "Bonjour Coucou",
+ "typed_static": "Bonjour Marie",
+ "exit": 0
+}

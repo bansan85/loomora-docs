@@ -1,0 +1,20 @@
+== GTK 3.24.41, gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. object code with and without the GTK 3.10 floor (gcc -std=c99 -O3 -Wall -Wextra)
+main.o: identical with and without the floor
+probe.o: identical with and without the floor
+GTK / GDK functions the UI calls:
+gtk_box_new gtk_box_pack_start gtk_container_add gtk_container_set_border_width gtk_entry_get_text gtk_entry_new gtk_entry_set_max_length gtk_entry_set_text gtk_info_bar_get_content_area gtk_info_bar_new gtk_info_bar_set_message_type gtk_info_bar_set_show_close_button gtk_init_check gtk_label_get_text gtk_label_new gtk_label_set_attributes gtk_label_set_justify gtk_label_set_line_wrap gtk_label_set_line_wrap_mode gtk_label_set_text gtk_main gtk_main_quit gtk_scrolled_window_new gtk_scrolled_window_set_policy gtk_widget_hide gtk_widget_set_halign gtk_widget_set_valign gtk_widget_show_all gtk_window_new gtk_window_set_default_size gtk_window_set_title 
+
+== 2. C++ runtime: system libstdc++ against -static-libstdc++ -static-libgcc
+53736 gtk_dynamic
+296952 gtk_static
+-- gtk_dynamic
+DT_NEEDED: libgtk-3.so.0 libpango-1.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libstdc++.so.6 libgcc_s.so.1 libc.so.6 
+highest GLIBCXX: GLIBCXX_3.4.21
+highest CXXABI: CXXABI_1.3
+highest GLIBC: GLIBC_2.34
+-- gtk_static
+DT_NEEDED: libgtk-3.so.0 libpango-1.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libc.so.6 ld-linux-x86-64.so.2 
+highest GLIBCXX: none
+highest CXXABI: none
+highest GLIBC: GLIBC_2.38

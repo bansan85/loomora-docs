@@ -1,0 +1,17 @@
+Executables behind the screenshots and runs in this folder (docs/adr/0004-fallback-per-case.md).
+
+vm-before-*  clean rebuild of commit 3867bfc (the tree before the ADR):
+  x86/loomora.exe  694005 bytes, sha256 1caee2553c59cc37b3f322ae2ef27dbeb938102591a9bdd89c4eb6808047baf7
+  (NOT the executable of the earlier trial, 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e:
+  the linker stamps the build time in the PE header, so every build has another hash; same source)
+
+vm-after-*, run-vectors-*, loomora-vm-exports.txt:
+  x86/loomora.exe  696127 bytes, sha256 67a695c888aa5deec4bba94638fcb8ba190314ee34ccecf8da1143a0447455a0
+
+selftest-noiostream-*: out/windows-legacy/guest/loomora_selftest.exe 629857 bytes sha256
+  9950717715b05399c088a39e0f038a754844551566ba39bb81f453be8e92db6e (loomora_selftest-noshim.exe is the
+  control that the loader of Windows 2000 still refuses: exit code 128). The files with the same names
+  one folder up were produced with the earlier executables and are kept.
+
+The guest screenshots are VBoxManage controlvm screenshotpng of the whole 800x600 screen. They were
+taken with vm-shots.py in a guest folder created for the run and removed afterwards.
