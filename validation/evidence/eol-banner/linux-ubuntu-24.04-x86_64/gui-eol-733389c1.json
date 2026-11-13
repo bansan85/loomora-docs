@@ -1,0 +1,42 @@
+{
+  "scenario": "eol",
+  "env": {
+    "LD_PRELOAD": "/home/legar/loomora-trial-scratch/fake-uname.so"
+  },
+  "argv": [],
+  "xid": "0xa00007",
+  "still_running_before_close": true,
+  "close_method": "WM_DELETE_WINDOW",
+  "exit_status": 0,
+  "close_to_exit_ms": 8,
+  "stdout": "",
+  "stderr_bytes": 0,
+  "stderr": "",
+  "leftover_after_exit": [],
+  "shots": {
+    "1-banner": {
+      "png": "gui-eol-733389c1-1-banner.png",
+      "size": [
+        480,
+        430
+      ]
+    },
+    "2-after-click-close-button": {
+      "png": "gui-eol-733389c1-2-after-click-close-button.png",
+      "size": [
+        480,
+        430
+      ]
+    }
+  },
+  "window_found_after_s": 0.092,
+  "close_button_click": [
+    456,
+    48
+  ],
+  "note": "uname faked by LD_PRELOAD=fake-uname.so (simulation, not a real old kernel)",
+  "window_size": [
+    480,
+    430
+  ]
+}

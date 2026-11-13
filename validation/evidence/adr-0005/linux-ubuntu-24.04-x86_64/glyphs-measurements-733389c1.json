@@ -1,0 +1,314 @@
+{
+ "accents": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-accents.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "Zoé Hélène çà ñ ü ø ß",
+   "message": "Bonjour Zoé Hélène çà ñ ü ø ß",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 52,
+   "peak_rss_kb": 27776,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:31Z"
+  }
+ },
+ "cjk": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-cjk.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "日本語 中文 한국어",
+   "message": "Bonjour 日本語 中文 한국어",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 110,
+   "peak_rss_kb": 31664,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:33Z"
+  }
+ },
+ "emoji": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-emoji.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "😀 👨‍👩‍👧 🇫🇷 👍🏽",
+   "message": "Bonjour 😀 👨‍👩‍👧 🇫🇷 👍🏽",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 92,
+   "peak_rss_kb": 28800,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:35Z"
+  }
+ },
+ "rtl": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-rtl.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "שלום עולם مرحبا بالعالم",
+   "message": "Bonjour שלום עולם مرحبا بالعالم",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 61,
+   "peak_rss_kb": 28620,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:38Z"
+  }
+ },
+ "combining": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-combining.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "é ä ñ ộ ก็ कि",
+   "message": "Bonjour é ä ñ ộ ก็ कि",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 78,
+   "peak_rss_kb": 30436,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:40Z"
+  }
+ },
+ "symbols": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-symbols.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "€ © ™ → ← ∑ ∞ ≠ ┌─┐ ✓ ✂ ☺ ♥",
+   "message": "Bonjour € © ™ → ← ∑ ∞ ≠ ┌─┐ ✓ ✂ ☺ ♥",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 57,
+   "peak_rss_kb": 28660,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:42Z"
+  }
+ },
+ "latinext": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-latinext.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "Łódź Čeština Ğ ő ǅ Ɛ ẞ",
+   "message": "Bonjour Łódź Čeština Ğ ő ǅ Ɛ ẞ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 54,
+   "peak_rss_kb": 27924,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:44Z"
+  }
+ },
+ "asc60": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-asc60.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "message": "Bonjour abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 59,
+   "peak_rss_kb": 27876,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:46Z"
+  }
+ },
+ "asc120": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-asc120.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "message": "Bonjour abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 60,
+   "peak_rss_kb": 27760,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:48Z"
+  }
+ },
+ "asc250": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-asc250.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "message": "Bonjour abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij abcdefghij ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 64,
+   "peak_rss_kb": 27820,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:50Z"
+  }
+ },
+ "cjk30": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-cjk30.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+   "message": "Bonjour 日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 57,
+   "peak_rss_kb": 30808,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:52Z"
+  }
+ },
+ "max1000": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-max1000.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi ",
+   "message": "Bonjour abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi ",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 81,
+   "peak_rss_kb": 27832,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:54Z"
+  }
+ },
+ "long": {
+  "png": "/mnt/h/repos/loomora/validation/evidence/linux-ubuntu-24.04-x86_64/glyphs-733389c1-long.png",
+  "size": [
+   480,
+   240
+  ],
+  "stderr": "",
+  "probe": {
+   "schema": 1,
+   "platform_id": "linux-ubuntu-24.04-x86_64",
+   "ui_variant": "modern",
+   "input": "Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit 日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+   "message": "Bonjour Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit Lorem ipsum dolor sit amet consectetur adipiscing elit 日本語日本語日本語日本語日本語日本語日本語日本語日本語日本語",
+   "greeting_matches": true,
+   "core": "cpp",
+   "compiler": "gcc 13.3.0",
+   "displayed": true,
+   "display_ms": 66,
+   "peak_rss_kb": 30996,
+   "eol_warning_shown": false,
+   "disabled_features": [],
+   "timestamp_utc": "2026-11-13T06:56:56Z"
+  }
+ }
+}

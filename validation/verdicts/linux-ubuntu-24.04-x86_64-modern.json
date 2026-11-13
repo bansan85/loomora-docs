@@ -3,16 +3,17 @@
   "ui_variant": "modern",
   "status": "ok_restricted",
   "restrictions": [
-    "Typing was exercised with synthetic key events, not by a person with a real keyboard in the real window: the window was started with GDK_BACKEND=x11 (XWayland) and GDK_CORE_DEVICE_EVENTS=1 and Ctrl+A then M, a, r, i, e were sent to it with XSendEvent; the label then showed \"Bonjour Marie\" in the capture taken 501-507 ms after the first key was sent (upper bound for the update delay, to be compared with the 1 s of User Story 1). The default GDK backend of this system is Wayland, which was not driven this way; real keyboard input, input methods and the IME path were not tested.",
-    "The end-of-life GtkInfoBar was not exercised: the WSL2 kernel 6.18.58.1 is not end of life for the backend, so eol_warning_shown was false in every run and the warning (FR-013, ui-contract item 3) was never displayed on Linux. It stays unverified at run time until a run on a kernel the backend treats as end of life.",
-    "Dark theme and high contrast were only forced through GTK_THEME (Adwaita:dark, HighContrast, HighContrastInverse), not through the system settings (gsettings color-scheme, the accessibility high-contrast switch, the Ubuntu Yaru theme): this distribution has only the Default and Emacs themes installed besides the themes built into GTK, and no desktop session of a full distribution was involved (WSLg only). The contrast ratio measured on the captured pixels of the greeting label (WCAG formula, most contrasting pixel against the most frequent colour of the label band) was 11.61 (default), 10.56 (Adwaita:dark), 13.88 (HighContrast) and 11.88 (HighContrastInverse), all above 4.5:1, but the HighContrast theme rendered by GTK 3.24 is mild-looking and is not a proof for the real high-contrast mode of a desktop.",
-    "Screenshots are captures of the window client area only (Gdk pixbuf of the X11 window under XWayland, 480x240): no title bar, no window decoration, no desktop, no screen recording. The probe runs use the default (Wayland) backend while the screenshots use the X11 backend, so no screenshot shows the exact process of the timing runs. 'displayed' in the probe record comes from the application's own first draw callback; that the compositor put the pixels on a screen was not independently checked.",
-    "Only GTK 3.24.41 was run. The GTK 3.10 API subset is enforced at compile time (GDK_VERSION_MIN_REQUIRED/MAX_ALLOWED = 3.10, no warning), but the executable was never run on a real GTK 3.10, so the lower limit of this UI is not verified here.",
-    "Only one environment was exercised: Ubuntu 24.04.5 in WSL2 with WSLg on a Windows 11 host, x86_64. Not tested: bare metal or a full VM boot, other distributions (the Ubuntu 22.04 and other targets of T059 have no record), other desktops, real GPU or software-rendering differences, Linux ARM. The timings and memory figures are those of this WSL2 virtual machine.",
-    "Glyph rendering was looked at (glyphs-*.png, viewed by the author of the trial), with the Noto fonts installed in this WSL image, for accents, CJK, emoji (a ZWJ family sequence, a flag, a skin-tone sequence), Hebrew and Arabic, combining marks (Latin, Thai, Devanagari), symbols (currency, arrows, math, box drawing, dingbats) and Latin Extended: the input field and the greeting label draw the same characters. This is a capture of one distribution with one font set (Noto Sans, Noto Sans CJK, Noto Color Emoji): nothing was checked about other font sets, other desktops, or a real person reading the screen. Right-to-left order was looked at only for Hebrew and Arabic in one string. Missing fonts are an environment limit, not a defect of the UI: with only DejaVu, Ubuntu and MathJax fonts (the image before the Noto packages were installed) CJK, Thai, Devanagari and most emoji code points were drawn as hexadecimal boxes in BOTH the input field and the label, identical in the two widgets (glyphs-dejavu-only-*.png); a system without those fonts will always show boxes. The packages that fix it on Ubuntu are fonts-noto-cjk, fonts-noto-color-emoji and fonts-noto-core.",
-    "The scrolling of a long greeting was only seen in captures (the first lines are visible and the window keeps 480x240); the scrollbar and the mouse wheel or keyboard scrolling of the greeting area were not exercised. The trial evidence above (probe series, trial-measurements.json, themes, typed Marie, run_vectors log and the window captures window-*.png) was produced with the executable 5bd33f1d… built before the commit that adds the scrolled window (the commit holding this record); only the glyphs-* evidence and a run_vectors run (log not stored: a re-run) were produced with the executable f83a1a13… of the fix, so the timings, memory and theme measurements were not repeated with it.",
-    "No procedure document exists yet for this trial (validation/procedures/linux.md is task T111), so the verdict carries no 'reproduction' path; the commands used are in the 'notes' field.",
-    "Re-run after adr/0004-fallback-per-case.md (2026-11-13): the executable of the evidence listed before this entry is sha256 5bd33f1d990d01c13c19773523d491f3e0a4f806287133657dba9f81f16c12dd (296848 bytes, libstdc++ and libgcc linked statically); the executable now built links the distribution's libstdc++ and libgcc (meson option static_cxx_runtime, default false) and is sha256 24b62cafff19e3e96cf2d716fd9894a46f7a7e5d75c9407402670d3a36b871cf (53736 bytes, 7 DT_NEEDED entries, highest GLIBC_2.34 and GLIBCXX_3.4.21). RE-VERIFIED on it: 15 of 15 vectors, 10 of the 13 glyph screenshots byte for byte equal to those of the earlier build (accents, cjk, emoji, rtl, combining, symbols, latinext, long, asc250, max1000; the three others have no counterpart), tools/check_std.py (0 failures), ctest with g++ (selftest through <iostream> and Catch2, 2 of 2). NOT re-run: the 20 probe runs, the GUI screenshots in dark and high-contrast themes, the typing. A distribution without a libstdc++.so.6 from GCC 5 or later was not tried; the static variant builds (-Dstatic_cxx_runtime=true, 296952 bytes) but was not run on such a system. The files of this re-run are not stored (CLAUDE.md: evidence is stored only when it proves something new); its results above come from the run logs of 2026-11-13; only the measurement behind the ADR is stored, validation/evidence/adr-0004/linux-ubuntu-24.04-x86_64/gtk-floor-and-runtime-check-output.txt."
+    "VERIFIED ON THE CURRENT BUILD (executable 733389c1, 54,016 bytes, default meson options, GTK 3.24.41 headers; 2026-11-13): 20 probe runs (10x --probe, 10x --probe-input Marie: exit 0, empty stderr, no leftover process, display_ms 91 to 239, peak_rss_kb 37716 to 38336), 15 of 15 vectors of tools/run_vectors.py, a window without --probe for 6 s with empty stderr (X11 and Wayland backends), typing \"Marie\" with real XTEST key events (\"Bonjour Marie\" in the default, Adwaita:dark, HighContrast and HighContrastInverse themes), 1,100 typed characters cut at 1,000, a long greeting with a visible scrollbar scrolled with the mouse wheel, the end-of-life banner with a faked kernel, 13 glyph captures with the Noto fonts. Only the files that prove something new are stored in the evidence with their sha256 (CLAUDE.md): the visible scrollbar, the 1,100-character limit, the Wayland start, the end-of-life banner and 3 of the glyph captures; the 20 probe runs, the 15 vectors, the X11 start, the four themes typed with XTEST and the other glyph captures of that list are re-runs of behaviour the first trial already evidenced, their results are stated here but their files are NOT stored. The evidence files of the executables 5bd33f1d, f83a1a13 and 24b62caf are kept as history; none of them is evidence for the current build.",
+    "NO PERSON: nobody typed in the window. The keys, wheel and click are synthetic XTEST events injected into the X11 session of WSLg (XWayland) by a script; they reach the focused window through the X server like keyboard events, but a real keyboard, key repeat, input methods and IME, dead keys, copy and paste, drag and drop, and mouse selection were not tried. Only ASCII characters were typed; the non-ASCII texts (accents, CJK, emoji, Hebrew, Arabic) reached the field through --probe-input, not through the keyboard. The 3 ms from the last key to the changed greeting pixels is an upper bound taken with polled captures of the X11 window, not the delay as seen by an eye on a screen.",
+    "BACKENDS: the typing, scrolling and banner runs used GDK_BACKEND=x11 (XWayland). The default backend of this system is Wayland, on which the application was only run for 6 s without --probe (empty stderr, no screenshot, no input, no clean close: ended with SIGTERM); the 20 probe runs and the 15 vectors use the default Wayland backend. No screenshot shows the process of the timing runs. 'displayed' in the probe record is the application's own first draw callback; that the compositor put the pixels on a screen was not independently checked.",
+    "END-OF-LIFE BANNER IS A SIMULATION: uname(2) was faked to 2.6.32 with an LD_PRELOAD shim (fake-uname.c, built in a scratch directory). The banner (FR-013, ui-contract item 3) was displayed, its text read in the screenshot, and closed with a click on its button, and the probe line reported eol_warning_shown true; but the WSL2 kernel (6.18.58.1) is not end of life and the banner has not been shown on a REAL old kernel or an end-of-life distribution. With the banner the window opens 480x430 instead of 480x240 and does not shrink when the banner is closed (already noted in ADR 0005, not changed).",
+    "THEMES: dark and high contrast were forced with GTK_THEME (Adwaita:dark, HighContrast, HighContrastInverse), not through the desktop settings (gsettings color-scheme, the accessibility high-contrast switch, the Ubuntu Yaru theme); the image has no full desktop session. Contrast ratios measured on the captured pixels of the greeting: 11.61, 10.56, 13.88 and 11.88, all above 4.5:1. The HighContrast theme rendered by GTK 3.24 looks almost like the default theme (near-white background, near-black text), so it is not evidence for the real high-contrast mode of a desktop.",
+    "SCREENSHOTS are captures of the window client area (Gdk pixbuf of the X11 window, 480x240, 480x430 with the banner): no title bar, no decoration, no desktop, no screen recording. Glyph rendering was looked at by the author of the trial for accents, Latin Extended, CJK, emoji (ZWJ family, flag, skin tone), Hebrew and Arabic (right-to-left order correct in the label, field right-aligned), combining marks (Latin, Thai, Devanagari) and symbols with ONE font set (Noto Sans, Noto Sans CJK, Noto Color Emoji, DejaVu) and ONE theme engine; the box-drawing string is drawn as a single small bracket-like glyph and was not compared with a reference. Other font sets, other desktops, real GPUs and a person reading the screen were not checked. Missing fonts are an environment limit, not a UI defect: with only DejaVu, Ubuntu and MathJax fonts CJK, Thai, Devanagari and most emoji code points were drawn as hexadecimal boxes in both the field and the label (history, executable 5bd33f1d: glyphs-dejavu-only-*.png); the packages that fix it on Ubuntu are fonts-noto-cjk, fonts-noto-color-emoji and fonts-noto-core.",
+    "GTK VERSIONS: only GTK 3.24.41 was run. The current build takes the 3.16 path (gtk_label_set_xalign and gtk_scrolled_window_set_overlay_scrolling(FALSE), macros LOOMORA_GTK_HAS_*) which no GTK older than 3.16 would have; the 3.10 path (gtk_misc_set_alignment, no overlay call) exists only in the floor build (-Dgtk_floor=true, ADR 0005), which the policy work compiled without warnings and ran for the probe, the vectors and a 4-second window on GTK 3.24, but this trial did NOT re-run it. A real GTK 3.10, versions between 3.10 and 3.24, GTK 4 (-Dgtk_api=4: no verdict and no deliverable record, built and checked only by the policy work) and the floor build's scrollbar on a runtime with overlay scrolling are not verified here.",
+    "ENVIRONMENT: one environment only, Ubuntu 24.04.5 in WSL2 with WSLg on a Windows 11 host, x86_64 (8 logical CPUs, 20 GB). Not tested: bare metal or a full VM boot, other distributions (the Ubuntu 22.04 and other targets of T059 have no record), other desktops and compositors, real GPU or software-rendering differences, Linux ARM or i686. Timings and memory are those of this WSL2 virtual machine; the first '--probe' run (cold start) was the slowest, 239 ms.",
+    "C++ RUNTIME: the current build links the distribution's libstdc++.so.6 and libgcc_s.so.1 dynamically (meson option static_cxx_runtime, default false, ADR 0004). The static variant (-Dstatic_cxx_runtime=true, about 296,952 bytes, asks for GLIBC_2.38) builds but was not run in this trial and was never tried on a system without a libstdc++.so.6 from GCC 5 or later. The loader's behaviour on a distribution older than Ubuntu 24.04 (glibc below 2.34) is not verified: the executable imports GLIBC_2.34.",
+    "MEMORY: peak_rss_kb is the application's own VmHWM; the cross-check with os.wait4 ru_maxrss of the child (136 to 496 kB higher, includes pre-exec pages) shows the same order of magnitude but is not an independent measurement of the same quantity. Memory was not measured with a long greeting or over a long session.",
+    "No procedure document exists yet for this trial (validation/procedures/linux.md is task T111), so the verdict carries no 'reproduction' path; the commands used are in the 'notes' field and the drivers (probe-series.py, gui-driver.py, glyphs-shoot.py, fake-uname.c) are in tools/trials/linux-ubuntu-24.04-x86_64/ of the main repository."
   ],
   "disabled_features": [],
   "evidence": [
@@ -20,115 +21,115 @@
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/probe-default-run1.json",
       "sha256": "e998f2649c63e8c00a3297e75319ff432b442500231b231238791efce26b3f9b",
       "kind": "probe",
-      "description": "First of 10 runs of 'loomora-gtk3 --probe': message \"Bonjour Coucou\", display_ms 247 (the slowest of the series), peak_rss_kb 37524."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] First of 10 runs of 'loomora-gtk3 --probe': message \"Bonjour Coucou\", display_ms 247 (the slowest of the series), peak_rss_kb 37524."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/probe-marie-run1.json",
       "sha256": "279fa3ac467c6e801378ce168f568e81404ce6b3abf2d67d0e1799eac899ce2d",
       "kind": "probe",
-      "description": "First of 10 runs of 'loomora-gtk3 --probe --probe-input Marie': message \"Bonjour Marie\", display_ms 105, peak_rss_kb 37260."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] First of 10 runs of 'loomora-gtk3 --probe --probe-input Marie': message \"Bonjour Marie\", display_ms 105, peak_rss_kb 37260."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/probe-default-runs.jsonl",
       "sha256": "028f89b64715ee97c7f95a8f4bdfa812a2ab75a4010eb1ee794824bacaab294a",
       "kind": "probe-series",
-      "description": "The 10 probe lines of '--probe' (one per line): display_ms 110 to 247."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] The 10 probe lines of '--probe' (one per line): display_ms 110 to 247."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/probe-marie-runs.jsonl",
       "sha256": "e00137edebcd1e1bbd68fa5a7ccf20802a66b8a26c48559e5af9703246aad1e0",
       "kind": "probe-series",
-      "description": "The 10 probe lines of '--probe --probe-input Marie': display_ms 105 to 138."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] The 10 probe lines of '--probe --probe-input Marie': display_ms 105 to 138."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/trial-measurements.json",
       "sha256": "7e2b10b7eba0ccdf20cc2c540a315e5d626a511b1043f2dd301663b04df6989d",
       "kind": "measurements",
-      "description": "Per run of the 20 probe runs: exit status (all 0), standard error (all empty, 0 bytes), one stdout line each, wall time of the process (2104 to 2359 ms, includes the 2 s of probe mode), pgrep for a leftover loomora-gtk3 process after each exit (none), executable size and sha256."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Per run of the 20 probe runs: exit status (all 0), standard error (all empty, 0 bytes), one stdout line each, wall time of the process (2104 to 2359 ms, includes the 2 s of probe mode), pgrep for a leftover loomora-gtk3 process after each exit (none), executable size and sha256."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/run-vectors-linux-ubuntu-24.04-x86_64-modern-log.txt",
       "sha256": "dae7faab7cf8c6af63ea21a9a2d5ad0ec9e5ac48d5ed0a0b4c5e8095779f1b14",
       "kind": "run_vectors-log",
-      "description": "Log of 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --evidence-dir ...' (SC-011, FR-027): 15 valid vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped as designed, 2 vectors truncated to the 1,000-character limit of the field, result PASSED."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Log of 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --evidence-dir ...' (SC-011, FR-027): 15 valid vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped as designed, 2 vectors truncated to the 1,000-character limit of the field, result PASSED."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/run-vectors-linux-ubuntu-24.04-x86_64-modern-probe-lines.tsv",
       "sha256": "5b7b5d662d45085c7681c80ceb5ebe04c782ad07b8619c3826e217a2c4203842",
       "kind": "run_vectors-probe-lines",
-      "description": "The probe line of each of the 15 vectors, as '<vector id><TAB><probe line>'."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] The probe line of each of the 15 vectors, as '<vector id><TAB><probe line>'."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-default-1-initial.png",
       "sha256": "e77bb703b3f5534ec4bd33553c303ef371450bf94edf881f01d102e762419a70",
       "kind": "screenshot",
-      "description": "Real window (client area, X11 backend under XWayland, default theme) right after start: field \"Coucou\" and greeting \"Bonjour Coucou\"."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Real window (client area, X11 backend under XWayland, default theme) right after start: field \"Coucou\" and greeting \"Bonjour Coucou\"."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-default-2-typed-marie.png",
       "sha256": "42c7aca925e5c048caf8651c7c5d8cf242cc1a6a2c37645d69da1ff2c9d51fc8",
       "kind": "screenshot",
-      "description": "Same window after the synthetic keys Ctrl+A, M, a, r, i, e: field \"Marie\", greeting \"Bonjour Marie\" (captured 507 ms after the first key was sent)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Same window after the synthetic keys Ctrl+A, M, a, r, i, e: field \"Marie\", greeting \"Bonjour Marie\" (captured 507 ms after the first key was sent)."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/gui-default.json",
       "sha256": "0a277b86b410973b07732e2d1e407bb1ab3b5557ea1624bb1771c98dd0e0193b",
       "kind": "gui-run",
-      "description": "Record of the window run with the default theme: 507 ms from the first key to the capture, window closed with a WM_DELETE_WINDOW client message, exit status 0 after 4 ms, standard error empty, no leftover process, contrast ratio 11.61."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Record of the window run with the default theme: 507 ms from the first key to the capture, window closed with a WM_DELETE_WINDOW client message, exit status 0 after 4 ms, standard error empty, no leftover process, contrast ratio 11.61."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-dark-1-initial.png",
       "sha256": "da7b16111871fd581849b6b2c54f30c1278c9dae4979b684db33dab3240840e2",
       "kind": "screenshot",
-      "description": "Window with GTK_THEME=Adwaita:dark right after start."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with GTK_THEME=Adwaita:dark right after start."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-dark-2-typed-marie.png",
       "sha256": "c7f770ba8ef50516bc76463532fadab894251016abbaceb2fb348dd04b948dfa",
       "kind": "screenshot",
-      "description": "Window with GTK_THEME=Adwaita:dark after the synthetic typing of Marie: \"Bonjour Marie\", light text on a dark background."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with GTK_THEME=Adwaita:dark after the synthetic typing of Marie: \"Bonjour Marie\", light text on a dark background."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/gui-dark.json",
       "sha256": "b93dae870ee361af959fd4e4393fe82fdf248d4496ee0c2a71783d4dad719c6c",
       "kind": "gui-run",
-      "description": "Record of the Adwaita:dark run: 501 ms from the first key to the capture, exit status 0, standard error empty, no leftover process, contrast ratio 10.56."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Record of the Adwaita:dark run: 501 ms from the first key to the capture, exit status 0, standard error empty, no leftover process, contrast ratio 10.56."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-highcontrast-1-initial.png",
       "sha256": "bd6c93827e03e73a9fb38623cba45786a6efc7dec9af620d621b5d962b56a4c0",
       "kind": "screenshot",
-      "description": "Window with GTK_THEME=HighContrast right after start."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with GTK_THEME=HighContrast right after start."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-highcontrast-2-typed-marie.png",
       "sha256": "de643276932d6ad785a364c41bb0e94b316616d2e0c39285ae83b69ee4db6cfe",
       "kind": "screenshot",
-      "description": "Window with GTK_THEME=HighContrast after the synthetic typing of Marie."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with GTK_THEME=HighContrast after the synthetic typing of Marie."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/gui-highcontrast.json",
       "sha256": "d8c41c67c41ea071eef3db77b9c6121ebef0b993f77f5789b20fb6d32fa4c8a0",
       "kind": "gui-run",
-      "description": "Record of the HighContrast run: 504 ms from the first key to the capture, exit status 0, standard error empty, no leftover process, contrast ratio 13.88."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Record of the HighContrast run: 504 ms from the first key to the capture, exit status 0, standard error empty, no leftover process, contrast ratio 13.88."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-highcontrast-inverse-1-initial.png",
       "sha256": "2bd01249fcbc94566665cba168095eb398159d7f47c19e580f2126f0411c5f91",
       "kind": "screenshot",
-      "description": "Window with GTK_THEME=HighContrastInverse right after start."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with GTK_THEME=HighContrastInverse right after start."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/window-highcontrast-inverse-2-typed-marie.png",
       "sha256": "ff920dfd3ed3bc2bd6c864b6d135dc4768f7e08b7df31931f59323be1038a0ba",
       "kind": "screenshot",
-      "description": "Window with GTK_THEME=HighContrastInverse after the synthetic typing of Marie."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with GTK_THEME=HighContrastInverse after the synthetic typing of Marie."
     },
     {
       "path": "validation/evidence/first-trial/linux-ubuntu-24.04-x86_64/gui-highcontrast-inverse.json",
       "sha256": "680e7c5bda14a9c3b55cdbb137c3b9f317a3a06170890c03ef0aa324e6f73aab",
       "kind": "gui-run",
-      "description": "Record of the HighContrastInverse run: 504 ms from the first key to the capture, exit status 0, standard error empty, no leftover process, contrast ratio 11.88."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Record of the HighContrastInverse run: 504 ms from the first key to the capture, exit status 0, standard error empty, no leftover process, contrast ratio 11.88."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-fonts-coverage.txt",
@@ -140,246 +141,415 @@
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-measurements-dejavu-only.json",
       "sha256": "30384b884b44fa84842c11c7c056c10203405e46331b32baf9908517be407ce1",
       "kind": "glyph-run",
-      "description": "Per vector of the glyph trial (DejaVu-only image, executable 5bd33f1d): window size, stderr and the probe line of the run (greeting_matches true for every vector); produced by glyphs-shoot.py."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Per vector of the glyph trial (DejaVu-only image, executable 5bd33f1d): window size, stderr and the probe line of the run (greeting_matches true for every vector); produced by glyphs-shoot.py."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-measurements-noto-before-fix.json",
       "sha256": "b6a1c0cee84c6649acdf21c9d545b16e47e363ade3edfa8583e52cbfae268562",
       "kind": "glyph-run",
-      "description": "Per vector of the glyph trial (Noto fonts installed, executable 5bd33f1d (before the scrolled window)): window size, stderr and the probe line of the run (greeting_matches true for every vector); produced by glyphs-shoot.py."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Per vector of the glyph trial (Noto fonts installed, executable 5bd33f1d (before the scrolled window)): window size, stderr and the probe line of the run (greeting_matches true for every vector); produced by glyphs-shoot.py."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-measurements-noto-after-fix.json",
       "sha256": "8dfbf130e8bec9477f319d89daec954cc72c6f88948485901d130c5c2c3aae3b",
       "kind": "glyph-run",
-      "description": "Per vector of the glyph trial (Noto fonts installed, executable f83a1a13 (with the scrolled window)): window size, stderr and the probe line of the run (greeting_matches true for every vector); produced by glyphs-shoot.py."
+      "description": "[history: executable f83a1a13 (296,952 bytes, static C++ runtime)] Per vector of the glyph trial (Noto fonts installed, executable f83a1a13 (with the scrolled window)): window size, stderr and the probe line of the run (greeting_matches true for every vector); produced by glyphs-shoot.py."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-accents.png",
       "sha256": "51c0f7480b3402a8153266b7bd77a8b9308409f74fe6bb48b7612a1b9d9af528",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, accented Latin letters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, accented Latin letters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-cjk.png",
       "sha256": "9a65e2522d38d12e6f43e444469dfb69bfde19a6f332241f440f13ae59d891ec",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, Japanese, Chinese and Korean: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, Japanese, Chinese and Korean: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-emoji.png",
       "sha256": "5f73ef747626de2807968c501e383780229914691344d05749221cb1f1582b9a",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, emoji, a ZWJ family sequence, a flag and a skin-tone sequence: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, emoji, a ZWJ family sequence, a flag and a skin-tone sequence: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-rtl.png",
       "sha256": "ca35dfb93064def87c96b8f2423a85a221cd5e9315fe0f0bee154688762c9e3e",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, Hebrew and Arabic: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, Hebrew and Arabic: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-combining.png",
       "sha256": "d8fd26cfb5d737a4d7b24e43bc9543a5bda51f1d841ba2eeaba23137a1d8733c",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, combining accents plus Thai and Devanagari marks: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, combining accents plus Thai and Devanagari marks: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-symbols.png",
       "sha256": "a1d36bf9a92a55f1710539b6c29b13d8070c2ae8045488b5e89cb8a13fda1902",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, symbols, arrows, math, box drawing and dingbats: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, symbols, arrows, math, box drawing and dingbats: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-latinext.png",
       "sha256": "7d0c81ce259a68cf591a03e3a9dfd8388e7b14628f4e0189a8a2517e4bc3eab3",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, Latin Extended: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, Latin Extended: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-asc60.png",
       "sha256": "db15e45ea0587e2372850954a7bf877073ae6ab4415b9db3b7fe2ddcd53b2f82",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, 60 ASCII characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, 60 ASCII characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-asc120.png",
       "sha256": "a2eb572c1f3be7c448064b8d6a528b73f8d7edfe750c0960f06df498c32bfc81",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, 120 ASCII characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, 120 ASCII characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-asc250.png",
       "sha256": "632ad000600b6d94a1b0d2cfb33802e1ba183edd5ba2c1a292d2bc5e7a8b7f44",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, 250 ASCII characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, 250 ASCII characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-long.png",
       "sha256": "1cc01fc0dc685895dc942f6e8fca2e629a792949ae39268af8f34ba9b895f5b9",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, 254 ASCII characters plus 30 CJK characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, 254 ASCII characters plus 30 CJK characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-accents.png",
       "sha256": "1b75b2914b45d7fc435afa2414d31a0ef5b358a651ce7f176e8f3ebdff4d02f3",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, accented Latin letters: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, accented Latin letters: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-cjk.png",
       "sha256": "1bfa08804b8801a7569833dcadbc926a5574ab7492e431fa2c5823892f7d1c54",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, Japanese, Chinese and Korean: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, Japanese, Chinese and Korean: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-emoji.png",
       "sha256": "9b2aa644c7a5866840c6ae587593e063746bcc4ccb0fee1e335633f32d38d64d",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, emoji, a ZWJ family sequence, a flag and a skin-tone sequence: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, emoji, a ZWJ family sequence, a flag and a skin-tone sequence: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-rtl.png",
       "sha256": "d296d3f6fec5ba7acce342fffc5177ef19fce844650ca3446a0f1ff1142c52f4",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, Hebrew and Arabic: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, Hebrew and Arabic: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-combining.png",
       "sha256": "fa79424fe1bd2b696cf509a6980876ae04ef5f15199f25ac8d0405016cd8916e",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, combining accents plus Thai and Devanagari marks: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, combining accents plus Thai and Devanagari marks: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-symbols.png",
       "sha256": "77a904c5759d5a7f1b717c854ac9933a3ede2faf2834906fd7547ccb38e06bcb",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, symbols, arrows, math, box drawing and dingbats: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, symbols, arrows, math, box drawing and dingbats: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-latinext.png",
       "sha256": "052e3372e9300ffa3fcc845767ac056cf4840176cec8bb7ba9c44a06b738421d",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, Latin Extended: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, Latin Extended: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-asc250.png",
       "sha256": "657f2b732ad9fb9aa10fb3b26c2376577e770401165e8b63973be7aa295cd4a3",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, 250 ASCII characters: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, 250 ASCII characters: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-long.png",
       "sha256": "561cb71c695a3814626c649240576139ec1a1a30904d653e37201ec3cd3686c0",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, 254 ASCII characters plus 30 CJK characters: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, 254 ASCII characters plus 30 CJK characters: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-max1000.png",
       "sha256": "50e18e5894f2689f60dc6fb86fddccc0d7083ef50d2461bf983f383ca8b07b98",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, 1,000 ASCII characters (the field limit): Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable 5bd33f1d (296,848 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, 1,000 ASCII characters (the field limit): Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-after-fix-asc250.png",
       "sha256": "6bf6c37bb824ca821e235ad73e570cc57689811f2c8206e5c9765e63d93778a1",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, 250 ASCII characters: Noto fonts, executable f83a1a13 (after the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable f83a1a13 (296,952 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, 250 ASCII characters: Noto fonts, executable f83a1a13 (after the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-after-fix-long.png",
       "sha256": "532ecbe87c0b71c7a2dd4867085afe71800929caccfe4f15f734b44664a1fb3b",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, 254 ASCII characters plus 30 CJK characters: Noto fonts, executable f83a1a13 (after the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable f83a1a13 (296,952 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, 254 ASCII characters plus 30 CJK characters: Noto fonts, executable f83a1a13 (after the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-after-fix-max1000.png",
       "sha256": "411e94a34424f98e8b3cc0791ff7d0d189a8a2d12fd79fda3f7df39848ab32b8",
       "kind": "screenshot",
-      "description": "Window with the input field and the greeting label side by side, 1,000 ASCII characters (the field limit): Noto fonts, executable f83a1a13 (after the fix) (Gdk pixbuf capture, X11 backend)."
+      "description": "[history: executable f83a1a13 (296,952 bytes, static C++ runtime)] Window with the input field and the greeting label side by side, 1,000 ASCII characters (the field limit): Noto fonts, executable f83a1a13 (after the fix) (Gdk pixbuf capture, X11 backend)."
     },
     {
       "path": "tools/trials/linux-ubuntu-24.04-x86_64/glyphs-shoot.py",
       "sha256": "e990de5834c80e0a431c1c310a2c8cb90be14852c365932344440ee891a2cdf5",
       "kind": "driver",
-      "description": "The script that starts the executable with '--probe --probe-input <vector>' on the X11 backend and captures the window 0.8 s later (run inside WSL: python3 glyphs-shoot.py <exe> <outdir> <tag> [vector ...])."
+      "description": "The script that starts the executable with '--probe --probe-input <vector>' on the X11 backend and captures the window 0.8 s later (run inside WSL: python3 glyphs-shoot.py <exe> <outdir> <tag> [vector ...]). Reused unchanged for the glyph captures of executable 733389c1."
     },
     {
       "path": "tools/trials/linux-ubuntu-24.04-x86_64/gtk-floor-and-runtime-check.sh",
       "sha256": "11098c57df77c31342a5f6bab3c666a397224121eeee762dd0e028881ee61f7a",
       "kind": "script",
-      "description": "The two measurements of ADR 0004: object code with and without the GTK 3.10 floor, and the dynamic against the static C++ runtime."
+      "description": "[history: executable 24b62caf (53,736 bytes), ADR 0004 re-run] The two measurements of ADR 0004: object code with and without the GTK 3.10 floor, and the dynamic against the static C++ runtime."
     },
     {
       "path": "validation/evidence/adr-0004/linux-ubuntu-24.04-x86_64/gtk-floor-and-runtime-check-output.txt",
       "sha256": "d81937bdc70a0fe703338fe791620ca530a8ecf3ac8dc7464c539bbc21a075a1",
       "kind": "check-log",
-      "description": "main.o and probe.o byte-identical with and without the floor; dynamic 53,736 bytes (GLIBC_2.34, GLIBCXX_3.4.21) against static 296,952 bytes (GLIBC_2.38)."
+      "description": "[history: executable 24b62caf (53,736 bytes), ADR 0004 re-run] main.o and probe.o byte-identical with and without the floor; dynamic 53,736 bytes (GLIBC_2.34, GLIBCXX_3.4.21) against static 296,952 bytes (GLIBC_2.38)."
+    },
+    {
+      "path": "tools/trials/linux-ubuntu-24.04-x86_64/probe-series.py",
+      "sha256": "8ad9ee908003f7858f68c4db980c3772f46e0e6ad369103a395c9d99650b215d",
+      "kind": "driver",
+      "description": "The script that produced the 20 probe runs of the current build (not stored: a re-run) and their measurements (run inside WSL: python3 probe-series.py <exe> <outdir> <suffix> [runs])."
+    },
+    {
+      "path": "tools/trials/linux-ubuntu-24.04-x86_64/gui-driver.py",
+      "sha256": "a7d0bec782cc4e169fe961ec94054528508791e07ec823428c453cf45699ee3a",
+      "kind": "driver",
+      "description": "Window driver of the 733389c1 trial (run inside WSL): starts the executable without --probe, injects REAL key events and mouse-wheel/click events with the XTEST extension (libXtst through ctypes, not XSendEvent), captures the window client area with Gdk, measures the WCAG contrast of the greeting and closes the window with WM_DELETE_WINDOW."
+    },
+    {
+      "path": "tools/trials/linux-ubuntu-24.04-x86_64/fake-uname.c",
+      "sha256": "df425ab80a7b947cddd2624975e085550112f1e64f94a3ed98bef88a0a4af94c",
+      "kind": "source",
+      "description": "Source of the LD_PRELOAD shim that makes uname(2) report 2.6.32, used to display the end-of-life warning. A SIMULATION: the kernel is not old, only the string the application reads. The shim was built in a scratch directory (~/loomora-trial-scratch), the binary is not kept."
+    },
+    {
+      "path": "validation/evidence/eol-banner/linux-ubuntu-24.04-x86_64/probe-eol-simulated-733389c1.json",
+      "sha256": "99f6f0695c95e8f56bdc8e69649f821889bdd793e48d7e224add5a964a9185ae",
+      "kind": "probe",
+      "description": "One '--probe' run of executable 733389c1 (54,016 bytes, current default build) with LD_PRELOAD=fake-uname.so (uname faked to 2.6.32): eol_warning_shown true, exit 0, stderr empty. SIMULATION of an old kernel, not a real one."
+    },
+    {
+      "path": "validation/evidence/adr-0005/linux-ubuntu-24.04-x86_64/gui-startup-wayland-733389c1.json",
+      "sha256": "223ae362de6167c37c4c16d34fb031706c9ad81043ea3e8025165facda6766b3",
+      "kind": "gui-run",
+      "description": "Window without --probe on the default (Wayland, WSLg) backend for 6 s with 733389c1: still running after 6 s, standard error 0 bytes; no screenshot; the process was ended with SIGTERM (exit -15), so this run does not show a clean close on Wayland."
+    },
+    {
+      "path": "validation/evidence/adr-0005/linux-ubuntu-24.04-x86_64/gui-limit-733389c1.json",
+      "sha256": "a76f053692b163f5630978b981b435965d2858af2c23bdeb44b0073dd21c38a5",
+      "kind": "gui-run",
+      "description": "Entry-limit run with 733389c1: 1,100 characters typed with XTEST as 220 tokens of the form \"0001 \" (13.5 s); the greeting stays in the 480x240 window; after scrolling the greeting with the mouse wheel (XTEST buttons 4 and 5) the last token is 0200 (character 1000) and 0201 does not appear; exit status 0, standard error 0 bytes."
+    },
+    {
+      "path": "validation/evidence/adr-0005/linux-ubuntu-24.04-x86_64/gui-limit-733389c1-1-initial.png",
+      "sha256": "bae6507e99d6f5fc1b2ebb4e89672fe18ab7e208f04f544ef1bd4af223e6a6a1",
+      "kind": "screenshot",
+      "description": "Window of the entry-limit run before typing (default theme)."
+    },
+    {
+      "path": "validation/evidence/adr-0005/linux-ubuntu-24.04-x86_64/gui-limit-733389c1-2-after-typing-top.png",
+      "sha256": "b166ccef5636316ed1c41a90c825a30e5143587f523b29e480fa989d455c3256",
+      "kind": "screenshot",
+      "description": "After typing 1,100 characters: the field shows the end of its text, ending in \"0199 0200\" with the caret after it; the greeting \"Bonjour 0001 0002 ...\" is at the top of the scrolled area and a grey vertical scrollbar, not an overlay, is visible at the right edge (thumb at the top)."
+    },
+    {
+      "path": "validation/evidence/adr-0005/linux-ubuntu-24.04-x86_64/gui-limit-733389c1-3-greeting-scrolled-bottom.png",
+      "sha256": "bc0b9860e11bcf722112524eba044225e071ec382cf582af6881266a865cb7a7",
+      "kind": "screenshot",
+      "description": "Same window after 60 mouse-wheel clicks down over the greeting: the greeting is scrolled to its end, the last line is \"0195 0196 0197 0198 0199 0200\" (nothing after 0200: the 1,000-character limit of the field), thumb of the scrollbar at the bottom."
+    },
+    {
+      "path": "validation/evidence/eol-banner/linux-ubuntu-24.04-x86_64/gui-eol-733389c1.json",
+      "sha256": "0202c98eb595cb33eb5955a2d95fe8613cbb0cc9d165dce5b8ec8ed0b2bd9991",
+      "kind": "gui-run",
+      "description": "End-of-life banner run with 733389c1 and LD_PRELOAD=fake-uname.so (SIMULATION, uname faked to 2.6.32): banner shown, window 480x430, then a real XTEST click on the banner's close button (456,48) hides it; exit status 0, standard error 0 bytes, no leftover process."
+    },
+    {
+      "path": "validation/evidence/eol-banner/linux-ubuntu-24.04-x86_64/gui-eol-733389c1-1-banner.png",
+      "sha256": "7f2af638d331e27c00523d0bfb2e7dd618ffb7d33a9357d5f0f09fe0e1439202",
+      "kind": "screenshot",
+      "description": "Window with the faked kernel: a light orange GtkInfoBar at the top with the text \"Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection.\" and a close button (x) at its right, then the field \"Coucou\" and \"Bonjour Coucou\". The window is 480x430 (the 430-pixel height already noted in ADR 0005)."
+    },
+    {
+      "path": "validation/evidence/eol-banner/linux-ubuntu-24.04-x86_64/gui-eol-733389c1-2-after-click-close-button.png",
+      "sha256": "fa8b418c9342bb04f231cfbc0fb66ed81dbe5dd3d6e9b0452dac34d8a799eb33",
+      "kind": "screenshot",
+      "description": "Same window after the XTEST click on the close button: the banner is gone, the field and the greeting remain; the window stays 480x430 (it does not shrink) and the greeting is centred lower in it."
+    },
+    {
+      "path": "validation/evidence/adr-0005/linux-ubuntu-24.04-x86_64/glyphs-measurements-733389c1.json",
+      "sha256": "0e5ae186498e6966d6f08897610ffab7845675475df3698e0473ce5db79a3e23",
+      "kind": "glyph-run",
+      "description": "Per vector of the glyph trial with executable 733389c1 (54,016 bytes, current default build) (Noto fonts installed): window size (all 480x240), stderr (all empty), probe line (greeting_matches true for all 13); produced by glyphs-shoot.py. Seven PNGs (accents, cjk, emoji, rtl, combining, symbols, latinext) are byte for byte equal to the f83a1a13 captures; asc250, max1000 and long differ from them because the scrollbar is now visible (overlay scrolling off); asc60, asc120 and cjk30 have no earlier counterpart."
+    },
+    {
+      "path": "validation/evidence/adr-0005/linux-ubuntu-24.04-x86_64/glyphs-733389c1-asc250.png",
+      "sha256": "6632deeeb9b0c94aadbc759dc789266857ef572df9b50b52df0a927e7f714a8a",
+      "kind": "screenshot",
+      "description": "Window client area for 250 ASCII characters, executable 733389c1 (Noto fonts, X11 backend, --probe --probe-input): greeting wrapped on many lines, first five visible, a grey non-overlay scrollbar visible at the right edge, window 480x240."
+    },
+    {
+      "path": "validation/evidence/adr-0005/linux-ubuntu-24.04-x86_64/glyphs-733389c1-max1000.png",
+      "sha256": "6d0e1537a9fa64b176a0e00420656ce53019df4e28e27c4bb36316cf4e5bb88e",
+      "kind": "screenshot",
+      "description": "Window client area for 1,000 ASCII characters (the field limit), executable 733389c1 (Noto fonts, X11 backend, --probe --probe-input): first five lines of the greeting visible, grey non-overlay scrollbar visible at the right edge, window 480x240."
+    },
+    {
+      "path": "validation/evidence/adr-0005/linux-ubuntu-24.04-x86_64/glyphs-733389c1-long.png",
+      "sha256": "9541731c4e15385ded1cb0c3f203e86cddc187a4d9fd26def28b0c9edf3515bc",
+      "kind": "screenshot",
+      "description": "Window client area for 254 ASCII characters plus 30 CJK characters, executable 733389c1 (Noto fonts, X11 backend, --probe --probe-input): first five lines of the greeting visible, grey non-overlay scrollbar visible, window 480x240."
     }
   ],
   "measurements": {
-    "trial_date": "2026-11-12",
-    "executable": {
+    "trial_date": "2026-11-13",
+    "evidence_note": "Figures of the re-run of 2026-11-13 on executable 733389c1 (probe series, vector log, X11 start, typing in four themes, most glyph captures): re-runs, NOT stored (CLAUDE.md: evidence is stored only when it proves something new); the files kept for this build are the visible scrollbar and entry-limit captures, the Wayland start and the end-of-life banner runs.",
+    "current_executable": {
       "name": "loomora-gtk3",
-      "size_bytes": 296848,
-      "sha256": "5bd33f1d990d01c13c19773523d491f3e0a4f806287133657dba9f81f16c12dd",
-      "built_from_commit": "99a9c70 (working tree clean for core/ and ui/; the GTK UI files date from commit c06345c)",
-      "dynamic_dependencies": "6 DT_NEEDED entries, GTK 3 and system libraries; libstdc++ and libgcc linked statically; highest glibc symbol version GLIBC_2.38"
+      "size_bytes": 54016,
+      "sha256": "733389c175006a214dfc6202419581ca65a3c8780dd83b1905c09660459b6287",
+      "built_from_commit": "08ac22c (git status: only the deliverable record modified; core/ and ui/ clean); python tools/build.py linux modern, GTK 3.24.41 headers, default meson options",
+      "dynamic_dependencies": "7 DT_NEEDED entries (libgtk-3, libpango-1.0, libgobject-2.0, libglib-2.0, libstdc++.so.6, libgcc_s.so.1, libc.so.6), highest GLIBC_2.34; imports gtk_label_set_xalign and gtk_scrolled_window_set_overlay_scrolling (3.16 path, no gtk_misc_set_alignment)"
     },
     "display_ms": {
       "scenario_probe_default_n10": {
-        "min": 110,
-        "median": 140,
-        "max": 247
+        "min": 93,
+        "median": 94,
+        "max": 239
       },
       "scenario_probe_input_Marie_n10": {
-        "min": 105,
-        "median": 111,
-        "max": 138
+        "min": 91,
+        "median": 94,
+        "max": 100
       },
       "all_20_runs": {
-        "min": 105,
-        "median": 118,
-        "max": 247
+        "min": 91,
+        "median": 94,
+        "max": 239
       },
       "run_vectors_15_runs_4_in_parallel": {
-        "min": 101,
-        "median": 185,
-        "max": 388
+        "min": 99,
+        "median": 136,
+        "max": 941
       },
-      "threshold": "SC-001: first frame under 3000 ms; the slowest run of any series was 388 ms"
+      "threshold": "SC-001: first frame under 3000 ms; the slowest run of any series was 941 ms (parallel vector run); the first run of the '--probe' series (cold start) was 239 ms"
     },
     "peak_rss_kb": {
       "all_20_runs": {
-        "min": 37260,
-        "median": 37576,
-        "max": 37784
+        "min": 37716,
+        "median": 38022,
+        "max": 38336
       },
       "run_vectors_15_runs": {
-        "min": 37272,
-        "max": 52096,
-        "note": "the largest value comes from the 1,000-character inputs, 4,096-byte vectors truncated to 1,000 characters included"
+        "min": 37828,
+        "max": 42532,
+        "note": "the largest value comes from the 1,000-character inputs"
       },
-      "source": "VmHWM of /proc/self/status read by the application itself (probe record field peak_rss_kb)"
+      "source": "VmHWM of /proc/self/status read by the application itself (probe record field peak_rss_kb)",
+      "cross_check": "os.wait4 resource usage of each child process (ru_maxrss), recorded by probe-series.py: 37964 to 38708 kB, always 136 to 496 kB (median 354) ABOVE the probe's VmHWM; ru_maxrss includes the pages of the process before exec, so the two sources agree on the order of magnitude and the probe value is not under-reported"
     },
     "process_wall_time_ms": {
       "all_20_runs": {
-        "min": 2104,
-        "median": 2148,
-        "max": 2359
+        "min": 2095,
+        "median": 2101,
+        "max": 2321
       },
       "note": "includes the 2 s that probe mode waits before exiting by itself"
     },
-    "exit": "20 of 20 probe runs and the 15 run_vectors runs exited with status 0 and empty standard error; no loomora-gtk3 process was left after any of the 20 runs (pgrep); the four window runs were closed with WM_DELETE_WINDOW and exited with status 0 in about 4 ms with empty standard error",
-    "typed_input": "message \"Bonjour Marie\" for --probe-input Marie in 10 of 10 runs with greeting_matches true; in the real window \"Bonjour Marie\" visible in the capture 501 to 507 ms after the first synthetic key (4 themes)",
+    "exit": "20 of 20 probe runs and the 15 run_vectors runs exited with status 0 and empty standard error; no loomora-gtk3 process was left after any of the 20 runs (pgrep); every window run (startup, 4 themes, entry limit, banner) was closed with WM_DELETE_WINDOW, exited with status 0 in 3 to 8 ms, with empty standard error and no leftover process; the Wayland window (no clean close tried) ran 6 s with empty standard error and was ended with SIGTERM",
+    "probe_fields": "10 of 10 '--probe' runs: message \"Bonjour Coucou\"; 10 of 10 '--probe --probe-input Marie' runs: \"Bonjour Marie\"; greeting_matches true, displayed true, disabled_features [], eol_warning_shown false in all 20; with the faked kernel (SIMULATION) eol_warning_shown true; all lines pass tools/check_probe.py",
+    "typed_input": "real XTEST key events Ctrl+A, M, a, r, i, e on the X11 backend: field \"Marie\", greeting \"Bonjour Marie\" in all 4 themes; the greeting area changed within 3 ms of the last key (captures polled about every 10 ms, upper bound, same 3 ms in all four themes)",
+    "entry_limit": "1,100 characters typed with XTEST (220 tokens of 5 characters): the greeting ends with the token 0200, character 1000, and the field does not accept more",
     "contrast_ratio_greeting_label": {
       "default": 11.61,
       "Adwaita:dark": 10.56,
       "HighContrast": 13.88,
       "HighContrastInverse": 11.88,
-      "requirement": "ui-contract item 2: at least 4.5:1"
+      "method": "WCAG 2.x relative luminance on the captured pixels of the band below the entry (y from 64 to the bottom border): the most frequent colour is the background, the pixel with the highest contrast against it is the text; implemented in gui-driver.py",
+      "requirement": "ui-contract item 2: at least 4.5:1",
+      "note": "identical to the four values measured on executable 5bd33f1d"
+    },
+    "history": {
+      "5bd33f1d_296848_bytes_2026-11-12": {
+        "trial_date": "2026-11-12",
+        "executable": {
+          "name": "loomora-gtk3",
+          "size_bytes": 296848,
+          "sha256": "5bd33f1d990d01c13c19773523d491f3e0a4f806287133657dba9f81f16c12dd",
+          "built_from_commit": "99a9c70 (working tree clean for core/ and ui/; the GTK UI files date from commit c06345c)",
+          "dynamic_dependencies": "6 DT_NEEDED entries, GTK 3 and system libraries; libstdc++ and libgcc linked statically; highest glibc symbol version GLIBC_2.38"
+        },
+        "display_ms": {
+          "scenario_probe_default_n10": {
+            "min": 110,
+            "median": 140,
+            "max": 247
+          },
+          "scenario_probe_input_Marie_n10": {
+            "min": 105,
+            "median": 111,
+            "max": 138
+          },
+          "all_20_runs": {
+            "min": 105,
+            "median": 118,
+            "max": 247
+          },
+          "run_vectors_15_runs_4_in_parallel": {
+            "min": 101,
+            "median": 185,
+            "max": 388
+          },
+          "threshold": "SC-001: first frame under 3000 ms; the slowest run of any series was 388 ms"
+        },
+        "peak_rss_kb": {
+          "all_20_runs": {
+            "min": 37260,
+            "median": 37576,
+            "max": 37784
+          },
+          "run_vectors_15_runs": {
+            "min": 37272,
+            "max": 52096,
+            "note": "the largest value comes from the 1,000-character inputs, 4,096-byte vectors truncated to 1,000 characters included"
+          },
+          "source": "VmHWM of /proc/self/status read by the application itself (probe record field peak_rss_kb)"
+        },
+        "process_wall_time_ms": {
+          "all_20_runs": {
+            "min": 2104,
+            "median": 2148,
+            "max": 2359
+          },
+          "note": "includes the 2 s that probe mode waits before exiting by itself"
+        },
+        "exit": "20 of 20 probe runs and the 15 run_vectors runs exited with status 0 and empty standard error; no loomora-gtk3 process was left after any of the 20 runs (pgrep); the four window runs were closed with WM_DELETE_WINDOW and exited with status 0 in about 4 ms with empty standard error",
+        "typed_input": "message \"Bonjour Marie\" for --probe-input Marie in 10 of 10 runs with greeting_matches true; in the real window \"Bonjour Marie\" visible in the capture 501 to 507 ms after the first synthetic key (4 themes)",
+        "contrast_ratio_greeting_label": {
+          "default": 11.61,
+          "Adwaita:dark": 10.56,
+          "HighContrast": 13.88,
+          "HighContrastInverse": 11.88,
+          "requirement": "ui-contract item 2: at least 4.5:1"
+        }
+      },
+      "f83a1a13_296952_bytes": "glyph captures and a run_vectors run (15 of 15 vectors, log not stored) only; no probe series or window runs",
+      "24b62caf_53736_bytes_ADR_0004": "15 of 15 vectors and 13 glyph captures only (re-run, files not stored); no probe series or window runs"
     }
   },
   "decision": "keep",
-  "notes": "Environment: WSL2 distribution Ubuntu-24.04 with WSLg, see validation/platforms/linux-ubuntu-24.04-x86_64.json. Commands used (from the repository root, Windows host, Git Bash): 'python tools/build.py linux modern' (build in ~/loomora-build under the distribution home, up to date, no change to the deliverable record), then 20 launches of ~/loomora-build/linux-modern/loomora-gtk3 --probe [--probe-input Marie] with the stdout, stderr, exit status and leftover processes recorded, then 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --evidence-dir validation/evidence/<change>/linux-ubuntu-24.04-x86_64/', then four runs of the window without --probe, driven by a small Python script (Gdk pixbuf capture of the X11 window, XSendEvent key events, WM_DELETE_WINDOW client message) with GDK_BACKEND=x11, GDK_CORE_DEVICE_EVENTS=1 and GTK_THEME unset, Adwaita:dark, HighContrast, HighContrastInverse. That driver script is not part of the repository. The first run of the '--probe' series was also its slowest (247 ms). The text files of this evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256. Glyph check (2026-11-12 and 2026-11-13): the trial evidence before the commit that adds the scrolled window (the commit holding this record) was produced with the executable of sha256 5bd33f1d, 296,848 bytes. On the image with only DejaVu/Ubuntu/MathJax fonts, CJK, Thai, Devanagari and most emoji showed as hexadecimal boxes in both the field and the label (environment: no font covers them, see glyphs-fonts-coverage.txt); after 'sudo apt install fonts-noto-cjk fonts-noto-color-emoji fonts-noto-core' both widgets draw them identically. One real UI defect was measured with plain ASCII, independent of fonts: a greeting longer than the label area was clipped, blank from 250 characters (glyphs-noto-before-fix-asc250.png) and, with the DejaVu fonts, the window grew from 480x240 to 480x273 at 60 characters (glyphs-dejavu-only-asc60.png). The label now sits in a GtkScrolledWindow (no horizontal scrollbar, automatic vertical one); the executable of sha256 f83a1a130aef05a8cf2d883953bdcc6c4343707525f3268a58abdeb5350cde0c, 296,952 bytes keeps the window at 480x240 and shows the first lines (glyphs-noto-after-fix-asc250.png, -long.png, -max1000.png; the seven other captures of the fixed build are byte-identical to the before-fix ones and are not stored), and 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern' still passes 15 of 15. The capture script is glyphs-shoot.py; builds for these captures were made in ~/loomora-build-glyphs (same source, same hashes as ~/loomora-build). ADR 0004 (2026-11-13): the earlier evidence was produced with executable 5bd33f1d...c12dd (static C++ runtime); the rebuilt one (24b62caf...71cf, dynamic C++ runtime, same source) was re-verified, see the last restriction; the files of that re-run are not stored (CLAUDE.md), only the measurement behind the ADR is, in validation/evidence/adr-0004/linux-ubuntu-24.04-x86_64/."
+  "notes": "Environment: WSL2 distribution Ubuntu-24.04 with WSLg, see validation/platforms/linux-ubuntu-24.04-x86_64.json. TRIAL OF 2026-11-13 on the CURRENT build: executable sha256 733389c175006a214dfc6202419581ca65a3c8780dd83b1905c09660459b6287, 54,016 bytes, built with 'python tools/build.py linux modern' (up to date; ~/loomora-build/linux-modern/loomora-gtk3 and out/linux-modern/loomora-gtk3 have the same hash), from commit 08ac22c with an unmodified core/ and ui/. Commands (from the repository root, Windows host, Git Bash): (1) inside WSL, 'python3 tools/trials/linux-ubuntu-24.04-x86_64/probe-series.py ~/loomora-build/linux-modern/loomora-gtk3 <evidence dir> 733389c1 10' (10x --probe, 10x --probe --probe-input Marie, default GDK backend), then tools/check_probe.py on every line (with --input Marie for the second series): 0 problems; (2) 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --evidence-dir <scratch dir>' (15 of 15), the two output files (not stored: a re-run); (3) inside WSL, 'python3 gui-driver.py <exe> <evidence dir> 733389c1 startup startup-wayland default dark highcontrast highcontrast-inverse limit eol --preload ~/loomora-trial-scratch/fake-uname.so' (GDK_BACKEND=x11 for the window runs, GTK_THEME unset or Adwaita:dark, HighContrast, HighContrastInverse); (4) inside WSL, 'python3 glyphs-shoot.py <exe> <evidence dir> glyphs-733389c1 > glyphs-measurements-733389c1.json'; (5) one '--probe' run with LD_PRELOAD=fake-uname.so for probe-eol-simulated-733389c1.json. Differences from the first trial: the earlier agents' window driver (Gdk capture, XSendEvent key events, WM_DELETE_WINDOW) was not kept in the repository; gui-driver.py replaces it and injects the keys with the XTEST extension instead of XSendEvent, so they are real X server input events; the contrast is measured with the same method (WCAG ratio, most frequent colour against the most contrasting pixel of the band below the entry) and gives the same four ratios. The end-of-life banner uses an LD_PRELOAD uname shim built in a scratch directory (fake-uname.c): it is a simulation, not a real old kernel. Executable of each older evidence file (all kept as history): sha256 5bd33f1d990d01c13c19773523d491f3e0a4f806287133657dba9f81f16c12dd (296,848 bytes, static libstdc++): probe-default-*, probe-marie-*, trial-measurements.json, run-vectors-*-log.txt and -probe-lines.tsv without a suffix, window-*.png, gui-*.json without a suffix, glyphs-dejavu-only-* and glyphs-noto-before-fix-*; sha256 f83a1a130aef05a8cf2d883953bdcc6c4343707525f3268a58abdeb5350cde0c (296,952 bytes, static libstdc++, with the scrolled window): glyphs-noto-after-fix-asc250/long/max1000.png and glyphs-measurements-noto-after-fix.json (the vector run and the seven other captures of that build were not stored: byte-identical or re-runs); sha256 24b62cafff19e3e96cf2d716fd9894a46f7a7e5d75c9407402670d3a36b871cf (53,736 bytes, dynamic libstdc++, before the GTK version policy): gtk-floor-and-runtime-check-output.txt in adr-0004/ (the vector run and the glyph captures of that build were not stored: re-runs). The files with the suffix 733389c1 belong to the current build. History of the executable: 5bd33f1d (first trial, 2026-11-12) -> f83a1a13 (scrolled window, a long greeting no longer clipped) -> 24b62caf (ADR 0004: dynamic libstdc++) -> 733389c1 (ADR 0005: GTK version policy, 3.16 features behind macros, non-overlay scrollbar). The text files of the evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256. Glyph defect history: on the image with only DejaVu/Ubuntu/MathJax fonts, CJK, Thai, Devanagari and most emoji showed as hexadecimal boxes in both the field and the label (environment, glyphs-fonts-coverage.txt); after 'sudo apt install fonts-noto-cjk fonts-noto-color-emoji fonts-noto-core' both widgets draw them identically. One real UI defect was found with plain ASCII (a greeting longer than the label area was clipped, blank from 250 characters, and the window grew); the label now sits in a GtkScrolledWindow (no horizontal scrollbar, automatic vertical one) and the window stays 480x240 with a first-lines view and, in the current build, a visible scrollbar. No defect was found in the current build by this trial; the only oddity noted is the 480x430 window that does not shrink after the banner is closed (known, ADR 0005)."
 }
