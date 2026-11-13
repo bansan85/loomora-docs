@@ -1,0 +1,71 @@
+# Fonts of the WSL image, measured with fc-list / fc-match.
+# Section 1: DejaVu-only image, captured before fonts-noto-* were installed.
+noto fonts installed now: 0
+fc-match sans:lang=ja -> DejaVuSans.ttf: "DejaVu Sans" "Book"
+fc-match emoji -> DejaVuSans.ttf: "DejaVu Sans" "Book"
+fc-match sans -> DejaVuSans.ttf: "DejaVu Sans" "Book"
+fc-match system-ui -> DejaVuSans.ttf: "DejaVu Sans" "Book"
+U+00e9 : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+00f1 : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+0141 : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+20ac : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+2122 : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+2192 : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;MathJax_AMS;MathJax_Main;MathJax_Vector;MathJax_Vector\-Bold;
+U+2211 : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;MathJax_Size1;MathJax_Size2;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+221e : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;MathJax_Main;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+2500 : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Ubuntu Mono;Ubuntu Sans Mono;
+U+2713 : DejaVu Sans;DejaVu Sans Mono;MathJax_AMS;Ubuntu;Ubuntu Sans;Ubuntu Sans Mono;
+U+2702 : DejaVu Sans;DejaVu Sans Mono;
+U+263a : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;
+U+2665 : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;
+U+05e9 : DejaVu Sans;
+U+0645 : DejaVu Sans;DejaVu Sans Mono;
+U+0301 : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;MathJax_Main;MathJax_SansSerif;MathJax_Typewriter;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+0e01 : NONE
+U+0915 : NONE
+U+65e5 : NONE
+U+4e2d : NONE
+U+d55c : NONE
+U+1f600 : DejaVu Sans;
+U+1f468 : NONE
+U+200d : DejaVu Sans;DejaVu Serif;
+U+1f1eb : NONE
+U+1f44d : NONE
+U+1f3fd : NONE
+U+fe0f : DejaVu Sans;DejaVu Serif;
+
+# Section 2: after 'sudo apt install fonts-noto-cjk fonts-noto-color-emoji fonts-noto-core'.
+noto fonts installed now:
+302
+fc-match sans:lang=ja -> NotoSansCJK-Regular.ttc: "Noto Sans CJK JP" "Regular"
+fc-match emoji -> NotoColorEmoji.ttf: "Noto Color Emoji" "Regular"
+fc-match sans -> NotoSans-Regular.ttf: "Noto Sans" "Regular"
+fc-match system-ui -> NotoSans-Regular.ttf: "Noto Sans" "Regular"
+U+00e9 : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Noto Mono;Noto Sans;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Display;Noto Sans Mono;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Serif;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;Noto Serif Display;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+00f1 : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Noto Mono;Noto Sans;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Display;Noto Sans Mono;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Serif;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;Noto Serif Display;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+0141 : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Noto Mono;Noto Sans;Noto Sans Display;Noto Sans Mono;Noto Serif;Noto Serif Display;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+20ac : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Noto Mono;Noto Sans;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Display;Noto Sans Mono;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Serif;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;Noto Serif Display;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+2122 : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Noto Color Emoji;Noto Mono;Noto Sans;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Display;Noto Sans Mono;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Serif;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;Noto Serif Display;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+2192 : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;MathJax_AMS;MathJax_Main;MathJax_Vector;MathJax_Vector\-Bold;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Math;Noto Sans Mono;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Sans Symbols;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;
+U+2211 : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;MathJax_Size1;MathJax_Size2;Noto Mono;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Math;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+221e : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;MathJax_Main;Noto Mono;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Math;Noto Sans Mono;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+2500 : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Mono;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;Ubuntu Mono;Ubuntu Sans Mono;
+U+2713 : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;MathJax_AMS;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Sans Symbols2;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;Ubuntu;Ubuntu Sans;Ubuntu Sans Mono;
+U+2702 : DejaVu Sans;DejaVu Sans Mono;Noto Color Emoji;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Sans Symbols2;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;
+U+263a : DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Noto Color Emoji;Noto Sans Symbols;
+U+2665 : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;Noto Color Emoji;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Sans Symbols2;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;
+U+05e9 : DejaVu Sans;Noto Rashi Hebrew;Noto Sans Hebrew;Noto Serif Hebrew;
+U+0645 : DejaVu Sans;DejaVu Sans Mono;Noto Kufi Arabic;Noto Naskh Arabic;Noto Nastaliq Urdu;Noto Sans Arabic;
+U+0301 : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Sans Mono;DejaVu Serif;MathJax_Main;MathJax_SansSerif;MathJax_Typewriter;Noto Mono;Noto Sans;Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Cherokee;Noto Sans Coptic;Noto Sans Display;Noto Sans Georgian;Noto Sans Mono;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Sans Osage;Noto Sans Tai Le;Noto Sans Tifinagh;Noto Sans Tifinagh APT;Noto Sans Tifinagh Adrar;Noto Sans Tifinagh Agraw Imazighen;Noto Sans Tifinagh Ahaggar;Noto Sans Tifinagh Air;Noto Sans Tifinagh Azawagh;Noto Sans Tifinagh Ghat;Noto Sans Tifinagh Hawad;Noto Sans Tifinagh Rhissa Ixa;Noto Sans Tifinagh SIL;Noto Sans Tifinagh Tawellemmet;Noto Serif;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;Noto Serif Display;Noto Serif Georgian;Ubuntu;Ubuntu Mono;Ubuntu Sans;Ubuntu Sans Mono;
+U+0e01 : Noto Looped Thai;Noto Sans Thai;Noto Serif Thai;
+U+0915 : Noto Sans Devanagari;Noto Serif Devanagari;
+U+65e5 : Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;
+U+4e2d : Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;
+U+d55c : Noto Sans CJK HK;Noto Sans CJK JP;Noto Sans CJK KR;Noto Sans CJK SC;Noto Sans CJK TC;Noto Sans Mono CJK HK;Noto Sans Mono CJK JP;Noto Sans Mono CJK KR;Noto Sans Mono CJK SC;Noto Sans Mono CJK TC;Noto Serif CJK HK;Noto Serif CJK JP;Noto Serif CJK KR;Noto Serif CJK SC;Noto Serif CJK TC;
+U+1f600 : DejaVu Sans;Noto Color Emoji;
+U+1f468 : Noto Color Emoji;
+U+200d : DejaVu Math TeX Gyre;DejaVu Sans;DejaVu Serif;Noto Color Emoji;Noto Kufi Arabic;Noto Looped Lao;Noto Looped Thai;Noto Naskh Arabic;Noto Nastaliq Urdu;Noto Sans;Noto Sans Arabic;Noto Sans Avestan;Noto Sans Balinese;Noto Sans Batak;Noto Sans Bengali;Noto Sans Brahmi;Noto Sans Buginese;Noto Sans Buhid;Noto Sans Chakma;Noto Sans Cham;Noto Sans Devanagari;Noto Sans Display;Noto Sans Duployan;Noto Sans Egyptian Hieroglyphs;Noto Sans Grantha;Noto Sans Gujarati;Noto Sans Gunjala Gondi;Noto Sans Gurmukhi;Noto Sans Hanifi Rohingya;Noto Sans Hanunoo;Noto Sans Hebrew;Noto Sans Javanese;Noto Sans Kaithi;Noto Sans Kannada;Noto Sans Kayah Li;Noto Sans Kharoshthi;Noto Sans Khmer;Noto Sans Khojki;Noto Sans Khudawadi;Noto Sans Lao;Noto Sans Lepcha;Noto Sans Limbu;Noto Sans Mahajani;Noto Sans Malayalam;Noto Sans Mandaic;Noto Sans Manichaean;Noto Sans Meetei Mayek;Noto Sans Modi;Noto Sans Mongolian;Noto Sans Mono;Noto Sans Myanmar;Noto Sans NKo;Noto Sans New Tai Lue;Noto Sans Newa;Noto Sans Old Hungarian;Noto Sans Oriya;Noto Sans Pahawh Hmong;Noto Sans PhagsPa;Noto Sans Psalter Pahlavi;Noto Sans Rejang;Noto Sans Saurashtra;Noto Sans Sharada;Noto Sans Siddham;Noto Sans Sinhala;Noto Sans Sundanese;Noto Sans Syloti Nagri;Noto Sans Syriac;Noto Sans Tagalog;Noto Sans Tagbanwa;Noto Sans Tai Le;Noto Sans Tai Tham;Noto Sans Tai Viet;Noto Sans Takri;Noto Sans Tamil;Noto Sans Telugu;Noto Sans Thaana;Noto Sans Thai;Noto Sans Tifinagh;Noto Sans Tifinagh APT;Noto Sans Tifinagh Adrar;Noto Sans Tifinagh Agraw Imazighen;Noto Sans Tifinagh Ahaggar;Noto Sans Tifinagh Air;Noto Sans Tifinagh Azawagh;Noto Sans Tifinagh Ghat;Noto Sans Tifinagh Hawad;Noto Sans Tifinagh Rhissa Ixa;Noto Sans Tifinagh SIL;Noto Sans Tifinagh Tawellemmet;Noto Sans Tirhuta;Noto Sans Warang Citi;Noto Serif;Noto Serif Balinese;Noto Serif Bengali;Noto Serif Devanagari;Noto Serif Display;Noto Serif Dogra;Noto Serif Grantha;Noto Serif Gujarati;Noto Serif Gurmukhi;Noto Serif Hebrew;Noto Serif Kannada;Noto Serif Khmer;Noto Serif Khojki;Noto Serif Lao;Noto Serif Malayalam;Noto Serif Myanmar;Noto Serif Sinhala;Noto Serif Tamil;Noto Serif Tamil Slanted;Noto Serif Telugu;Noto Serif Thai;Noto Serif Tibetan;
+U+1f1eb : Noto Color Emoji;
+U+1f44d : Noto Color Emoji;Noto Sans Symbols2;
+U+1f3fd : Noto Color Emoji;
+U+fe0f : DejaVu Sans;DejaVu Serif;

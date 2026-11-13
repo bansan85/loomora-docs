@@ -9,7 +9,8 @@
     "Screenshots are captures of the window client area only (Gdk pixbuf of the X11 window under XWayland, 480x240): no title bar, no window decoration, no desktop, no screen recording. The probe runs use the default (Wayland) backend while the screenshots use the X11 backend, so no screenshot shows the exact process of the timing runs. 'displayed' in the probe record comes from the application's own first draw callback; that the compositor put the pixels on a screen was not independently checked.",
     "Only GTK 3.24.41 was run. The GTK 3.10 API subset is enforced at compile time (GDK_VERSION_MIN_REQUIRED/MAX_ALLOWED = 3.10, no warning), but the executable was never run on a real GTK 3.10, so the lower limit of this UI is not verified here.",
     "Only one environment was exercised: Ubuntu 24.04.5 in WSL2 with WSLg on a Windows 11 host, x86_64. Not tested: bare metal or a full VM boot, other distributions (the Ubuntu 22.04 and other targets of T059 have no record), other desktops, real GPU or software-rendering differences, Linux ARM. The timings and memory figures are those of this WSL2 virtual machine.",
-    "The rendering of the glyphs of the non-ASCII vectors (accents, CJK, right-to-left Arabic and Hebrew, emoji, combining characters) was not looked at: tools/run_vectors.py checks the text of the probe line (message and input, UTF-8, greeting_matches), not what the fonts of this system draw. Only the \"Coucou\" and \"Marie\" labels were seen in captures.",
+    "Glyph rendering was looked at (glyphs-*.png, viewed by the author of the trial), with the Noto fonts installed in this WSL image, for accents, CJK, emoji (a ZWJ family sequence, a flag, a skin-tone sequence), Hebrew and Arabic, combining marks (Latin, Thai, Devanagari), symbols (currency, arrows, math, box drawing, dingbats) and Latin Extended: the input field and the greeting label draw the same characters. This is a capture of one distribution with one font set (Noto Sans, Noto Sans CJK, Noto Color Emoji): nothing was checked about other font sets, other desktops, or a real person reading the screen. Right-to-left order was looked at only for Hebrew and Arabic in one string. Missing fonts are an environment limit, not a defect of the UI: with only DejaVu, Ubuntu and MathJax fonts (the image before the Noto packages were installed) CJK, Thai, Devanagari and most emoji code points were drawn as hexadecimal boxes in BOTH the input field and the label, identical in the two widgets (glyphs-dejavu-only-*.png); a system without those fonts will always show boxes. The packages that fix it on Ubuntu are fonts-noto-cjk, fonts-noto-color-emoji and fonts-noto-core.",
+    "The scrolling of a long greeting was only seen in captures (the first lines are visible and the window keeps 480x240); the scrollbar and the mouse wheel or keyboard scrolling of the greeting area were not exercised. The trial evidence above (probe series, trial-measurements.json, themes, typed Marie, run_vectors log and the window captures window-*.png) was produced with the executable 5bd33f1d… built before the commit that adds the scrolled window (the commit holding this record); only the glyphs-* evidence and a run_vectors run (log not stored: a re-run) were produced with the executable f83a1a13… of the fix, so the timings, memory and theme measurements were not repeated with it.",
     "No procedure document exists yet for this trial (validation/procedures/linux.md is task T111), so the verdict carries no 'reproduction' path; the commands used are in the 'notes' field."
   ],
   "disabled_features": [],
@@ -127,6 +128,180 @@
       "sha256": "680e7c5bda14a9c3b55cdbb137c3b9f317a3a06170890c03ef0aa324e6f73aab",
       "kind": "gui-run",
       "description": "Record of the HighContrastInverse run: 504 ms from the first key to the capture, exit status 0, standard error empty, no leftover process, contrast ratio 11.88."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-fonts-coverage.txt",
+      "sha256": "0b6917f2e63a710be5eaf564dc975b3e496a58c360c12ce33888bef26c54ef32",
+      "kind": "fonts-coverage",
+      "description": "fc-match and fc-list --charset results for the code points of the glyph vectors: section 1 on the DejaVu/Ubuntu/MathJax-only image (no font for CJK, Thai, Devanagari or any emoji except U+1F600), section 2 after fonts-noto-cjk, fonts-noto-color-emoji and fonts-noto-core were installed in the distribution."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-measurements-dejavu-only.json",
+      "sha256": "30384b884b44fa84842c11c7c056c10203405e46331b32baf9908517be407ce1",
+      "kind": "glyph-run",
+      "description": "Per vector of the glyph trial (DejaVu-only image, executable 5bd33f1d): window size, stderr and the probe line of the run (greeting_matches true for every vector); produced by glyphs-shoot.py."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-measurements-noto-before-fix.json",
+      "sha256": "b6a1c0cee84c6649acdf21c9d545b16e47e363ade3edfa8583e52cbfae268562",
+      "kind": "glyph-run",
+      "description": "Per vector of the glyph trial (Noto fonts installed, executable 5bd33f1d (before the scrolled window)): window size, stderr and the probe line of the run (greeting_matches true for every vector); produced by glyphs-shoot.py."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-measurements-noto-after-fix.json",
+      "sha256": "8dfbf130e8bec9477f319d89daec954cc72c6f88948485901d130c5c2c3aae3b",
+      "kind": "glyph-run",
+      "description": "Per vector of the glyph trial (Noto fonts installed, executable f83a1a13 (with the scrolled window)): window size, stderr and the probe line of the run (greeting_matches true for every vector); produced by glyphs-shoot.py."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-accents.png",
+      "sha256": "51c0f7480b3402a8153266b7bd77a8b9308409f74fe6bb48b7612a1b9d9af528",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, accented Latin letters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-cjk.png",
+      "sha256": "9a65e2522d38d12e6f43e444469dfb69bfde19a6f332241f440f13ae59d891ec",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, Japanese, Chinese and Korean: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-emoji.png",
+      "sha256": "5f73ef747626de2807968c501e383780229914691344d05749221cb1f1582b9a",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, emoji, a ZWJ family sequence, a flag and a skin-tone sequence: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-rtl.png",
+      "sha256": "ca35dfb93064def87c96b8f2423a85a221cd5e9315fe0f0bee154688762c9e3e",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, Hebrew and Arabic: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-combining.png",
+      "sha256": "d8fd26cfb5d737a4d7b24e43bc9543a5bda51f1d841ba2eeaba23137a1d8733c",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, combining accents plus Thai and Devanagari marks: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-symbols.png",
+      "sha256": "a1d36bf9a92a55f1710539b6c29b13d8070c2ae8045488b5e89cb8a13fda1902",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, symbols, arrows, math, box drawing and dingbats: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-latinext.png",
+      "sha256": "7d0c81ce259a68cf591a03e3a9dfd8388e7b14628f4e0189a8a2517e4bc3eab3",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, Latin Extended: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-asc60.png",
+      "sha256": "db15e45ea0587e2372850954a7bf877073ae6ab4415b9db3b7fe2ddcd53b2f82",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, 60 ASCII characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-asc120.png",
+      "sha256": "a2eb572c1f3be7c448064b8d6a528b73f8d7edfe750c0960f06df498c32bfc81",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, 120 ASCII characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-asc250.png",
+      "sha256": "632ad000600b6d94a1b0d2cfb33802e1ba183edd5ba2c1a292d2bc5e7a8b7f44",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, 250 ASCII characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-dejavu-only-long.png",
+      "sha256": "1cc01fc0dc685895dc942f6e8fca2e629a792949ae39268af8f34ba9b895f5b9",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, 254 ASCII characters plus 30 CJK characters: DejaVu-only fonts, executable 5bd33f1d (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-accents.png",
+      "sha256": "1b75b2914b45d7fc435afa2414d31a0ef5b358a651ce7f176e8f3ebdff4d02f3",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, accented Latin letters: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-cjk.png",
+      "sha256": "1bfa08804b8801a7569833dcadbc926a5574ab7492e431fa2c5823892f7d1c54",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, Japanese, Chinese and Korean: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-emoji.png",
+      "sha256": "9b2aa644c7a5866840c6ae587593e063746bcc4ccb0fee1e335633f32d38d64d",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, emoji, a ZWJ family sequence, a flag and a skin-tone sequence: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-rtl.png",
+      "sha256": "d296d3f6fec5ba7acce342fffc5177ef19fce844650ca3446a0f1ff1142c52f4",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, Hebrew and Arabic: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-combining.png",
+      "sha256": "fa79424fe1bd2b696cf509a6980876ae04ef5f15199f25ac8d0405016cd8916e",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, combining accents plus Thai and Devanagari marks: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-symbols.png",
+      "sha256": "77a904c5759d5a7f1b717c854ac9933a3ede2faf2834906fd7547ccb38e06bcb",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, symbols, arrows, math, box drawing and dingbats: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-latinext.png",
+      "sha256": "052e3372e9300ffa3fcc845767ac056cf4840176cec8bb7ba9c44a06b738421d",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, Latin Extended: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-asc250.png",
+      "sha256": "657f2b732ad9fb9aa10fb3b26c2376577e770401165e8b63973be7aa295cd4a3",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, 250 ASCII characters: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-long.png",
+      "sha256": "561cb71c695a3814626c649240576139ec1a1a30904d653e37201ec3cd3686c0",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, 254 ASCII characters plus 30 CJK characters: Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-before-fix-max1000.png",
+      "sha256": "50e18e5894f2689f60dc6fb86fddccc0d7083ef50d2461bf983f383ca8b07b98",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, 1,000 ASCII characters (the field limit): Noto fonts, executable 5bd33f1d (before the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-after-fix-asc250.png",
+      "sha256": "6bf6c37bb824ca821e235ad73e570cc57689811f2c8206e5c9765e63d93778a1",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, 250 ASCII characters: Noto fonts, executable f83a1a13 (after the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-after-fix-long.png",
+      "sha256": "532ecbe87c0b71c7a2dd4867085afe71800929caccfe4f15f734b44664a1fb3b",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, 254 ASCII characters plus 30 CJK characters: Noto fonts, executable f83a1a13 (after the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "validation/evidence/scroll-long-greeting/linux-ubuntu-24.04-x86_64/glyphs-noto-after-fix-max1000.png",
+      "sha256": "411e94a34424f98e8b3cc0791ff7d0d189a8a2d12fd79fda3f7df39848ab32b8",
+      "kind": "screenshot",
+      "description": "Window with the input field and the greeting label side by side, 1,000 ASCII characters (the field limit): Noto fonts, executable f83a1a13 (after the fix) (Gdk pixbuf capture, X11 backend)."
+    },
+    {
+      "path": "tools/trials/linux-ubuntu-24.04-x86_64/glyphs-shoot.py",
+      "sha256": "e990de5834c80e0a431c1c310a2c8cb90be14852c365932344440ee891a2cdf5",
+      "kind": "driver",
+      "description": "The script that starts the executable with '--probe --probe-input <vector>' on the X11 backend and captures the window 0.8 s later (run inside WSL: python3 glyphs-shoot.py <exe> <outdir> <tag> [vector ...])."
     }
   ],
   "measurements": {
@@ -193,5 +368,5 @@
     }
   },
   "decision": "keep",
-  "notes": "Environment: WSL2 distribution Ubuntu-24.04 with WSLg, see validation/platforms/linux-ubuntu-24.04-x86_64.json. Commands used (from the repository root, Windows host, Git Bash): 'python tools/build.py linux modern' (build in ~/loomora-build under the distribution home, up to date, no change to the deliverable record), then 20 launches of ~/loomora-build/linux-modern/loomora-gtk3 --probe [--probe-input Marie] with the stdout, stderr, exit status and leftover processes recorded, then 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --evidence-dir validation/evidence/<change>/linux-ubuntu-24.04-x86_64/', then four runs of the window without --probe, driven by a small Python script (Gdk pixbuf capture of the X11 window, XSendEvent key events, WM_DELETE_WINDOW client message) with GDK_BACKEND=x11, GDK_CORE_DEVICE_EVENTS=1 and GTK_THEME unset, Adwaita:dark, HighContrast, HighContrastInverse. That driver script is not part of the repository. The first run of the '--probe' series was also its slowest (247 ms). The text files of this evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256."
+  "notes": "Environment: WSL2 distribution Ubuntu-24.04 with WSLg, see validation/platforms/linux-ubuntu-24.04-x86_64.json. Commands used (from the repository root, Windows host, Git Bash): 'python tools/build.py linux modern' (build in ~/loomora-build under the distribution home, up to date, no change to the deliverable record), then 20 launches of ~/loomora-build/linux-modern/loomora-gtk3 --probe [--probe-input Marie] with the stdout, stderr, exit status and leftover processes recorded, then 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --evidence-dir validation/evidence/<change>/linux-ubuntu-24.04-x86_64/', then four runs of the window without --probe, driven by a small Python script (Gdk pixbuf capture of the X11 window, XSendEvent key events, WM_DELETE_WINDOW client message) with GDK_BACKEND=x11, GDK_CORE_DEVICE_EVENTS=1 and GTK_THEME unset, Adwaita:dark, HighContrast, HighContrastInverse. That driver script is not part of the repository. The first run of the '--probe' series was also its slowest (247 ms). The text files of this evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256. Glyph check (2026-11-12 and 2026-11-13): the trial evidence before the commit that adds the scrolled window (the commit holding this record) was produced with the executable of sha256 5bd33f1d, 296,848 bytes. On the image with only DejaVu/Ubuntu/MathJax fonts, CJK, Thai, Devanagari and most emoji showed as hexadecimal boxes in both the field and the label (environment: no font covers them, see glyphs-fonts-coverage.txt); after 'sudo apt install fonts-noto-cjk fonts-noto-color-emoji fonts-noto-core' both widgets draw them identically. One real UI defect was measured with plain ASCII, independent of fonts: a greeting longer than the label area was clipped, blank from 250 characters (glyphs-noto-before-fix-asc250.png) and, with the DejaVu fonts, the window grew from 480x240 to 480x273 at 60 characters (glyphs-dejavu-only-asc60.png). The label now sits in a GtkScrolledWindow (no horizontal scrollbar, automatic vertical one); the executable of sha256 f83a1a130aef05a8cf2d883953bdcc6c4343707525f3268a58abdeb5350cde0c, 296,952 bytes keeps the window at 480x240 and shows the first lines (glyphs-noto-after-fix-asc250.png, -long.png, -max1000.png; the seven other captures of the fixed build are byte-identical to the before-fix ones and are not stored), and 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern' still passes 15 of 15. The capture script is glyphs-shoot.py; builds for these captures were made in ~/loomora-build-glyphs (same source, same hashes as ~/loomora-build)."
 }
