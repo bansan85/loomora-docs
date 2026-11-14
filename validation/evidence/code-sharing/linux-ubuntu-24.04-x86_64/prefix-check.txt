@@ -1,0 +1,38 @@
+prefix_check: prefix 'Bonjour ' -> 'hello ' in a COPY of the sources (the repository is never edited)
+host: Windows 11, repository H:\repos\loomora-sharing
+copy: C:\Users\legar\loomora-build\prefix-check\src
+change in the copy:
+  --- a/core/src/greet.cpp
+  +++ b/core/src/greet.cpp
+  @@ -12 +12 @@
+  -    return "Bonjour " + input;
+  +    return "hello " + input;
+files of core/ ui/ bridge/ cmake/ CMakeLists.txt that differ from the repository: 1 (core/src/greet.cpp); under ui/ or bridge/: 0
+
+== linux-legacy-x86_64: Linux Legacy UI (Xlib), x86_64
+   built in 3 s; launcher: WSL Ubuntu-24.04: /home/legar/loomora-build/prefix-check/build/linux-legacy-x86_64/loomora-xlib
+   PASS: 16 vector(s) run, 16 passed, 0 failed; the default text shows 'hello Coucou'; (Linux executable, built in WSL)
+== linux-legacy-i686: Linux Legacy UI (Xlib), i686 (gcc -m32)
+   built in 4 s; launcher: WSL Ubuntu-24.04: /home/legar/loomora-build/prefix-check/build/linux-legacy-i686/loomora-xlib
+   PASS: 16 vector(s) run, 16 passed, 0 failed; the default text shows 'hello Coucou'; (Linux executable, built in WSL)
+== linux-modern: Linux Modern UI (gtkmm 3)
+   built in 8 s; launcher: WSL Ubuntu-24.04: /home/legar/loomora-build/prefix-check/build/linux-modern/loomora-gtk3
+   PASS: 16 vector(s) run, 16 passed, 0 failed; the default text shows 'hello Coucou'; (Linux executable, built in WSL)
+
+after the builds: files that differ between the repository and the copy: core/src/greet.cpp; repository files changed by this run: 0
+
+target                 result      detail
+linux-legacy-x86_64    PASS        16 of 16 vector(s) show 'hello ' + input; default text -> 'hello Coucou'
+linux-legacy-i686      PASS        16 of 16 vector(s) show 'hello ' + input; default text -> 'hello Coucou'
+linux-modern           PASS        16 of 16 vector(s) show 'hello ' + input; default text -> 'hello Coucou'
+android legacy (ui/legacy/android-views) NOT TESTED  no UI built yet (T082)
+android modern (ui/modern/android-compose) NOT TESTED  no UI built yet (T055)
+ios legacy (ui/legacy/ios-uikit) NOT TESTED  no UI built yet (T079)
+ios modern (ui/modern/ios-swiftui) NOT TESTED  no UI built yet (T052)
+macos legacy (ui/legacy/macos-appkit) NOT TESTED  no UI built yet (T077)
+macos modern (ui/modern/macos-swiftui) NOT TESTED  no UI built yet (T049)
+web legacy (ui/legacy/web-es5) NOT TESTED  no UI built yet (T086)
+web modern (ui/modern/web-ts) NOT TESTED  no UI built yet (T040)
+windows modern (ui/modern/windows-winui3) NOT TESTED  no UI built yet (T046)
+
+platform linux-ubuntu-24.04-x86_64: 3 of 3 target(s) tested show 'hello ' + input; no problem with the scope of the change

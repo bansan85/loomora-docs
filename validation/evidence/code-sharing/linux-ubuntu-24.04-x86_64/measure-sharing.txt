@@ -1,0 +1,41 @@
+Shared-code share: non-empty, non-comment lines; ratio = backend / (backend + glue + ui)
+backend core/               493 lines in 14 file(s)
+glue    bridge/jni             0 lines in 0 file(s)
+glue    bridge/wasm            0 lines in 0 file(s)
+
+platform / variant                                    backend   glue       ui   shared
+deliverable linux-i686-legacy                             493      0     1330    27.0%  BELOW 80%
+deliverable linux-ubuntu-24.04-x86_64-legacy              493      0     1330    27.0%  BELOW 80%
+deliverable linux-ubuntu-24.04-x86_64-modern              493      0      519    48.7%  BELOW 80%
+ui legacy/linux-xlib                                      493      0     1330    27.0%  BELOW 80%
+ui modern/linux-gtk3                                      493      0      519    48.7%  BELOW 80%
+
+  core/include/loomora.h                                                58
+  core/src/c_api.cpp                                                    53
+  core/src/eol.cpp                                                      29
+  core/src/eol.hpp                                                      17
+  core/src/errors.hpp                                                   14
+  core/src/greet.cpp                                                    11
+  core/src/greet.hpp                                                     9
+  core/src/internal/config.hpp                                          27
+  core/src/probe.cpp                                                   161
+  core/src/probe.hpp                                                    12
+  core/src/utf8.cpp                                                     66
+  core/src/utf8.hpp                                                      9
+  core/src/version.cpp                                                  18
+  core/src/version.hpp                                                   9
+  ui/legacy/linux-xlib/keys.cpp                                                    54
+  ui/legacy/linux-xlib/keys.hpp                                                     6
+  ui/legacy/linux-xlib/main.cpp                                                   873
+  ui/legacy/linux-xlib/probe.cpp                                                  179
+  ui/legacy/linux-xlib/probe.hpp                                                   19
+  ui/legacy/linux-xlib/xftfonts.cpp                                               119
+  ui/legacy/linux-xlib/xftfonts.hpp                                                80
+  ui/modern/linux-gtk3/gtk_compat.hpp                                              51
+  ui/modern/linux-gtk3/main.cpp                                                    86
+  ui/modern/linux-gtk3/main_window.cpp                                            156
+  ui/modern/linux-gtk3/main_window.hpp                                             46
+  ui/modern/linux-gtk3/probe.cpp                                                  154
+  ui/modern/linux-gtk3/probe.hpp                                                   26
+
+5 row(s) below 80% (SC-007: each gap must be justified in the report)
