@@ -14,7 +14,7 @@ Every command is the one that was run, taken from `tools/`, ADR 0006 and 0007, t
 - Written on 2026-11-14 and replayed the same day on the machine below: the builds, `tools/verify.py quick`, `tools/run_vectors.py` for both UIs, the probe runs (including the mixed Unicode string), the Xlib window run with `xlib-driver.c`, and the gtkmm window driver and probe series (`startup default` scenarios). The results quoted are those of that replay; the stored evidence is named where it is the reference.
 - **One machine only**: Ubuntu 24.04.5 in WSL2 with WSLg on a Windows 11 host. No bare-metal install, no other distribution, no old distribution, no other X server or desktop, no kernel older than 6.18, no native 32-bit system, no real keyboard (the window runs inject synthetic key events). The verdicts say so as restrictions and this procedure says nothing more.
 - Per ADR 0007 a Linux binary is **built on the machine that runs it**; there is no glibc or libstdc++ ceiling to check and no cross build. The Linux floor is therefore not determined by this procedure.
-- The i686 build (`--arch i686`, platform record `linux-i686`) is built and run through the 32-bit multiarch libraries of the same machine; it has no verdict. Its commands are given in L.2 because they are part of `tools/build.py`, not as a verdict procedure.
+- The i686 build (`--arch i686`, platform record `linux-i686`) is built and run through the 32-bit multiarch libraries of the same machine; its Legacy verdict is `validation/verdicts/linux-i686-legacy.json` (written 2026-11-14 from a real run: build with `python3 tools/build.py linux legacy --arch i686`, then L.5, L.6 and L.7 on that executable, with `--exe` for the vectors; the probe line reports the host platform id) and its Modern variant is `not_tested` with a reason in `validation/verdicts/linux-i686-modern.json`.
 - Not covered by anything here: Ubuntu 22.04 and the other targets of T059 (no record), GTK older than 3.24, a real GTK 3.10 system (the 3.10 floor is compiled with `LOOMORA_GTK_FLOOR=ON` but no gtkmm 3.10 system was available), the end-of-life banner on a real old kernel (it is simulated, see L.7).
 
 ## L.1 System
@@ -79,7 +79,7 @@ and for the Legacy UI the note `linux legacy builds natively on this machine ...
 
 `tools/build.py` rewrites the deliverable records in the docs submodule (only the notes change): a replay that does not release a new build discards them with `git -C docs/implementation checkout -- validation/deliverables`.
 
-Optional variants of the Modern UI, built into their own folders by `python3 tools/verify.py quick --variants`: the GTK 3.10 floor (`-DLOOMORA_GTK_FLOOR=ON`, 3.10 code path only, rejects any GTK/GDK symbol newer than 3.10; executable 167,120 bytes on 2026-11-14), GTK 4 (`-DLOOMORA_GTK_API=4`, `libgtkmm-4.0-dev`; 169,920 bytes) and the i686 Xlib build. They were run on 2026-11-14 (15 of 15 vectors, 0 warnings) and are described in the verdict notes; they have no verdict of their own.
+Optional variants of the Modern UI, built into their own folders by `python3 tools/verify.py quick --variants`: the GTK 3.10 floor (`-DLOOMORA_GTK_FLOOR=ON`, 3.10 code path only, rejects any GTK/GDK symbol newer than 3.10; executable 167,120 bytes on 2026-11-14), GTK 4 (`-DLOOMORA_GTK_API=4`, `libgtkmm-4.0-dev`; 169,920 bytes) and the i686 Xlib build. They were run on 2026-11-14 (15 of 15 vectors, 0 warnings) and are described in the verdict notes; the GTK variants have no verdict of their own (the i686 Xlib build has one, for `linux-i686`).
 
 ## L.4 Quick check
 

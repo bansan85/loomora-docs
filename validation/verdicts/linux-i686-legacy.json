@@ -1,0 +1,71 @@
+{
+  "platform_id": "linux-i686",
+  "ui_variant": "legacy",
+  "status": "ok_restricted",
+  "restrictions": [
+    "SCOPE: NOT A NATIVE 32-BIT SYSTEM. The 32-bit (i686, gcc -m32) executable was built and run only inside the Ubuntu 24.04.5 WSL2 distribution with WSLg on a Windows 11 laptop (validation/platforms/linux-i686.json): a 64-bit (x86_64) kernel 6.18.58.1-microsoft-standard-WSL2 runs it in compatibility mode on an x86_64 CPU (Intel Core i5-8300H) through the i386 multiarch libraries (libc6:i386 2.39, libx11-6:i386, libxft2:i386, libfontconfig1:i386; dpkg --print-foreign-architectures prints i386). Not tested: a 32-bit kernel, a 32-bit-only distribution, a CPU without x86_64, a real or old machine, any other X server (Xorg, a native Wayland session), any window manager decoration, any system older than Ubuntu 24.04. Per ADR 0007 the executable is built on the machine that runs it, so no glibc or libstdc++ ceiling is checked. This verdict says that the 32-bit build of the UI links and runs here; it does not determine the Linux floor and says nothing about T092 beyond this platform.",
+    "SAME SOURCE, SAME LIMITS AS THE x86_64 BUILD: the UI sources are those of validation/verdicts/linux-ubuntu-24.04-x86_64-legacy.json, built with -m32. By decision (accepted by the owner) there is no text shaping and no bidirectional layout (logical order, left to right); the stored screenshot of that verdict shows it for the x86_64 build, and no new picture of the i686 build was stored, so the i686 drawing of Hebrew, Arabic and ZWJ sequences is not backed by an i686 screenshot. A code point that no installed font has (U+0378 in the mixed string) is an empty box and the probe line carries 'missing-glyph': measured on this build (run log). Which glyphs exist depends on the fonts of this machine.",
+    "CORE-FONT PATH ONLY WITHOUT XFT: the executable of this verdict was built with libxft-dev:i386 and libfontconfig-dev:i386 present, so it draws through Xft. Before those packages were installed the i686 build took the core X11 font path (fallback xlib-core-font-glyphs, probe line with 'glyph-substitution', stored in xlib-core-font-fallback-i686-probe-mixed.txt). In this session that path was exercised for the vectors only (LOOMORA_XLIB_NO_XFT=1, 15 of 15), not for the mixed string.",
+    "INPUT WAS SYNTHETIC: the window run typed 'Marie' with XSendEvent key events from xlib-driver.c on the WSLg X server, never a physical keyboard or a real layout; no input-method server, dead key, compose sequence or IME was tried. The 1,000-character limit was checked through the vectors only (2 truncated vectors passed), not by typing in the window.",
+    "ONE VECTOR RUN FAILED ON AN X SERVER ERROR: in the stored run of tools/run_vectors.py, 4 of the 15 vectors (empty, ascii, ascii_punctuation, accented, the first four launched in parallel) failed with 'XIO: fatal IO error 2 on X server \":0\"' at 0.0 s; 5 repeated runs of the same executable and 3 runs of the x86_64 build then passed 15 of 15. The cause was not investigated (a WSLg display connection problem is likely, not proven); it was not seen on the x86_64 build, which was only run 3 times, so a difference between the two builds is not excluded.",
+    "ONE RUN, ONE DAY: the numbers are one run on 2026-11-14 (two probe lines stored); no series was made, display_ms and peak_rss_kb are indicative only. The display was WSLg :0; no private Xvfb display was used."
+  ],
+  "disabled_features": [
+    "missing-glyph (Xft path, the normal path of this build: only a code point that no installed font has, such as U+0378, is drawn as an empty box; the greeting and the probe record are unchanged. Measured in run-log.txt)",
+    "glyph-substitution (core-font path, NOT taken by the build of this verdict: only when CMake finds no 32-bit libXft and fontconfig development files, LOOMORA_XLIB_XFT=OFF or the run-time switch LOOMORA_XLIB_NO_XFT; fallback xlib-core-font-glyphs, platform_ids empty on purpose. Measured on the earlier i686 build in xlib-core-font-fallback-i686-probe-mixed.txt)",
+    "text-shaping-and-bidi (not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it)"
+  ],
+  "evidence": [
+    {
+      "path": "validation/evidence/linux-i686-verdict/linux-i686/run-log.txt",
+      "sha256": "9d635254744709c35549873d67f95d86ea6d9db0528523ffe91ed1b5ea2ef977",
+      "kind": "check-log",
+      "description": "[current build, ADR 0007] Run of the 32-bit (i686) Xlib executable rebuilt on 2026-11-14 with Xft (73,348 bytes, sha256 11040a8e..., identical to the deliverable record): ELF 32-bit, DT_NEEDED list, probe line of the default input and of the mixed string 'Zoé €5 ... U+0378' (greeting_matches true, displayed true, eol_warning_shown false, display_ms 22 and 26, peak_rss_kb 8032 and 11728, disabled_features [] and ['missing-glyph']), tools/check_probe.py OK on both, tools/run_vectors.py (one run with 4 of 15 vectors failing on an X server connection error at 0.0 s, then 5 runs of 15 of 15 and 3 runs of the x86_64 build of 15 of 15), the vectors with LOOMORA_XLIB_NO_XFT=1 (15 of 15), and a window run (typed 'Marie' with synthetic key events, close, exit status 0, no process left). The one screenshot taken for the observer is not stored."
+    },
+    {
+      "path": "validation/evidence/linux-build-on-target/linux-ubuntu-24.04-x86_64/xlib-core-font-fallback-i686-probe-mixed.txt",
+      "sha256": "a69bedcabaa7b8a82528cfa445e376029754e19a26a4d72b74a9c39e1029343f",
+      "kind": "check-data",
+      "description": "[history, same day] Text file holding a probe line (its platform_id is that of the host, linux-ubuntu-24.04-x86_64, as for every probe line of an i686 build, so it is not listed with the kind probe) of the i686 executable built BEFORE libxft-dev:i386 was installed, so on the core-font path (fallback xlib-core-font-glyphs): greeting_matches true, display_ms 18, peak_rss_kb 5712, disabled_features ['glyph-substitution']. It shows what this platform does without 32-bit Xft; the build of this verdict has Xft."
+    },
+    {
+      "path": "tools/trials/linux-ubuntu-24.04-x86_64/xlib-driver.c",
+      "sha256": "fa1ef323b49f08de47b119646153fd4d2aafad6812325835662e24676bca133a",
+      "kind": "driver",
+      "description": "Window driver (C, run inside WSL) that started the executable and sent SYNTHETIC key events (XSendEvent with a remapped spare keycode) and closed the window; used for the window run of the run log. Never a physical keyboard."
+    }
+  ],
+  "measurements": {
+    "trial_date": "2026-11-14",
+    "scope": "Ubuntu 24.04.5 under WSL2 and WSLg (XWayland) on one Windows 11 laptop, 64-bit kernel, 32-bit executable through i386 multiarch libraries: not a native 32-bit system",
+    "executable": {
+      "name": "loomora-xlib",
+      "size_bytes": 73348,
+      "sha256": "11040a8e1818e3f25deb9fa3f18b3bdf18b7567de31d238012149340d5d3a15b",
+      "source": "validation/deliverables/linux-i686-legacy.json; rebuilt on 2026-11-14 with python3 tools/build.py linux legacy --arch i686, same size and hash",
+      "elf": "ELF 32-bit LSB pie executable, Intel 80386",
+      "direct_libraries": "libX11.so.6, libXft.so.2, libfontconfig.so.1, libstdc++.so.6, libgcc_s.so.1, libc.so.6"
+    },
+    "probe_lines_stored": {
+      "default_input": {
+        "display_ms": 22,
+        "peak_rss_kb": 8032,
+        "disabled_features": [],
+        "greeting_matches": true
+      },
+      "mixed_unicode_input": {
+        "display_ms": 26,
+        "peak_rss_kb": 11728,
+        "disabled_features": [
+          "missing-glyph"
+        ],
+        "greeting_matches": true
+      }
+    },
+    "vectors": "tools/run_vectors.py linux-ubuntu-24.04-x86_64 legacy --exe <i686 executable>: first stored run 11 of 15 passed (4 failed with an X server connection error at 0.0 s, see the restrictions), then 5 runs of 15 of 15 (2 truncated to 1,000 characters, 16 skipped); 15 of 15 also with LOOMORA_XLIB_NO_XFT=1; 3 runs of 15 of 15 for the x86_64 build",
+    "window_run": "xlib-driver.c: typed 5 characters ('Marie') after 6 BackSpace, close sent, UI exit status 0, no loomora-xlib process left; the observer saw the field 'Marie' and the label 'Bonjour Marie' in a 480x320 client area (picture not stored)"
+  },
+  "reproduction": "validation/procedures/linux.md",
+  "decision": "keep",
+  "notes": "Verdict of the 32-bit (i686) Linux Legacy UI (Xlib, C++11, CMake, text drawn with Xft and fontconfig) on linux-i686, written 2026-11-14 after a real run of the rebuilt executable in WSL (run-log.txt), modelled on validation/verdicts/linux-ubuntu-24.04-x86_64-legacy.json. STATUS ok_restricted because the greeting 'Bonjour Coucou' / 'Bonjour Marie' and the mixed Unicode input are computed and displayed by the 32-bit build (greeting_matches true, displayed true in both probe lines; 15 of 15 vectors in every run made except the first stored one, which had 4 failures on an X server connection error), but the restrictions are real: not a native 32-bit system, no shaping or bidi, an empty box for a glyph no font has, the core-font path only without 32-bit Xft at build time, one machine under WSLg, synthetic key events, one run. DECISION keep: nothing found makes the UI unusable on this platform. FALLBACKS (validation/fallbacks.json): cxx17-nodiscard is taken (deliverable record); xlib-core-font-glyphs is NOT taken by this build. BUILD AND CHECK COMMANDS (inside WSL, Ubuntu 24.04, build directory under $HOME/loomora-build): 'python3 tools/build.py linux legacy --arch i686' (needs gcc-multilib, g++-multilib, libx11-dev:i386, libxft-dev:i386, libfontconfig-dev:i386), then the probe, 'python3 tools/run_vectors.py linux-ubuntu-24.04-x86_64 legacy --exe <executable>' and the window driver; the probe line carries the platform_id of the host (linux-ubuntu-24.04-x86_64), not linux-i686, because the application derives it from /etc/os-release and uname. build.py rewrites the deliverable record without its measured fields and its VERIFIED text: that rewrite was discarded, the stored record is unchanged. The replayable procedure is validation/procedures/linux.md (field 'reproduction'). The text of the run log keeps its LF line endings (validation/evidence/.gitattributes) because this verdict holds its sha256. NOT DONE and not claimed: a native 32-bit kernel or distribution, an i686-only CPU, any other system, X server or font set, a physical keyboard or an input-method server, shaping or bidirectional text (none by decision), a series of runs, a screenshot stored for i686, and the end-of-life banner on an end-of-life system."
+}
