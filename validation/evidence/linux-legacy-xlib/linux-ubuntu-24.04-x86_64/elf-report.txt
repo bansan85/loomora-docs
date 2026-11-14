@@ -1,0 +1,40 @@
+== static build (default, STATIC_CXX=1): /home/legar/loomora-build/linux-legacy-x86_64/loomora-xlib
+  NEEDED               libX11.so.6
+  NEEDED               libc.so.6
+  NEEDED               ld-linux-x86-64.so.2
+GLIBC versions used (objdump -T, count per version):
+     37 GLIBC_2.2.5
+      1 GLIBC_2.3
+      2 GLIBC_2.3.2
+      2 GLIBC_2.3.4
+      2 GLIBC_2.4
+      1 GLIBC_2.7
+      1 GLIBC_2.14
+      1 GLIBC_2.15
+      1 GLIBC_2.17
+      1 GLIBC_2.25
+      1 GLIBC_2.32
+      3 GLIBC_2.34
+      1 GLIBC_2.35
+      1 GLIBC_2.36
+      1 GLIBC_2.38
+GLIBCXX / CXXABI / GCC symbol versions: 0
+
+== dynamic C++ runtime (STATIC_CXX=0): ~/loomora-build/linux-legacy-dyn/loomora-xlib (57976 bytes)
+  NEEDED               libX11.so.6
+  NEEDED               libstdc++.so.6
+  NEEDED               libgcc_s.so.1
+  NEEDED               libc.so.6
+  highest GLIBC: GLIBC_2.34
+  highest GLIBCXX: GLIBCXX_3.4.21
+  highest CXXABI: CXXABI_1.3
+  highest GCC: GCC_3.0
+
+== i686 (make ARCH=i686): compiles, does not link: libX11 for i386 is not installed
+/usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libX11.so when searching for -lX11
+/usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libX11.a when searching for -lX11
+/usr/bin/ld: cannot find -lX11: No such file or directory
+/usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libX11.so when searching for -lX11
+collect2: error: ld returned 1 exit status
+make: *** [Makefile:60: ~/loomora-build/linux-legacy-i686/loomora-xlib] Error 1
+i686 objects built: 3 of 3 (main.o, probe.o, libloomora.a)

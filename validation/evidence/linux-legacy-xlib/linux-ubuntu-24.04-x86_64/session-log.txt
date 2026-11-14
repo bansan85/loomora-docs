@@ -1,0 +1,54 @@
+Linux Legacy Xlib UI under WSLg, 2026-11-14T00:41:24Z
+executable: /home/legar/loomora-build/linux-legacy-x86_64/loomora-xlib (300960 bytes), sha256 f29b0393da78d0089694e5b4a7e7d5d20928c893d3d7d94e28f61c4d6ce8207b
+X server: DISPLAY=:0 (XWayland of WSLg), kernel 6.18.58.1-microsoft-standard-WSL2, Ubuntu 24.04.5 LTS, glibc 2.39
+
+== core font fixed (xdrive -f, XLoadQueryFont + font properties) and fonts listed by the server
+fixed: ascent 11 descent 2 max_width 6 min_byte1 0 max_byte1 0 min2 0 max2 255 per_char yes
+  FONT = -Misc-Fixed-Medium-R-SemiCondensed--13-120-75-75-C-60-ISO8859-1
+  CHARSET_REGISTRY = ISO8859
+  CHARSET_ENCODING = 1
+pattern *iso10646*: 0
+pattern *: 6
+  -misc-fixed-medium-r-semicondensed--13-100-100-100-c-60-iso8859-1
+  -misc-fixed-medium-r-semicondensed--13-120-75-75-c-60-iso8859-1
+  6x13
+  cursor
+  fixed
+  -misc-fixed-medium-r-semicondensed--0-0-75-75-c-0-iso8859-1
+
+== typed text, close through WM_DELETE_WINDOW
+shot 480x320
+shot 480x320
+shot 480x320
+exit status after WM_DELETE_WINDOW: 0
+
+== long greeting (1,000 bytes of words), probe run with a window capture
+shot 480x320
+exit 0 stdout bytes 2309 stderr b''
+
+== 10 probe runs of the default input and 10 of Zoé (exit, stderr, display_ms, peak_rss_kb)
+default: failures 0, display_ms 4..10, peak_rss_kb 2916..3060
+Zoé: failures 0, display_ms 4..8, peak_rss_kb 2880..3004
+
+== AddressSanitizer + UndefinedBehaviorSanitizer build, probe runs (stderr is empty when clean)
+  default                                  exit 0 stdout 322 bytes stderr b''
+  1000 ASCII                               exit 0 stdout 2310 bytes stderr b''
+  750 two-byte (1500 bytes, cut at 1000)   exit 0 stdout 6310 bytes stderr b''
+  300 emoji (1200 bytes)                   exit 0 stdout 6330 bytes stderr b''
+  newline and tab                          exit 0 stdout 344 bytes stderr b''
+  empty                                    exit 0 stdout 310 bytes stderr b''
+  CJK, Arabic, combining, ZWJ              exit 0 stdout 566 bytes stderr b''
+  4096 ASCII                               exit 0 stdout 2311 bytes stderr b''
+  200 words                                exit 0 stdout 1910 bytes stderr b''
+
+== usage errors (exit 2, nothing on stdout)
+usage: /home/legar/loomora-build/linux-legacy-x86_64/loomora-xlib [--probe [--probe-input <utf8>]]
+  --probe-input without --probe: exit 2
+usage: /home/legar/loomora-build/linux-legacy-x86_64/loomora-xlib [--probe [--probe-input <utf8>]]
+  --probe-input without value: exit 2
+usage: /home/legar/loomora-build/linux-legacy-x86_64/loomora-xlib [--probe [--probe-input <utf8>]]
+  invalid UTF-8 argument: exit 2
+
+== end-of-life banner: test-only build whose only difference is uname() returning release 2.6.32
+   (compiled with -Duname=fake_uname and a stub, outside the repository); see eol-test-build-probe.json
+ran 15 skipped 16

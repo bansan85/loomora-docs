@@ -1,0 +1,23 @@
+{
+  "platform_id": "linux-ubuntu-24.04-x86_64",
+  "ui_variant": "legacy",
+  "cpp_std": "c++11",
+  "compiler": "gcc-13.3.0",
+  "target": "x86_64-linux-gnu",
+  "output": "native",
+  "ui_language": "c",
+  "ui_toolkit": "Xlib (libX11 only, no toolkit), core X11 font fixed, C89 (gnu89) with POSIX",
+  "ui_compiler": "gcc-13.3.0",
+  "artifact": {
+    "name": "loomora-xlib",
+    "size": 300960
+  },
+  "disabled_features": [],
+  "fallbacks": [
+    "cxx17-nodiscard",
+    "gtk4-ui",
+    "xlib-core-font-glyphs",
+    "static-cxx-runtime-xlib"
+  ],
+  "notes": "make (ui/legacy/linux-xlib/Makefile, ARCH=x86_64) on linux-ubuntu-24.04-x86_64 (glibc 2.39); static libloomora.a built from core/src with -std=c++11; libstdc++ and libgcc linked statically; shared libraries needed: libX11.so.6, libc.so.6, ld-linux-x86-64.so.2; highest symbol versions (objdump -T): GLIBC_2.38. BUILT NATIVELY, NOT IN THE manylinux2010 CONTAINER: the executable needs GLIBC_2.38 or newer, so the glibc 2.12 baseline of the Linux Legacy floor is NOT verified (spike S4 / T069 stays open); not run on any system other than the build machine. Artifact copied to out/linux-legacy/x86_64/, sha256 f29b0393da78d0089694e5b4a7e7d5d20928c893d3d7d94e28f61c4d6ce8207b."
+}
