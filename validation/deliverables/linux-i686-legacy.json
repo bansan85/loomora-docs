@@ -13,6 +13,8 @@
     "size": 73348
   },
   "disabled_features": [],
-  "fallbacks": [],
+  "fallbacks": [
+    "cxx17-nodiscard"
+  ],
   "notes": "cmake 3.31.12 (ui/legacy/linux-xlib/CMakeLists.txt, i686 through cmake/toolchains/linux-gcc-i686.cmake (gcc -m32), Release with -O2) on linux-ubuntu-24.04-x86_64 (glibc 2.39); the UI is C++11 (-std=c++11, -Wall -Wextra -pedantic); static libloomora.a built from core/src with -std=c++11; libstdc++ and libgcc_s linked dynamically; text drawn with Xft (xft 2.3.6, fontconfig 2.15.0, found by pkg-config and linked; no fallback); shared libraries needed (objdump -p): libX11.so.6, libXft.so.2, libfontconfig.so.1, libstdc++.so.6, libgcc_s.so.1, libc.so.6; 22 libraries resolved by ldd. BUILT NATIVELY ON THE MACHINE IT IS FOR (ADR 0007), so no glibc or libstdc++ version ceiling is checked and it was not run on any other system. Artifact copied to out/linux-legacy/i686/, sha256 11040a8e1818e3f25deb9fa3f18b3bdf18b7567de31d238012149340d5d3a15b. VERIFIED 2026-11-14 (ADR 0007): with libxft-dev:i386 and libfontconfig-dev:i386 installed by the owner, this 32-bit build finds Xft, links it and runs; the probe line for the mixed input \"Zoé € Ελ 日本\" has greeting_matches true, no glyph-substitution and an empty disabled_features (text check only, no screenshot)."
 }
