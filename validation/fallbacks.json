@@ -127,5 +127,25 @@
       "linux-ubuntu-24.04-x86_64"
     ],
     "reason": "GTK 4 is opt-in (-Dgtk_api=3 is the default), so every deliverable takes the GTK 3 path, linux-ubuntu-24.04-x86_64 included even though its libgtk-4-dev is installed: the GTK 3 UI is the one of all the trials, the floor of the UI is GTK 3.10 and a system without GTK 4 stays served. On GTK 4.14.5 in WSLg the branch builds without a warning, passes the 15 reference vectors and the probe checks; the Mesa EGL warnings it prints on standard error under WSLg (\"libEGL warning\" lines, 134 bytes on the X11 backend, 265 on the default Wayland backend) come from the OpenGL renderer, not from the UI; on the Wayland backend they disappear with GSK_RENDERER=cairo or LIBGL_ALWAYS_SOFTWARE=1. The GTK 4 build has no trial verdict."
+  },
+  {
+    "id": "xlib-core-font-glyphs",
+    "description": "Glyph coverage of the Linux Legacy UI (ui/legacy/linux-xlib/main.c): text is drawn with the core X11 font \"fixed\" through XDrawString (ISO 8859-1 font) or XDrawString16 (font whose CHARSET_REGISTRY / CHARSET_ENCODING is ISO10646 / 1). A character the font cannot draw (a code point the font lacks, a control character, a code point above U+FFFF, an invalid byte) is drawn as '?'; the greeting and the probe record are unchanged, only the picture is. When the greeting holds such a character the UI adds \"glyph-substitution\" to disabled_features of the probe line.",
+    "macro": "LOOMORA_XLIB_GLYPH_SUBSTITUTION",
+    "min_compiler": "not a compiler feature and not a C macro (the name identifies the run-time test glyph_exists in main.c, whose result is reported as the disabled feature glyph-substitution): needs an X server whose core font \"fixed\" is ISO 10646-1 to draw more than Latin-1, and has the Basic Multilingual Plane glyphs the text needs",
+    "platform_ids": [
+      "linux-ubuntu-24.04-x86_64"
+    ],
+    "reason": "A core X11 font has no shaping, no combining marks, no bidirectional layout, no colour and no fallback font, so what it lacks cannot be drawn. Measured under WSLg (XWayland) on Ubuntu 24.04: the server lists only 6 fonts, none ISO 10646, and \"fixed\" is -Misc-Fixed-Medium-R-SemiCondensed--13-120-75-75-C-60-ISO8859-1, so only U+0020..U+00FF (without U+007F..U+009F) is drawn: Latin-1 text (Zoé, élève, ñ) is drawn, the euro sign, Greek, Hebrew, Arabic, CJK, emoji, a combining accent and a ZWJ sequence are each drawn as '?' and \"glyph-substitution\" is in the probe line (validation/evidence/linux-legacy-xlib/linux-ubuntu-24.04-x86_64/). The ISO 10646-1 path (XDrawString16) was exercised only by forcing it on this 8-bit font in a test copy (Latin-1 text drawn correctly); it was NOT run with a real ISO 10646-1 font, none being available on this server. Typed text has the same limit on input: only Latin-1 keys (XLookupString), Unicode keysyms and the keysyms 0x20A0..0x20AC are converted, no dead key, compose sequence, input method or paste. Other X servers and distributions were not tried."
+  },
+  {
+    "id": "static-cxx-runtime-xlib",
+    "description": "C++ runtime of the Linux Legacy UI executable (ui/legacy/linux-xlib/Makefile): libstdc++ and libgcc are linked statically by default (STATIC_CXX=1) so that the executable needs no libstdc++.so.6 / libgcc_s.so.1 on an old distribution; STATIC_CXX=0 links the distribution's own.",
+    "macro": "LOOMORA_XLIB_STATIC_CXX_RUNTIME",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the Makefile variable STATIC_CXX, default 1): the dynamic variant (STATIC_CXX=0) needs libstdc++.so.6 from the GCC that built it (GLIBCXX_3.4.21 for GCC 5 and later) on the target system",
+    "platform_ids": [
+      "linux-ubuntu-24.04-x86_64"
+    ],
+    "reason": "The Linux Legacy floor is glibc 2.12 (CentOS 6, Debian 6), whose libstdc++ is far older than what a C++11 backend needs, so the static runtime is the case of that floor. The default applies it to every build of the UI, including the one for Ubuntu 24.04, where it is the more restrictive choice (ADR 0004, finding 13): measured on this platform with the same objects, the static link is 300,912 bytes and its highest GLIBC symbol version is GLIBC_2.38 (libstdc++.a of this toolchain was built against a newer glibc), the dynamic link (STATIC_CXX=0) is 57,976 bytes with GLIBC_2.34, GLIBCXX_3.4.21 and CXXABI_1.3 and needs libstdc++.so.6 and libgcc_s.so.1. The default was kept because the task for this UI asks for no dynamic libstdc++ dependency; the executable for this platform is therefore listed as taking the fallback. Not measured inside the manylinux2010 container (not available here): there the static libstdc++ comes from GCC 8 built against glibc 2.12, which is the reason for the default."
   }
 ]
