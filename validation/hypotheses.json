@@ -1,0 +1,283 @@
+[
+  {
+    "id": "V1",
+    "title": "Rust toolchain",
+    "old_targets": "Windows XP, Android API 21 (ARMv7, x86), Linux ARMv6 / ARMv7, PowerPC 32 / 64-bit, macOS 11, iOS 15",
+    "criterion": "Build and execution of the PoC and of the core tests",
+    "fallback": "XP: version abandoned or thin client; others: downgrade to tier C or target withdrawal",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [
+      "adr/0001-backend-cpp11-c-api.md",
+      "validation/spikes.json"
+    ],
+    "note": "Not tested as worded: Rust was dropped by the project owner (spec Clarifications of 2026-11-12, ADR 0001), so no Rust toolchain was ever tried on any target. The same question for the C++11 backend that replaced it is answered elsewhere, and only in part: spike S1 (a MinGW-w64 C++11 static library runs on Windows 2000 build 2195 without a service pack; SP4 itself was not run) and spike S6 (strict C++11 and C-only exports checked with g++ 13.3.0 and clang++ 23.1.5 on Linux). Not tried at all: Windows XP, Android API 21, Linux ARM and PowerPC, macOS 11, iOS 15."
+  },
+  {
+    "id": "V2",
+    "title": "CPU engine performance",
+    "old_targets": "API 21 (1 GB), ARM 32-bit, PowerPC, XP",
+    "criterion": "§5.3 target reached on a modern machine; time measured and no memory overrun on the old ones",
+    "fallback": "Resolution at 0.5 px, fewer lines, offloaded computation (server or file)",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: the application only builds a greeting, no path is computed. Nothing was measured against the section 5.3 target."
+  },
+  {
+    "id": "V3",
+    "title": "Memory on 32-bit",
+    "old_targets": "XP, ARM 32-bit, API 21",
+    "criterion": "Peak under the budget (e.g. 512 MB out of 1 GB) at standard and reduced resolution",
+    "fallback": "Reduced resolution, tile processing",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no 512 MB budget case exists. The only memory figure is the peak working set of the greeting window (1,084 KB on Windows 2000, see the verdict), which says nothing about the path computation."
+  },
+  {
+    "id": "V4",
+    "title": "Cross-architecture consistency",
+    "old_targets": "All, including big-endian",
+    "criterion": "`.loomora` read back identically; equivalent paths within the documented tolerance",
+    "fallback": "The file is authoritative; wider tolerance",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no .loomora file is written or read, and no big-endian system was available. The greeting returns identical text on every platform tested (SC-011 vectors), which is a different property."
+  },
+  {
+    "id": "V5",
+    "title": "GPU backend (`wgpu`)",
+    "old_targets": "API 21–23 (OpenGL ES), API ≥ 24 (Vulkan), Windows ARM64 (DirectX 12), macOS / iOS (Metal), Linux",
+    "criterion": "Reliable detection; compute shader executed; result equivalent to the CPU",
+    "fallback": "CPU only on the target, automatic disabling",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: there is no GPU engine. FR-015 only requires that the application works without graphics acceleration, which it does on the platforms tested."
+  },
+  {
+    "id": "V6",
+    "title": "FFI bridges",
+    "old_targets": "Kotlin (UniFFI, API 21), Swift (iOS 15), C# (WinUI 3 x86 / x64 / ARM64), C (`cbindgen`, MFC / XP), Rust (GTK), WebAssembly",
+    "criterion": "Round-trip calls with large volumes, callbacks, errors and threads; acceptable binary size",
+    "fallback": "Hand-written JNI and C API; UniFFI abandoned on the target",
+    "covered_by_probe": true,
+    "platform_ids": [
+      "windows-2000-x86",
+      "windows-11-x64",
+      "linux-ubuntu-24.04-x86_64"
+    ],
+    "status": "ok_restricted",
+    "records": [
+      "adr/0001-backend-cpp11-c-api.md",
+      "validation/spikes.json",
+      "validation/verdicts/windows-2000-x86-legacy.json",
+      "validation/verdicts/windows-11-x64-legacy.json",
+      "validation/verdicts/linux-ubuntu-24.04-x86_64-legacy.json",
+      "validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json"
+    ],
+    "note": "Only the C API of the C++11 backend called from C++ was exercised: the Win32 Legacy UI (Windows 2000 and Windows 11), the Xlib Legacy UI and the gtkmm Modern UI (Linux). Spike S6 shows the exports are the 6 loomora_* C functions and that no exception crosses the boundary (allocation failures injected). Not exercised: large volumes, callbacks, threads, and every other bridge of the criterion (Kotlin or UniFFI, Swift, C# / WinUI 3 (spike S8 open), WebAssembly); cbindgen and Rust no longer exist in the project."
+  },
+  {
+    "id": "V7",
+    "title": "Android API 21 UI",
+    "old_targets": "Jetpack Compose or Views",
+    "criterion": "Smooth 5,000-segment path on 1 GB; themes; RTL",
+    "fallback": "Views; simplified rendering",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no Android build or trial exists (spike S3 open)."
+  },
+  {
+    "id": "V8",
+    "title": "iOS 15 UI",
+    "old_targets": "SwiftUI",
+    "criterion": "Same; light, dark and contrast themes",
+    "fallback": "Occasional UIKit",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no iOS build or trial exists (spikes S2 and S7 open)."
+  },
+  {
+    "id": "V9",
+    "title": "Windows UI",
+    "old_targets": "WinUI 3 (minimum Windows version to be set); MFC on XP (`v141_xp`)",
+    "criterion": "Preview screen, list, dialog boxes, printing; themes drawn on XP",
+    "fallback": "MFC only, or abandon XP",
+    "covered_by_probe": true,
+    "platform_ids": [
+      "windows-2000-x86",
+      "windows-11-x64"
+    ],
+    "status": "ok_restricted",
+    "records": [
+      "validation/verdicts/windows-2000-x86-legacy.json",
+      "validation/verdicts/windows-11-x64-legacy.json",
+      "validation/spikes.json"
+    ],
+    "note": "Only the Windows Legacy UI that replaced MFC (C++ on the plain Win32 API, one source for Windows 2000 to 11, spec Clarifications of 2026-11-12) was tried, on Windows 2000 build 2195 (VirtualBox) and Windows 11: a text field and a label. Not exercised: preview screen, list, dialog boxes, printing, and every Windows XP case (no XP system was tried; MFC is dropped, so 'MFC on XP' cannot be answered). WinUI 3 has no build or trial (spike S8 open)."
+  },
+  {
+    "id": "V10",
+    "title": "Linux UI",
+    "old_targets": "GTK 4 versus Slint on Ubuntu 20.04, Debian 11, ARM 32-bit; Flatpak and AppImage",
+    "criterion": "Starts; Arabic, CJK and RTL correct; high contrast",
+    "fallback": "Slint, or tier C (web UI)",
+    "covered_by_probe": true,
+    "platform_ids": [
+      "linux-ubuntu-24.04-x86_64"
+    ],
+    "status": "ok_restricted",
+    "records": [
+      "validation/verdicts/linux-ubuntu-24.04-x86_64-legacy.json",
+      "validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json",
+      "validation/fallbacks.json"
+    ],
+    "note": "Tried on Ubuntu 24.04 in WSL2 only: the GTK 3 / gtkmm Modern UI (GTK 4 only as a build option) and the Xlib Legacy UI start and show the greeting; Arabic, CJK and RTL were looked at in screenshots (Modern: correct with one font set; Legacy: no shaping and no bidirectional layout, by decision). Not tried: Ubuntu 20.04, Debian 11, ARM 32-bit, Slint, AppImage (Flatpak is excluded by the spec). High contrast was forced with GTK_THEME on the earlier C build only."
+  },
+  {
+    "id": "V11",
+    "title": "SQLite persistence",
+    "old_targets": "All, including XP, ARM 32-bit and big-endian",
+    "criterion": "Synchronous write at each nail; survives abrupt shutdown and power cut; acceptable latency on slow storage",
+    "fallback": "Home-made append-only journal",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: the application stores nothing (spec Assumptions)."
+  },
+  {
+    "id": "V12",
+    "title": "Embedded server and QR",
+    "old_targets": "XP (without `tokio`), Android client (cleartext HTTP, API ≥ 28), iOS (local network)",
+    "criterion": "PC → phone transfer with resume (`Range`)",
+    "fallback": "File transfer only",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no network access exists; FR-013 only requires that none is opened."
+  },
+  {
+    "id": "V13",
+    "title": "Bluetooth Low Energy",
+    "old_targets": "Android API 21, iOS 15, Windows 10, macOS 11, Linux (BlueZ); XP excluded",
+    "criterion": "Transfer of 15 to 40 KB with CRC, negotiated MTU and resume",
+    "fallback": "BLE removed; file and HTTP",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no Bluetooth code exists."
+  },
+  {
+    "id": "V14",
+    "title": "System voice",
+    "old_targets": "Android API 21, iOS 15, Windows (SAPI from XP to 11), macOS, Linux",
+    "criterion": "Multilingual synthesis and recognition of 3 words; absence handled by clean disabling",
+    "fallback": "Synthesis only",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no speech synthesis or recognition exists."
+  },
+  {
+    "id": "V15",
+    "title": "i18n, RTL and fonts",
+    "old_targets": "All native UIs, XP",
+    "criterion": "Arabic, Hindi and Chinese text rendered correctly; RTL; language pack imported without recompiling; acceptable application size",
+    "fallback": "System fonts; per-platform packs",
+    "covered_by_probe": true,
+    "platform_ids": [
+      "windows-2000-x86",
+      "linux-ubuntu-24.04-x86_64"
+    ],
+    "status": "ok_restricted",
+    "records": [
+      "validation/verdicts/windows-2000-x86-legacy.json",
+      "validation/verdicts/linux-ubuntu-24.04-x86_64-legacy.json",
+      "validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json"
+    ],
+    "note": "Partly covered, through the greeting vectors only (accents, CJK, right-to-left, emoji). Windows 2000 draws the accents but not CJK and emoji (the fonts of that system have no such glyphs; the text itself is exact); Linux Legacy draws logical order left to right, with no shaping or bidi, by owner decision; Linux Modern is correct with Noto fonts installed. Not covered: Hindi shaping on the Legacy UIs, a layout switch to RTL, language packs imported without recompiling, Windows XP, every other family."
+  },
+  {
+    "id": "V16",
+    "title": "Printing and PDF",
+    "old_targets": "XP (GDI), Android Print, AirPrint, CUPS",
+    "criterion": "1:1 template at the measured scale; correct tiling",
+    "fallback": "PDF export only",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no printing and no PDF."
+  },
+  {
+    "id": "V17",
+    "title": "PWA / WebAssembly",
+    "old_targets": "Recent and old browsers, iOS Safari",
+    "criterion": "Working Wasm engine (threads, SIMD); acceptable performance; OPFS storage; memory limits respected",
+    "fallback": "Single-threaded Wasm; offloaded computation",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no web build or trial exists (spike S5 open)."
+  },
+  {
+    "id": "V18",
+    "title": "3D",
+    "old_targets": "BVH on 32-bit, API 21, XP; `wgpu` surfaces in `SurfaceView`, `SwapChainPanel`, `GLArea`",
+    "criterion": "100,000 triangles and 500 nails: admissibility matrix in acceptable time; smooth 3D view",
+    "fallback": "Heavy simplification; software wireframe view",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no 3D, no mesh."
+  },
+  {
+    "id": "V19",
+    "title": "Themes and contrast",
+    "old_targets": "All",
+    "criterion": "Contrast ratios verified automatically; system high contrast detected",
+    "fallback": "Manual choice",
+    "covered_by_probe": true,
+    "platform_ids": [
+      "windows-11-x64",
+      "linux-ubuntu-24.04-x86_64"
+    ],
+    "status": "ok_restricted",
+    "records": [
+      "validation/verdicts/windows-11-x64-legacy.json",
+      "validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json",
+      "validation/fallbacks.json"
+    ],
+    "note": "Partly covered. Windows 11: light theme in the trial; light and dark both shown with the Legacy UI in the ADR 0004 re-run; high contrast not exercised. Linux Modern: dark and high contrast forced with GTK_THEME on the earlier C build (contrast ratios 10.56 to 13.88, not re-run on the gtkmm build), not through the desktop settings. The Windows Legacy UI reads the system high contrast flag, not exercised with a scheme on. Not covered: macOS, Android, iOS, web, Windows 2000 beyond system colours."
+  },
+  {
+    "id": "V20",
+    "title": "Distribution and signing",
+    "old_targets": "Play (16 KB pages, `targetSdk`), App Store, macOS notarization, Flatpak / AppImage, XP installer and accepted signature",
+    "criterion": "One installable package per platform",
+    "fallback": "Packaging adaptation",
+    "covered_by_probe": false,
+    "platform_ids": [],
+    "status": "not_covered",
+    "records": [],
+    "note": "Not covered by this probe: no package, installer, signature or store submission was made. The Windows deliverable is a plain executable and the Linux ones are plain executables built on the target (ADR 0007)."
+  }
+]
