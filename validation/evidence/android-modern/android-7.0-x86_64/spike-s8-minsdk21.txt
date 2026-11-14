@@ -1,0 +1,18 @@
+Spike S8, Android half: does Jetpack Compose accept minSdk 21?  (2026-11-15)
+
+Command: python tools/build.py android modern --min-sdk 21
+         (gradlew assembleRelease -Ploomora.minSdk=21 in ui/modern/android-compose;
+          AGP 9.5.1, Gradle 9.9.1, Kotlin 2.3.21, Compose BOM 2026.09.00, activity-compose 1.13.0)
+
+Result: BUILD FAILED, task :app:processReleaseMainManifest
+
+  Manifest merger failed : uses-sdk:minSdkVersion 21 cannot be smaller than version 23 declared in library
+  [androidx.compose.animation:animation-core-android:1.12.1] ... as the library might be using APIs not
+  available in 21
+    Suggestion: use a compatible library with a minSdk of at most 21,
+    or increase this project's minSdk version to at least 23,
+    or use tools:overrideLibrary="androidx.compose.animation.core" to force usage (may lead to runtime failures)
+
+So the pinned Compose / AndroidX versions do NOT accept minSdk 21 (their own minSdk is 23). tools:overrideLibrary
+was not tried: it only hides the check and the libraries may fail at run time. The decided floor stays 24;
+minSdk 24 builds and runs (see the verdict android-7.0-x86_64-modern.json).

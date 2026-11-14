@@ -1,0 +1,17 @@
+{
+  "id": "android-7.0-x86_64",
+  "family": "android",
+  "os_name": "Android (AOSP emulator image, Nougat)",
+  "os_version": "7.0 (API 24), x86_64, system image build 4174735 (ro.build.id NYC, security patch 2017-06-05)",
+  "arch": "x86_64",
+  "release_date": "2016-08-22",
+  "age_years": 10.2,
+  "is_floor": true,
+  "in_scope": true,
+  "environment": "emulator",
+  "environment_detail": "Android emulator 37.2.13.0 on the Windows 11 host of validation/platforms/windows-11-x64.json, started headless by the trial on its own console port (-avd API24 -port 5556 -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect), WHPX acceleration; AVD 'API24': system image android-24 default x86_64 (SDK package revision 8, ro.build.fingerprint Android/sdk_phone_x86_64/generic_x86_64:7.0/NYC/4174735:userdebug/test-keys), ro.product.model 'Android SDK built for x86_64', 1,536 MB of RAM (MemTotal 1,533,776 kB), 1080x1920 at 420 dpi, no SD card. This is an emulated machine, not a phone: CPU, timing and memory figures are the emulator's.",
+  "eol": true,
+  "eol_source": "validation/sources.json eol-android-security: the backend (loomora_is_eol) treats Android marketing versions below 14 as end of life, so 7.0 is end of life and the Modern UI shows the banner.",
+  "release_date_source": "General availability of Android 7.0 (2016-08-22, author's knowledge, not re-read for this record); age_years = days from that date to the trial date 2026-11-15 divided by 365.25, rounded to 0.1.",
+  "floor_note": "The floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision). It is the oldest Android the Modern UI is built for, and the only Modern system that was run (x86_64 emulator). The Legacy UI (API 9 and later) also installs on it, since both applicationIds can coexist."
+}

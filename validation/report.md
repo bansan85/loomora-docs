@@ -10,7 +10,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 |---|---|---|
 | SC-002 | NOT MET | 2 of 3 required families validated with the Legacy UI on a system 10 years old or more (Windows, Android); the oldest working platform is identified with evidence for 3 of 6 families |
 | SC-003 | MET | validated with the Legacy UI on a system 15 years old or more: Windows (read the restrictions of that verdict: a virtual machine, one build) |
-| SC-004 | MET | 8 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
+| SC-004 | MET | 9 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
 | SC-010 | MET | 0 absent variant(s) without a recorded justification |
 | SC-005 | MET | 20 of 20 hypotheses recorded, 5 with a verdict, 15 not covered by this probe |
 | SC-009 | INCOMPLETE | go / no-go concluded for 1 of 2 systems |
@@ -40,6 +40,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 - android-2.3-arm legacy: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 - android-4.1.2-x86 legacy: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 - android-5.0-arm64 legacy: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
+- android-7.0-x86_64 modern: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 
 ## 2. Go / no-go: Windows 2000 and Windows XP (SC-009)
 
@@ -91,6 +92,7 @@ No platform record and no verdict exist for Windows XP (no service pack, x86 or 
 | android-2.3-arm | Android | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and armeabi-v7a; NOT RUN | arm | 2010-12-06 | 15.9 | emulator | yes | yes |
 | android-4.1.2-x86 | Android | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image eng.wdu.20191218.182616 | x86 | 2012-10-09 | 14.1 | emulator | yes | no |
 | android-5.0-arm64 | Android | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | arm64 | 2014-11-12 | 12.0 | emulator | yes | no |
+| android-7.0-x86_64 | Android | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 (ro.build.id NYC ... | x86_64 | 2016-08-22 | 10.2 | emulator | yes | yes |
 
 Environment details are in the platform records. A `vm` is an emulated machine: its timings and memory are those of the virtual machine, not of real hardware.
 
@@ -107,11 +109,13 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | legacy | OK with restrictions | keep | 17 file(s), 2 screenshot(s) | validation/procedures/linux.md | 10 restriction(s), 3 disabled feature(s) |
 | linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | modern | OK with restrictions | keep | 101 file(s), 63 screenshot(s) | validation/procedures/linux.md | 16 restriction(s), 0 disabled feature(s) |
 | android-2.3-arm | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and ... | legacy | not tested | - | - | - | not attempted, justified: Built, not run. The armeabi (ARMv5TE, -latomic) and armeabi-v7a libraries of the Android Legacy APK are compiled against the API 9 sysroot with NDK r15c and linked with --no-undefined against the API 9 libc (DT_NEEDED: libc.so only; 6 exported JNI functions each; validation/deliverables/android-2.3-arm-legacy.json), but nothing ... (full text in section 12) |
-| android-2.3-arm | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and ... | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055). (full text in section 12) |
+| android-2.3-arm | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and ... | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because ... (full text in section 12) |
 | android-4.1.2-x86 | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image ... | legacy | OK with restrictions | keep | 9 file(s), 2 screenshot(s) | validation/procedures/android.md | 8 restriction(s), 0 disabled feature(s) |
-| android-4.1.2-x86 | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image ... | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055). (full text in section 12) |
+| android-4.1.2-x86 | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image ... | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because ... (full text in section 12) |
 | android-5.0-arm64 | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | legacy | not tested | - | - | - | not attempted, justified: Built, not run. The arm64-v8a library of the Android Legacy APK (android-21 sysroot, 141,152 bytes in the APK, DT_NEEDED libdl.so and libc.so, 6 exported JNI functions; validation/deliverables/android-5.0-arm64-legacy.json) was compiled and linked with NDK r15c but never executed: no ARM64 system image or device is available. ... (full text in section 12) |
-| android-5.0-arm64 | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055). (full text in section 12) |
+| android-5.0-arm64 | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because ... (full text in section 12) |
+| android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | legacy | not tested | - | - | - | not attempted, justified: Above the range of the Android Legacy UI (API 9 to 23, owner decision): this platform is served by the Modern UI (verdict android-7.0-x86_64-modern.json) and no Legacy deliverable record names it. For the record, on 2026-11-15 the Legacy APK (renamed to the package id fr.bansan.loomora.probe) was installed on this emulator to ... (full text in section 12) |
+| android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | modern | OK with restrictions | keep | 9 file(s), 2 screenshot(s) | validation/procedures/android.md | 10 restriction(s), 1 disabled feature(s) |
 | (none) | macOS | both | not tested | - | - | - | no platform record: no trial |
 | (none) | iOS / iPadOS | both | not tested | - | - | - | no platform record: no trial |
 | (none) | Web | both | not tested | - | - | - | no platform record: no trial |
@@ -129,7 +133,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | Linux | legacy | linux-i686, linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 17 file(s), 2 screenshot(s) |
 | Linux | modern | linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 101 file(s), 63 screenshot(s) |
 | Android | legacy | android-4.1.2-x86 | 2012-10-09 | 14.1 | OK with restrictions | 9 file(s), 2 screenshot(s) |
-| Android | modern | not tested | - | - | - | - |
+| Android | modern | android-7.0-x86_64 | 2016-08-22 | 10.2 | OK with restrictions | 9 file(s), 2 screenshot(s) |
 | iOS / iPadOS | legacy | not tested | - | - | - | - |
 | iOS / iPadOS | modern | not tested | - | - | - | - |
 | Web (wasm path) | legacy | not tested | - | - | - | - |
@@ -153,6 +157,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | android-2.3-arm | legacy | loomora.apk: 228,623 bytes | not measured: no verdict, no trial run recorded | not measured: no verdict, no trial run recorded |
 | android-4.1.2-x86 | legacy | loomora.apk: 228,623 bytes | not measured: the verdict has no display_ms value | not measured: the verdict has no peak_rss_kb value |
 | android-5.0-arm64 | legacy | loomora.apk: 228,623 bytes | not measured: no verdict, no trial run recorded | not measured: no verdict, no trial run recorded |
+| android-7.0-x86_64 | modern | loomora.apk: 1,396,354 bytes | 243 to 463 ms | 68,616 to 69,060 kB |
 
 ## 7. Fallbacks and disabled features
 
@@ -161,7 +166,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | Fallback | Macro | What it replaces | Platforms taking it (fallback record) | Deliverables listing it |
 |---|---|---|---|---|
 | builtin-expect | LOOMORA_HAS_BUILTIN_EXPECT | Branch prediction hint __builtin_expect through LOOMORA_LIKELY / LOOMORA_UNLIKELY (used in core/src/c_api.cpp); the fallback is the plain condition ... | no platform takes it | - |
-| cxx17-nodiscard | LOOMORA_HAS_CXX17_NODISCARD | [[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty ... | windows-2000-x86, windows-11-x64, linux-ubuntu-24.04-x86_64, linux-i686, android-4.1.2-x86, android-2.3-arm, android-5.0-arm64 | android-2.3-arm legacy, android-4.1.2-x86 legacy, android-5.0-arm64 legacy, linux-i686 legacy, linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern, windows-11-x64 legacy, windows-2000-x86 legacy |
+| cxx17-nodiscard | LOOMORA_HAS_CXX17_NODISCARD | [[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty ... | windows-2000-x86, windows-11-x64, linux-ubuntu-24.04-x86_64, linux-i686, android-4.1.2-x86, android-2.3-arm, android-5.0-arm64, android-7.0-x86_64 | android-2.3-arm legacy, android-4.1.2-x86 legacy, android-5.0-arm64 legacy, android-7.0-x86_64 modern, linux-i686 legacy, linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern, windows-11-x64 legacy, windows-2000-x86 legacy |
 | dark-mode | LOOMORA_FEATURE_DARK_MODE | Dark theme of the Windows Legacy UI (ui/legacy/windows-win32/dynfeatures.cpp): when the user's "apps use light theme" setting ... | windows-2000-x86 | windows-2000-x86 legacy |
 | dpi-awareness | LOOMORA_FEATURE_DPI_AWARENESS | DPI awareness of the Windows Legacy UI: SetProcessDPIAware (user32) is looked up at run time and called before the window exists, the layout and the ... | windows-2000-x86 | windows-2000-x86 legacy |
 | high-contrast-query | LOOMORA_FEATURE_HIGH_CONTRAST_QUERY | High contrast query of the Windows Legacy UI: SystemParametersInfoW(SPI_GETHIGHCONTRAST), looked up at run time in user32; when a high contrast ... | no platform takes it | - |
@@ -179,12 +184,14 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | probe-tick-clock | LOOMORA_PROBE_TICK_CLOCK | Clock of the display time in the probe record of the Windows Legacy UI (ui/legacy/windows-win32/probe.cpp): QueryPerformanceCounter, in milliseconds ... | no platform takes it | - |
 | xlib-no-input-method | LOOMORA_XLIB_NO_XIM | Keyboard input of the Linux Legacy UI (ui/legacy/linux-xlib/main.cpp, InputMethod): Xutf8LookupString through an X input method (XOpenIM and ... | no platform takes it | - |
 | android-armeabi-libatomic | LOOMORA_ANDROID_LINK_LIBATOMIC | The armeabi (ARMv5TE) libraries are linked with -latomic (the CMake variable LOOMORA_ANDROID_LINK_LIBATOMIC set by ... | android-2.3-arm | android-2.3-arm legacy |
+| android-uimode-contrast | LOOMORA_FEATURE_UIMODE_CONTRAST | High contrast of the Android Modern UI (ui/modern/android-compose/.../Theme.kt): on Android 14 (API 34) and later the UI reads ... | android-7.0-x86_64 | android-7.0-x86_64 modern |
 
 ### Disabled features (FR-025)
 
 | Platform | Variant | Disabled feature | Reason |
 |---|---|---|---|
 | android-4.1.2-x86 | legacy | none recorded | - |
+| android-7.0-x86_64 | modern | uimode-contrast |  |
 | linux-i686 | legacy | missing-glyph | Xft path, the normal path of this build: only a code point that no installed font has, such as U+0378, is drawn as an empty box; the greeting and the probe record are unchanged. Measured in run-log.txt |
 | linux-i686 | legacy | glyph-substitution | core-font path, NOT taken by the build of this verdict: only when CMake finds no 32-bit libXft and fontconfig development files, LOOMORA_XLIB_XFT=OFF or the run-time switch LOOMORA_XLIB_NO_XFT; fallback xlib-core-font-glyphs, platform_ids empty on purpose. ... |
 | linux-i686 | legacy | text-shaping-and-bidi | not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it |
@@ -256,7 +263,7 @@ The Linux GTK 3.10 floor of the Modern UI is a compile-time rule: the floor buil
 
 | Tier | Requirements document | Trials | Proposed change |
 |---|---|---|---|
-| A | complete packaged application (table of section 2.1) | android-2.3-arm legacy: not tested; android-2.3-arm modern: not tested; android-5.0-arm64 legacy: not tested; android-5.0-arm64 modern: not tested; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
+| A | complete packaged application (table of section 2.1) | android-2.3-arm legacy: not tested; android-2.3-arm modern: not tested; android-5.0-arm64 legacy: not tested; android-5.0-arm64 modern: not tested; android-7.0-x86_64 legacy: not tested; android-7.0-x86_64 modern: OK with restrictions; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
 | B | Windows x86 32-bit, Linux x86 32-bit, ARM 32-bit, RISC-V, PowerPC 64 LE | Windows x86 (windows-2000-x86): OK with restrictions; Linux i686 built and run as a 32-bit program on a 64-bit kernel (not a native 32-bit system), legacy OK with restrictions, modern not tested; ARM 32-bit, RISC-V, PowerPC: out of scope or not tested | Windows x86 is reachable by the Legacy UI down to Windows 2000; the tier no longer depends on a Rust toolchain, so it should be redefined by "a C++11 compiler and the platform libraries exist" |
 | C | PowerPC big-endian, s390x, LoongArch64, FreeBSD: CPU engine, CLI, server | not tested; PowerPC and other architectures are out of scope (spec Clarifications) | no change proposed |
 
@@ -266,6 +273,7 @@ The disabled features listed for XP in section 2.1.2 (GPU, BLE, TLS, simplified 
 
 | Platform | Variant | Disabled feature | Proposed change |
 |---|---|---|---|
+| android-7.0-x86_64 | modern | uimode-contrast | add to section 2.3 for this platform (reason in the verdict) |
 | linux-i686 | legacy | missing-glyph | add to section 2.3 for this platform (reason in the verdict) |
 | linux-i686 | legacy | glyph-substitution | add to section 2.3 for this platform (reason in the verdict) |
 | linux-i686 | legacy | text-shaping-and-bidi | add to section 2.3 for this platform (reason in the verdict) |
@@ -316,7 +324,7 @@ Justification recorded in the verdict: Built, not run. The armeabi (ARMv5TE, -la
 
 ### android-2.3-arm modern: not tested (not attempted)
 
-Justification recorded in the verdict: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055).
+Justification recorded in the verdict: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because androidx.compose.animation:animation-core-android:1.12.1 declares minSdk 23 (validation/evidence/android-modern/android-7.0-x86_64/spike-s8-minsdk21.txt), so the floor stays 24 and no Modern build exists for this API level.
 
 ### android-4.1.2-x86 legacy: OK with restrictions (decision: keep)
 
@@ -333,7 +341,7 @@ Evidence: 9 file(s), 2 screenshot(s). Reproduction: validation/procedures/androi
 
 ### android-4.1.2-x86 modern: not tested (not attempted)
 
-Justification recorded in the verdict: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055).
+Justification recorded in the verdict: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because androidx.compose.animation:animation-core-android:1.12.1 declares minSdk 23 (validation/evidence/android-modern/android-7.0-x86_64/spike-s8-minsdk21.txt), so the floor stays 24 and no Modern build exists for this API level.
 
 ### android-5.0-arm64 legacy: not tested (not attempted)
 
@@ -341,7 +349,26 @@ Justification recorded in the verdict: Built, not run. The arm64-v8a library of 
 
 ### android-5.0-arm64 modern: not tested (not attempted)
 
-Justification recorded in the verdict: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055).
+Justification recorded in the verdict: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because androidx.compose.animation:animation-core-android:1.12.1 declares minSdk 23 (validation/evidence/android-modern/android-7.0-x86_64/spike-s8-minsdk21.txt), so the floor stays 24 and no Modern build exists for this API level.
+
+### android-7.0-x86_64 legacy: not tested (not attempted)
+
+Justification recorded in the verdict: Above the range of the Android Legacy UI (API 9 to 23, owner decision): this platform is served by the Modern UI (verdict android-7.0-x86_64-modern.json) and no Legacy deliverable record names it. For the record, on 2026-11-15 the Legacy APK (renamed to the package id fr.bansan.loomora.probe) was installed on this emulator to prove the rename and its 15 reference vectors passed (the x86 library ran as a 32-bit process, so its probe lines read platform_id android-7.0-x86, and run_vectors had to be given that id); that run is not stored as evidence because it proves nothing about the Legacy range.
+
+### android-7.0-x86_64 modern: OK with restrictions (decision: keep)
+
+Evidence: 9 file(s), 2 screenshot(s). Reproduction: validation/procedures/android.md.
+
+- ONE EMULATED SYSTEM, ONE ABI: the APK (minSdk 24, targetSdk 37) was run only on an Android 7.0 (API 24) x86_64 emulator (Android emulator 37.2.13.0, AVD API24, system image android-24 default x86_64 revision 8, 1,536 MB, WHPX, headless with swiftshader_indirect): not a phone, no real GPU, touch ...
+- ONLY THE x86_64 LIBRARY WAS EXECUTED: the same APK holds armeabi-v7a, arm64-v8a and x86 libraries, built and statically checked by tools/build.py (needed libraries libc, libm, libdl only; only the 6 Java_fr_bansan_loomora_probe_Native_* functions exported; LOAD segments aligned to 16 KB; the ...
+- NO ANDROID 14+ PATH EXERCISED: the only API above level 24 the UI calls is UiModeManager.getContrast() (level 34), behind Build.VERSION.SDK_INT >= 34 (fallback android-uimode-contrast in validation/fallbacks.json). On this API 24 system the check is false, the standard Material 3 scheme is used and ...
+- THEMES: the dark theme and high contrast were NOT checked on a screen. The UI follows isSystemInDarkTheme() with the Material 3 dark scheme, and the window background of values-night/themes.xml, but the dark setting was not turned on (no `cmd uimode` on API 24) and no contrast ratio was measured ...
+- INPUT WAS SYNTHETIC: the window run typed 'Marie' with `adb shell input keyevent` / `input text` and read the screen with uiautomator (typing-uiautomator.txt), never a person, a hardware keyboard or a vendor input method. The update delay of the greeting (User Story 1, within 1 second) was not ...
+- TEXT GIVEN BY TWO ROUTES: the plain intent extra probe_input for the texts the `am` command can carry, and probe_input_file (a UTF-8 file pushed with adb) for a text with a character outside the BMP or longer than 1,500 bytes, the same launcher as the Legacy UI. Both routes reach the same initial ...
+- GLYPHS: the probe checks the greeting text for character for the 15 vectors (CJK, Arabic, Hebrew, emoji, ZWJ sequence); the pixels were looked at for one mixed Unicode input only (screenshot-mixed-unicode.png: accent, euro sign, Greek, CJK drawn, no box). Arabic, Hebrew, emoji and combining ...
+- NOT CHECKED: rotation (the activity handles it with configChanges and rememberSaveable, never rotated), screen sizes other than 1080x1920 at 420 dpi, accessibility services (TalkBack), a build signed with anything but a throwaway key made by tools/build.py, installation from a store, the behaviour ...
+- THE BUILD IS PINNED AND RECORDED, NOT AUDITED: AGP 9.5.1, Gradle 9.9.1, Kotlin 2.3.21, Compose BOM 2026.09.00, activity-compose 1.13.0, JDK Temurin 25.0.4 (Gradle ran on it as is), NDK r30 (30.0.16248370), CMake 3.22.1, build-tools 36.0.0. R8 minification and resource shrinking are on for the ...
+- ONE DAY, ONE MACHINE: runs of 2026-11-15 (UTC 2026-11-14 23:33 to 23:40). The first vector run after the package rename of the same day is the one stored; the Legacy UI, renamed to the package id fr.bansan.loomora.probe in the same change, was rebuilt and its 15 vectors passed again (in the ...
 
 ### linux-i686 legacy: OK with restrictions (decision: keep)
 
@@ -433,6 +460,7 @@ Shared code is the backend `core/` (the C++11 library and its C API), glue is th
 | android-2.3-arm | legacy | legacy/android-views | Android framework views (Activity, EditText, TextView ... | - | - | - | not measured | not measured |
 | android-4.1.2-x86 | legacy | legacy/android-views | Android framework views (Activity, EditText, TextView ... | - | - | - | not measured | not measured |
 | android-5.0-arm64 | legacy | legacy/android-views | Android framework views (Activity, EditText, TextView ... | - | - | - | not measured | not measured |
+| android-7.0-x86_64 | modern | modern/android-compose | Jetpack Compose (Material 3), Compose BOM 2026.09.00 ... | - | - | - | not measured | not measured |
 | linux-i686 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
 | linux-ubuntu-24.04-x86_64 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
 | linux-ubuntu-24.04-x86_64 | modern | modern/linux-gtk3 | gtkmm-3.0 3.24.9 on gtk+-3.0 3.24.41 (C++11 UI; GTK 3.10 ... | 493 | 0 | 519 | 48.7% | BELOW 80% |
@@ -441,7 +469,7 @@ Shared code is the backend `core/` (the C++11 library and its C API), glue is th
 
 Records that run the same UI sources have the same numbers, the code is counted once per record: `ui/legacy/android-views/`: android-2.3-arm, android-4.1.2-x86, android-5.0-arm64; `ui/legacy/linux-xlib/`: linux-i686, linux-ubuntu-24.04-x86_64; `ui/legacy/windows-win32/`: windows-11-x64, windows-2000-x86.
 
-Not measured: macOS, iOS / iPadOS, Web have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, linux-i686 modern, windows-11-x64 modern, windows-2000-x86 modern) have no row.
+Not measured: macOS, iOS / iPadOS, Web have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-i686 modern, windows-11-x64 modern, windows-2000-x86 modern) have no row.
 
 ### Platform-specific code and why it is platform-specific
 
