@@ -55,6 +55,18 @@
       "sha256": "7047c26f851c4c5a2c805af00165228b257176caf25043d96091622dd2b140ce",
       "kind": "check-log",
       "description": "End of `python tools/build.py android legacy`: the four ABIs, DT_NEEDED, 6 exported JNI functions each, undefined symbols all resolved by the API 9 (API 21 for arm64-v8a) libraries, the APK (228,623 bytes), the three deliverable records written."
+    },
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/screenshot-default.png",
+      "sha256": "84873ddffce8f093ce68c50ff9babef55cbb6eb8e8fe1858eaee8bf6f27d7e44",
+      "kind": "screenshot",
+      "description": "Android 4.1.2 (API 16, x86 emulator, software rendering), Legacy UI started normally: end-of-life banner, field \"Coucou\", label \"Bonjour Coucou\". Same build as probe-default.json (built for API 9, run on API 16)."
+    },
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/screenshot-mixed-unicode.png",
+      "sha256": "b1af25b79bb51575145fbe55b49a502d30015b5aa1f8684b067cdbadc4107090",
+      "kind": "screenshot",
+      "description": "Same device and build, probe-mode launch with the input \"Zoé € Ελ 日本\" (accent, euro sign, Greek, CJK) read from a UTF-8 file: field and label \"Bonjour Zoé € Ελ 日本\" show every glyph, no tofu box."
     }
   ],
   "measurements": {

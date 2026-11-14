@@ -21,7 +21,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 - Windows: windows-2000-x86, 2000-02-17, 26.7 years old, OK with restrictions, evidence: 41 file(s), 7 screenshot(s)
 - macOS: not tested
 - Linux: linux-i686, linux-ubuntu-24.04-x86_64, 2024-04-25, 2.55 years old, OK with restrictions, evidence: 17 file(s), 2 screenshot(s)
-- Android: android-4.1.2-x86, 2012-10-09, 14.1 years old, OK with restrictions, evidence: 7 file(s)
+- Android: android-4.1.2-x86, 2012-10-09, 14.1 years old, OK with restrictions, evidence: 9 file(s), 2 screenshot(s)
 - iOS / iPadOS: not tested
 - Web: not tested
 
@@ -108,7 +108,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | modern | OK with restrictions | keep | 101 file(s), 63 screenshot(s) | validation/procedures/linux.md | 16 restriction(s), 0 disabled feature(s) |
 | android-2.3-arm | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and ... | legacy | not tested | - | - | - | not attempted, justified: Built, not run. The armeabi (ARMv5TE, -latomic) and armeabi-v7a libraries of the Android Legacy APK are compiled against the API 9 sysroot with NDK r15c and linked with --no-undefined against the API 9 libc (DT_NEEDED: libc.so only; 6 exported JNI functions each; validation/deliverables/android-2.3-arm-legacy.json), but nothing ... (full text in section 12) |
 | android-2.3-arm | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and ... | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055). (full text in section 12) |
-| android-4.1.2-x86 | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image ... | legacy | OK with restrictions | keep | 7 file(s) | validation/procedures/android.md | 8 restriction(s), 0 disabled feature(s) |
+| android-4.1.2-x86 | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image ... | legacy | OK with restrictions | keep | 9 file(s), 2 screenshot(s) | validation/procedures/android.md | 8 restriction(s), 0 disabled feature(s) |
 | android-4.1.2-x86 | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image ... | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055). (full text in section 12) |
 | android-5.0-arm64 | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | legacy | not tested | - | - | - | not attempted, justified: Built, not run. The arm64-v8a library of the Android Legacy APK (android-21 sysroot, 141,152 bytes in the APK, DT_NEEDED libdl.so and libc.so, 6 exported JNI functions; validation/deliverables/android-5.0-arm64-legacy.json) was compiled and linked with NDK r15c but never executed: no ARM64 system image or device is available. ... (full text in section 12) |
 | android-5.0-arm64 | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055). (full text in section 12) |
@@ -128,7 +128,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | macOS | modern | not tested | - | - | - | - |
 | Linux | legacy | linux-i686, linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 17 file(s), 2 screenshot(s) |
 | Linux | modern | linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 101 file(s), 63 screenshot(s) |
-| Android | legacy | android-4.1.2-x86 | 2012-10-09 | 14.1 | OK with restrictions | 7 file(s) |
+| Android | legacy | android-4.1.2-x86 | 2012-10-09 | 14.1 | OK with restrictions | 9 file(s), 2 screenshot(s) |
 | Android | modern | not tested | - | - | - | - |
 | iOS / iPadOS | legacy | not tested | - | - | - | - |
 | iOS / iPadOS | modern | not tested | - | - | - | - |
@@ -320,7 +320,7 @@ Justification recorded in the verdict: Below the floor of the Android Modern UI 
 
 ### android-4.1.2-x86 legacy: OK with restrictions (decision: keep)
 
-Evidence: 7 file(s). Reproduction: validation/procedures/android.md.
+Evidence: 9 file(s), 2 screenshot(s). Reproduction: validation/procedures/android.md.
 
 - BUILT FOR API 9, RUN ON API 16: the APK (minSdkVersion 9, libraries compiled and linked against the android-9 sysroot) was run only on an Android 4.1.2 (API 16) x86 emulator, the oldest system the project owner's emulator can run. This verdict says nothing about Android 2.3 (API 9) to 4.0 (API 15) ...
 - ONE EMULATED SYSTEM: Android emulator 37.2.13.0 with the AOSP image android-16 default x86 (4.1.2, build eng.wdu.20191218.182616, 2 vCPUs, 1,024 MB, WHPX) started headless with swiftshader_indirect: not a phone, no real GPU, touch screen, vendor skin, vendor fonts or input method. display_ms (123 ...
