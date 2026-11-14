@@ -1,0 +1,31 @@
+# Linux Legacy and Modern builds on Ubuntu 24.04 (WSL2), 2026-11-14, ADR 0007
+# python3 tools/build.py linux legacy / modern, then ctest, tools/run_vectors.py (not stored: re-runs)
+== legacy x86_64: LOOMORA_XLIB_TEXT_PATH:INTERNAL=xft LOOMORA_XLIB_XFT_INFO:INTERNAL=xft 2.3.6, fontconfig 2.15.0 
+NEEDED: libX11.so.6 libXft.so.2 libfontconfig.so.1 libstdc++.so.6 libgcc_s.so.1 libc.so.6 
+size 80216
+sha256 4d7c91a4ce77a627a4651c6f0f82c9baedfa7a72f38da00e1420cd2ed865cbcc
+== legacy i686: LOOMORA_XLIB_TEXT_PATH:INTERNAL=core-font LOOMORA_XLIB_XFT_INFO:INTERNAL= 
+NEEDED: libX11.so.6 libstdc++.so.6 libgcc_s.so.1 libc.so.6 
+size 67388
+sha256 409098f1a494d5aa18394738c946a1735325826eae3a26ac2c5d58442de2a627
+== legacy x86_64 built with -DLOOMORA_XLIB_XFT=OFF: NEEDED: libX11.so.6 libstdc++.so.6 libgcc_s.so.1 libc.so.6 
+== cmake status lines
+-- ctest.cfg.log
+-- Linux Legacy UI: text drawn with Xft (xft 2.3.6, fontconfig 2.15.0)
+-- xftoff.cfg.log
+-- Linux Legacy UI: built with the CORE FONT text path (fallback xlib-core-font-glyphs: '?' for a character the core font lacks, probe marker glyph-substitution)
+-- i686-xft-on.cfg.log
+CMake Error at ui/legacy/linux-xlib/CMakeLists.txt:83 (message):
+  libXft and fontconfig development files not found (or not usable with these
+== legacy i686 build.py configure
+== modern NEEDED
+linux-modern: libgtkmm-3.0.so.1 libatkmm-1.6.so.1 libgiomm-2.4.so.1 libpangomm-1.4.so.1 libglibmm-2.4.so.1 libsigc-2.0.so.0 libstdc++.so.6 libgcc_s.so.1 libc.so.6  size 167192
+gtk-floor: libgtkmm-3.0.so.1 libatkmm-1.6.so.1 libgiomm-2.4.so.1 libpangomm-1.4.so.1 libglibmm-2.4.so.1 libsigc-2.0.so.0 libstdc++.so.6 libgcc_s.so.1 libc.so.6  size 167120
+gtk-gtk4: libgtkmm-4.0.so.0 libpangomm-2.48.so.1 libgiomm-2.68.so.1 libglibmm-2.68.so.1 libsigc-3.0.so.0 libstdc++.so.6 libgcc_s.so.1 libc.so.6  size 169920
+warnings: gtk default 0, floor 0, gtk4 0, ctest build 0, xlib xft-off 0
+== results of the re-runs (not stored, text output of the tools)
+ctest: 2 of 2 passed (backend selftest and loomora_tests), the Xlib UI built with Xft in the same project, 0 warnings
+tools/run_vectors.py linux-ubuntu-24.04-x86_64 legacy --exe <x86_64 Xft build>: 15 run, 15 passed, 16 skipped, 2 truncated to 1000 chars
+same with LOOMORA_XLIB_NO_XFT=1: 15 of 15; i686 build without Xft: 15 of 15
+tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --exe <GTK 3 default build>: 15 of 15
+ASan + UBSan on a copy of tools/trials/linux-ubuntu-24.04-x86_64/xlib-ui-harness-cpp.cpp adapted to the Xft-linked build (Xft, core font, forced core font, no input method): 0 sanitizer errors in 5 runs (3 fontconfig FcInit allocations suppressed in LeakSanitizer as before)

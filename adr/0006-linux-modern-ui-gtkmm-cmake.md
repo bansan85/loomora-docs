@@ -1,6 +1,6 @@
 # ADR 0006: Linux Modern UI in C++ with gtkmm, built with CMake
 
-- **Status**: accepted (amends ADR 0005, which describes the C UI and the Meson options as decided on 2026-11-13)
+- **Status**: accepted (amends ADR 0005, which describes the C UI and the Meson options as decided on 2026-11-13; amended by ADR 0007: no static C++ runtime option, the `istringstream` parsers stay for their own sake)
 - **Date**: 2026-11-14
 - **Spike / requirement**: owner decision of 2026-11-14 / FR-017 (backend in C++11 behind the C API), FR-021, FR-022 (fallbacks), research R7 and R12
 
@@ -41,7 +41,6 @@ Behaviour kept: window 480 x 240, title "Loomora", 12 pixel border, field prefil
 | `-Dgtk_api=3` (default) | `-DLOOMORA_GTK_API=3`: `pkg_check_modules(gtkmm-3.0>=3.10)` |
 | `-Dgtk_api=4` | `-DLOOMORA_GTK_API=4`: `gtkmm-4.0` |
 | `-Dgtk_floor=true` | `-DLOOMORA_GTK_FLOOR=ON`: `GDK_VERSION_MAX_ALLOWED` 3.10 and `-Werror=deprecated-declarations`; still refused with `LOOMORA_GTK_API=4` |
-| `-Dstatic_cxx_runtime=true` | `-DLOOMORA_STATIC_CXX_RUNTIME=ON`: `-static-libstdc++ -static-libgcc` |
 | `warning_level=2`, `buildtype=release` | `-Wall -Wextra` on the UI target, `CMAKE_BUILD_TYPE=Release` |
 
 `GDK_VERSION_MIN_REQUIRED` is 3.10 in every GTK 3 build, as before.
@@ -73,12 +72,12 @@ Behaviour kept: window 480 x 240, title "Loomora", 12 pixel border, field prefil
 - **Main loop and start.** `Gtk::Application` with the flags `NON_UNIQUE | HANDLES_COMMAND_LINE` replaces `gtk_init_check` + `gtk_main` (GTK 3) and the `GMainLoop` (GTK 4): nothing is registered on the session bus (a probe run leaves no process behind) and `--probe` / `--probe-input` are read by the program from `argv` (raw bytes, UTF-8 checked with `Glib::ustring::validate`), not by GApplication. Unknown arguments, among them GTK's own (`--display`), are accepted as before. **A display that cannot be opened** still ends the program with status 1, but the message is GTK's (`Gtk-WARNING ... cannot open display`) instead of `loomora: cannot open the display`.
 - **First display.** GTK 3: the `on_draw` override calls `Gtk::Window::on_draw` and then notifies, the same moment as the `draw` signal connected with `connect_after`. GTK 4: gtkmm 4.10 does not wrap the `after-paint` signal of the frame clock, so the notification is connected to its `paint` signal after GTK's own handlers (`connect(slot, true)`), a little before the end of the frame that `after-paint` marked; only the first call counts.
 - **Info bar.** `Gtk::Window::show_all()` does not show the GTK 3 `Gtk::InfoBar` (the first gtkmm build opened a 480 x 430 window with no banner); `show_window()` shows it explicitly. The GTK 4 banner is a plain box (icon, text, flat close button) as before.
-- **glibc.** `std::strtoll` and `std::sscanf` bind to `__isoc23_strtoll` / `__isoc23_sscanf` (GLIBC_2.38) with GCC 13 and glibc 2.39 in C++ mode (`_GNU_SOURCE` is always defined by g++); the first gtkmm build asked for GLIBC_2.38 because of them. They are replaced by `std::istringstream`, and the executable asks for GLIBC_2.34 (`__libc_start_main`), as the C one did.
+- **Number parsing.** The kernel version and `VmHWM` are read with `std::istringstream` instead of `std::sscanf` / `std::strtoll` (first done to avoid `__isoc23_*` / GLIBC_2.38; kept by ADR 0007 because it is the natural C++ code, the glibc reason being void now that binaries are built on the machine that runs them).
 - **`Glib::ustring(const char*, n)` counts characters.** The greeting is built from a `std::string` of the exact byte count the backend returned.
 
-### 6. The static C++ runtime option no longer does what it was for
+### 6. The static C++ runtime option was removed
 
-`LOOMORA_STATIC_CXX_RUNTIME` was meant for a distribution without `libstdc++.so.6`. gtkmm, glibmm, giomm, pangomm, atkmm and libsigc++ are C++ libraries that need `libstdc++.so.6` themselves, so such a distribution cannot run the UI anyway, and with the option the executable carries a second copy of the C++ runtime next to the system one (`ldd` still lists `libstdc++.so.6`, through `libglibmm`). The option is kept, as the owner asked, and builds and runs (15 of 15 vectors), but its size is 1,998,448 bytes against 167,192 and it asks for GLIBC_2.38 (the static `libstdc++.a` of this toolchain was built against it). Recommendation: do not use it; the `fallbacks.json` entry `static-cxx-runtime-linux` says so.
+The CMake option `LOOMORA_STATIC_CXX_RUNTIME` that this ADR first kept was removed on 2026-11-14 (ADR 0007): libstdc++ and libgcc are always linked dynamically, gtkmm needs `libstdc++.so.6` anyway.
 
 ## Rejected alternatives
 
@@ -98,7 +97,6 @@ Behaviour kept: window 480 x 240, title "Loomora", 12 pixel border, field prefil
 | default (GTK 3) | 54,016 | 167,192 | 71 / 79 | 2.34, 3.4.21, 1.3 |
 | floor | 53,952 | 167,120 | 71 / 79 | 2.34, 3.4.21, 1.3 |
 | GTK 4 | 54,480 | 169,920 | 69 / 75 | 2.34, 3.4.21, 1.3.9 |
-| static C++ runtime | 301,328 | 1,998,448 | 69 / 79 | 2.38, none, none |
 
 - New direct run-time dependencies of the GTK 3 build: `libgtkmm-3.0.so.1`, `libatkmm-1.6.so.1`, `libgiomm-2.4.so.1`, `libpangomm-1.4.so.1`, `libglibmm-2.4.so.1`, `libsigc-2.0.so.0` (before: `libgtk-3.so.0`, `libpango-1.0.so.0`, `libgobject-2.0.so.0`, `libglib-2.0.so.0`; `libstdc++.so.6`, `libgcc_s.so.1` and `libc.so.6` in both). GTK 4 build: `libgtkmm-4.0.so.0`, `libpangomm-2.48.so.1`, `libgiomm-2.68.so.1`, `libglibmm-2.68.so.1`, `libsigc-3.0.so.0`. The distribution packages `libgtkmm-3.0-1t64` (or `libgtkmm-4.0-0`) must be installed to run the UI, not only GTK.
 - A probe run uses about 8 MB more memory (peak_rss_kb 45,820 to 46,600 kB against 37,716 to 38,336 kB) and starts as fast (display_ms 90 to 152 against 91 to 239).

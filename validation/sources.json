@@ -42,20 +42,6 @@
     "claim": "GCC toolchain for Windows, targetable at old _WIN32_WINNT values"
   },
   {
-    "id": "pep-571",
-    "url": "https://peps.python.org/pep-0571/",
-    "title": "PEP 571 manylinux2010",
-    "accessed": "2026-11-12",
-    "claim": "manylinux2010 baseline is glibc 2.12"
-  },
-  {
-    "id": "zig-cross",
-    "url": "https://ziglang.org/learn/overview/#cross-compiling-is-a-first-class-use-case",
-    "title": "Zig cross-compilation",
-    "accessed": "2026-11-12",
-    "claim": "Zig as an alternative cross-compiler"
-  },
-  {
     "id": "emscripten-settings",
     "url": "https://emscripten.org/docs/tools_reference/settings_reference.html",
     "title": "Emscripten settings reference",

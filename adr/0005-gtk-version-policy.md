@@ -4,7 +4,7 @@
 - **Date**: 2026-11-13
 - **Spike / requirement**: T057 / FR-021, FR-022 (fallbacks), research R7 and R12
 
-> **Amended by ADR 0006 (2026-11-14).** The Linux Modern UI is now C++ with gtkmm built with CMake. The policy below (GTK 3.10 floor, newer features behind one macro each, one `fallbacks.json` entry per macro, the floor build, the GTK 4 option) is unchanged; the files and options it names are now: `gtk_compat.hpp` for `gtk_compat.h`, `main.cpp` / `main_window.cpp` for `main.c`, `CMakeLists.txt` with `LOOMORA_GTK_API`, `LOOMORA_GTK_FLOOR` and `LOOMORA_STATIC_CXX_RUNTIME` for `meson_options.txt` with `gtk_api`, `gtk_floor` and `static_cxx_runtime`, and the C calls (`gtk_label_set_xalign`, ...) are their gtkmm methods. ADR 0006 has the mapping and what the floor build proves with gtkmm. The text and the measurements below describe the C UI and the Meson build of 2026-11-13 and are kept as they were.
+> **Amended by ADR 0006 (2026-11-14).** The Linux Modern UI is now C++ with gtkmm built with CMake. The policy below (GTK 3.10 floor, newer features behind one macro each, one `fallbacks.json` entry per macro, the floor build, the GTK 4 option) is unchanged; the files and options it names are now: `gtk_compat.hpp` for `gtk_compat.h`, `main.cpp` / `main_window.cpp` for `main.c`, `CMakeLists.txt` with `LOOMORA_GTK_API` and `LOOMORA_GTK_FLOOR` for `meson_options.txt` with `gtk_api` and `gtk_floor` (the static C++ runtime option was removed by ADR 0007), and the C calls (`gtk_label_set_xalign`, ...) are their gtkmm methods. ADR 0006 has the mapping and what the floor build proves with gtkmm. The text and the measurements below describe the C UI and the Meson build of 2026-11-13 and are kept as they were.
 
 ## Context
 
