@@ -5,7 +5,7 @@
     "macro": "LOOMORA_HAS_BUILTIN_EXPECT",
     "min_compiler": "gcc 3.0, clang 1.0 (any compiler defining __GNUC__ or __clang__)",
     "platform_ids": [],
-    "reason": "Compilers without __builtin_expect (MSVC, unknown compilers) take the fallback. No platform of validation/platforms/ takes it: the three of them build with GCC (MinGW-w64 GCC 13 for Windows, GCC 13 for Linux), which has __builtin_expect."
+    "reason": "Compilers without __builtin_expect (MSVC, unknown compilers) take the fallback. No platform of validation/platforms/ takes it: the four of them build with GCC (MinGW-w64 GCC 13 for Windows, GCC 13 for Linux, i686 included), which has __builtin_expect."
   },
   {
     "id": "cxx17-nodiscard",
@@ -15,9 +15,10 @@
     "platform_ids": [
       "windows-2000-x86",
       "windows-11-x64",
-      "linux-ubuntu-24.04-x86_64"
+      "linux-ubuntu-24.04-x86_64",
+      "linux-i686"
     ],
-    "reason": "The backend is built as strict C++11 on every Legacy target (and as C++14 where MSVC or the CMake clang/MSVC STL combination imposes it), so those builds take the fallback; only a build in C++17 mode or later uses [[nodiscard]]. All three platform records take it: their builds are strict C++11 (cpp_std of the deliverable records)."
+    "reason": "The backend is built as strict C++11 on every Legacy target (and as C++14 where MSVC or the CMake clang/MSVC STL combination imposes it), so those builds take the fallback; only a build in C++17 mode or later uses [[nodiscard]]. All four platform records take it: their builds are strict C++11 (cpp_std of the deliverable records; the record linux-i686-legacy.json was written before linux-i686 was listed here and does not name the fallback yet, the next tools/build.py linux legacy run will)."
   },
   {
     "id": "dark-mode",
@@ -127,5 +128,39 @@
     "min_compiler": "not a compiler feature: LOOMORA_XLIB_HAVE_XFT is defined by CMake (target compile definition of loomora_xlib) when it finds the development files of libXft 2.x and fontconfig 2.x with pkg-config and a program using them links with the flags of the build; the fallback is the build WITHOUT that definition. The Xft path needs an X server with the RENDER extension and at least one installed font with Latin letters; the core-font path needs an X server whose core font \"fixed\" is ISO 10646-1 to draw more than Latin-1",
     "platform_ids": [],
     "reason": "A build on a machine without the Xft development files (a minimal system, a very old distribution, a 32-bit build without libxft-dev:i386 and libfontconfig-dev:i386) can only draw with core X11 fonts, which have no shaping, no combining marks, no bidirectional layout, no colour and no fallback font, so what they lack cannot be drawn. Binaries are built on the machine that runs them (ADR 0007), so the case is decided per build and recorded in its deliverable record. PLATFORMS THAT TAKE IT: none of the platform records of this repository (platform_ids is empty because no recorded platform takes it: the x86_64 build on linux-ubuntu-24.04-x86_64 and the i686 build on linux-i686 both find Xft; a build without the Xft development files is recorded under the platform it runs on); the x86_64 build on linux-ubuntu-24.04-x86_64 finds Xft and does NOT take it. Measured 2026-11-14 (ADR 0007, evidence/linux-build-on-target/linux-ubuntu-24.04-x86_64/): CMake without Xft (a machine without the Xft development files) builds the core-font UI, and so does -DLOOMORA_XLIB_XFT=OFF; both draw '?' for the euro sign, Greek, Cyrillic, Hebrew, Arabic, CJK, combining marks and emoji and report glyph-substitution, identical to LOOMORA_XLIB_NO_XFT on the Xft build; the Xft build draws the real glyphs and reports missing-glyph for U+0378. The 32-bit Xft path was run on 2026-11-14 once libxft-dev:i386 and libfontconfig-dev:i386 were installed: the i686 build finds Xft and its probe line has no glyph-substitution (text check, no screenshot). On the machine of the trials the i686 build therefore does NOT take this fallback. Earlier measurements (dlopen version, Latin-1 only font \"fixed\" of the WSLg X server, ISO 10646-1 path only forced on an 8-bit font in a test copy) are in validation/evidence/xlib-unicode-manylinux/ and linux-legacy-xlib/ and are kept as history. NOT tested: a real old distribution, a 32-bit system with a 32-bit libXft, other X servers and distributions, any other font set than the one of this machine, any text shaping or bidirectional text (none exists by decision)."
+  },
+  {
+    "id": "native-system-info",
+    "description": "Architecture of the operating system in the platform id of the Windows Legacy UI (ui/legacy/windows-win32/sysinfo.cpp, NativeArchitecture): kernel32!GetNativeSystemInfo, looked up at run time, sees through WOW64 so that the x86 executable on a 64-bit Windows reports x64. The fallback is GetSystemInfo, which on a system without WOW64 already reports the real architecture.",
+    "macro": "LOOMORA_LOOKUP_GETNATIVESYSTEMINFO",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the run-time lookup): looked up at run time, any compiler; GetNativeSystemInfo exists since Windows XP",
+    "platform_ids": [
+      "windows-2000-x86"
+    ],
+    "reason": "Windows 2000 has no WOW64 and kernel32 does not export GetNativeSystemInfo (export table read on Windows 2000 build 2195: NO), so the lookup returns nothing and GetSystemInfo is used; the result is the same, \"x86\", and the probe records of that system carry platform_id windows-2000-x86. Nothing is lost and nothing is added to disabled_features. Not taken by windows-11-x64 (the function exists). Proof: validation/evidence/first-trial/windows-2000-x86/dll-exports-check.txt (section 3)."
+  },
+  {
+    "id": "version-query",
+    "description": "Windows version read by the Windows Legacy UI (ui/legacy/windows-win32/sysinfo.cpp, ReadVersion) for the platform id and the end-of-life test: ntdll!RtlGetVersion, looked up at run time because it is not part of the Win32 API; it reports the true version on every NT system. The fallback is GetVersionExW, also looked up at run time, which is subject to the compatibility lie of Windows 8.1 and later (6.2 for an executable without a matching manifest) and is therefore acceptable only where RtlGetVersion is missing.",
+    "macro": "LOOMORA_LOOKUP_RTLGETVERSION",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the run-time lookup): looked up at run time, any compiler; RtlGetVersion exists in ntdll since Windows 2000",
+    "platform_ids": [],
+    "reason": "Every Windows of the range is NT and exports RtlGetVersion (read on Windows 2000 build 2195 and run on Windows 11), so the skip is a defensive path that is not expected to be taken; it is declared because the code can take it. No platform of validation/platforms/ takes it. The skip path was not exercised."
+  },
+  {
+    "id": "probe-tick-clock",
+    "description": "Clock of the display time in the probe record of the Windows Legacy UI (ui/legacy/windows-win32/probe.cpp): QueryPerformanceCounter, in milliseconds through the counter frequency. The fallback is GetTickCount, whose resolution is the system timer tick (10 to 16 ms), when the performance counter is absent or reports no frequency.",
+    "macro": "LOOMORA_PROBE_TICK_CLOCK",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the run-time choice of clock): decided at run time by the return value of QueryPerformanceFrequency, any compiler",
+    "platform_ids": [],
+    "reason": "Every NT system has a performance counter, so the fallback is a defensive path that is not expected to be taken; it is declared because the code can take it. It only changes the resolution of display_ms (the 3 s threshold of SC-001 is far above it). No platform of validation/platforms/ takes it; the path was not exercised."
+  },
+  {
+    "id": "xlib-no-input-method",
+    "description": "Keyboard input of the Linux Legacy UI (ui/legacy/linux-xlib/main.cpp, InputMethod): Xutf8LookupString through an X input method (XOpenIM and XCreateIC, whatever the system provides, the built-in one included), so dead keys and the Compose key work and the text is real UTF-8. THIS FALLBACK is taken when no input method opens (or the environment variable LOOMORA_XLIB_NO_XIM is set, a test switch): XLookupString (Latin-1) plus the key symbol to Unicode conversion of ui/legacy/linux-xlib/keys.cpp. Characters the keyboard layout produces as key symbols still arrive; dead keys and Compose sequences do not.",
+    "macro": "LOOMORA_XLIB_NO_XIM",
+    "min_compiler": "not a compiler feature: a run-time switch, the environment variable LOOMORA_XLIB_NO_XIM, and the result of XOpenIM / XCreateIC; any compiler, libX11 only",
+    "platform_ids": [],
+    "reason": "The decision is taken at run time on each session, not per platform: an X server with a locale that Xlib supports always has the built-in input method, so no platform of validation/platforms/ is known to take it. The path was exercised with LOOMORA_XLIB_NO_XIM=1 under WSLg on linux-ubuntu-24.04-x86_64 (T083: the same pixels as with the input method for mixed Unicode typing, through tools/trials/linux-ubuntu-24.04-x86_64/xlib-ui-harness-cpp.cpp); a real session without any input method was not tried."
   }
 ]
