@@ -1,0 +1,17 @@
+{
+  "id": "android-5.0-arm64",
+  "family": "android",
+  "os_name": "Android (Lollipop)",
+  "os_version": "5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN",
+  "arch": "arm64",
+  "release_date": "2014-11-12",
+  "age_years": 12.0,
+  "is_floor": false,
+  "in_scope": true,
+  "environment": "emulator",
+  "environment_detail": "NOT RUN, no ARM64 system was available. The record stands for the arm64-v8a library of the Legacy APK, built with the android-21 sysroot (the first API level that has that ABI), so that the Legacy APK also runs on 64-bit-only phones (research R3). Its verdict is not_tested.",
+  "eol": true,
+  "eol_source": "validation/sources.json eol-android-security: Android versions below 14 are end of life for the backend.",
+  "release_date_source": "General availability of Android 5.0 (2014-11-12, author's knowledge, not re-read); age_years = days to 2026-11-14 divided by 365.25 = 12.0.",
+  "floor_note": "Not a floor. API 21 to 23 are below the Modern UI floor (API 24) and are served by the Legacy UI (spec SC-001)."
+}

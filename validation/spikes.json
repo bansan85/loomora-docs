@@ -16,9 +16,10 @@
   {
     "id": "S3",
     "question": "Does NDK r16b + the scripted APK build run on an Android 2.3 emulator (all four ABIs)?",
-    "status": "open",
-    "result": "",
-    "adr": ""
+    "status": "refuted",
+    "result": "Refuted as stated (NDK r16b + ndk-build), replaced by NDK r15c, and only partly demonstrated, 2026-11-14. BUILT: libloomora_jni.so and loomora_selftest for armeabi, armeabi-v7a, x86 (android-9 sysroot) and arm64-v8a (android-21 sysroot) with NDK r15c Clang 5.0.300080 through cmake/toolchains/android-ndk-r15c.cmake; ndk-build is unusable (r15c raises APP_PLATFORM below 14 to 14, r16b has no android-9 platform); gnustl static, DT_NEEDED libc.so (+ libdl.so on x86 and arm64), link with --no-undefined against the API 9 libraries; armeabi needs -latomic. APK by javac -source 8 + d8 --min-api 9 (accepted) + aapt + zipalign + apksigner v1: 228,623 bytes, four ABIs. RUN: only x86, on an Android 4.1.2 (API 16) emulator (the emulator cannot run below API 16): loomora_selftest 'all passed', the APK installs and shows the greeting, 15 of 15 reference vectors pass through the UI. NOT RUN: the three ARM ABIs (no ARM system) and Android 2.3 to 4.0 on any CPU: the claim 'runs on Android 2.3' is neither confirmed nor refuted.",
+    "adr": "adr/0016-android-legacy-ndk-r15c.md",
+    "fallback": "NDK r15c + CMake toolchain file + scripted APK build instead of NDK r16b + ndk-build (ADR 0016)"
   },
   {
     "id": "S5",

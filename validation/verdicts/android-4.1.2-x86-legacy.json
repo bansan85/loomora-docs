@@ -1,0 +1,93 @@
+{
+  "platform_id": "android-4.1.2-x86",
+  "ui_variant": "legacy",
+  "status": "ok_restricted",
+  "restrictions": [
+    "BUILT FOR API 9, RUN ON API 16: the APK (minSdkVersion 9, libraries compiled and linked against the android-9 sysroot) was run only on an Android 4.1.2 (API 16) x86 emulator, the oldest system the project owner's emulator can run. This verdict says nothing about Android 2.3 (API 9) to 4.0 (API 15): they were NOT run, so the floor of the Android Legacy UI is NOT validated, and the words 'works on Android 2.3' are not supported by any evidence. What the build does establish: the x86 library links with --no-undefined against the API 9 libc and needs only libc.so and libdl.so.",
+    "ONE EMULATED SYSTEM: Android emulator 37.2.13.0 with the AOSP image android-16 default x86 (4.1.2, build eng.wdu.20191218.182616, 2 vCPUs, 1,024 MB, WHPX) started headless with swiftshader_indirect: not a phone, no real GPU, touch screen, vendor skin, vendor fonts or input method. display_ms (123 to 161 ms in the stored lines) and peak_rss_kb (38,724) are the emulator's and indicative only. No other API level (17 to 23, 24+) and no x86_64 or ARM system was started.",
+    "ONLY THE x86 LIBRARY WAS EXECUTED: the same APK holds armeabi, armeabi-v7a and arm64-v8a libraries, built and checked (needed libraries, exported symbols) but never run; their platforms have not_tested verdicts (android-2.3-arm, android-5.0-arm64). The x86 run does not prove them.",
+    "INPUT WAS SYNTHETIC: the window run typed 'Marie' with `adb shell input keyevent` / `input text` (typing-uiautomator.txt) and read the screen with uiautomator, never a person, a hardware keyboard or an input method of a vendor. The update delay of the greeting (User Story 1, within 1 second) was not measured (a 2 s wait before the dump). The 1,000-character limit was exercised through the probe input only (the two vectors of 4,096 characters were cut to 1,000 UTF-16 units by the field's input filter), not by typing 1,001 characters. No screenshot was taken or stored.",
+    "TEXT GIVEN BY TWO ROUTES: the plain intent extra `probe_input` for the texts the `am` command can carry, and `probe_input_file` (a UTF-8 file pushed with adb) for a text with a character outside the BMP or longer than 1,500 bytes, because `am` of Android 4.1 crashes with a segmentation fault in Check_NewStringUTF on a 4-byte UTF-8 sequence (measured) and adb refuses a 4,096-byte command ('shell command too long'). Both routes reach the same EditText.setText; the emoji vectors passed through the file route only.",
+    "GLYPHS: the probe checks the text of the greeting character for character (15 of 15 vectors, including CJK, Arabic, Hebrew, emoji and a ZWJ sequence); how the 4.1.2 emulator draws them (fonts, missing glyph boxes, bidi) was not looked at, since no screenshot was taken.",
+    "NOT CHECKED: dark and high-contrast themes (the UI uses the system theme colours, the end-of-life banner has fixed black on #FFF3CD), 4.5:1 contrast of the greeting, rotation, screen sizes other than 1080x1920, accessibility services, a build signed with anything but a debug key, installation from a store, the behaviour when the process is killed. The exit of the UI is `finish()` 2 s after the first display; Android keeps the process cached, so 'exit status 0' is not measured, the launcher checks that the activity is no longer resumed and that logcat has no FATAL EXCEPTION.",
+    "ONE DAY, ONE MACHINE: runs of 2026-11-14 (the vectors three times in the session, the last one stored). The first vector run of the session failed 4 vectors because of the launcher (emoji through `am`, long input through the shell command) and one vector took 17.9 s once (cjk, cause not investigated); after the file route was added the 15 vectors passed in 49 s in every later run. The backend self-test (loomora_selftest, all vectors) also passed on the emulator."
+  ],
+  "disabled_features": [],
+  "evidence": [
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/probe-default.json",
+      "sha256": "428a99588bf3083a10be183388c4a28425e8fc38f5b404797c6e9806eba6e78b",
+      "kind": "probe",
+      "description": "Probe line of one default run (input Coucou) on Android 4.1.2 x86: greeting_matches true, displayed true, eol_warning_shown true, display_ms 161, peak_rss_kb 38724, disabled_features []. platform_id android-4.1.2-x86, core cpp, compiler 'clang 5.0.300080 '."
+    },
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/probe-default.txt",
+      "sha256": "75c5b6fc2bf094a68d48ca655bcd5c01de18a1eab86526d7d58244452891f0fe",
+      "kind": "check-log",
+      "description": "The adb commands that started the activity and read the line from logcat, and tools/check_probe.py on it (OK)."
+    },
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/run-vectors-android-4.1.2-x86-legacy-log.txt",
+      "sha256": "c2d6b22ce114b90f19443a2ea320141ad66bb43c1afd20bff455f8cf2493408d",
+      "kind": "check-log",
+      "description": "tools/run_vectors.py android-4.1.2-x86 legacy: 15 valid vectors, 15 passed, 0 failed, 16 skipped (error and API-only vectors), 2 truncated to 1,000 UTF-16 units (limit_4096_ascii, limit_4096_two_byte_chars), 49.3 s, one device, serial runs."
+    },
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/run-vectors-android-4.1.2-x86-legacy-probe-lines.tsv",
+      "sha256": "1bb9087fa03c14119e3bba90cb90f297b252e185e857e6c6151194def7629c5a",
+      "kind": "check-data",
+      "description": "The 15 probe lines of that run (one per vector, TSV: vector id, line), each checked by tools/check_probe.py against its vector."
+    },
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/selftest-x86-api16.txt",
+      "sha256": "48d2d55825b019b17259a034aa2946fa2aa2ea5e625c43fa33aff0bcf8b023ea",
+      "kind": "check-log",
+      "description": "loomora_selftest built for x86 with the API 9 sysroot (sha256 7d8c1bf4..., 3,749,252 bytes) pushed to /data/local/tmp and run on the emulator: 'all passed', exit 0. This is the run of spike S3 for the x86 ABI."
+    },
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/typing-uiautomator.txt",
+      "sha256": "ab2d33d0557eb11fc9fd22d5a7a41b6f047865c95603433d43280644ffc28a5b",
+      "kind": "check-log",
+      "description": "Window run without probe mode: texts on screen at start (end-of-life banner, 'Coucou', 'Bonjour Coucou') and after typing Marie with synthetic key events ('Marie', 'Bonjour Marie')."
+    },
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/build-output-tail.txt",
+      "sha256": "7047c26f851c4c5a2c805af00165228b257176caf25043d96091622dd2b140ce",
+      "kind": "check-log",
+      "description": "End of `python tools/build.py android legacy`: the four ABIs, DT_NEEDED, 6 exported JNI functions each, undefined symbols all resolved by the API 9 (API 21 for arm64-v8a) libraries, the APK (228,623 bytes), the three deliverable records written."
+    },
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/screenshot-default.png",
+      "sha256": "84873ddffce8f093ce68c50ff9babef55cbb6eb8e8fe1858eaee8bf6f27d7e44",
+      "kind": "screenshot",
+      "description": "Android 4.1.2 (API 16, x86 emulator, software rendering), Legacy UI started normally: end-of-life banner, field \"Coucou\", label \"Bonjour Coucou\". Same build as probe-default.json (built for API 9, run on API 16)."
+    },
+    {
+      "path": "validation/evidence/android-legacy/android-4.1.2-x86/screenshot-mixed-unicode.png",
+      "sha256": "b1af25b79bb51575145fbe55b49a502d30015b5aa1f8684b067cdbadc4107090",
+      "kind": "screenshot",
+      "description": "Same device and build, probe-mode launch with the input \"Zoé € Ελ 日本\" (accent, euro sign, Greek, CJK) read from a UTF-8 file: field and label \"Bonjour Zoé € Ελ 日本\" show every glyph, no tofu box."
+    }
+  ],
+  "measurements": {
+    "trial_date": "2026-11-14",
+    "scope": "Android emulator 37.2.13.0, AVD API16 (android-16 default x86, Android 4.1.2, API 16), headless, on one Windows 11 host",
+    "apk": {
+      "name": "loomora.apk",
+      "size_bytes": 228623,
+      "sha256": "d4b0d066769637cb96dd16205d8a128d0561568c3d9c073f10bce73a2cebaa9e",
+      "source": "validation/deliverables/android-4.1.2-x86-legacy.json (python tools/build.py android legacy); the vectors run installed this file with adb install"
+    },
+    "built_for": "minSdkVersion 9, targetSdkVersion 23, NDK r15c Clang 5.0.300080, android-9 sysroot (x86), gnustl static; dex 035 by d8 --min-api 9",
+    "run_on": "API 16 (Android 4.1.2), x86",
+    "libraries_in_apk_bytes": {
+      "armeabi": 95716,
+      "armeabi-v7a": 87532,
+      "x86": 136708,
+      "arm64-v8a": 141152
+    }
+  },
+  "reproduction": "validation/procedures/android.md",
+  "decision": "keep",
+  "notes": "Verdict of the Android Legacy UI (Java views, JNI glue, C++11 backend) on the x86 emulator at API 16, written 2026-11-14 after real runs. STATUS ok_restricted: the greeting 'Bonjour Coucou' / 'Bonjour Marie' is computed by the backend and displayed, typing updates it, the end-of-life banner shows, the 15 reference vectors pass and the self-test passes, but the restrictions above are real: built for API 9 and run on API 16 only, one emulator, x86 only, synthetic input, no screenshot. DECISION keep: nothing found makes the UI unusable on this system, and the API 9 floor stays an open question that only a system or emulator of API 9 to 15 can answer (the emulator of this project cannot start below API 16)."
+}

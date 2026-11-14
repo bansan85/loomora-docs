@@ -15,9 +15,9 @@ This page describes how Loomora is built: the engine (the backend), the code lay
 | Path | Content |
 |---|---|
 | `core/` | the backend, its C API and its tests |
-| `bridge/` | glue with no logic: `jni/` (Android), `wasm/` (Emscripten); not built yet |
+| `bridge/` | glue with no logic: `jni/` (Android, built by the Android Legacy UI), `wasm/` (Emscripten, not built yet) |
 | `ui/legacy/`, `ui/modern/` | one folder per platform and UI variant, each in the native language, with no logic |
-| `cmake/toolchains/` | toolchain files: MinGW-w64 (Windows 2000 i686, Windows x86_64) and Linux i686 |
+| `cmake/toolchains/` | toolchain files: MinGW-w64 (Windows 2000 i686, Windows x86_64), Linux i686 and Android NDK r15c |
 | `tools/` | Python host tools: `verify.py`, `build.py`, `run_vectors.py`, `check_std.py`, `check_imports.py`, `check_probe.py`, `check_ui_logic.py`, `validate_records.py`, `measure_sharing.py`, `prefix_check.py`, `report.py`, `diff_verdicts.py`, and `trials/` (drivers that produced the evidence) |
 | `specs/001-loomora-cross-platform/` | specification, plan, research, tasks, quickstart, contracts |
 | `docs/implementation/` | this git submodule (`../loomora-docs`): the ADRs and `validation/` (platforms, verdicts, deliverables, fallbacks, evidence, procedures, report) |
@@ -25,7 +25,7 @@ This page describes how Loomora is built: the engine (the backend), the code lay
 
 ## Interfaces
 
-Each interface is native and thin. Three exist: Windows Legacy (plain Win32, C++11), Linux Legacy (Xlib with Xft, C++11) and Linux Modern (gtkmm, up to C++17). The Legacy ones target very old systems (down to Windows 2000), the Modern ones current systems.
+Each interface is native and thin. Four exist: Windows Legacy (plain Win32, C++11), Linux Legacy (Xlib with Xft, C++11), Linux Modern (gtkmm, up to C++17) and Android Legacy (Java views and JNI glue, API 9 to 23). The Legacy ones target very old systems (down to Windows 2000), the Modern ones current systems.
 
 ## Technical rules
 
@@ -58,3 +58,4 @@ The complete rules are in `CLAUDE.md` at the root of the repository. Building an
 | 0013 | verification levels, `quick` and `full` |
 | 0014 | evidence rules |
 | 0015 | Python host tools: Python 3.8+, standard library only |
+| 0016 | Android Legacy: NDK r15c, CMake toolchain file and scripted APK build for API 9 |

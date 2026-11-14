@@ -16,7 +16,10 @@
       "windows-2000-x86",
       "windows-11-x64",
       "linux-ubuntu-24.04-x86_64",
-      "linux-i686"
+      "linux-i686",
+      "android-4.1.2-x86",
+      "android-2.3-arm",
+      "android-5.0-arm64"
     ],
     "reason": "The backend is built as strict C++11 on every Legacy target (and as C++14 where MSVC or the CMake clang/MSVC STL combination imposes it), so those builds take the fallback; only a build in C++17 mode or later uses [[nodiscard]]. All four platform records take it: their builds are strict C++11 (cpp_std of the deliverable records; the record linux-i686-legacy.json was written before linux-i686 was listed here and does not name the fallback yet, the next tools/build.py linux legacy run will)."
   },
@@ -162,5 +165,15 @@
     "min_compiler": "not a compiler feature: a run-time switch, the environment variable LOOMORA_XLIB_NO_XIM, and the result of XOpenIM / XCreateIC; any compiler, libX11 only",
     "platform_ids": [],
     "reason": "The decision is taken at run time on each session, not per platform: an X server with a locale that Xlib supports always has the built-in input method, so no platform of validation/platforms/ is known to take it. The path was exercised with LOOMORA_XLIB_NO_XIM=1 under WSLg on linux-ubuntu-24.04-x86_64 (T083: the same pixels as with the input method for mixed Unicode typing, through tools/trials/linux-ubuntu-24.04-x86_64/xlib-ui-harness-cpp.cpp); a real session without any input method was not tried."
+  },
+  {
+    "id": "android-armeabi-libatomic",
+    "description": "The armeabi (ARMv5TE) libraries are linked with -latomic (the CMake variable LOOMORA_ANDROID_LINK_LIBATOMIC set by cmake/toolchains/android-ndk-r15c.cmake for ANDROID_ABI=armeabi): ARMv5TE has no ldrex / strex, so Clang turns the atomic reference counts of the statically linked gnustl (std::string, exceptions) into calls to __atomic_fetch_add_4 and similar, which only libatomic.a of the GCC toolchain provides. The other ABIs link without it.",
+    "macro": "LOOMORA_ANDROID_LINK_LIBATOMIC",
+    "min_compiler": "any Clang for ARMv5 (measured: NDK r15c Clang 5.0.300080)",
+    "platform_ids": [
+      "android-2.3-arm"
+    ],
+    "reason": "Without it the armeabi library does not link (undefined reference to __atomic_fetch_add_4, measured). Declared for the ARM platform record only: armeabi-v7a, x86 and arm64-v8a do not take it. It is a toolchain switch, not a feature macro, and was linked and checked but not run (no ARM system)."
   }
 ]

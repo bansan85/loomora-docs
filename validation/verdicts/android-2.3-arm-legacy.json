@@ -1,0 +1,6 @@
+{
+  "platform_id": "android-2.3-arm",
+  "ui_variant": "legacy",
+  "status": "not_tested",
+  "reason": "Built, not run. The armeabi (ARMv5TE, -latomic) and armeabi-v7a libraries of the Android Legacy APK are compiled against the API 9 sysroot with NDK r15c and linked with --no-undefined against the API 9 libc (DT_NEEDED: libc.so only; 6 exported JNI functions each; validation/deliverables/android-2.3-arm-legacy.json), but nothing was executed: the project owner's emulator cannot run below API 16 and no ARM system image or device is available, so the loomora_selftest of these two ABIs (built, 3.7 MB each) never ran. The floor (Android 2.3) is therefore neither confirmed nor refuted. The only run of the same sources is the x86 build on API 16 (validation/verdicts/android-4.1.2-x86-legacy.json). Known open point: readelf -A shows Tag_FP_arch VFPv2 in the armeabi library although it is built soft-float ARMv5TE; not investigated."
+}

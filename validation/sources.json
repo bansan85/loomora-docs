@@ -18,7 +18,8 @@
     "url": "https://developer.android.com/ndk/downloads/revision_history",
     "title": "Android NDK revision history",
     "accessed": "2026-11-12",
-    "claim": "NDK r16b is the last to target API 9 (Android 2.3) as planned"
+    "claim": "NDK r16b is the last to target API 9 (Android 2.3) as planned",
+    "note": "Corrected by measurement on 2026-11-14 (docs/implementation/adr/0016-android-legacy-ndk-r15c.md): NDK r16b starts at android-14 and has no android-9 platform; r15c is the last NDK with platforms/android-9, but its ndk-build raises APP_PLATFORM below 14 to 14. The claim above is the one read on 2026-11-12 and is wrong."
   },
   {
     "id": "ndk-r25",

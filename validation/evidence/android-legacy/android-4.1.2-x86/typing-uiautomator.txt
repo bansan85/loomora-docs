@@ -1,0 +1,4 @@
+window run on release 4.1.2: UI started without probe mode
+texts on screen at start: ['Loomora', 'Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection.', 'Coucou', 'Bonjour Coucou']
+after 6 x KEYCODE_DEL and `input text Marie` (synthetic key events through adb, not a person):
+texts on screen: ['Loomora', 'Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection.', 'Marie', 'Bonjour Marie']

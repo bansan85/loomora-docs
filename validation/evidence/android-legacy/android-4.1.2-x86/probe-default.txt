@@ -1,0 +1,14 @@
+apk loomora.apk sha256 d4b0d066769637cb96dd16205d8a128d0561568c3d9c073f10bce73a2cebaa9e
+$ adb shell am start -W -n fr.loomora.probe/.MainActivity --ez probe true
+Starting: Intent { cmp=fr.loomora.probe/.MainActivity (has extras) }
+Status: ok
+Activity: fr.loomora.probe/.MainActivity
+ThisTime: 733
+TotalTime: 733
+Complete
+$ adb logcat -d -v raw -s LOOMORA_PROBE:I
+--------- beginning of /dev/log/main
+--------- beginning of /dev/log/system
+{"schema":1,"platform_id":"android-4.1.2-x86","ui_variant":"legacy","input":"Coucou","message":"Bonjour Coucou","greeting_matches":true,"core":"cpp","compiler":"clang 5.0.300080 ","displayed":true,"display_ms":161,"peak_rss_kb":38724,"eol_warning_shown":true,"disabled_features":[],"timestamp_utc":"2026-11-14T22:48:12Z"}
+$ python tools/check_probe.py --input Coucou probe-default.json
+OK
