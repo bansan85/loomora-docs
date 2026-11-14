@@ -6,18 +6,16 @@
   "target": "x86_64-linux-gnu",
   "output": "native",
   "ui_language": "c",
-  "ui_toolkit": "Xlib (libX11 only, no toolkit), core X11 font fixed, C89 (gnu89) with POSIX",
+  "ui_toolkit": "Xlib (libX11, no toolkit); text drawn with libXft and fontconfig opened at run time with dlopen (core X11 font fixed when libXft cannot be loaded); C89 (gnu89) with POSIX",
   "ui_compiler": "gcc-13.3.0",
   "artifact": {
     "name": "loomora-xlib",
-    "size": 300960
+    "size": 67280
   },
   "disabled_features": [],
   "fallbacks": [
     "cxx17-nodiscard",
-    "gtk4-ui",
-    "xlib-core-font-glyphs",
-    "static-cxx-runtime-xlib"
+    "gtk4-ui"
   ],
-  "notes": "make (ui/legacy/linux-xlib/Makefile, ARCH=x86_64) on linux-ubuntu-24.04-x86_64 (glibc 2.39); static libloomora.a built from core/src with -std=c++11; libstdc++ and libgcc linked statically; shared libraries needed: libX11.so.6, libc.so.6, ld-linux-x86-64.so.2; highest symbol versions (objdump -T): GLIBC_2.38. BUILT NATIVELY, NOT IN THE manylinux2010 CONTAINER: the executable needs GLIBC_2.38 or newer, so the glibc 2.12 baseline of the Linux Legacy floor is NOT verified (spike S4 / T069 stays open); not run on any system other than the build machine. Artifact copied to out/linux-legacy/x86_64/, sha256 f29b0393da78d0089694e5b4a7e7d5d20928c893d3d7d94e28f61c4d6ce8207b."
+  "notes": "make (ui/legacy/linux-xlib/Makefile, ARCH=x86_64, STATIC_CXX=0) on linux-ubuntu-24.04-x86_64 (glibc 2.39); static libloomora.a built from core/src with -std=c++11; the C++ runtime of the distribution (libstdc++, libgcc_s) linked dynamically; libXft and fontconfig opened at run time with dlopen, not linked; shared libraries needed: libX11.so.6, libstdc++.so.6, libgcc_s.so.1, libc.so.6; highest symbol versions (objdump -T): CXXABI_1.3, GCC_3.0, GLIBC_2.34, GLIBCXX_3.4.21. BUILT NATIVELY, NOT IN THE manylinux2010 CONTAINER: the executable needs GLIBC_2.34 or newer, so the glibc 2.12 baseline is NOT verified by this record (the manylinux2010 deliverables linux-manylinux2010-x86_64 and linux-manylinux2010-i686 are the ones built for it, with the static C++ runtime). Artifact copied to out/linux-legacy/x86_64/, sha256 7618b43d1d5a7a70a6b2c9093708eb8fba7020938f5a00c52cd05ad9d05dcd0e. RUN (2026-11-14, Ubuntu 24.04.5 under WSLg, executable sha256 7618b43d...): 15 of 15 reference vectors (tools/run_vectors.py linux-ubuntu-24.04-x86_64 legacy, 2 truncated to 1,000 characters, not stored: a re-run of the vectors); text drawn with libXft (real glyphs for Latin with accents, euro, Greek, Cyrillic, Hebrew, Arabic, CJK and emoji, no shaping or bidi), 1,000 code points of two-byte and three-byte characters accepted, wrapped and the typing beyond 1,000 refused, Unicode typed through the X input method and through the key symbol table (synthetic key events only, no physical keyboard), ASan and UBSan clean on hard texts including invalid UTF-8 (3 allocations made by fontconfig's own FcInit suppressed in LeakSanitizer); startup display_ms median 22 (13 with the core font), peak_rss_kb about 9,100 (5,700); evidence in validation/evidence/xlib-unicode-manylinux/linux-ubuntu-24.04-x86_64/ (it supersedes the '?' screenshots of validation/evidence/linux-legacy-xlib/, kept as history)."
 }

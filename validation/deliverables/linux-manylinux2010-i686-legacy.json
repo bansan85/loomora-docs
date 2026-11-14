@@ -1,0 +1,21 @@
+{
+  "platform_id": "linux-manylinux2010-i686",
+  "ui_variant": "legacy",
+  "cpp_std": "c++11",
+  "compiler": "gcc-8.3.1",
+  "target": "i686-redhat-linux",
+  "output": "native",
+  "ui_language": "c",
+  "ui_toolkit": "Xlib (libX11, no toolkit); text drawn with libXft and fontconfig opened at run time with dlopen (core X11 font fixed when libXft cannot be loaded); C89 (gnu89) with POSIX",
+  "ui_compiler": "gcc-8.3.1",
+  "artifact": {
+    "name": "loomora-xlib",
+    "size": 1086080
+  },
+  "disabled_features": [],
+  "fallbacks": [
+    "static-cxx-runtime-xlib",
+    "xlib-core-font-glyphs"
+  ],
+  "notes": "BUILT IN THE manylinux2010 CONTAINER (spike S4 / T069): image quay.io/pypa/manylinux2010_i686, digest quay.io/pypa/manylinux2010_i686@sha256:c5bba0e43a64127d0312937423885c3427da827c2b5aa11e72ea406e63cda27d, image id sha256:c5bba0e43a64127d0312937423885c3427da827c2b5aa11e72ea406e63cda27d; the container's GCC 8.3.1 with its glibc 2.12; make (ui/legacy/linux-xlib/Makefile, ARCH=i686, STATIC_CXX=1) in the container's own file system, the sources mounted read-only; libX11-devel was already installed in the image, no package was installed (libX11-devel-1.6.4-4.el6_10.i686), headers only: libXft and fontconfig are opened at run time with dlopen and their development files are not installed; libstdc++ and libgcc linked statically; shared libraries needed (objdump -p): libX11.so.6, libdl.so.2, libc.so.6, ld-linux.so.2; highest symbol versions (objdump -T): GLIBC_2.7, so the executable needs GLIBC_2.7 at most and the glibc 2.12 baseline is reached as far as symbol versions show (no GLIBCXX / CXXABI / GCC version node: the C++ runtime is static); this is a link-level check, not a run on a glibc 2.12 system. Artifact copied to out/linux-legacy-manylinux2010/i686/, sha256 6566c84e3e51f375cad8a31b1bbc8298cfa7c3aa8d5ab58ef8262a587c0393f7, container build log next to it. RUN (2026-11-14, on Ubuntu 24.04.5 under WSLg with only the 32-bit libX11, NOT on glibc 2.12): objdump on the host agrees (GLIBC_2.7 highest, no GLIBCXX), 15 of 15 reference vectors; no 32-bit libXft here, so it takes the core-font path ('?', glyph-substitution; 05-core-font-manylinux2010-i686-no-32bit-libxft.png, probe-mixed-manylinux2010-i686-fallback.json in validation/evidence/xlib-unicode-manylinux/linux-ubuntu-24.04-x86_64/). The 32-bit static libstdc++ makes the executable 1,086,080 bytes against 253,424 for x86_64 (it pulls in the verbose terminate handler, the demangler and iostream)."
+}

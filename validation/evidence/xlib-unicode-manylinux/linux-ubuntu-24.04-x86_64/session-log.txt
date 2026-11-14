@@ -1,0 +1,131 @@
+Linux Legacy Xlib UI, Xft text, under WSLg: 2026-11-14T07:56:45Z
+host: Ubuntu 24.04.5 LTS, kernel 6.18.58.1-microsoft-standard-WSL2, glibc 2.39, DISPLAY=:0, LANG=C.UTF-8
+fontconfig fonts: 429; 32-bit libXft present: 0 (the i686 executables cannot load it)
+executables (sha256, bytes):
+  7618b43d1d5a7a70a6b2c9093708eb8fba7020938f5a00c52cd05ad9d05dcd0e 67280 /home/legar/loomora-build/linux-legacy-x86_64/loomora-xlib
+  be746aa171ad745ccc043d2dbc7705a20d7f3869b5af31af871fac04923983c6 60912 /home/legar/loomora-build/linux-legacy-i686/loomora-xlib
+  0190a86342cc59ba40920d283bf2a23f44301c85de69d34702796f89fb2d4da4 253424 /home/legar/loomora-build/manylinux2010-x86_64/loomora-xlib
+  6566c84e3e51f375cad8a31b1bbc8298cfa7c3aa8d5ab58ef8262a587c0393f7 1086080 /home/legar/loomora-build/manylinux2010-i686/loomora-xlib
+
+== libraries each executable names (objdump -p NEEDED) and highest GLIBC (objdump -T), executed on this host
+/home/legar/loomora-build/linux-legacy-x86_64/loomora-xlib
+      NEEDED               libX11.so.6
+      NEEDED               libstdc++.so.6
+      NEEDED               libgcc_s.so.1
+      NEEDED               libc.so.6
+    highest GLIBC: GLIBC_2.34   GLIBCXX/CXXABI nodes: 27
+/home/legar/loomora-build/manylinux2010-x86_64/loomora-xlib
+      NEEDED               libX11.so.6
+      NEEDED               libdl.so.2
+      NEEDED               libc.so.6
+      NEEDED               ld-linux-x86-64.so.2
+    highest GLIBC: GLIBC_2.7   GLIBCXX/CXXABI nodes: 0
+/home/legar/loomora-build/manylinux2010-i686/loomora-xlib
+      NEEDED               libX11.so.6
+      NEEDED               libdl.so.2
+      NEEDED               libc.so.6
+      NEEDED               ld-linux.so.2
+    highest GLIBC: GLIBC_2.7   GLIBCXX/CXXABI nodes: 0
+(libXft and fontconfig are NOT named: dlopen at run time. objdump -T of the dlopen user: 1 dlopen reference)
+
+== screenshots (window contents, synthetic keys from xlib-driver.c)
+01-xft-native-x86_64: exit 0 stderr 0 bytes
+02-xft-limits-native-x86_64: exit 0 stderr 0 bytes
+03-xft-manylinux2010-x86_64: exit 0 stderr 0 bytes
+04-core-font-i686-no-32bit-libxft: exit 0 stderr 0 bytes
+05-core-font-manylinux2010-i686-no-32bit-libxft: exit 0 stderr 0 bytes
+06-core-font-x86_64-xft-disabled-by-switch: exit 0 stderr 0 bytes
+
+== probe records with the mixed string (exact UTF-8 greeting), Xft path and core-font path
+native-x86_64                  exit-line ok, input==typed True, message==Bonjour+input True, disabled_features [], display_ms 23, peak_rss_kb 13376
+manylinux2010-x86_64           exit-line ok, input==typed True, message==Bonjour+input True, disabled_features [], display_ms 24, peak_rss_kb 11880
+i686-fallback                  exit-line ok, input==typed True, message==Bonjour+input True, disabled_features ['glyph-substitution'], display_ms 16, peak_rss_kb 5716
+manylinux2010-i686-fallback    exit-line ok, input==typed True, message==Bonjour+input True, disabled_features ['glyph-substitution'], display_ms 17, peak_rss_kb 4024
+x86_64-xft-disabled            exit-line ok, input==typed True, message==Bonjour+input True, disabled_features ['glyph-substitution'], display_ms 14, peak_rss_kb 5748
+
+== 1,000 CHARACTERS (code points), 995 then 5 typed / 1100 cut
+two    input: 1000 code points, 2000 bytes; message: 1008 code points; message == Bonjour + input: True; disabled_features []
+three  input: 1000 code points, 2995 bytes; message: 1008 code points; message == Bonjour + input: True; disabled_features []
+cut    input: 1000 code points, 2500 bytes; message: 1008 code points; message == Bonjour + input: True; disabled_features []
+
+== typed text through the X input method and through the key symbol table (4 combinations)
+im-xft       input OK: True  'Coucoué€Ωж日😀αаא'  disabled_features []
+noxim-xft    input OK: True  'Coucoué€Ωж日😀αаא'  disabled_features []
+noxim-core   input OK: True  'Coucoué€Ωж日😀αаא'  disabled_features ['glyph-substitution']
+im-core      input OK: True  'Coucoué€Ωж日😀αаא'  disabled_features ['glyph-substitution']
+
+== startup cost of the Xft path (10 probe runs each, display_ms and peak_rss_kb)
+xft: runs 10, display_ms min 20 median 23 max 25, peak_rss_kb min 9056 max 9256
+core-font: runs 10, display_ms min 12 median 14 max 21, peak_rss_kb min 5668 max 5816
+
+== sanitizers: ASan + UBSan harness (xlib-ui-harness.c, main.c included), 3 modes
+=== xft
+-----------------------------------------------------
+Suppressions used:
+  count      bytes template
+      3        320 libfontconfig.so
+-----------------------------------------------------
+engine: Xft; input method: yes (Xutf8LookupString)
+empty                                        bytes    0 chars    0 substituted 0 missing 0  1 ms
+mixed                                        bytes   28 chars   16 substituted 0 missing 0  4 ms
+newline and tab                              bytes    7 chars    7 substituted 0 missing 1  0 ms
+NUL-free control chars                       bytes    4 chars    4 substituted 0 missing 1  1 ms
+invalid: lone continuation                   bytes    4 chars    2 substituted 0 missing 0  0 ms
+invalid: truncated 3-byte                    bytes    4 chars    3 substituted 0 missing 0  0 ms
+invalid: overlong                            bytes    9 chars    3 substituted 0 missing 0  0 ms
+invalid: surrogate D800                      bytes    3 chars    1 substituted 0 missing 0  0 ms
+invalid: above 10FFFF                        bytes    9 chars    2 substituted 0 missing 0  0 ms
+invalid: 0xFF 0xFE                           bytes    2 chars    2 substituted 0 missing 0  0 ms
+invalid through the backend                  bytes    3 chars    3 substituted 0 missing 0  0 ms
+noncharacters + private use                  bytes   13 chars    4 substituted 0 missing 1  1 ms
+format characters                            bytes   15 chars    7 substituted 0 missing 1  0 ms
+combining + ZWJ family                       bytes   22 chars    8 substituted 0 missing 0  1 ms
+1000 two-byte (2000 bytes)                   bytes 2000 chars 1000 substituted 0 missing 0  2 ms
+1000 three-byte (3000 bytes)                 bytes 3000 chars 1000 substituted 0 missing 0  16 ms
+1000 four-byte (4000 bytes)                  bytes 4000 chars 1000 substituted 0 missing 0  3 ms
+1000 ASCII, one word                         bytes 1000 chars 1000 substituted 0 missing 0  2 ms
+4000 random bytes, drawn raw                 bytes 4000 chars 2954 substituted 0 missing 1  84 ms
+4000 continuation bytes, drawn raw           bytes 4000 chars 2010 substituted 0 missing 1  63 ms
+typed 1010 characters: 1000 characters, 3000 bytes (limit 1000 characters)
+after 1005 deletions: 0 characters, 0 bytes, valid UTF-8 1
+exit 0
+=== core
+engine: core font; input method: yes (Xutf8LookupString)
+empty                                        bytes    0 chars    0 substituted 0 missing 0  1 ms
+mixed                                        bytes   28 chars   16 substituted 1 missing 0  0 ms
+newline and tab                              bytes    7 chars    7 substituted 1 missing 0  0 ms
+NUL-free control chars                       bytes    4 chars    4 substituted 1 missing 0  0 ms
+invalid: lone continuation                   bytes    4 chars    2 substituted 1 missing 0  0 ms
+invalid: truncated 3-byte                    bytes    4 chars    3 substituted 1 missing 0  1 ms
+invalid: overlong                            bytes    9 chars    3 substituted 1 missing 0  0 ms
+invalid: surrogate D800                      bytes    3 chars    1 substituted 1 missing 0  0 ms
+invalid: above 10FFFF                        bytes    9 chars    2 substituted 1 missing 0  0 ms
+invalid: 0xFF 0xFE                           bytes    2 chars    2 substituted 1 missing 0  0 ms
+invalid through the backend                  bytes    3 chars    3 substituted 0 missing 0  0 ms
+noncharacters + private use                  bytes   13 chars    4 substituted 1 missing 0  0 ms
+format characters                            bytes   15 chars    7 substituted 1 missing 0  0 ms
+combining + ZWJ family                       bytes   22 chars    8 substituted 1 missing 0  0 ms
+1000 two-byte (2000 bytes)                   bytes 2000 chars 1000 substituted 1 missing 0  0 ms
+1000 three-byte (3000 bytes)                 bytes 3000 chars 1000 substituted 1 missing 0  0 ms
+1000 four-byte (4000 bytes)                  bytes 4000 chars 1000 substituted 1 missing 0  0 ms
+1000 ASCII, one word                         bytes 1000 chars 1000 substituted 0 missing 0  0 ms
+4000 random bytes, drawn raw                 bytes 4000 chars 2954 substituted 1 missing 0  4 ms
+4000 continuation bytes, drawn raw           bytes 4000 chars 2010 substituted 1 missing 0  1 ms
+typed 1010 characters: 1000 characters, 3000 bytes (limit 1000 characters)
+after 1005 deletions: 0 characters, 0 bytes, valid UTF-8 1
+exit 0
+=== noxim
+-----------------------------------------------------
+Suppressions used:
+  count      bytes template
+      3        320 libfontconfig.so
+-----------------------------------------------------
+engine: Xft; input method: none (XLookupString + keysym table)
+empty                                        bytes    0 chars    0 substituted 0 missing 0  2 ms
+mixed                                        bytes   28 chars   16 substituted 0 missing 0  3 ms
+exit 0
+
+== usage errors keep exit 2 (invalid UTF-8 argument, input without --probe)
+invalid UTF-8 argument: exit 2
+--probe-input without --probe: exit 2
+done
