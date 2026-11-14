@@ -10,36 +10,33 @@ Success criteria evaluated from the records at generation time (`python tools/re
 |---|---|---|
 | SC-002 | NOT MET | 1 of 3 required families validated with the Legacy UI on a system 10 years old or more (Windows); the oldest working platform is identified with evidence for 2 of 6 families |
 | SC-003 | MET | validated with the Legacy UI on a system 15 years old or more: Windows (read the restrictions of that verdict: a virtual machine, one build) |
-| SC-004 | INCOMPLETE | 5 attempted platform/variant pair(s); 5 gap(s) in verdict, evidence or reproduction |
-| SC-010 | INCOMPLETE | 1 absent variant(s) without a recorded justification |
+| SC-004 | MET | 5 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
+| SC-010 | MET | 0 absent variant(s) without a recorded justification |
 | SC-005 | MET | 20 of 20 hypotheses recorded, 5 with a verdict, 15 not covered by this probe |
 | SC-009 | INCOMPLETE | go / no-go concluded for 1 of 2 systems |
+| SC-007 | NOT MET | 0 of 5 measured platform/variant rows reach 80% shared code; 5 below, each one explained in section 13 from the records (the explanation does not remove the gap) |
 
 **SC-002 detail**
 
 - Windows: windows-2000-x86, 2000-02-17, 26.7 years old, OK with restrictions, evidence: 41 file(s), 7 screenshot(s)
 - macOS: not tested
-- Linux: linux-ubuntu-24.04-x86_64, 2024-04-25, 2.55 years old, OK with restrictions, evidence: 17 file(s), 2 screenshot(s)
+- Linux: linux-i686, linux-ubuntu-24.04-x86_64, 2024-04-25, 2.55 years old, OK with restrictions, evidence: 17 file(s), 2 screenshot(s)
 - Android: not tested
 - iOS / iPadOS: not tested
 - Web: not tested
-
-**SC-004 detail**
-
-- windows-2000-x86 legacy: missing reproduction (no procedure recorded)
-- windows-11-x64 legacy: missing reproduction (no procedure recorded)
-- linux-i686 legacy: no verdict record (built or run, but no verdict)
-- linux-ubuntu-24.04-x86_64 legacy: missing reproduction (no procedure recorded)
-- linux-ubuntu-24.04-x86_64 modern: missing reproduction (no procedure recorded)
-
-**SC-010 detail**
-
-- linux-i686 modern: not attempted and no reason recorded
 
 **SC-009 detail**
 
 - Windows 2000: GO: OK with restrictions
 - Windows XP: NOT CONCLUDED: no trial
+
+**SC-007 detail**
+
+- linux-i686 legacy: 27.0% (493 shared, 0 glue, 1,330 platform-specific lines)
+- linux-ubuntu-24.04-x86_64 legacy: 27.0% (493 shared, 0 glue, 1,330 platform-specific lines)
+- linux-ubuntu-24.04-x86_64 modern: 48.7% (493 shared, 0 glue, 519 platform-specific lines)
+- windows-11-x64 legacy: 37.5% (493 shared, 0 glue, 822 platform-specific lines)
+- windows-2000-x86 legacy: 37.5% (493 shared, 0 glue, 822 platform-specific lines)
 
 ## 2. Go / no-go: Windows 2000 and Windows XP (SC-009)
 
@@ -47,7 +44,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 
 - **Verdict**: OK with restrictions (decision: keep), record `validation/verdicts/windows-2000-x86-legacy.json`.
 - **System tried**: Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service pack (RTM; no CSDVersion value in the ...; vm; VirtualBox 7.2.22 (r175245) virtual machine named 'Windows 2000' on the Windows 11 host of validation/platforms/windows-11-x64.json. Released 2000-02-17 (26.7 years old).
-- **Deliverable**: loomora.exe, 696,127 bytes, gcc-13-win32-mingw-w64; fallbacks taken: cxx17-nodiscard, dark-mode, dpi-awareness, win2000-getthreadid-shim, selftest-no-iostream, visual-styles.
+- **Deliverable**: loomora.exe, 696,127 bytes, gcc-13-win32-mingw-w64; fallbacks taken: cxx17-nodiscard, dark-mode, dpi-awareness, win2000-getthreadid-shim, selftest-no-iostream, visual-styles, native-system-info.
 - **imports** (verdict measurements): 112 imported functions from gdi32, kernel32, msvcrt, user32, every one exported by the DLLs of this system (0 missing); 117 of 117 functions of the x86 allowlist exported
 - **message check** (verdict measurements): message "Bonjour Coucou" in 10 of 10 '--probe' runs and "Bonjour Marie" in 10 of 10 '--probe-input Marie' runs, greeting_matches true; platform_id windows-2000-x86, eol_warning_shown true and disabled_features [dpi-awareness, dark-mode] in all 20 runs
 - **exit** (verdict measurements): 20 of 20 probe runs and the 15 + 25 run_vectors runs exited with status 0 and wrote a valid probe line (check_probe); 0 loomora.exe processes were alive after any of the 20 probe runs (WMI count in the guest, after each run); the window run closed with Alt+F4 left 0 processes
@@ -95,14 +92,14 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 
 | Platform | System | Variant | Verdict | Decision | Evidence | Reproduction | Notes |
 |---|---|---|---|---|---|---|---|
-| windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | legacy | OK with restrictions | keep | 41 file(s), 7 screenshot(s) | MISSING: no procedure recorded | 10 restriction(s), 2 disabled feature(s) |
+| windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | legacy | OK with restrictions | keep | 41 file(s), 7 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 2 disabled feature(s) |
 | windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | modern | not attempted | - | - | - | justified: the Modern UI technology (WinUI 3) is not available on this system: WinUI 3 requires Windows 10 1809 or later (source winappsdk-support) |
-| windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | legacy | OK with restrictions | keep | 37 file(s), 12 screenshot(s) | MISSING: no procedure recorded | 10 restriction(s), 0 disabled feature(s) |
+| windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | legacy | OK with restrictions | keep | 37 file(s), 12 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 0 disabled feature(s) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | modern | not attempted | - | - | - | justified: no WinUI 3 Modern UI has been built: spike S8 (WinUI 3 calling the C++11 backend) is open |
-| linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | legacy | no verdict (built, never judged) | - | none | MISSING | deliverable loomora-xlib, 73,348 bytes |
-| linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | modern | not attempted | - | - | - | MISSING: no justification recorded |
-| linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | legacy | OK with restrictions | keep | 17 file(s), 2 screenshot(s) | MISSING: no procedure recorded | 10 restriction(s), 3 disabled feature(s) |
-| linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | modern | OK with restrictions | keep | 101 file(s), 63 screenshot(s) | MISSING: no procedure recorded | 16 restriction(s), 0 disabled feature(s) |
+| linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | legacy | OK with restrictions | keep | 3 file(s) | validation/procedures/linux.md | 6 restriction(s), 3 disabled feature(s) |
+| linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The Linux Modern UI (gtkmm on GTK 3, ui/modern/linux-gtk3) was built and judged for the 64-bit platform only (validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json). For the 32-bit build the machine (validation/platforms/linux-i686.json, a 64-bit WSL2 ... (full text in section 12) |
+| linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | legacy | OK with restrictions | keep | 17 file(s), 2 screenshot(s) | validation/procedures/linux.md | 10 restriction(s), 3 disabled feature(s) |
+| linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | modern | OK with restrictions | keep | 101 file(s), 63 screenshot(s) | validation/procedures/linux.md | 16 restriction(s), 0 disabled feature(s) |
 | (none) | macOS | both | not tested | - | - | - | no platform record: no trial |
 | (none) | Android | both | not tested | - | - | - | no platform record: no trial |
 | (none) | iOS / iPadOS | both | not tested | - | - | - | no platform record: no trial |
@@ -118,7 +115,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | Windows | modern | not tested | - | - | - | - |
 | macOS | legacy | not tested | - | - | - | - |
 | macOS | modern | not tested | - | - | - | - |
-| Linux | legacy | linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 17 file(s), 2 screenshot(s) |
+| Linux | legacy | linux-i686, linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 17 file(s), 2 screenshot(s) |
 | Linux | modern | linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 101 file(s), 63 screenshot(s) |
 | Android | legacy | not tested | - | - | - | - |
 | Android | modern | not tested | - | - | - | - |
@@ -129,6 +126,8 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | Web (wasm path) | modern | not tested | - | - | - | - |
 | Web (js path) | modern | not tested | - | - | - | - |
 
+Several ids in one cell are platform records of the same release date (for example the 32-bit build run on a 64-bit system of the same distribution): none is older than the other, and the verdict and evidence shown are those with the most evidence.
+
 ## 6. Measurements
 
 Artifact size comes from the deliverable record; display time and peak memory from the `measurements` of the verdict (the range over the series of the current build; the verdict may describe an earlier build, read its notes). `display_ms` is the time to the first display, `peak_rss_kb` the application's own peak, both read from the probe line; SC-001 asks for under 3,000 ms.
@@ -137,7 +136,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 |---|---|---|---|---|
 | windows-2000-x86 | legacy | loomora.exe: 696,127 bytes | 2 to 15 ms | 1,084 to 1,160 kB |
 | windows-11-x64 | legacy | loomora.exe: 703,383 bytes | 42 to 127 (median 50) ms | 11,548 to 14,420 kB |
-| linux-i686 | legacy | loomora-xlib: 73,348 bytes | not measured: no verdict, no trial run recorded | not measured: no verdict, no trial run recorded |
+| linux-i686 | legacy | loomora-xlib: 73,348 bytes | 22 to 26 ms | 8,032 to 11,728 kB |
 | linux-ubuntu-24.04-x86_64 | legacy | loomora-xlib: 80,216 bytes | 164 ms | 13,680 kB |
 | linux-ubuntu-24.04-x86_64 | modern | loomora-gtk3: 167,192 bytes | 90 to 152 (median 101.5) ms | 45,820 to 46,600 (median 46,208) kB |
 
@@ -148,7 +147,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | Fallback | Macro | What it replaces | Platforms taking it (fallback record) | Deliverables listing it |
 |---|---|---|---|---|
 | builtin-expect | LOOMORA_HAS_BUILTIN_EXPECT | Branch prediction hint __builtin_expect through LOOMORA_LIKELY / LOOMORA_UNLIKELY (used in core/src/c_api.cpp); the fallback is the plain condition ... | no platform takes it | - |
-| cxx17-nodiscard | LOOMORA_HAS_CXX17_NODISCARD | [[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty ... | windows-2000-x86, windows-11-x64, linux-ubuntu-24.04-x86_64 | linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern, windows-11-x64 legacy, windows-2000-x86 legacy |
+| cxx17-nodiscard | LOOMORA_HAS_CXX17_NODISCARD | [[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty ... | windows-2000-x86, windows-11-x64, linux-ubuntu-24.04-x86_64, linux-i686 | linux-i686 legacy, linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern, windows-11-x64 legacy, windows-2000-x86 legacy |
 | dark-mode | LOOMORA_FEATURE_DARK_MODE | Dark theme of the Windows Legacy UI (ui/legacy/windows-win32/dynfeatures.cpp): when the user's "apps use light theme" setting ... | windows-2000-x86 | windows-2000-x86 legacy |
 | dpi-awareness | LOOMORA_FEATURE_DPI_AWARENESS | DPI awareness of the Windows Legacy UI: SetProcessDPIAware (user32) is looked up at run time and called before the window exists, the layout and the ... | windows-2000-x86 | windows-2000-x86 legacy |
 | high-contrast-query | LOOMORA_FEATURE_HIGH_CONTRAST_QUERY | High contrast query of the Windows Legacy UI: SystemParametersInfoW(SPI_GETHIGHCONTRAST), looked up at run time in user32; when a high contrast ... | no platform takes it | - |
@@ -161,11 +160,18 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | gtk-overlay-scrolling | LOOMORA_GTK_HAS_OVERLAY_SCROLLING | Scrollbar of the greeting of the Linux Modern UI (ui/modern/linux-gtk3/main_window.cpp, MainWindow constructor) ... | no platform takes it | - |
 | gtk4-ui | LOOMORA_GTK4 | GTK 4 branch of the Linux Modern UI (ui/modern/linux-gtk3/main_window.cpp, gtk_compat.hpp), selected at build time by the CMake cache option ... | linux-ubuntu-24.04-x86_64 | linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern |
 | xlib-core-font-glyphs | LOOMORA_XLIB_HAVE_XFT | Text path of the Linux Legacy UI (ui/legacy/linux-xlib/main.cpp, xftfonts.cpp). The normal path draws with client-side fonts through libXft and ... | no platform takes it | - |
+| native-system-info | LOOMORA_LOOKUP_GETNATIVESYSTEMINFO | Architecture of the operating system in the platform id of the Windows Legacy UI (ui/legacy/windows-win32/sysinfo.cpp, NativeArchitecture) ... | windows-2000-x86 | windows-2000-x86 legacy |
+| version-query | LOOMORA_LOOKUP_RTLGETVERSION | Windows version read by the Windows Legacy UI (ui/legacy/windows-win32/sysinfo.cpp, ReadVersion) for the platform id and the end-of-life test ... | no platform takes it | - |
+| probe-tick-clock | LOOMORA_PROBE_TICK_CLOCK | Clock of the display time in the probe record of the Windows Legacy UI (ui/legacy/windows-win32/probe.cpp): QueryPerformanceCounter, in milliseconds ... | no platform takes it | - |
+| xlib-no-input-method | LOOMORA_XLIB_NO_XIM | Keyboard input of the Linux Legacy UI (ui/legacy/linux-xlib/main.cpp, InputMethod): Xutf8LookupString through an X input method (XOpenIM and ... | no platform takes it | - |
 
 ### Disabled features (FR-025)
 
 | Platform | Variant | Disabled feature | Reason |
 |---|---|---|---|
+| linux-i686 | legacy | missing-glyph | Xft path, the normal path of this build: only a code point that no installed font has, such as U+0378, is drawn as an empty box; the greeting and the probe record are unchanged. Measured in run-log.txt |
+| linux-i686 | legacy | glyph-substitution | core-font path, NOT taken by the build of this verdict: only when CMake finds no 32-bit libXft and fontconfig development files, LOOMORA_XLIB_XFT=OFF or the run-time switch LOOMORA_XLIB_NO_XFT; fallback xlib-core-font-glyphs, platform_ids empty on purpose. ... |
+| linux-i686 | legacy | text-shaping-and-bidi | not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it |
 | linux-ubuntu-24.04-x86_64 | legacy | missing-glyph | Xft path, the normal path of this platform: only a code point that no installed font has, such as U+0378, is drawn as an empty box; the greeting and the probe record are unchanged. Measured in xlib-xft-probe-mixed.txt |
 | linux-ubuntu-24.04-x86_64 | legacy | glyph-substitution | core-font path, NOT taken by the x86_64 build of this platform: only a build whose CMake finds no libXft and fontconfig development files, or LOOMORA_XLIB_XFT=OFF or the run-time switch LOOMORA_XLIB_NO_XFT; a character the core font cannot draw is a '?' ... |
 | linux-ubuntu-24.04-x86_64 | legacy | text-shaping-and-bidi | not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it |
@@ -223,7 +229,7 @@ Status: 15 not covered by this probe, 5 OK with restrictions.
 | Windows legacy | Windows XP SP3 minimum, MFC UI (sections 2.1 and 2.1.2) | Windows 2000, plain Win32 UI | windows-11-x64 legacy: OK with restrictions; windows-2000-x86 legacy: OK with restrictions | contradicted: windows-2000-x86 works (OK with restrictions) | lower the floor of the requirements document to Windows 2000 Professional, as decided (Windows 2000, plain Win32 UI); the verdict is OK with restrictions: read its restrictions (section 12) before G0 |
 | Windows modern | Windows 10+, WinUI 3 (section 2.1) | WinUI 3 needs Windows 10 1809 (research R6; source winappsdk-support) | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
 | macOS legacy | macOS 11+ (section 2.1) | macOS 10.6 Snow Leopard | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
-| Linux legacy | Ubuntu 20.04+ / Debian 11+, AppImage and Flatpak (section 2.1) | any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007) | linux-ubuntu-24.04-x86_64 legacy: OK with restrictions | not contradicted: only newer systems tried (oldest working: linux-ubuntu-24.04-x86_64) | reword the floor as decided (any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007)); older systems are not tried |
+| Linux legacy | Ubuntu 20.04+ / Debian 11+, AppImage and Flatpak (section 2.1) | any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007) | linux-i686 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions | not contradicted: only newer systems tried (oldest working: linux-i686, linux-ubuntu-24.04-x86_64) | reword the floor as decided (any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007)); older systems are not tried |
 | Android legacy | minSdk API 21 (Android 5.0) (section 2.1) | Android 2.3 (API 9) | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
 | iOS / iPadOS legacy | iOS 15.0 (section 2.1) | iOS 5 | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
 | Web legacy | Chrome, Safari and Firefox with WebAssembly (section 2.1) | WebAssembly mandatory, JavaScript build for the browsers of November 2011 | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
@@ -235,7 +241,7 @@ The Linux GTK 3.10 floor of the Modern UI is a compile-time rule: the floor buil
 | Tier | Requirements document | Trials | Proposed change |
 |---|---|---|---|
 | A | complete packaged application (table of section 2.1) | linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
-| B | Windows x86 32-bit, Linux x86 32-bit, ARM 32-bit, RISC-V, PowerPC 64 LE | Windows x86 (windows-2000-x86): OK with restrictions; Linux i686 built and run as a 32-bit program on a 64-bit kernel, no verdict; ARM 32-bit, RISC-V, PowerPC: out of scope or not tested | Windows x86 is reachable by the Legacy UI down to Windows 2000; the tier no longer depends on a Rust toolchain, so it should be redefined by "a C++11 compiler and the platform libraries exist" |
+| B | Windows x86 32-bit, Linux x86 32-bit, ARM 32-bit, RISC-V, PowerPC 64 LE | Windows x86 (windows-2000-x86): OK with restrictions; Linux i686 built and run as a 32-bit program on a 64-bit kernel (not a native 32-bit system), legacy OK with restrictions, modern not tested; ARM 32-bit, RISC-V, PowerPC: out of scope or not tested | Windows x86 is reachable by the Legacy UI down to Windows 2000; the tier no longer depends on a Rust toolchain, so it should be redefined by "a C++11 compiler and the platform libraries exist" |
 | C | PowerPC big-endian, s390x, LoongArch64, FreeBSD: CPU engine, CLI, server | not tested; PowerPC and other architectures are out of scope (spec Clarifications) | no change proposed |
 
 ### Disabled features (section 2.3, section 2.1.2)
@@ -244,6 +250,9 @@ The disabled features listed for XP in section 2.1.2 (GPU, BLE, TLS, simplified 
 
 | Platform | Variant | Disabled feature | Proposed change |
 |---|---|---|---|
+| linux-i686 | legacy | missing-glyph | add to section 2.3 for this platform (reason in the verdict) |
+| linux-i686 | legacy | glyph-substitution | add to section 2.3 for this platform (reason in the verdict) |
+| linux-i686 | legacy | text-shaping-and-bidi | add to section 2.3 for this platform (reason in the verdict) |
 | linux-ubuntu-24.04-x86_64 | legacy | missing-glyph | add to section 2.3 for this platform (reason in the verdict) |
 | linux-ubuntu-24.04-x86_64 | legacy | glyph-substitution | add to section 2.3 for this platform (reason in the verdict) |
 | linux-ubuntu-24.04-x86_64 | legacy | text-shaping-and-bidi | add to section 2.3 for this platform (reason in the verdict) |
@@ -285,9 +294,24 @@ The disabled features listed for XP in section 2.1.2 (GPU, BLE, TLS, simplified 
 
 ## 12. Restrictions and causes as recorded (US3 scenario 2)
 
+### linux-i686 legacy: OK with restrictions (decision: keep)
+
+Evidence: 3 file(s). Reproduction: validation/procedures/linux.md.
+
+- SCOPE: NOT A NATIVE 32-BIT SYSTEM. The 32-bit (i686, gcc -m32) executable was built and run only inside the Ubuntu 24.04.5 WSL2 distribution with WSLg on a Windows 11 laptop (validation/platforms/linux-i686.json): a 64-bit (x86_64) kernel 6.18.58.1-microsoft-standard-WSL2 runs it in compatibility ...
+- SAME SOURCE, SAME LIMITS AS THE x86_64 BUILD: the UI sources are those of validation/verdicts/linux-ubuntu-24.04-x86_64-legacy.json, built with -m32. By decision (accepted by the owner) there is no text shaping and no bidirectional layout (logical order, left to right); the stored screenshot of ...
+- CORE-FONT PATH ONLY WITHOUT XFT: the executable of this verdict was built with libxft-dev:i386 and libfontconfig-dev:i386 present, so it draws through Xft. Before those packages were installed the i686 build took the core X11 font path (fallback xlib-core-font-glyphs, probe line with ...
+- INPUT WAS SYNTHETIC: the window run typed 'Marie' with XSendEvent key events from xlib-driver.c on the WSLg X server, never a physical keyboard or a real layout; no input-method server, dead key, compose sequence or IME was tried. The 1,000-character limit was checked through the vectors only (2 ...
+- ONE VECTOR RUN FAILED ON AN X SERVER ERROR: in the stored run of tools/run_vectors.py, 4 of the 15 vectors (empty, ascii, ascii_punctuation, accented, the first four launched in parallel) failed with 'XIO: fatal IO error 2 on X server ":0"' at 0.0 s; 5 repeated runs of the same executable and 3 ...
+- ONE RUN, ONE DAY: the numbers are one run on 2026-11-14 (two probe lines stored); no series was made, display_ms and peak_rss_kb are indicative only. The display was WSLg :0; no private Xvfb display was used.
+
+### linux-i686 modern: not tested (not attempted)
+
+Justification recorded in the verdict: Not attempted on this platform, by choice of scope, not by a failure. The Linux Modern UI (gtkmm on GTK 3, ui/modern/linux-gtk3) was built and judged for the 64-bit platform only (validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json). For the 32-bit build the machine (validation/platforms/linux-i686.json, a 64-bit WSL2 Ubuntu 24.04 running 32-bit programs through the i386 multiarch libraries) has no 32-bit GTK 3, glib or gtkmm libraries: the i386 packages measured with dpkg on 2026-11-14 are the C library, libX11, libXft, fontconfig, freetype and their development files, none of the GTK family. tools/build.py builds the Modern UI for the host architecture only (its --arch option is for the Legacy UI only). Whether the i386 GTK 3 and gtkmm development packages could be installed with multiarch on this machine, and whether the Modern UI would build and run as a 32-bit program, was not tried, so nothing is claimed about it.
+
 ### linux-ubuntu-24.04-x86_64 legacy: OK with restrictions (decision: keep)
 
-Evidence: 17 file(s), 2 screenshot(s). Reproduction: MISSING (no procedure recorded).
+Evidence: 17 file(s), 2 screenshot(s). Reproduction: validation/procedures/linux.md.
 
 - SCOPE: one machine and one environment. The Linux Legacy UI was built and run only on Ubuntu 24.04.5 inside WSL2 with WSLg on a Windows 11 laptop (validation/platforms/linux-ubuntu-24.04-x86_64.json), against the XWayland server of WSLg, as x86_64 here (the i686 build is another platform record ...
 - NO TEXT SHAPING AND NO BIDIRECTIONAL LAYOUT, by decision (accepted by the owner, see the fallback record xlib-core-font-glyphs): Xft draws the code points one after the other in logical order, left to right. Arabic letters appear in their isolated forms and left to right, Hebrew and Arabic words ...
@@ -302,7 +326,7 @@ Evidence: 17 file(s), 2 screenshot(s). Reproduction: MISSING (no procedure recor
 
 ### linux-ubuntu-24.04-x86_64 modern: OK with restrictions (decision: keep)
 
-Evidence: 101 file(s), 63 screenshot(s). Reproduction: MISSING (no procedure recorded).
+Evidence: 101 file(s), 63 screenshot(s). Reproduction: validation/procedures/linux.md.
 
 - 2026-11-14, THE UI IS NOW C++ WITH GTKMM BUILT WITH CMAKE (ADR 0006): this verdict was written for the C UI built with Meson (executable 733389c1). Every restriction below that speaks of 'the current build', main.c, gtk_*_ C calls, the meson options or 54,016 bytes describes THAT C build and stays ...
 - NOT RE-RUN ON THE C++ BUILD: the three forced GTK themes (Adwaita:dark, HighContrast, HighContrastInverse) and the contrast ratios of the C trial (the default theme gave 11.61 again), the cross-check of peak_rss_kb with os.wait4 beyond what probe-series.py records (ru_maxrss 46016 to 46684 kB, 84 ...
@@ -319,11 +343,11 @@ Evidence: 101 file(s), 63 screenshot(s). Reproduction: MISSING (no procedure rec
 - ENVIRONMENT: one environment only, Ubuntu 24.04.5 in WSL2 with WSLg on a Windows 11 host, x86_64 (8 logical CPUs, 20 GB). Not tested: bare metal or a full VM boot, other distributions (the Ubuntu 22.04 and other targets of T059 have no record), other desktops and compositors, real GPU or ...
 - C++ RUNTIME: the current build links the distribution's libstdc++.so.6 and libgcc_s.so.1 dynamically (meson option static_cxx_runtime, default false, ADR 0004). The static variant (-Dstatic_cxx_runtime=true, about 296,952 bytes, asks for GLIBC_2.38) builds but was not run in this trial and was ...
 - MEMORY: peak_rss_kb is the application's own VmHWM; the cross-check with os.wait4 ru_maxrss of the child (136 to 496 kB higher, includes pre-exec pages) shows the same order of magnitude but is not an independent measurement of the same quantity. Memory was not measured with a long greeting or over ...
-- No procedure document exists yet for this trial (validation/procedures/linux.md is task T111), so the verdict carries no 'reproduction' path; the commands used are in the 'notes' field and the drivers (probe-series.py, gui-driver.py, glyphs-shoot.py, fake-uname.c) are in ...
+- The replayable procedure is validation/procedures/linux.md (field 'reproduction', written 2026-11-14 and replayed on the same machine that day); the commands used are also in the 'notes' field and the drivers (probe-series.py, gui-driver.py, glyphs-shoot.py, fake-uname.c) are in ...
 
 ### windows-11-x64 legacy: OK with restrictions (decision: keep)
 
-Evidence: 37 file(s), 12 screenshot(s). Reproduction: MISSING (no procedure recorded).
+Evidence: 37 file(s), 12 screenshot(s). Reproduction: validation/procedures/windows.md.
 
 - Typing was exercised with Win32 messages, not by a person with a real keyboard: the Edit control received EM_SETSEL then the WM_CHAR messages M, a, r, i, e (SendMessageW from another process) and the Static control was read back with WM_GETTEXT ("Bonjour Marie", 16.3 ms after the first message on ...
 - The end-of-life warning (FR-013, ui-contract item 3) was not exercised: Windows 11 26H2 is in support (validation/sources.json eol-windows-11), so eol_warning_shown was false in all 40 probe runs and no banner exists in the window (one Static only). The check 'warning on every end-of-life system' ...
@@ -332,13 +356,13 @@ Evidence: 37 file(s), 12 screenshot(s). Reproduction: MISSING (no procedure reco
 - The screenshots are PrintWindow captures of the window (420x200, title bar included, empty shadow corners), not screen recordings and not an independent view of the physical screen; 'displayed' and display_ms in the probe record come from the application's own first WM_PAINT. The glyph rendering of ...
 - Only one Windows version and one machine: Windows 11 26H2 (10.0.26300.9974), French (fr-FR), x64, on a physical MSI laptop whose Windows runs on top of the Microsoft hypervisor. Not tested: Windows 11 ARM64, Windows 10 and every older Windows (8.1, 7, Vista, XP, 2000), a native 32-bit Windows (the ...
 - This trial says nothing about the Legacy floor: Windows 11 is the newest system of the Windows Legacy ladder and the 'oldest working Windows' of FR-005 / SC-002 / SC-009 is not determined by it. The Windows 2000 SP4 / XP / Vista / 7 / 8.1 / 10 runs of T088, spike S1 (T066) and the 'verify' entries ...
-- No procedure document exists yet for this trial (validation/procedures/windows.md is task T109), so the verdict carries no 'reproduction' path; the commands used are in the 'notes' field and the driver script is part of the evidence.
+- The replayable procedure is validation/procedures/windows.md, part A (field 'reproduction', written 2026-11-14 and replayed on the same host that day); the commands used are also in the 'notes' field and the driver script is part of the evidence.
 - The executables were started from a scratch copy in the Windows temp folder (one copy per run) so that loomora-probe.json files could not collide; they were built by 'wsl -d Ubuntu-24.04 -- python3 tools/build.py windows legacy' (up to date, sha256 below) and closed by a WM_CLOSE message, not by a ...
 - Re-run after adr/0004-fallback-per-case.md (2026-11-13), same host: the executables of the evidence listed before this entry are x64 sha256 2c6c3ed9b1cc20b546e43b703e239c44742220e6c4c414ee54135d3ad89f8866 (701774 bytes) and x86 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e; the ...
 
 ### windows-2000-x86 legacy: OK with restrictions (decision: keep)
 
-Evidence: 41 file(s), 7 screenshot(s). Reproduction: MISSING (no procedure recorded).
+Evidence: 41 file(s), 7 screenshot(s). Reproduction: validation/procedures/windows.md.
 
 - The system is Windows 2000 build 2195 RTM with NO service pack, not Windows 2000 SP4: this verdict says nothing about SP4 (the plan, research R6, spike S1 and task T066 name SP4). The system DLLs read here are the RTM ones (kernel32.dll 5.0.2191.1, user32.dll 5.0.2180.1, msvcrt.dll 6.1.8637.0 ...
 - Only one machine and one configuration, and an emulated one: VirtualBox 7.2.22 on a Windows 11 host, 1 vCPU, 168 MB RAM, VirtualBox Graphics Adapter 800x600x32 at 96 DPI, English (US) system with a French AZERTY keyboard layout for the user. No real hardware (physical chipset, display driver, input ...
@@ -348,5 +372,93 @@ Evidence: 41 file(s), 7 screenshot(s). Reproduction: MISSING (no procedure recor
 - No high contrast scheme, no DPI above 96 and no dark theme were tried: HKCU HighContrast Flags 126 (off), Win32_DisplayConfiguration.LogPixels 96, the AppsUseLightTheme value does not exist on this system. The Legacy UI took the skipped-feature path for two optional features, 'dpi-awareness' ...
 - Scope of the backend self-test run: loomora_selftest (core/tests/selftest.cpp) passes on this system, but only on this one RTM VM (see the first restriction), and it covers the greet vectors, loomora_abi_version and loomora_build_compiler only (loomora_is_eol and loomora_probe_record are not in ...
 - The verdict covers the x86 executable out/windows-legacy/x86/loomora.exe (sha256 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e) as built at commit d7f84de with MinGW-w64 GCC 13; it was started with CreateProcessW from a guest helper (tools/guest/runw.c, built with the same ...
-- No procedure document exists yet for this trial (validation/procedures/windows.md is task T109), so the verdict carries no 'reproduction' path; the commands are in the 'notes' field and the driver script is part of the evidence.
+- The replayable procedure is validation/procedures/windows.md, part B (field 'reproduction', written 2026-11-14 from the records and the scripts; the VM was NOT replayed that day); the commands are also in the 'notes' field and the driver script is part of the evidence.
 - Re-run after adr/0004-fallback-per-case.md (2026-11-13) with the same VM (RTM build 2195, no service pack): the executable of the evidence listed before this entry is sha256 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e (694005 bytes); the x86 executable now built is sha256 ...
+
+## 13. Shared code per platform and variant (FR-011, FR-012, SC-007)
+
+Shared code is the backend `core/` (the C++11 library and its C API), glue is the code between the C API and a UI language (`bridge/jni`, `bridge/wasm`: none exists yet), platform-specific code is the native UI of the platform and variant (`ui/<variant>/<platform>/`). Counted: non-empty, non-comment source lines, without tests, generated code, build and packaging files. Share = shared / (shared + glue + platform-specific). The numbers are the fields `shared_loc`, `glue_loc`, `ui_loc` and `sharing_ratio` of the deliverable records, written by `python tools/measure_sharing.py --write`; SC-007 asks for at least 80%.
+
+| Platform | Variant | UI directory | UI toolkit | Shared lines | Glue lines | Platform-specific lines | Share | SC-007 |
+|---|---|---|---|---|---|---|---|---|
+| linux-i686 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
+| linux-ubuntu-24.04-x86_64 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
+| linux-ubuntu-24.04-x86_64 | modern | modern/linux-gtk3 | gtkmm-3.0 3.24.9 on gtk+-3.0 3.24.41 (C++11 UI; GTK 3.10 ... | 493 | 0 | 519 | 48.7% | BELOW 80% |
+| windows-11-x64 | legacy | legacy/windows-win32 | Win32 API (user32, gdi32), EDIT + STATIC controls ... | 493 | 0 | 822 | 37.5% | BELOW 80% |
+| windows-2000-x86 | legacy | legacy/windows-win32 | Win32 API (user32, gdi32), EDIT + STATIC controls ... | 493 | 0 | 822 | 37.5% | BELOW 80% |
+
+Records that run the same UI sources have the same numbers, the code is counted once per record: `ui/legacy/linux-xlib/`: linux-i686, linux-ubuntu-24.04-x86_64; `ui/legacy/windows-win32/`: windows-11-x64, windows-2000-x86.
+
+Not measured: macOS, Android, iOS / iPadOS, Web have no platform record and no UI code; the variants without a deliverable record (linux-i686 modern, windows-11-x64 modern, windows-2000-x86 modern) have no row.
+
+### Platform-specific code and why it is platform-specific
+
+Every file counted as platform-specific, with its line count from the stored listing of the code-sharing evidence (`validation/evidence/code-sharing/`). Reason: the UI of a platform is native (FR-001, FR-020) and limited to system integration, without application logic (FR-010); a file that a fallback record names also holds the code of that fallback (FR-012: the cost of an old or optional platform case in non-shared code), next to the rest of the native UI.
+
+| File | Lines | Why platform-specific | Used by |
+|---|---|---|---|
+| ui/legacy/linux-xlib/keys.cpp | 54 | named by fallback record(s) `xlib-no-input-method`, besides the native UI code | linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/keys.hpp | 6 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/main.cpp | 873 | named by fallback record(s) `xlib-core-font-glyphs`, `xlib-no-input-method`, besides the native UI code | linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/probe.cpp | 179 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/probe.hpp | 19 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/xftfonts.cpp | 119 | named by fallback record(s) `xlib-core-font-glyphs`, besides the native UI code | linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/xftfonts.hpp | 80 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/modern/linux-gtk3/gtk_compat.hpp | 51 | named by fallback record(s) `gtk-label-xalign`, `gtk-overlay-scrolling`, `gtk4-ui`, besides the native UI code | linux-ubuntu-24.04-x86_64 |
+| ui/modern/linux-gtk3/main.cpp | 86 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
+| ui/modern/linux-gtk3/main_window.cpp | 156 | named by fallback record(s) `gtk-label-xalign`, `gtk-overlay-scrolling`, `gtk4-ui`, besides the native UI code | linux-ubuntu-24.04-x86_64 |
+| ui/modern/linux-gtk3/main_window.hpp | 46 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
+| ui/modern/linux-gtk3/probe.cpp | 154 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
+| ui/modern/linux-gtk3/probe.hpp | 26 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
+| ui/legacy/windows-win32/dynfeatures.cpp | 197 | named by fallback record(s) `dark-mode`, `message-font`, besides the native UI code | windows-11-x64, windows-2000-x86 |
+| ui/legacy/windows-win32/dynfeatures.h | 21 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
+| ui/legacy/windows-win32/dynload.h | 22 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
+| ui/legacy/windows-win32/getthreadid_shim.cpp | 39 | named by fallback record(s) `win2000-getthreadid-shim`, besides the native UI code | windows-11-x64, windows-2000-x86 |
+| ui/legacy/windows-win32/main.cpp | 200 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
+| ui/legacy/windows-win32/probe.cpp | 208 | named by fallback record(s) `probe-tick-clock`, besides the native UI code | windows-11-x64, windows-2000-x86 |
+| ui/legacy/windows-win32/probe.h | 21 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
+| ui/legacy/windows-win32/resource.h | 7 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
+| ui/legacy/windows-win32/sysinfo.cpp | 99 | named by fallback record(s) `native-system-info`, `version-query`, besides the native UI code | windows-11-x64, windows-2000-x86 |
+| ui/legacy/windows-win32/sysinfo.h | 8 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
+
+### Exceptions: shares below 80% (SC-007)
+
+5 of 5 measured rows are below 80%. Each reason below is taken from the numbers, the file listing and the fallback records above; none is a claim about code that was not measured.
+
+Common to every row: the shared part is the whole backend, 493 lines in 14 file(s) (largest: `core/src/probe.cpp` 161, `core/src/utf8.cpp` 66, `core/include/loomora.h` 58). The application of this project is the probe, a text field and the greeting (`Hello Loomora` reduced on purpose: section 11, spec assumptions, FR-001), so there is little shared logic to count, and every platform pays its own native UI on top.
+
+- **linux-i686 legacy** (`ui/legacy/linux-xlib/`): 27.0% shared. 493 shared lines, 1,330 platform-specific.
+  - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 1,330, 10.8 times that.
+  - Platform-specific code: 7 files, 1,330 lines; the largest is `main.cpp` with 873 lines (66% of it).
+  - Files that a fallback record names (`keys.cpp` 54, `main.cpp` 873, `xftfonts.cpp` 119): 1,046 lines, 79% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
+  - The same sources as linux-ubuntu-24.04-x86_64: one code base, counted again in this record.
+  - Fallbacks listed by the deliverable record: `cxx17-nodiscard`.
+- **linux-ubuntu-24.04-x86_64 legacy** (`ui/legacy/linux-xlib/`): 27.0% shared. 493 shared lines, 1,330 platform-specific.
+  - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 1,330, 10.8 times that.
+  - Platform-specific code: 7 files, 1,330 lines; the largest is `main.cpp` with 873 lines (66% of it).
+  - Files that a fallback record names (`keys.cpp` 54, `main.cpp` 873, `xftfonts.cpp` 119): 1,046 lines, 79% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
+  - The same sources as linux-i686: one code base, counted again in this record.
+  - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `gtk4-ui`.
+- **linux-ubuntu-24.04-x86_64 modern** (`ui/modern/linux-gtk3/`): 48.7% shared. 493 shared lines, 519 platform-specific.
+  - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 519, 4.2 times that.
+  - Platform-specific code: 6 files, 519 lines; the largest is `main_window.cpp` with 156 lines (30% of it).
+  - Files that a fallback record names (`gtk_compat.hpp` 51, `main_window.cpp` 156): 207 lines, 40% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
+  - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `gtk4-ui`.
+- **windows-11-x64 legacy** (`ui/legacy/windows-win32/`): 37.5% shared. 493 shared lines, 822 platform-specific.
+  - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 822, 6.7 times that.
+  - Platform-specific code: 10 files, 822 lines; the largest is `probe.cpp` with 208 lines (25% of it).
+  - Files that a fallback record names (`dynfeatures.cpp` 197, `getthreadid_shim.cpp` 39, `probe.cpp` 208, `sysinfo.cpp` 99): 543 lines, 66% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
+  - The same sources as windows-2000-x86: one code base, counted again in this record.
+  - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `selftest-no-iostream`.
+- **windows-2000-x86 legacy** (`ui/legacy/windows-win32/`): 37.5% shared. 493 shared lines, 822 platform-specific.
+  - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 822, 6.7 times that.
+  - Platform-specific code: 10 files, 822 lines; the largest is `probe.cpp` with 208 lines (25% of it).
+  - Files that a fallback record names (`dynfeatures.cpp` 197, `getthreadid_shim.cpp` 39, `probe.cpp` 208, `sysinfo.cpp` 99): 543 lines, 66% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
+  - The same sources as windows-11-x64: one code base, counted again in this record.
+  - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `dark-mode`, `dpi-awareness`, `win2000-getthreadid-shim`, `selftest-no-iostream`, `visual-styles`, `native-system-info`.
+
+Reading, not measured: the platform-specific part is a native window with its text display and input, which every platform needs whatever the application does, against a shared part that is only the probe logic. The records do not say what the share would be for a larger application, so the report does not claim that 80% would be reached: SC-007 is not met by this probe, and the gap is explained here, not closed.
+
+## 14. Verdict changes since a baseline (FR-018)
+
+No baseline was given, so no comparison is made. Generate the report with `python tools/report.py --baseline REV` (REV: a git revision of the docs submodule, or a folder of verdicts) to list every change of `status` and every other difference of the verdicts and deliverable records since REV (`tools/diff_verdicts.py`). The committed report is generated without a baseline so that it is reproducible; the baseline is not recorded in it.
