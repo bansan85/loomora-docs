@@ -1,0 +1,107 @@
+{
+  "platform_id": "android-7.0-x86_64",
+  "ui_variant": "modern",
+  "status": "ok_restricted",
+  "restrictions": [
+    "ONE EMULATED SYSTEM, ONE ABI: the APK (minSdk 24, targetSdk 37) was run only on an Android 7.0 (API 24) x86_64 emulator (Android emulator 37.2.13.0, AVD API24, system image android-24 default x86_64 revision 8, 1,536 MB, WHPX, headless with swiftshader_indirect): not a phone, no real GPU, touch screen, vendor skin, vendor fonts or input method. display_ms (243 to 463 ms over 6 default runs, median 303.5) and peak_rss_kb (68,616 to 69,060) are the emulator's and indicative only. No other API level (25 to 37) was started, so nothing is known about Android 8 to 16.",
+    "ONLY THE x86_64 LIBRARY WAS EXECUTED: the same APK holds armeabi-v7a, arm64-v8a and x86 libraries, built and statically checked by tools/build.py (needed libraries libc, libm, libdl only; only the 6 Java_fr_bansan_loomora_probe_Native_* functions exported; LOAD segments aligned to 16 KB; the backend and the glue compiled with -std=c++11) but never run. No ARM system or device was available, so no ARM ABI was executed and they are not_tested; the x86 library was not run either (no 32-bit x86 Modern system).",
+    "NO ANDROID 14+ PATH EXERCISED: the only API above level 24 the UI calls is UiModeManager.getContrast() (level 34), behind Build.VERSION.SDK_INT >= 34 (fallback android-uimode-contrast in validation/fallbacks.json). On this API 24 system the check is false, the standard Material 3 scheme is used and the probe lines carry disabled_features [\"uimode-contrast\"]. The high contrast path (API 34 or later with a high contrast level) was never run, and neither was the edge-to-edge behaviour enforced from targetSdk 35 on a system that enforces it (API 35+): on API 24 the window insets are applied by Compose and the screenshots show the banner below the status bar.",
+    "THEMES: the dark theme and high contrast were NOT checked on a screen. The UI follows isSystemInDarkTheme() with the Material 3 dark scheme, and the window background of values-night/themes.xml, but the dark setting was not turned on (no `cmd uimode` on API 24) and no contrast ratio was measured: the 4.5:1 claim rests on the colour pairs (Material 3 text roles above 12:1, the banner fixed black on #FFF3CD, the high contrast schemes 21:1), not on a measurement of rendered pixels. The two screenshots are the light theme only.",
+    "INPUT WAS SYNTHETIC: the window run typed 'Marie' with `adb shell input keyevent` / `input text` and read the screen with uiautomator (typing-uiautomator.txt), never a person, a hardware keyboard or a vendor input method. The update delay of the greeting (User Story 1, within 1 second) was not measured (a 2 s wait before the dump). The 1,000-code-point limit was exercised through the probe input only (the two vectors of more than 1,000 characters were cut to 1,000 code points), not by typing 1,001 characters or pasting.",
+    "TEXT GIVEN BY TWO ROUTES: the plain intent extra probe_input for the texts the `am` command can carry, and probe_input_file (a UTF-8 file pushed with adb) for a text with a character outside the BMP or longer than 1,500 bytes, the same launcher as the Legacy UI. Both routes reach the same initial state of the Compose text field; the emoji vectors passed through the file route only.",
+    "GLYPHS: the probe checks the greeting text for character for the 15 vectors (CJK, Arabic, Hebrew, emoji, ZWJ sequence); the pixels were looked at for one mixed Unicode input only (screenshot-mixed-unicode.png: accent, euro sign, Greek, CJK drawn, no box). Arabic, Hebrew, emoji and combining characters were not looked at on screen. Capital Greek epsilon (U+0395) is drawn like the Latin E, which is what the font does.",
+    "NOT CHECKED: rotation (the activity handles it with configChanges and rememberSaveable, never rotated), screen sizes other than 1080x1920 at 420 dpi, accessibility services (TalkBack), a build signed with anything but a throwaway key made by tools/build.py, installation from a store, the behaviour when the process is killed. The exit of the UI is finish() 2 s after the first drawn frame of the greeting; Android keeps the process cached, so 'exit status 0' is not measured, the launcher checks that the activity is no longer resumed and that logcat has no FATAL EXCEPTION.",
+    "THE BUILD IS PINNED AND RECORDED, NOT AUDITED: AGP 9.5.1, Gradle 9.9.1, Kotlin 2.3.21, Compose BOM 2026.09.00, activity-compose 1.13.0, JDK Temurin 25.0.4 (Gradle ran on it as is), NDK r30 (30.0.16248370), CMake 3.22.1, build-tools 36.0.0. R8 minification and resource shrinking are on for the release APK (1,396,354 bytes; the same sha256 98e42af7... came out of three builds, so the build is reproducible on this machine). The libraries that Compose brings (libandroidx.graphics.path.so, built by Google) are in the APK in the four ABIs and were not inspected beyond their presence.",
+    "ONE DAY, ONE MACHINE: runs of 2026-11-15 (UTC 2026-11-14 23:33 to 23:40). The first vector run after the package rename of the same day is the one stored; the Legacy UI, renamed to the package id fr.bansan.loomora.probe in the same change, was rebuilt and its 15 vectors passed again (in the session, not stored, see the notes). The evidence stored for the Legacy verdicts (validation/evidence/android-legacy/) keeps the old package id fr.loomora.probe as history and was not edited."
+  ],
+  "disabled_features": [
+    "uimode-contrast"
+  ],
+  "evidence": [
+    {
+      "path": "validation/evidence/android-modern/android-7.0-x86_64/probe-default.json",
+      "sha256": "2453f7e2b51f6f3e557a215f12446cf1ddb5c41dccb2ba97ef6b7a049265d6a4",
+      "kind": "probe",
+      "description": "Probe line of the first of 6 default runs (input Coucou) on Android 7.0 x86_64: greeting_matches true, displayed true, eol_warning_shown true, display_ms 254, peak_rss_kb 68848, disabled_features [\"uimode-contrast\"], ui_variant modern, platform_id android-7.0-x86_64, core cpp, compiler 'clang 21.0.0'."
+    },
+    {
+      "path": "validation/evidence/android-modern/android-7.0-x86_64/probe-default-runs.txt",
+      "sha256": "fe81061ec8dc9e83a1cf84884eeed9c38fc46cbd40b0a3bf600f129398e36fc5",
+      "kind": "check-data",
+      "description": "The 6 probe lines of the series (one per run, force-stop then am start -W then logcat): display_ms 254, 352, 243, 463, 255, 362; peak_rss_kb 68616 to 69060."
+    },
+    {
+      "path": "validation/evidence/android-modern/android-7.0-x86_64/run-vectors-android-7.0-x86_64-modern-log.txt",
+      "sha256": "c7d30575901313432b8a9f601472bd32ecb3ea69580b1704eab30186c1cd9752",
+      "kind": "check-log",
+      "description": "tools/run_vectors.py android-7.0-x86_64 modern: 15 valid vectors, 15 passed, 0 failed, 16 skipped (error and API-only vectors), 2 truncated to 1,000 characters (limit_4096_ascii, limit_4096_two_byte_chars), 58.4 s, one device, serial runs; APK sha256 98e42af7af99a8904fbe6c3f230fd2233143ddcccd54600964fad954cab7a8c7."
+    },
+    {
+      "path": "validation/evidence/android-modern/android-7.0-x86_64/run-vectors-android-7.0-x86_64-modern-probe-lines.tsv",
+      "sha256": "42564ef97c971bedf403d0bec42666a49ef06bab0f11c29d190d787babdc3ee2",
+      "kind": "check-data",
+      "description": "The 15 probe lines of that run (one per vector, TSV: vector id, line), each checked by tools/check_probe.py against its vector."
+    },
+    {
+      "path": "validation/evidence/android-modern/android-7.0-x86_64/typing-uiautomator.txt",
+      "sha256": "7d6ce249c54a5c32ba866651a1238a8b75db65cdd7523807ff61167b7decaf22",
+      "kind": "check-log",
+      "description": "Window run without probe mode: texts on screen at start (end-of-life banner, 'Coucou', 'Bonjour Coucou') and after typing Marie with synthetic key events ('Marie', 'Bonjour Marie')."
+    },
+    {
+      "path": "validation/evidence/android-modern/android-7.0-x86_64/build-output-tail.txt",
+      "sha256": "9d5ecfed78081969306d8e28445a4a82d1a9659a2cc353dda4a8a82deecd14af",
+      "kind": "check-log",
+      "description": "End of `python tools/build.py android modern`: Gradle assembleRelease successful, the four ABIs (needed libraries, 6 JNI exports, 16 KB alignment, -std=c++11), apksigner verification (v2), zipalign, the deliverable record written; APK 1,396,354 bytes."
+    },
+    {
+      "path": "validation/evidence/android-modern/android-7.0-x86_64/spike-s8-minsdk21.txt",
+      "sha256": "04086823a3f2a2bd0891270339f5a9156c06102157aa337978759c690d5ebe09",
+      "kind": "check-log",
+      "description": "Spike S8, Android half: the same project built with minSdk 21 is refused by the manifest merger, androidx.compose.animation:animation-core-android:1.12.1 declares minSdk 23. Decision unchanged (24)."
+    },
+    {
+      "path": "validation/evidence/android-modern/android-7.0-x86_64/screenshot-default.png",
+      "sha256": "0eba31695311ab228a87e46234612bed9789231e8a78ad8b32d87050b12aca5d",
+      "kind": "screenshot",
+      "description": "Android 7.0 (API 24, x86_64 emulator, software rendering), Modern UI started normally, light theme: end-of-life banner, field \"Coucou\", label \"Bonjour Coucou\". Same APK as the probe lines (sha256 98e42af7...)."
+    },
+    {
+      "path": "validation/evidence/android-modern/android-7.0-x86_64/screenshot-mixed-unicode.png",
+      "sha256": "6f7f535634a351f16a8f94586cc1b5554752e289b0d1b5924b8d6635262dc8c7",
+      "kind": "screenshot",
+      "description": "Same device and APK, probe-mode launch with the input \"Zoé € Ελ 日本\" (accent, euro sign, Greek, CJK) read from a UTF-8 file, shot inside the 2 s window: field and label \"Bonjour Zoé € Ελ 日本\" show every glyph, no box."
+    }
+  ],
+  "measurements": {
+    "trial_date": "2026-11-15",
+    "scope": "Android emulator 37.2.13.0, AVD API24 (android-24 default x86_64, Android 7.0, API 24), headless, on one Windows 11 host",
+    "apk": {
+      "name": "loomora.apk",
+      "size_bytes": 1396354,
+      "sha256": "98e42af7af99a8904fbe6c3f230fd2233143ddcccd54600964fad954cab7a8c7",
+      "source": "validation/deliverables/android-7.0-x86_64-modern.json (python tools/build.py android modern); the vectors run installed this file with adb install"
+    },
+    "built_for": "applicationId fr.bansan.loomora.probe.modern, minSdk 24, targetSdk 37, compileSdk 37, AGP 9.5.1, Gradle 9.9.1, Kotlin 2.3.21, Compose BOM 2026.09.00, NDK r30 Clang 21.0.0, c++_static, JDK Temurin 25.0.4",
+    "run_on": "API 24 (Android 7.0), x86_64",
+    "display_ms": {
+      "runs": 6,
+      "min": 243,
+      "median": 303.5,
+      "max": 463
+    },
+    "peak_rss_kb": {
+      "min": 68616,
+      "max": 69060
+    },
+    "libraries_in_apk_bytes": {
+      "armeabi-v7a": 112432,
+      "arm64-v8a": 175872,
+      "x86": 152068,
+      "x86_64": 167768
+    }
+  },
+  "reproduction": "validation/procedures/android.md",
+  "decision": "keep",
+  "notes": "Verdict of the Android Modern UI (Kotlin, Jetpack Compose, JNI glue, C++11 backend) on the x86_64 emulator at API 24, written 2026-11-15 after real runs. STATUS ok_restricted: the greeting 'Bonjour Coucou' / 'Bonjour Marie' is computed by the backend and displayed, typing updates it, the end-of-life banner shows, the 15 reference vectors pass, two screenshots (light theme, default and mixed Unicode) were looked at, but the restrictions above are real: emulator only, API 24 only, x86_64 only, no ARM ABI executed, no dark or high contrast screen, synthetic input. DECISION keep: nothing found makes the UI unusable on this system. Spike S8 (Android half): Compose with the pinned AndroidX versions does not accept minSdk 21 (library minSdk 23), the floor 24 is unchanged. The Legacy UI was renamed to the package id fr.bansan.loomora.probe in the same change and its 15 vectors passed again on this emulator (the Legacy x86 library ran as a 32-bit process, so its probe line reads android-7.0-x86, which has no platform record: not stored)."
+}

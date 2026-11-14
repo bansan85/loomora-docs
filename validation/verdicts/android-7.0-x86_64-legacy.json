@@ -1,0 +1,6 @@
+{
+  "platform_id": "android-7.0-x86_64",
+  "ui_variant": "legacy",
+  "status": "not_tested",
+  "reason": "Above the range of the Android Legacy UI (API 9 to 23, owner decision): this platform is served by the Modern UI (verdict android-7.0-x86_64-modern.json) and no Legacy deliverable record names it. For the record, on 2026-11-15 the Legacy APK (renamed to the package id fr.bansan.loomora.probe) was installed on this emulator to prove the rename and its 15 reference vectors passed (the x86 library ran as a 32-bit process, so its probe lines read platform_id android-7.0-x86, and run_vectors had to be given that id); that run is not stored as evidence because it proves nothing about the Legacy range."
+}

@@ -2,5 +2,5 @@
   "platform_id": "android-4.1.2-x86",
   "ui_variant": "modern",
   "status": "not_tested",
-  "reason": "Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055)."
+  "reason": "Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because androidx.compose.animation:animation-core-android:1.12.1 declares minSdk 23 (validation/evidence/android-modern/android-7.0-x86_64/spike-s8-minsdk21.txt), so the floor stays 24 and no Modern build exists for this API level."
 }

@@ -46,7 +46,7 @@
     "id": "S8",
     "question": "Can WinUI 3 call a C++11 loomora.dll, and does Compose accept minSdk 21?",
     "status": "open",
-    "result": "",
+    "result": "PARTIAL, 2026-11-15 (the WinUI 3 half is not run). Android half: Compose with the pinned AndroidX versions (AGP 9.5.1, Gradle 9.9.1, Kotlin 2.3.21, Compose BOM 2026.09.00, activity-compose 1.13.0) does NOT accept minSdk 21: `python tools/build.py android modern --min-sdk 21` fails in the manifest merger, androidx.compose.animation:animation-core-android:1.12.1 declares minSdk 23 (evidence validation/evidence/android-modern/android-7.0-x86_64/spike-s8-minsdk21.txt). tools:overrideLibrary would hide the check but may fail at run time and was not tried. The decided floor 24 stays: minSdk 24 builds and runs on an API 24 x86_64 emulator (15 of 15 vectors, validation/verdicts/android-7.0-x86_64-modern.json). WinUI 3 calling a C++11 loomora.dll: not tried (spike stays open for it).",
     "adr": ""
   },
   {

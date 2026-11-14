@@ -1,0 +1,35 @@
+run_vectors android-7.0-x86_64 modern: 15 vector(s) to run, 16 skipped (H:\repos\loomora-android-modern\core\tests\vectors.json)
+skip too_long_4097_ascii                expects error -1 (not enterable in a UI field)
+skip too_long_4098_two_byte_chars       expects error -1 (not enterable in a UI field)
+skip invalid_overlong_two_byte          expects error -3 (not enterable in a UI field)
+skip invalid_overlong_three_byte        expects error -3 (not enterable in a UI field)
+skip invalid_surrogate                  expects error -3 (not enterable in a UI field)
+skip invalid_above_10ffff               expects error -3 (not enterable in a UI field)
+skip invalid_byte_ff                    expects error -3 (not enterable in a UI field)
+skip invalid_lone_continuation          expects error -3 (not enterable in a UI field)
+skip invalid_truncated_sequence         expects error -3 (not enterable in a UI field)
+skip invalid_after_valid_text           expects error -3 (not enterable in a UI field)
+skip null_pointer                       expects error -3 (not enterable in a UI field)
+skip capacity_too_small                 expects error -2 (not enterable in a UI field)
+skip capacity_one_byte_short            expects error -2 (not enterable in a UI field)
+skip capacity_zero                      expects error -2 (not enterable in a UI field)
+skip capacity_exact                     API-only case (explicit buffer capacity)
+skip capacity_exact_empty_input         API-only case (explicit buffer capacity)
+launcher: Android Modern UI Android SDK built for x86_64 (release 7.0, API 24, abi x86_64): loomora.apk (1396354 bytes, sha256 98e42af7af99a8904fbe6c3f230fd2233143ddcccd54600964fad954cab7a8c7)
+ok   empty (exact, 0 chars)  3.3s
+ok   ascii (exact, 6 chars)  3.3s
+ok   ascii_punctuation (exact, 11 chars)  3.5s
+ok   accented (exact, 9 chars)  3.5s
+ok   cjk (exact, 8 chars)  3.5s
+ok   right_to_left_arabic (exact, 5 chars)  3.5s
+ok   right_to_left_hebrew (exact, 4 chars)  3.3s
+ok   emoji (exact, 1 chars)  3.4s
+ok   emoji_zwj_sequence (exact, 5 chars)  3.5s
+ok   combining_characters (exact, 6 chars)  4.1s
+ok   control_characters (exact, 6 chars)  5.3s
+ok   one_thousand_ascii (exact, 1000 chars)  4.9s
+ok   one_thousand_two_byte_chars (exact, 1000 chars)  6.2s
+ok   limit_4096_ascii (truncated, 4096 chars)  3.7s
+ok   limit_4096_two_byte_chars (truncated, 2048 chars)  3.3s
+summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars; 58.4 s with 1 worker(s)
+result: PASSED

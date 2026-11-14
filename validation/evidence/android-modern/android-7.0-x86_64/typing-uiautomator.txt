@@ -1,0 +1,10 @@
+adb -s emulator-5556 shell am start -W -n fr.bansan.loomora.probe.modern/fr.bansan.loomora.probe.MainActivity (no probe mode)
+== at start (uiautomator dump)
+  text="Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection."
+  text="Coucou"
+  text="Bonjour Coucou"
+adb shell input keyevent KEYCODE_MOVE_END ; 6 x KEYCODE_DEL ; input text Marie ; wait 2 s
+== after typing Marie
+  text="Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection."
+  text="Marie"
+  text="Bonjour Marie"
