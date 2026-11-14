@@ -4,6 +4,8 @@
 - **Date**: 2026-11-13
 - **Spike / requirement**: T057 / FR-021, FR-022 (fallbacks), research R7 and R12
 
+> **Amended by ADR 0006 (2026-11-14).** The Linux Modern UI is now C++ with gtkmm built with CMake. The policy below (GTK 3.10 floor, newer features behind one macro each, one `fallbacks.json` entry per macro, the floor build, the GTK 4 option) is unchanged; the files and options it names are now: `gtk_compat.hpp` for `gtk_compat.h`, `main.cpp` / `main_window.cpp` for `main.c`, `CMakeLists.txt` with `LOOMORA_GTK_API`, `LOOMORA_GTK_FLOOR` and `LOOMORA_STATIC_CXX_RUNTIME` for `meson_options.txt` with `gtk_api`, `gtk_floor` and `static_cxx_runtime`, and the C calls (`gtk_label_set_xalign`, ...) are their gtkmm methods. ADR 0006 has the mapping and what the floor build proves with gtkmm. The text and the measurements below describe the C UI and the Meson build of 2026-11-13 and are kept as they were.
+
 ## Context
 
 The Linux Modern UI (`ui/modern/linux-gtk3`) was written against the GTK 3.10 API subset and enforced it for every build: `GDK_VERSION_MIN_REQUIRED` and `GDK_VERSION_MAX_ALLOWED` were both pinned to 3.10, so the compiler refused any newer symbol, whichever GTK the machine had. That keeps the floor (about Ubuntu 14.04) but gives a recent distribution nothing from its newer GTK, and rules out GTK 4 completely. The Fallbacks rule of `CLAUDE.md` says a restriction applies only to the case that needs it.
