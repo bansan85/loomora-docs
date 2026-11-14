@@ -14,9 +14,9 @@ The Linux Modern UI (`ui/modern/linux-gtk3`) was written against the GTK 3.10 AP
 
 1. **The floor stays GTK 3.10.** The UI must always build and run with only the 3.10 API. `GDK_VERSION_MIN_REQUIRED` is 3.10 in every GTK 3 build.
 2. **Newer features are allowed, up to GTK 4 and later, each behind one macro.** `gtk_compat.h` defines `LOOMORA_GTK_HAS_<FEATURE>` from the version of the headers being built against (`GTK_CHECK_VERSION`, `GTK_MAJOR_VERSION`); without the macro the code takes the 3.10 path (`#else`). Code outside `gtk_compat.h` never tests a GTK version by itself, it tests the macro. Every macro is declared in `validation/fallbacks.json`, one entry per macro (the Fallbacks rule, FR-021).
-3. **Two meson options** (`ui/modern/linux-gtk3/meson_options.txt`):
-   - `-Dgtk_api=3|4` (default `3`): dependency `gtk+-3.0` (>= 3.10) or `gtk4`. The default build keeps the GTK 3 UI used in every trial.
-   - `-Dgtk_floor=true` (default off): the **floor build**. It pins `GDK_VERSION_MAX_ALLOWED` to 3.10 and compiles with `-Werror=deprecated-declarations`. GTK marks a symbol newer than `MAX_ALLOWED` with a deprecation attribute, so any such symbol is a build error. The same pin makes every `LOOMORA_GTK_HAS_*` macro of `gtk_compat.h` undefined (each one also tests `GDK_VERSION_MAX_ALLOWED`), so the floor build compiles exactly the 3.10 code path. It cannot be combined with `gtk_api=4`.
+3. **Two CMake options** (`ui/modern/linux-gtk3/CMakeLists.txt`):
+   - `-DLOOMORA_GTK_API=3|4` (default `3`): gtkmm-3.0 (GTK 3.10 or later) or gtkmm-4.0 (GTK 4). The default build keeps the GTK 3 UI used in every trial.
+   - `-DLOOMORA_GTK_FLOOR=ON` (default off): the **floor build**. It pins `GDK_VERSION_MAX_ALLOWED` to 3.10 and compiles with `-Werror=deprecated-declarations`. GTK marks a symbol newer than `MAX_ALLOWED` with a deprecation attribute, so any such symbol is a build error. The same pin makes every `LOOMORA_GTK_HAS_*` macro of `gtk_compat.h` undefined (each one also tests `GDK_VERSION_MAX_ALLOWED`), so the floor build compiles exactly the 3.10 code path. It cannot be combined with `LOOMORA_GTK_API=4`.
 
    The default build does not pin `MAX_ALLOWED`: it uses the headers' own version and turns the newer features on.
 
@@ -46,13 +46,13 @@ The GTK 4 build has no trial verdict and no deliverable record; it is a verified
 
 - **Pin 3.10 for everybody** (the previous state): safe, but permanently denies every newer GTK feature to the systems that have them. Against the Fallbacks rule.
 - **Runtime checks of the GTK version** (`gtk_check_version`, `dlsym`): the 3.10 build would still need the newer headers and symbols to compile, and a program built against the 3.10 headers cannot call them. A compile-time macro keeps the floor build honest.
-- **GTK 4 selected by the macros alone, no meson option**: the headers decide, and a machine with both `gtk+-3.0` and `gtk4` can only build one UI at a time. A build option says which one is wanted.
+- **GTK 4 selected by the macros alone, no CMake option**: the headers decide, and a machine with both `gtk+-3.0` and `gtk4` can only build one UI at a time. A build option says which one is wanted.
 - **A separate source tree for GTK 4**: duplicates the probe contract and the greeting code; one tree with one branch keeps the contract in one place.
 
 ## Consequences
 
 - The executable of the default build changes (new code, no more pinned headers), so the executable hash recorded by the existing Linux trial evidence no longer matches a rebuild: the trial must be redone after this change.
-- `tools/build.py linux modern` builds the default variant. To build the other two: `meson setup <dir> ui/modern/linux-gtk3 -Dgtk_floor=true` or `-Dgtk_api=4`, then `ninja -C <dir>`. `tools/run_vectors.py` takes the executable of `$LOOMORA_BUILD_DIR/linux-modern/loomora-gtk3`.
+- `tools/build.py linux modern` builds the default variant. To build the other two: `cmake -S . -B <dir> -G Ninja -DLOOMORA_GTK_FLOOR=ON` or `-DLOOMORA_GTK_API=4`, then `cmake --build <dir>`. `tools/run_vectors.py` takes the executable of `$LOOMORA_BUILD_DIR/linux-modern/loomora-gtk3`.
 - A new newer-than-3.10 feature means a new macro in `gtk_compat.h`, a use of it in the code, its `#else` path in 3.10, and an entry in `fallbacks.json`; the floor build then fails if the 3.10 path used anything newer.
 - GTK 4 under WSLg prints Mesa EGL warnings on standard error (`libEGL warning: DRI3 error` on the X11 backend, `failed to get driver name` / `MESA-LOADER` on the default Wayland backend: 134 and 265 bytes). They come from the OpenGL renderer, not from the UI. On the default Wayland backend they disappear with `GSK_RENDERER=cairo` or `LIBGL_ALWAYS_SOFTWARE=1` (0 bytes); on the X11 backend `GSK_RENDERER=cairo` does not remove them. The GTK 3 builds print nothing.
 
