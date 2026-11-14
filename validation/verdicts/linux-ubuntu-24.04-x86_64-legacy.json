@@ -1,0 +1,177 @@
+{
+  "platform_id": "linux-ubuntu-24.04-x86_64",
+  "ui_variant": "legacy",
+  "status": "ok_restricted",
+  "restrictions": [
+    "SCOPE: one machine and one environment. The Linux Legacy UI was built and run only on Ubuntu 24.04.5 inside WSL2 with WSLg on a Windows 11 laptop (validation/platforms/linux-ubuntu-24.04-x86_64.json), against the XWayland server of WSLg, as x86_64 here (the i686 build is another platform record, linux-i686, and has no verdict). Per ADR 0007 the executable is built on the machine that runs it, so no glibc or libstdc++ ceiling is checked and it was not run on any other system: no real or very old distribution, no other X server (Xorg, a native Wayland session), no window manager decorations (the captures show the client area), no other hardware. This verdict does not determine the Linux floor and says nothing about T092 beyond this platform.",
+    "NO TEXT SHAPING AND NO BIDIRECTIONAL LAYOUT, by decision (accepted by the owner, see the fallback record xlib-core-font-glyphs): Xft draws the code points one after the other in logical order, left to right. Arabic letters appear in their isolated forms and left to right, Hebrew and Arabic words appear visually reversed, a ZWJ sequence (a family emoji, a flag) is drawn as its separate components, an Indic conjunct is not formed, a combining mark is placed correctly only when its font gives it a zero advance, and the invisible format characters (ZWSP, ZWJ, bidi controls, variation selectors, BOM, soft hyphen) draw nothing. The stored screenshot xlib-xft-mixed-unicode.png shows the reversed Hebrew, the isolated Arabic and the separate family components.",
+    "EMPTY BOX FOR A GLYPH NO FONT HAS: a code point that no installed font provides (U+0378 in the mixed string) is drawn as an empty box and the probe line carries 'missing-glyph' in disabled_features; the greeting and the probe record are unchanged. Which code points have a glyph depends on the fonts of this machine (429 fontconfig fonts on 2026-11-14, per the session log of xlib-unicode-manylinux); no other font set was tried and the coverage of the 15 vectors on a machine with fewer fonts is not known.",
+    "CORE-FONT PATH ONLY WHEN XFT IS MISSING AT BUILD TIME: if CMake finds no libXft and fontconfig development files (or LOOMORA_XLIB_XFT=OFF, or at run time LOOMORA_XLIB_NO_XFT, or Xft opens no font) the UI draws with the core X11 font 'fixed', a character it cannot draw is a '?' and the probe line carries 'glyph-substitution' (fallback xlib-core-font-glyphs). The x86_64 build of this platform finds Xft and does NOT take it; the fallback was measured on builds without Xft (stored: the i686 build before the 32-bit Xft packages were installed, the x86_64 build with LOOMORA_XLIB_NO_XFT of the dlopen version, the 15 vectors of the first core-font build). Under WSLg the core font 'fixed' is -Misc-Fixed-Medium-R-SemiCondensed--13-120-75-75-C-60-ISO8859-1 and the server lists no ISO 10646 font, so only Latin-1 is drawn on that path. NOT verified: the ISO 10646-1 path (XDrawString16) with a real Unicode core font (it was only forced onto the 8-bit font in a test copy, Latin-1 drawn correctly).",
+    "INPUT WAS SYNTHETIC: every typed key of the window runs was an XSendEvent with a remapped spare keycode (tools/trials/linux-ubuntu-24.04-x86_64/xlib-driver.c), never a physical keyboard, a real layout, key repeat or focus changes by a person. The Xutf8LookupString path was exercised only in the typing runs of the dlopen build (session log of xlib-unicode-manylinux), with whatever input method XOpenIM opened on this server, and the XLookupString plus key symbol table path without one (4 combinations, same text typed). NOT tested: an input-method server such as ibus or fcitx, dead keys, compose sequences, IME composition; clipboard paste is out of scope of the UI.",
+    "THE STORED EVIDENCE IS MOSTLY OF EARLIER BUILDS. Only validation/evidence/linux-build-on-target/ belongs to the current builds (native, Xft linked, ADR 0007): the build facts, two probe lines of the mixed string and one screenshot. The folders linux-legacy-xlib/ (first build: static C++ runtime, core font only, 300,960 bytes) and xlib-unicode-manylinux/ (dlopen of Xft, plus manylinux2010 builds removed by ADR 0007) are history: they show the behaviour that did not change (greeting, 1,000-character limit, 15 vectors, sanitizer cleanliness, startup cost) but are not evidence of executable 4d7c91a4. The real-window checks of the current Xft build (mixed Unicode drawn, typing, 1,000 characters kept, close exits 0) are recorded in the deliverable record; of them only the one screenshot and the probe lines above are stored, so the typing, the 1,000-character limit and the close of the CURRENT build are not backed by a stored file.",
+    "RE-RUNS ARE NOT STORED (CLAUDE.md): tools/run_vectors.py 15 of 15 (15 run, 15 passed, 16 skipped, 2 truncated to 1,000 characters) for the x86_64 Xft build, with LOOMORA_XLIB_NO_XFT=1 and for the i686 build; ctest 2 of 2; ASan and UBSan with 0 errors in 5 runs on an adapted copy of tools/trials/linux-ubuntu-24.04-x86_64/xlib-ui-harness-cpp.cpp (Xft, core font, forced core font, no input method). Their results are in the text of build-facts.txt and of the deliverable record, not as files. The vectors have no emoji, shaping or bidi expectation beyond the probe line (greeting_matches and the 1,000-character cut): they do not check the picture.",
+    "END-OF-LIFE BANNER: this platform is not end of life (kernel 6.18 is not treated as such by loomora_is_eol), so eol_warning_shown is false in every probe line of the current build and the banner of the Linux Legacy UI was shown only by a TEST-ONLY build outside the repository whose uname() returns 2.6.32, on the first core-font build (eol-test-build-probe.json, 05-eol-banner-test-build.png). The banner was not re-run on the Xft build and was never shown on a real end-of-life Linux system (the check of T088 for Linux has no real case here).",
+    "TIMINGS ARE SINGLE LINES, NOT A SERIES: the stored probe lines of the current build give display_ms 164 and peak_rss_kb 13680 (Xft) once; the 10-run series of the Xft path (display_ms 20 to 25, peak_rss_kb 9056 to 9256) is from the dlopen build of the history folder. No series was run on the current build, and no number here is a performance claim.",
+    "NOT DONE (no record or file shows it): HiDPI or a changed Xft.dpi, themes and high-contrast schemes, a second monitor, a long-running or repeated session, memory over time, and the shipped x86_64 executable of the deliverable record (sha256 4d7c91a4...) being re-measured after the build: the x86_64 file of ~/loomora-build/linux-legacy-x86_64 at the time of writing (79,912 bytes) is a later build whose hash differs from the deliverable record, so no stored number is claimed for it."
+  ],
+  "disabled_features": [
+    "missing-glyph (Xft path, the normal path of this platform: only a code point that no installed font has, such as U+0378, is drawn as an empty box; the greeting and the probe record are unchanged. Measured in xlib-xft-probe-mixed.txt)",
+    "glyph-substitution (core-font path, NOT taken by the x86_64 build of this platform: only a build whose CMake finds no libXft and fontconfig development files, or LOOMORA_XLIB_XFT=OFF or the run-time switch LOOMORA_XLIB_NO_XFT; a character the core font cannot draw is a '?'; fallback xlib-core-font-glyphs, platform_ids empty on purpose. Measured in xlib-core-font-fallback-i686-probe-mixed.txt)",
+    "text-shaping-and-bidi (not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it)"
+  ],
+  "evidence": [
+    {
+      "path": "validation/evidence/linux-build-on-target/linux-ubuntu-24.04-x86_64/build-facts.txt",
+      "sha256": "528b45cb98589014310c110e682a2d7b26d9f1254acda3d9e0bf657a13ede1b8",
+      "kind": "build-measurements",
+      "description": "[current build, ADR 0007] Facts of the native builds of 2026-11-14: legacy x86_64 with Xft (CMake status 'xft 2.3.6, fontconfig 2.15.0', DT_NEEDED libX11, libXft, libfontconfig, libstdc++, libgcc_s, libc, 80,216 bytes, sha256 4d7c91a4...cbcc), the i686 build then without Xft (core-font path, 67,388 bytes), the x86_64 build with -DLOOMORA_XLIB_XFT=OFF, the cmake errors and status lines, and the text list of the re-runs that are NOT stored (ctest 2 of 2, 15 of 15 vectors, ASan and UBSan)."
+    },
+    {
+      "path": "validation/evidence/linux-build-on-target/linux-ubuntu-24.04-x86_64/xlib-xft-probe-mixed.txt",
+      "sha256": "2e860332f0c1fe285780ed98bc8230e19406699549262fb8f0842f27ca841dae",
+      "kind": "probe",
+      "description": "[current build, Xft path, the x86_64 build: the i686 build had no Xft until later that day] Probe line of '--probe --probe-input' with the mixed string 'Zoé €5 αβγ Привет 日本語 שלום مرحبا é 🦊 family-ZWJ x<ZWSP>y U+0378': greeting_matches true, displayed true, eol_warning_shown false, display_ms 164, peak_rss_kb 13680, disabled_features ['missing-glyph'] (the one code point no font has, U+0378)."
+    },
+    {
+      "path": "validation/evidence/linux-build-on-target/linux-ubuntu-24.04-x86_64/xlib-xft-mixed-unicode.png",
+      "sha256": "43a5aa3173294df193198a05ecd02598b210a349f766da7080af376bb7222411",
+      "kind": "screenshot",
+      "description": "[current build, Xft path, the only screenshot of it] Client area of the window under WSLg with the same mixed string: Latin, euro sign, Greek, Cyrillic and CJK drawn as real glyphs; Hebrew and Arabic visibly NOT shaped and NOT reordered (Hebrew reversed, Arabic letters in isolated forms, left to right); the fox emoji and the three components of the family sequence drawn separately; an empty box for U+0378 at the end of both lines."
+    },
+    {
+      "path": "validation/evidence/linux-build-on-target/linux-ubuntu-24.04-x86_64/xlib-core-font-fallback-i686-probe-mixed.txt",
+      "sha256": "a69bedcabaa7b8a82528cfa445e376029754e19a26a4d72b74a9c39e1029343f",
+      "kind": "probe",
+      "description": "[current build, i686 executable built BEFORE libxft-dev:i386 was installed, so the core-font fallback xlib-core-font-glyphs] Probe line with the same mixed string: greeting_matches true, display_ms 18, peak_rss_kb 5712, disabled_features ['glyph-substitution']. It shows what the fallback does when CMake finds no Xft; it is not the x86_64 build of this verdict."
+    },
+    {
+      "path": "validation/evidence/xlib-unicode-manylinux/linux-ubuntu-24.04-x86_64/probe-mixed-native-x86_64.json",
+      "sha256": "a97f9af02a21f5790e61e17b5e627c638ec2c32610a535a57006b00f79682258",
+      "kind": "probe",
+      "description": "[history: dlopen build of the branch feat/xlib-unicode-manylinux, before ADR 0007] Probe line of the x86_64 Xft build with a mixed string of Latin, Greek, Cyrillic, Hebrew, Arabic, CJK and an emoji: greeting_matches true, disabled_features [], display_ms 23, peak_rss_kb 13376."
+    },
+    {
+      "path": "validation/evidence/xlib-unicode-manylinux/linux-ubuntu-24.04-x86_64/probe-mixed-x86_64-xft-disabled.json",
+      "sha256": "e33bdf5336cbd94b22899cf2dee4c4f6cbb5fa9312b047f7a0d97e13393ff6e3",
+      "kind": "probe",
+      "description": "[history: dlopen build] The same x86_64 build with the run-time switch LOOMORA_XLIB_NO_XFT: greeting_matches true, disabled_features ['glyph-substitution'], display_ms 14, peak_rss_kb 5748."
+    },
+    {
+      "path": "validation/evidence/xlib-unicode-manylinux/linux-ubuntu-24.04-x86_64/limit-two-byte-probe.json",
+      "sha256": "3a645344a5694f3ab6eeb05b1d152423a7e68b2a337d78aeb1ce7f3c4d3fa919",
+      "kind": "probe",
+      "description": "[history: dlopen build] 1,000 two-byte characters (2,000 bytes): input 1,000 code points, message 1,008 code points equal to 'Bonjour ' + input, disabled_features []."
+    },
+    {
+      "path": "validation/evidence/xlib-unicode-manylinux/linux-ubuntu-24.04-x86_64/limit-three-byte-probe.json",
+      "sha256": "560e4ff280b1908ef1648c97fca6f78a16a819fdd22560c6d6e0d2162c460bab",
+      "kind": "probe",
+      "description": "[history: dlopen build] 1,000 three-byte characters (2,995 bytes in the log): input 1,000 code points, message 1,008 code points equal to 'Bonjour ' + input, disabled_features []."
+    },
+    {
+      "path": "validation/evidence/xlib-unicode-manylinux/linux-ubuntu-24.04-x86_64/limit-cut-mixed-probe.json",
+      "sha256": "c1c7861002bb4f7c1e7738e6ab7a16e01d1f7f04fe6ea6a3dee1fdd04a0f02cb",
+      "kind": "probe",
+      "description": "[history: dlopen build] 995 characters then 5 typed (mixed, 2,500 bytes): input stays at 1,000 code points, message 1,008 code points equal to 'Bonjour ' + input, disabled_features []."
+    },
+    {
+      "path": "validation/evidence/xlib-unicode-manylinux/linux-ubuntu-24.04-x86_64/session-log.txt",
+      "sha256": "7ae1a009312055710f09dc6ec37ce10545673c8963a5e970bfbf93b198c37956",
+      "kind": "check-log",
+      "description": "[history: dlopen build, executables 7618b43d (x86_64) and be746aa1 (i686); the manylinux2010 lines concern builds removed by ADR 0007] Session of 2026-11-14 under WSLg (DISPLAY=:0, LANG=C.UTF-8, 429 fontconfig fonts, no 32-bit libXft): the six window runs (exit 0, empty stderr), the probe records of the Xft and core-font paths, the 1,000-character limit for two-, three-byte and mixed text, typed text through Xutf8LookupString and through the key symbol table in 4 combinations (same text, disabled_features [] with Xft and ['glyph-substitution'] with the core font), the startup cost (10 runs each: Xft display_ms 20 to 25, peak_rss_kb 9056 to 9256; core font 12 to 21 and 5668 to 5816), and ASan + UBSan in 3 modes (3 fontconfig-internal allocations suppressed in LeakSanitizer)."
+    },
+    {
+      "path": "validation/evidence/linux-legacy-xlib/linux-ubuntu-24.04-x86_64/vectors-15-check.txt",
+      "sha256": "09d37db40bb713c748899d572e9e74c220968b98e4abd4127efe158ed284c828",
+      "kind": "check-log",
+      "description": "[history: first build, static C++ runtime, core font only, executable f29b0393 (300,960 bytes)] The 15 reference vectors checked with tools/check_probe.py: 15 PASS, failures 0 of 15 (cjk, both right-to-left, emoji, ZWJ, combining and control characters carry glyph-substitution, as that core-font build did)."
+    },
+    {
+      "path": "validation/evidence/linux-legacy-xlib/linux-ubuntu-24.04-x86_64/vectors-15-raw.json",
+      "sha256": "9a111164d9689515e4de28e48096d282875248d822683d241cad68396aadfff9",
+      "kind": "check-data",
+      "description": "[history: same first build] The raw results (exit code, stderr, stdout probe line) of the 15 vectors of vectors-15-check.txt."
+    },
+    {
+      "path": "validation/evidence/linux-legacy-xlib/linux-ubuntu-24.04-x86_64/session-log.txt",
+      "sha256": "87a60e8a9c1481f1f456398464e61082a284e4da22fbc96409dc49e8e79fa376",
+      "kind": "check-log",
+      "description": "[history: same first build, Latin-1 core font 'fixed' of the WSLg X server, no ISO 10646 font] Core font properties, typed text, close through WM_DELETE_WINDOW (exit 0), 10 + 10 probe runs (failures 0, display_ms 4 to 10, peak_rss_kb 2880 to 3060), ASan + UBSan on 9 hard inputs (stderr empty), usage errors (exit 2), and the end-of-life banner run with a test-only build."
+    },
+    {
+      "path": "validation/evidence/linux-legacy-xlib/linux-ubuntu-24.04-x86_64/eol-test-build-probe.json",
+      "sha256": "fb7ca8a32c08499ea1331eb035c25512cff5be0db1b732d7010b280f2bca4f9c",
+      "kind": "probe",
+      "description": "[history: first build, a TEST-ONLY build outside the repository whose only difference is that uname() returns release 2.6.32] Probe line with eol_warning_shown true. The only run of the end-of-life banner path of the Linux Legacy UI."
+    },
+    {
+      "path": "validation/evidence/linux-legacy-xlib/linux-ubuntu-24.04-x86_64/05-eol-banner-test-build.png",
+      "sha256": "caef95869bd71aa4ab6c4e02117f071baee0a49b10b9a8c5d7563a121b1dc845",
+      "kind": "screenshot",
+      "description": "[history: same test-only build, core font] The window with the yellow end-of-life banner above the input line 'Coucou' and the greeting 'Bonjour Coucou'. A simulation, not a real old kernel."
+    },
+    {
+      "path": "tools/trials/linux-ubuntu-24.04-x86_64/xlib-driver.c",
+      "sha256": "fa1ef323b49f08de47b119646153fd4d2aafad6812325835662e24676bca133a",
+      "kind": "driver",
+      "description": "Window driver (C, run inside WSL) that started the executable and sent SYNTHETIC key events (XSendEvent with a remapped spare keycode that it frees afterwards) and captured the window; used for the window runs of xlib-unicode-manylinux (session log). Never a physical keyboard."
+    },
+    {
+      "path": "tools/trials/linux-ubuntu-24.04-x86_64/xlib-ui-harness-cpp.cpp",
+      "sha256": "70bb627e59560b65a053aee51c3116441f70e66a5b31983c63196e40451a2ffe",
+      "kind": "driver",
+      "description": "ASan + UBSan harness of the C++ Xlib UI (hard texts, 1,000-character limit, Xft and core font, with and without an input method). The run recorded in build-facts.txt used an adapted copy of this file for the Xft-linked build; that copy is not stored."
+    }
+  ],
+  "measurements": {
+    "trial_date": "2026-11-14 (ADR 0007 builds); the history evidence is of the same day, earlier builds",
+    "scope": "Ubuntu 24.04.5 under WSL2 and WSLg (XWayland) on one Windows 11 laptop, x86_64 build only: this verdict says nothing about any other Linux system, X server or architecture, nor about the i686 platform (linux-i686)",
+    "executables": {
+      "x86_64_deliverable_record": {
+        "name": "loomora-xlib",
+        "size_bytes": 80216,
+        "sha256": "4d7c91a4ce77a627a4651c6f0f82c9baedfa7a72f38da00e1420cd2ed865cbcc",
+        "source": "validation/deliverables/linux-ubuntu-24.04-x86_64-legacy.json and build-facts.txt; text path xft (xft 2.3.6, fontconfig 2.15.0); DT_NEEDED libX11.so.6, libXft.so.2, libfontconfig.so.1, libstdc++.so.6, libgcc_s.so.1, libc.so.6"
+      },
+      "i686_for_comparison": {
+        "name": "loomora-xlib",
+        "size_bytes": 73348,
+        "sha256": "11040a8e1818e3f25deb9fa3f18b3bdf18b7567de31d238012149340d5d3a15b",
+        "source": "validation/deliverables/linux-i686-legacy.json; built with the 32-bit Xft packages installed; not the subject of this verdict"
+      },
+      "toolchain": "gcc 13.3.0, cmake 3.31.12, Release -O2, UI and backend -std=c++11 -Wall -Wextra -pedantic (deliverable record)"
+    },
+    "probe_lines_of_the_current_build": {
+      "xft_x86_64_mixed": {
+        "display_ms": 164,
+        "peak_rss_kb": 13680,
+        "disabled_features": [
+          "missing-glyph"
+        ],
+        "greeting_matches": true
+      },
+      "core_font_i686_mixed": {
+        "display_ms": 18,
+        "peak_rss_kb": 5712,
+        "disabled_features": [
+          "glyph-substitution"
+        ],
+        "greeting_matches": true
+      }
+    },
+    "history_series_dlopen_build": {
+      "xft_startup_n10": "display_ms 20 to 25 (median 23), peak_rss_kb 9056 to 9256",
+      "core_font_startup_n10": "display_ms 12 to 21 (median 14), peak_rss_kb 5668 to 5816",
+      "first_build_probe_runs_n20": "display_ms 4 to 10, peak_rss_kb 2880 to 3060, failures 0"
+    },
+    "reruns_not_stored": {
+      "run_vectors_x86_64_xft": "15 run, 15 passed, 16 skipped, 2 truncated to 1,000 characters",
+      "run_vectors_no_xft_switch_and_i686": "15 of 15 each",
+      "ctest": "2 of 2",
+      "asan_ubsan": "0 sanitizer errors in 5 runs (3 fontconfig allocations suppressed in LeakSanitizer)",
+      "run_vectors_i686_while_writing_this_verdict": "2026-11-14, i686 executable sha256 11040a8e... (the one of linux-i686-legacy.json) started from the worktree of the branch docs/linux-legacy-verdict: 15 run, 15 passed, 0 failed, 16 skipped, 2 truncated to 1,000 characters (text output, not stored)"
+    }
+  },
+  "decision": "keep",
+  "notes": "Verdict of the Linux Legacy UI (Xlib, C++11, CMake, text drawn with Xft and fontconfig) on linux-ubuntu-24.04-x86_64, written 2026-11-14 from the records and the stored evidence only; it covers the x86_64 part of T092 for this one platform (T092 and T087 stay open) and the Linux part of the Legacy UI checks, not the Linux floor. STATUS ok_restricted because the greeting 'Bonjour Coucou' / 'Bonjour Marie' and the mixed Unicode input are drawn and kept (greeting_matches true in every stored probe line; 15 of 15 reference vectors in the re-runs), but the restrictions above are real: no shaping or bidi, an empty box for a glyph no font has, the core-font path only without Xft at build time, one machine under WSLg, synthetic key events, no input-method server. DECISION keep: nothing found makes the UI unusable on this platform, and the lack of shaping and bidi is accepted by the owner while the other limits are test coverage gaps, not defects found. FALLBACKS (validation/fallbacks.json): cxx17-nodiscard is taken (the UI and the backend are strict C++11, the deliverable record lists it); xlib-core-font-glyphs is NOT taken by this platform's x86_64 build (its platform_ids is empty on purpose, it is decided per build and written by tools/build.py into the deliverable record of a build without Xft); the gtk4-ui id in the deliverable record is the platform-wide list of fallbacks and concerns the Modern UI, not the Xlib UI. BUILD AND CHECK COMMANDS (inside WSL, Ubuntu 24.04, build directory under $HOME/loomora-build): 'python3 tools/build.py linux legacy [--arch x86_64|i686|all]' (native build, writes the deliverable record); 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 legacy [--exe <path>]' (from Windows through the WSL launcher or inside WSL); 'ctest' in the build directory; tools/check_probe.py on a probe line; the window drivers and the sanitizer harness in tools/trials/linux-ubuntu-24.04-x86_64/ (xlib-driver.c, xlib-ui-harness-cpp.cpp). The text files of the evidence folders keep their LF line endings (validation/evidence/.gitattributes) because this verdict holds their sha256. No 'reproduction' procedure file exists in validation/procedures/, so the field is left out and validate_records.py keeps its SC-004 warning for it. EVIDENCE SORTING: [current build] items are the proof for the executable of the deliverable record; [history] items are earlier builds of the same UI (first static core-font build; dlopen Xft build) kept as they were and superseded by ADR 0007 for anything about the build; they are listed because they hold the only stored runs of the 1,000-character limit, the sanitizer sessions, the 15-vector check and the end-of-life banner. NOT DONE and not claimed: a real old Linux distribution, kernel 2.6, a native 32-bit system, any other X server, distribution or font set, a physical keyboard or an input-method server, shaping or bidirectional text (none by decision), HiDPI, and the end-of-life banner on a real end-of-life system."
+}
