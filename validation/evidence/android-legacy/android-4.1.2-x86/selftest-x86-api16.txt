@@ -1,0 +1,7 @@
+loomora_selftest x86 (NDK r15c, API 9 sysroot, gnustl static), sha256 7d8c1bf475172bee2aaf218b8d1e92cda5661e48097c68b290863051b2613e77, 3749252 bytes
+device: release 4.1.2, sdk 16, abi x86, model Android SDK built for x86
+$ adb push loomora_selftest /data/local/tmp/
+H:/repos/loomora-android-legacy/out/android-legacy/selftest/x86/loomora_selftest: 1 file pushed, 0 skipped. 24.2 MB/s (3749252 bytes in 0.148s)
+$ adb shell chmod 755 ... ; /data/local/tmp/loomora_selftest ; echo exit=$?
+all passed
+exit=0

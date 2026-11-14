@@ -1,0 +1,6 @@
+{
+  "platform_id": "android-4.1.2-x86",
+  "ui_variant": "modern",
+  "status": "not_tested",
+  "reason": "Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, API 24; 21 only if the pinned Compose accepts it, research R3, spike S8): this platform is served by the Legacy UI (spec SC-001) and the Modern UI is not written (T055)."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "android-2.3-arm",
+  "family": "android",
+  "os_name": "Android (Gingerbread)",
+  "os_version": "2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and armeabi-v7a; NOT RUN",
+  "arch": "arm",
+  "release_date": "2010-12-06",
+  "age_years": 15.9,
+  "is_floor": true,
+  "in_scope": true,
+  "environment": "emulator",
+  "environment_detail": "NOT RUN, no system of this record was available: the project owner's emulator cannot run below API 16, and an ARM system image is not run on this x86 host. The record exists because the decided floor of the Android Legacy UI is API 9 (spec, Clarifications) and this is the platform the armeabi and armeabi-v7a libraries of the APK are built for (sysroot platforms/android-9/arch-arm). Its verdict is not_tested with that reason. The libraries were built and linked against the API 9 libc but never executed.",
+  "eol": true,
+  "eol_source": "validation/sources.json eol-android-security: Android versions below 14 are end of life for the backend.",
+  "release_date_source": "General availability of Android 2.3 (2010-12-06, author's knowledge, not re-read); age_years = days to 2026-11-14 divided by 365.25 = 15.9.",
+  "floor_note": "The decided floor of the Android Legacy UI (API 9). Not tested: whether the UI really runs there is exactly what this project did NOT establish (see the verdict)."
+}
