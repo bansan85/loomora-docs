@@ -1,0 +1,35 @@
+Shared-code share: non-empty, non-comment lines; ratio = backend / (backend + glue + ui)
+backend core/               493 lines in 14 file(s)
+glue    bridge/jni             0 lines in 0 file(s)
+glue    bridge/wasm            0 lines in 0 file(s)
+
+platform / variant                                    backend   glue       ui   shared
+deliverable windows-2000-x86-legacy                       493      0      822    37.5%  BELOW 80%
+ui legacy/windows-win32                                   493      0      822    37.5%  BELOW 80%
+
+  core/include/loomora.h                                                58
+  core/src/c_api.cpp                                                    53
+  core/src/eol.cpp                                                      29
+  core/src/eol.hpp                                                      17
+  core/src/errors.hpp                                                   14
+  core/src/greet.cpp                                                    11
+  core/src/greet.hpp                                                     9
+  core/src/internal/config.hpp                                          27
+  core/src/probe.cpp                                                   161
+  core/src/probe.hpp                                                    12
+  core/src/utf8.cpp                                                     66
+  core/src/utf8.hpp                                                      9
+  core/src/version.cpp                                                  18
+  core/src/version.hpp                                                   9
+  ui/legacy/windows-win32/dynfeatures.cpp                                            197
+  ui/legacy/windows-win32/dynfeatures.h                                               21
+  ui/legacy/windows-win32/dynload.h                                                   22
+  ui/legacy/windows-win32/getthreadid_shim.cpp                                        39
+  ui/legacy/windows-win32/main.cpp                                                   200
+  ui/legacy/windows-win32/probe.cpp                                                  208
+  ui/legacy/windows-win32/probe.h                                                     21
+  ui/legacy/windows-win32/resource.h                                                   7
+  ui/legacy/windows-win32/sysinfo.cpp                                                 99
+  ui/legacy/windows-win32/sysinfo.h                                                    8
+
+2 row(s) below 80% (SC-007: each gap must be justified in the report)

@@ -1,0 +1,38 @@
+prefix_check: prefix 'Bonjour ' -> 'hello ' in a COPY of the sources (the repository is never edited)
+host: Windows 11, repository H:\repos\loomora-sharing
+copy: C:\Users\legar\loomora-build\prefix-check\src
+change in the copy:
+  --- a/core/src/greet.cpp
+  +++ b/core/src/greet.cpp
+  @@ -12 +12 @@
+  -    return "Bonjour " + input;
+  +    return "hello " + input;
+files of core/ ui/ bridge/ cmake/ CMakeLists.txt that differ from the repository: 1 (core/src/greet.cpp); under ui/ or bridge/: 0
+
+== windows-host: Windows Legacy UI, host build (clang + Ninja)
+   built in 7 s; launcher: Windows legacy x64: C:\Users\legar\loomora-build\prefix-check\build-windows-host\ui\legacy\windows-win32\loomora.exe (81920 bytes, sha256 7472e9d1de52f1a1696898b1554e9a4d44fad643b2b844f0521fde3971b3483e)
+   PASS: 16 vector(s) run, 16 passed, 0 failed; the default text shows 'hello Coucou'; 7472e9d1de52f1a1696898b1554e9a4d44fad643b2b844f0521fde3971b3483e
+== windows-x64: Windows Legacy UI, MinGW-w64 x86_64 (XP x64 -> 11)
+   built in 6 s; launcher: Windows legacy x64: C:\Users\legar\loomora-build\prefix-check\src\out\windows-legacy\x64\loomora.exe (703383 bytes, sha256 bb3ecbafda0b5fe65f14934ce3a51e8f298c5a5fd490e0e7694e3b82ca236fbf)
+   PASS: 16 vector(s) run, 16 passed, 0 failed; the default text shows 'hello Coucou'; bb3ecbafda0b5fe65f14934ce3a51e8f298c5a5fd490e0e7694e3b82ca236fbf
+== windows-x86: Windows Legacy UI, MinGW-w64 i686 (2000 -> 11) under WOW64
+   built in 0 s; launcher: Windows legacy x86: C:\Users\legar\loomora-build\prefix-check\src\out\windows-legacy\x86\loomora.exe (696127 bytes, sha256 abdc9368766a2c311807fa3e77782b8cbd095fcafc7275dd7d2d2d5d84abd396)
+   PASS: 16 vector(s) run, 16 passed, 0 failed; the default text shows 'hello Coucou'; abdc9368766a2c311807fa3e77782b8cbd095fcafc7275dd7d2d2d5d84abd396
+
+after the builds: files that differ between the repository and the copy: core/src/greet.cpp; repository files changed by this run: 0
+
+target                 result      detail
+windows-host           PASS        16 of 16 vector(s) show 'hello ' + input; default text -> 'hello Coucou'
+windows-x64            PASS        16 of 16 vector(s) show 'hello ' + input; default text -> 'hello Coucou'
+windows-x86            PASS        16 of 16 vector(s) show 'hello ' + input; default text -> 'hello Coucou'
+android legacy (ui/legacy/android-views) NOT TESTED  no UI built yet (T082)
+android modern (ui/modern/android-compose) NOT TESTED  no UI built yet (T055)
+ios legacy (ui/legacy/ios-uikit) NOT TESTED  no UI built yet (T079)
+ios modern (ui/modern/ios-swiftui) NOT TESTED  no UI built yet (T052)
+macos legacy (ui/legacy/macos-appkit) NOT TESTED  no UI built yet (T077)
+macos modern (ui/modern/macos-swiftui) NOT TESTED  no UI built yet (T049)
+web legacy (ui/legacy/web-es5) NOT TESTED  no UI built yet (T086)
+web modern (ui/modern/web-ts) NOT TESTED  no UI built yet (T040)
+windows modern (ui/modern/windows-winui3) NOT TESTED  no UI built yet (T046)
+
+platform windows-11-x64: 3 of 3 target(s) tested show 'hello ' + input; no problem with the scope of the change

@@ -1,0 +1,30 @@
+prefix_check: prefix 'Bonjour ' -> 'hello ' in a COPY of the sources (the repository is never edited)
+host: Windows 11, repository H:\repos\loomora-sharing
+copy: C:\Users\legar\loomora-build\prefix-check\src
+change in the copy:
+  --- a/core/src/greet.cpp
+  +++ b/core/src/greet.cpp
+  @@ -12 +12 @@
+  -    return "Bonjour " + input;
+  +    return "hello " + input;
+files of core/ ui/ bridge/ cmake/ CMakeLists.txt that differ from the repository: 1 (core/src/greet.cpp); under ui/ or bridge/: 0
+
+== windows-2000-x86: Windows Legacy UI, i686 exe in the Windows 2000 VM
+   built in 2 s; launcher: VirtualBox VM 'Windows 2000' (168 MB RAM), guest Windows 2000 5.0.2195 service pack 'none reported', guest user 'name', folder C:\Documents and Settings\name\loomora-vectors, copied C:\Users\legar\loomora-build\prefix-check\src\out\windows-legacy\x86\loomora.exe (696127 bytes, sha256 abdc9368766a2c311807fa3e77782b8cbd095fcafc7275dd7d2d2d5d84abd396)
+   PASS: 16 vector(s) run, 16 passed, 0 failed; the default text shows 'hello Coucou'; abdc9368766a2c311807fa3e77782b8cbd095fcafc7275dd7d2d2d5d84abd396
+
+after the builds: files that differ between the repository and the copy: core/src/greet.cpp; repository files changed by this run: 0
+
+target                 result      detail
+windows-2000-x86       PASS        16 of 16 vector(s) show 'hello ' + input; default text -> 'hello Coucou'
+android legacy (ui/legacy/android-views) NOT TESTED  no UI built yet (T082)
+android modern (ui/modern/android-compose) NOT TESTED  no UI built yet (T055)
+ios legacy (ui/legacy/ios-uikit) NOT TESTED  no UI built yet (T079)
+ios modern (ui/modern/ios-swiftui) NOT TESTED  no UI built yet (T052)
+macos legacy (ui/legacy/macos-appkit) NOT TESTED  no UI built yet (T077)
+macos modern (ui/modern/macos-swiftui) NOT TESTED  no UI built yet (T049)
+web legacy (ui/legacy/web-es5) NOT TESTED  no UI built yet (T086)
+web modern (ui/modern/web-ts) NOT TESTED  no UI built yet (T040)
+windows modern (ui/modern/windows-winui3) NOT TESTED  no UI built yet (T046)
+
+platform windows-2000-x86: 1 of 1 target(s) tested show 'hello ' + input; no problem with the scope of the change
