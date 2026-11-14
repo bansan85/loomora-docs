@@ -57,3 +57,4 @@ The complete rules are in `CLAUDE.md` at the root of the repository. Building an
 | 0012 | MinGW-w64 cross toolchain from WSL for Windows |
 | 0013 | verification levels, `quick` and `full` |
 | 0014 | evidence rules |
+| 0015 | Python host tools: Python 3.8+, standard library only |
