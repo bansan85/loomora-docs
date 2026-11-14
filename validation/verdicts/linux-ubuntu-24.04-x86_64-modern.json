@@ -3,7 +3,12 @@
   "ui_variant": "modern",
   "status": "ok_restricted",
   "restrictions": [
-    "VERIFIED ON THE CURRENT BUILD (executable 733389c1, 54,016 bytes, default meson options, GTK 3.24.41 headers; 2026-11-13): 20 probe runs (10x --probe, 10x --probe-input Marie: exit 0, empty stderr, no leftover process, display_ms 91 to 239, peak_rss_kb 37716 to 38336), 15 of 15 vectors of tools/run_vectors.py, a window without --probe for 6 s with empty stderr (X11 and Wayland backends), typing \"Marie\" with real XTEST key events (\"Bonjour Marie\" in the default, Adwaita:dark, HighContrast and HighContrastInverse themes), 1,100 typed characters cut at 1,000, a long greeting with a visible scrollbar scrolled with the mouse wheel, the end-of-life banner with a faked kernel, 13 glyph captures with the Noto fonts. Only the files that prove something new are stored in the evidence with their sha256 (CLAUDE.md): the visible scrollbar, the 1,100-character limit, the Wayland start, the end-of-life banner and 3 of the glyph captures; the 20 probe runs, the 15 vectors, the X11 start, the four themes typed with XTEST and the other glyph captures of that list are re-runs of behaviour the first trial already evidenced, their results are stated here but their files are NOT stored. The evidence files of the executables 5bd33f1d, f83a1a13 and 24b62caf are kept as history; none of them is evidence for the current build.",
+    "2026-11-14, THE UI IS NOW C++ WITH GTKMM BUILT WITH CMAKE (ADR 0006): this verdict was written for the C UI built with Meson (executable 733389c1). Every restriction below that speaks of 'the current build', main.c, gtk_*_ C calls, the meson options or 54,016 bytes describes THAT C build and stays as history. The current build is executable 44cba2ef (167,192 bytes: gtkmm-3.0 3.24.9 on GTK 3.24.41, UI compiled as C++11, backend libloomora compiled with -std=c++11, both checked in compile_commands.json, gcc 13.3.0, Release, 0 warnings), built by 'python tools/build.py linux modern'. VERIFIED ON IT (2026-11-14): 15 of 15 vectors of tools/run_vectors.py, run through the Windows launcher and inside WSL, and also with the floor build (a93d4bf5), the GTK 4 build (0ce25e43) and the static-C++-runtime build (4d9be3da) through --exe; tools/check_probe.py OK on the probe lines; 20 probe runs (10x --probe, 10x --probe-input Marie: exit 0, empty stderr, no leftover process, display_ms 90 to 152, median 101.5, peak_rss_kb 45820 to 46600, against 91 to 239 and 37716 to 38336 for the C build); a window without --probe for 6 s on the X11 backend (still running, empty stderr, exit 0 when closed) and on the Wayland backend (still running, empty stderr, SIGTERM); typing Marie with XTEST key events (Ctrl+A then M a r i e: 'Bonjour Marie', 3 ms from the last key to the changed pixels); 1,100 typed characters cut at 1,000 (the greeting ends with the token 0200); a 250-character greeting wrapped and scrolled with a visible scrollbar; the end-of-life banner with a faked kernel and its close button; glyph captures looked at one by one: Latin accents and Latin Extended, the euro sign, Greek, Cyrillic, CJK, emoji (ZWJ family, flag, skin tone), Hebrew and Arabic (right to left), combining marks, symbols; ctest 2 of 2 (the UI built in the same CMake tree) and tools/check_std.py 0 failures. STORED (new proof of the new toolkit, with sha256, in validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/): the screenshots, three probe lines, the gui run records, the 20-run measurement, and the before/after build measurements. NOT stored, results above only: the 15 vectors and their probe lines, check_probe on every line of the series, ctest, check_std, the runs of the floor and static builds beyond one screenshot and one start each, the GTK 4 vectors (re-runs, CLAUDE.md).",
+    "NOT RE-RUN ON THE C++ BUILD: the three forced GTK themes (Adwaita:dark, HighContrast, HighContrastInverse) and the contrast ratios of the C trial (the default theme gave 11.61 again), the cross-check of peak_rss_kb with os.wait4 beyond what probe-series.py records (ru_maxrss 46016 to 46684 kB, 84 to 368 kB above the probe's VmHWM), memory with a long greeting, a real person typing, IME, clipboard, dead keys. The restrictions NO PERSON, BACKENDS, END-OF-LIFE BANNER IS A SIMULATION, SCREENSHOTS and ENVIRONMENT below apply to the new build unchanged (the faked kernel 2.6.32 shim, client-area captures, one WSL2 environment).",
+    "SHARED X SERVER, 2026-11-14: another change (the Linux Legacy UI, also titled 'Loomora') was run against the same WSLg X server at the same time. The window drivers of the C trial look a window up by its title and the first screenshots of this trial captured the other program's window (recognised by its look and discarded). gtkmm-gui-driver.py and gtkmm-glyphs-shoot.py (derived from the stored drivers, which are untouched) look the window up by its title AND the _NET_WM_PID of the process they started, ignore X errors of vanishing windows, and each run waited for a moment without any other Loomora program before it started; the XTEST keys of two such drivers could still reach the other's window, so every typed run was checked on its screenshot (the stored ones show the typed text in the right window). The new drivers also add the vectors euro, greek and cyrillic.",
+    "GTKMM AND THE GTK 3.10 FLOOR: the floor build (LOOMORA_GTK_FLOOR=ON, ADR 0006) compiles the 3.10 path only (executable a93d4bf5 imports Gtk::Misc::set_alignment, not Gtk::Label::set_xalign or Gtk::ScrolledWindow::set_overlay_scrolling) and rejects any GTK or GDK C symbol newer than 3.10, but a gtkmm METHOD is not marked by GTK: label.set_xalign(0) compiles in the floor build. That the gtkmm calls of the 3.10 path exist in gtkmm 3.10 (the version of Ubuntu 14.04) is a hand check against the GTK versions of the functions they wrap (the table of ADR 0006), not a compiler check, and no gtkmm 3.10 header or system was available: NOT verified. Whether the glibmm and libsigc++ of such a system accept the C++11 lambdas and -std=c++11 of this UI was not tried. The executable links libgtkmm-3.0.so.1 (GTK 3.24 symbols), so it runs only with the gtkmm of its build.",
+    "NEW RUN-TIME DEPENDENCIES: the C++ build needs libgtkmm-3.0, libatkmm-1.6, libgiomm-2.4, libpangomm-1.4, libglibmm-2.4 and libsigc-2.0 in addition to GTK (9 direct DT_NEEDED entries, 79 libraries resolved by ldd against 7 and 71 for the C build); highest symbol versions GLIBC_2.34, GLIBCXX_3.4.21, CXXABI_1.3, the same as the C build (std::strtoll and std::sscanf were replaced because g++ binds them to GLIBC_2.38 symbols). The static-C++-runtime option (LOOMORA_STATIC_CXX_RUNTIME) builds and passes 15 of 15 vectors and starts a window, but it no longer serves its purpose with gtkmm (libglibmm etc. still need libstdc++.so.6, so the process holds two copies of the runtime): 1,998,448 bytes, GLIBC_2.38. A display that cannot be opened ends with status 1 and GTK's own message (checked with DISPLAY unset and GDK_BACKEND=x11), not with 'loomora: cannot open the display'. The GTK 4 build (gtkmm-4.0 4.10.0, C++17) has no verdict: screenshots, the vectors and the start are the verification of ADR 0006, not a trial.",
+    "[C UI, until 2026-11-14] VERIFIED ON THE BUILD OF 2026-11-13 (executable 733389c1, 54,016 bytes, default meson options, GTK 3.24.41 headers; 2026-11-13): 20 probe runs (10x --probe, 10x --probe-input Marie: exit 0, empty stderr, no leftover process, display_ms 91 to 239, peak_rss_kb 37716 to 38336), 15 of 15 vectors of tools/run_vectors.py, a window without --probe for 6 s with empty stderr (X11 and Wayland backends), typing \"Marie\" with real XTEST key events (\"Bonjour Marie\" in the default, Adwaita:dark, HighContrast and HighContrastInverse themes), 1,100 typed characters cut at 1,000, a long greeting with a visible scrollbar scrolled with the mouse wheel, the end-of-life banner with a faked kernel, 13 glyph captures with the Noto fonts. Only the files that prove something new are stored in the evidence with their sha256 (CLAUDE.md): the visible scrollbar, the 1,100-character limit, the Wayland start, the end-of-life banner and 3 of the glyph captures; the 20 probe runs, the 15 vectors, the X11 start, the four themes typed with XTEST and the other glyph captures of that list are re-runs of behaviour the first trial already evidenced, their results are stated here but their files are NOT stored. The evidence files of the executables 5bd33f1d, f83a1a13 and 24b62caf are kept as history; none of them is evidence for the current build.",
     "NO PERSON: nobody typed in the window. The keys, wheel and click are synthetic XTEST events injected into the X11 session of WSLg (XWayland) by a script; they reach the focused window through the X server like keyboard events, but a real keyboard, key repeat, input methods and IME, dead keys, copy and paste, drag and drop, and mouse selection were not tried. Only ASCII characters were typed; the non-ASCII texts (accents, CJK, emoji, Hebrew, Arabic) reached the field through --probe-input, not through the keyboard. The 3 ms from the last key to the changed greeting pixels is an upper bound taken with polled captures of the X11 window, not the delay as seen by an eye on a screen.",
     "BACKENDS: the typing, scrolling and banner runs used GDK_BACKEND=x11 (XWayland). The default backend of this system is Wayland, on which the application was only run for 6 s without --probe (empty stderr, no screenshot, no input, no clean close: ended with SIGTERM); the 20 probe runs and the 15 vectors use the default Wayland backend. No screenshot shows the process of the timing runs. 'displayed' in the probe record is the application's own first draw callback; that the compositor put the pixels on a screen was not independently checked.",
     "END-OF-LIFE BANNER IS A SIMULATION: uname(2) was faked to 2.6.32 with an LD_PRELOAD shim (fake-uname.c, built in a scratch directory). The banner (FR-013, ui-contract item 3) was displayed, its text read in the screenshot, and closed with a click on its button, and the probe line reported eol_warning_shown true; but the WSL2 kernel (6.18.58.1) is not end of life and the banner has not been shown on a REAL old kernel or an end-of-life distribution. With the banner the window opens 480x430 instead of 480x240 and does not shrink when the banner is closed (already noted in ADR 0005, not changed).",
@@ -412,12 +417,291 @@
       "sha256": "9541731c4e15385ded1cb0c3f203e86cddc187a4d9fd26def28b0c9edf3515bc",
       "kind": "screenshot",
       "description": "Window client area for 254 ASCII characters plus 30 CJK characters, executable 733389c1 (Noto fonts, X11 backend, --probe --probe-input): first five lines of the greeting visible, grey non-overlay scrollbar visible, window 480x240."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/window-default-1-initial.png",
+      "sha256": "bae6507e99d6f5fc1b2ebb4e89672fe18ab7e208f04f544ef1bd4af223e6a6a1",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] Real window (client area, X11 backend under XWayland, default theme) right after start: field \"Coucou\" and greeting \"Bonjour Coucou\" at 1.8 times the font size."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/window-default-2-typed-marie.png",
+      "sha256": "23a807168d477dfbffd51b4fde85579011b5084d6b88341d417bfcfe20a02f69",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] Same window after the XTEST key events Ctrl+A, M, a, r, i, e: field \"Marie\", greeting \"Bonjour Marie\"."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/gui-default.json",
+      "sha256": "3fca277ee1876bce160638a4c9cff9338cf0eb7a731a8c4909763b838038d0e1",
+      "kind": "gui-run",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] Record of that run: 3 ms from the last key to the changed greeting pixels (upper bound), window closed with WM_DELETE_WINDOW, exit status 0, standard error empty, no leftover process, contrast ratio 11.61."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/gui-startup.json",
+      "sha256": "65ca424d063432b844f424f6fc703cf8bf363bdfe53bec543d404fbbe1f0ffd4",
+      "kind": "gui-run",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] Window without --probe on the X11 backend for 6 s: still running, closed with WM_DELETE_WINDOW, exit status 0, standard error empty, no leftover process."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/gui-startup-wayland.json",
+      "sha256": "f260f9a65649f398514e67d7704468bffe1091145f041447f9c8703fd2ab1fcf",
+      "kind": "gui-run",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] Window without --probe on the default Wayland backend for 6 s: still running, standard error empty, closed with SIGTERM (exit -15, as the C UI was), no screenshot."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/window-limit-1-after-typing-top.png",
+      "sha256": "b166ccef5636316ed1c41a90c825a30e5143587f523b29e480fa989d455c3256",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] 1,100 typed characters (\"0001 0002 ... 0220 \"): the field ends with the token 0200 and the greeting starts with \"Bonjour 0001\", scrollbar visible on the right."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/window-limit-2-scrolled-bottom.png",
+      "sha256": "bc0b9860e11bcf722112524eba044225e071ec382cf582af6881266a865cb7a7",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] Same greeting scrolled to the bottom with the mouse wheel: the last token is 0200, so the field kept exactly 1,000 characters."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/gui-limit.json",
+      "sha256": "5fb9809b05fd570077c8d15077c81020e4d3a50ebccfc24235de706c0cf2ef6e",
+      "kind": "gui-run",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] Record of the 1,100-character run: exit status 0, standard error empty, no leftover process."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/window-eol-1-banner.png",
+      "sha256": "7f2af638d331e27c00523d0bfb2e7dd618ffb7d33a9357d5f0f09fe0e1439202",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] End-of-life banner with uname(2) FAKED to 2.6.32 by LD_PRELOAD (simulation): the Gtk::InfoBar with the warning text and the close button, above the field; window 480x430."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/window-eol-2-after-close.png",
+      "sha256": "fa8b418c9342bb04f231cfbc0fb66ed81dbe5dd3d6e9b0452dac34d8a799eb33",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] After a click on the close button of the banner: banner hidden, the window keeps its 480x430 size (as the C UI did)."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/gui-eol.json",
+      "sha256": "dceafc006290ebe087fd90d54a2589693910d2e46f17a9f42b83817e33f535e7",
+      "kind": "gui-run",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] Record of the end-of-life run: exit status 0, standard error empty, no leftover process."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-euro.png",
+      "sha256": "2a1bfbc1865dac0ca88900c46ba1d34c6c34255738240d9b1e65cff57cce2f25",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input \"Prix : 12,50 € (≈ 14 $)\": euro sign and approximately-equal sign drawn in the field and in the greeting."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-greek.png",
+      "sha256": "9a411ff8bb2f8eb6eb9badaba4e9733cb892f07350c831a70ebd88f58b0eab50",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input of Greek text with tonos and capital omega: drawn in the field and in the greeting."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-cyrillic.png",
+      "sha256": "034e00ec7d50f48e93089df259e7d9ee8475c1fd3ddf23e32ef1ef2b36afa425",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input of Cyrillic text (Ё, Щ): drawn in the field and in the greeting."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-accents.png",
+      "sha256": "1b75b2914b45d7fc435afa2414d31a0ef5b358a651ce7f176e8f3ebdff4d02f3",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input \"Zoé Hélène çà ñ ü ø ß\": Latin accents drawn in the field and in the greeting."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-latinext.png",
+      "sha256": "052e3372e9300ffa3fcc845767ac056cf4840176cec8bb7ba9c44a06b738421d",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input of Latin Extended letters."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-cjk.png",
+      "sha256": "1bfa08804b8801a7569833dcadbc926a5574ab7492e431fa2c5823892f7d1c54",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input of Japanese, Chinese and Korean text: drawn with Noto Sans CJK in the field and in the greeting."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-emoji.png",
+      "sha256": "9b2aa644c7a5866840c6ae587593e063746bcc4ccb0fee1e335633f32d38d64d",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input of four emoji (a smiley, a ZWJ family, a flag, a thumbs up with a skin tone): drawn in colour with Noto Color Emoji in the field and in the greeting."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-rtl.png",
+      "sha256": "d296d3f6fec5ba7acce342fffc5177ef19fce844650ca3446a0f1ff1142c52f4",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input of Hebrew and Arabic: right-to-left order correct in the label, text right-aligned in the field."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-combining.png",
+      "sha256": "fa79424fe1bd2b696cf509a6980876ae04ef5f15199f25ac8d0405016cd8916e",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input of combining marks (Latin, Thai, Devanagari)."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-symbols.png",
+      "sha256": "77a904c5759d5a7f1b717c854ac9933a3ede2faf2834906fd7547ccb38e06bcb",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input of symbols, arrows and box-drawing characters."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-long.png",
+      "sha256": "9541731c4e15385ded1cb0c3f203e86cddc187a4d9fd26def28b0c9edf3515bc",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input of a 250-character text: the greeting wraps and is scrolled, the scrollbar is visible beside the text (overlay scrolling off through LOOMORA_GTK_HAS_OVERLAY_SCROLLING)."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/glyphs-max1000.png",
+      "sha256": "6d0e1537a9fa64b176a0e00420656ce53019df4e28e27c4bb36316cf4e5bb88e",
+      "kind": "screenshot",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] --probe-input of 1,000 characters: wrapped greeting with a visible scrollbar."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/probe-default-run1.json",
+      "sha256": "3ead8f570b1d9012d1cbef036a91c6249fed93ef3c13f1fc81e44a2fc623251c",
+      "kind": "probe",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] First of 10 runs of 'loomora-gtk3 --probe': message \"Bonjour Coucou\", checked by tools/check_probe.py (OK)."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/probe-marie-run1.json",
+      "sha256": "f42889598906257c0a8d83e8a7e400a02377df19779f6b3d94262dcecda72a62",
+      "kind": "probe",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] First of 10 runs of 'loomora-gtk3 --probe --probe-input Marie': message \"Bonjour Marie\", checked by tools/check_probe.py (OK)."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/probe-unicode.json",
+      "sha256": "f24320cc7697cbe06aaf6c2f0189adc8f949201abe79f5936b2c3bd26663bcb8",
+      "kind": "probe",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] 'loomora-gtk3 --probe --probe-input' with Latin accents, CJK, an emoji, Cyrillic, Greek and the euro sign: message \"Bonjour \" + input, greeting_matches true, checked by tools/check_probe.py with --input (OK)."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/probe-series-measurements.json",
+      "sha256": "16dd61eac4ed398cf5d860ea0169766ffebbad3dee39e0cc4df2efe98c94e656",
+      "kind": "measurements",
+      "description": "[executable 44cba2ef (167,192 bytes, C++ gtkmm-3.0, CMake)] The 20 probe runs (10 x --probe, 10 x --probe-input Marie): exit status 0, standard error empty, one stdout line, no leftover process, display_ms 90 to 152, peak_rss_kb 45820 to 46600; executable size and sha256."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/build-measurements-before-after.txt",
+      "sha256": "a86567070816ce37e561fe0e5ff6d8515e675ae74a2ea85348d6a5bd39814a0b",
+      "kind": "build-measurements",
+      "description": "Before (C, Meson, master d420297) and after (C++, CMake) of the four builds: size, warnings (0), the -std flag of every source in compile_commands.json (backend c++11, UI c++11 with gtkmm-3.0 and c++17 with gtkmm-4.0), DT_NEEDED, highest GLIBC / GLIBCXX / CXXABI versions, ldd counts, sha256 of the executables, and the floor build checks (gtkmm symbols of the default and floor objects, a GTK symbol newer than 3.10 rejected by the floor flags)."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/gtk4-window-2-typed-marie.png",
+      "sha256": "8c4e9cf0de0f03478357f635528786699c70daed69244b5dab31ec9fc9ba34f1",
+      "kind": "screenshot",
+      "description": "[GTK 4 build, gtkmm-4.0 4.10.0 on GTK 4.14.5, C++17, executable 0ce25e43 (169,920 bytes)] Same window after typing Marie: \"Bonjour Marie\"."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/gtk4-window-eol-banner.png",
+      "sha256": "fb4c15e69887e38e2e86f8ef8294b5e8d2a343c1448416faaf07f0db6a93c493",
+      "kind": "screenshot",
+      "description": "[GTK 4 build, executable 0ce25e43] End-of-life banner with the faked kernel: the plain box (warning icon, text, close button), no warning background."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/gtk4-glyphs-long.png",
+      "sha256": "f623fe6de29ae98926aff9bbd02162e9dcb819467d1d3471b719f7d86c76d52f",
+      "kind": "screenshot",
+      "description": "[GTK 4 build, executable 0ce25e43] The 250-character greeting wrapped and scrolled, scrollbar visible."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/gtk4-gui-startup.json",
+      "sha256": "94231f61ad5009693de73b539856f7d553c1b66d59abde478913c73269b153f1",
+      "kind": "gui-run",
+      "description": "[GTK 4 build, executable 0ce25e43] Window without --probe for 6 s on the X11 backend: still running, exit status 0 on close, standard error 134 bytes (the Mesa EGL warnings of WSLg, ADR 0005, not the UI)."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/floor-glyphs-long-no-scrollbar.png",
+      "sha256": "532ecbe87c0b71c7a2dd4867085afe71800929caccfe4f15f734b44664a1fb3b",
+      "kind": "screenshot",
+      "description": "[floor build, LOOMORA_GTK_FLOOR=ON, executable a93d4bf5 (167,120 bytes)] The same 250-character greeting: no scrollbar (the 3.10 path does not switch overlay scrolling off), as the C floor build."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/floor-gui-startup.json",
+      "sha256": "1e0bc133d2f17934d46f540f6abaaae584c48012217ae1984d046f849fbd7d9b",
+      "kind": "gui-run",
+      "description": "[floor build, executable a93d4bf5] Window without --probe for 6 s: still running, exit status 0 on close, standard error empty, no leftover process."
+    },
+    {
+      "path": "validation/evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/static-window-2-typed-marie.png",
+      "sha256": "23a807168d477dfbffd51b4fde85579011b5084d6b88341d417bfcfe20a02f69",
+      "kind": "screenshot",
+      "description": "[static C++ runtime build, LOOMORA_STATIC_CXX_RUNTIME=ON, executable 4d9be3da (1,998,448 bytes)] Same window after typing Marie: \"Bonjour Marie\"."
     }
   ],
   "measurements": {
-    "trial_date": "2026-11-13",
+    "trial_date": "2026-11-14 (C++ gtkmm build); the entries below it, trial_date_c_ui and the C figures, are those of the C UI of 2026-11-13",
+    "cpp_gtkmm_2026_11_14": {
+      "current_executable": {
+        "name": "loomora-gtk3",
+        "size_bytes": 167192,
+        "sha256": "44cba2efb5550d374205ccc58220162b4b2bca7a979f3ae0adcee9ce98c9a043",
+        "built_from_commit": "branch refactor/gtk-gtkmm-cmake, ui/ and core/ as of the commit 'fix: show the info bar of the Modern UI'; python tools/build.py linux modern (cmake + ninja, Release), gtkmm-3.0 3.24.9, GTK 3.24.41 headers, default options (the out/linux-modern copy and the new-default build of the CMake variants have the same hash)",
+        "dynamic_dependencies": "9 DT_NEEDED entries (libgtkmm-3.0.so.1, libatkmm-1.6.so.1, libgiomm-2.4.so.1, libpangomm-1.4.so.1, libglibmm-2.4.so.1, libsigc-2.0.so.0, libstdc++.so.6, libgcc_s.so.1, libc.so.6), 79 libraries resolved by ldd, highest GLIBC_2.34, GLIBCXX_3.4.21, CXXABI_1.3; imports Gtk::Label::set_xalign and Gtk::ScrolledWindow::set_overlay_scrolling (3.16 path, no Gtk::Misc::set_alignment)"
+      },
+      "display_ms": {
+        "scenario_probe_default_n10": {
+          "min": 90,
+          "median": 93,
+          "max": 96
+        },
+        "scenario_probe_input_Marie_n10": {
+          "min": 107,
+          "median": 115.5,
+          "max": 152
+        },
+        "all_20_runs": {
+          "min": 90,
+          "median": 101.5,
+          "max": 152
+        },
+        "threshold": "SC-001: first frame under 3000 ms"
+      },
+      "peak_rss_kb": {
+        "all_20_runs": {
+          "min": 45820,
+          "median": 46208,
+          "max": 46600
+        },
+        "source": "VmHWM of /proc/self/status read by the application itself (probe record field peak_rss_kb)",
+        "cross_check": "os.wait4 ru_maxrss of each child (probe-series.py): 46016 to 46684 kB"
+      },
+      "process_wall_time_ms": {
+        "all_20_runs": {
+          "min": 2097,
+          "median": 2122,
+          "max": 2204
+        },
+        "note": "includes the 2 s that probe mode waits before exiting by itself"
+      },
+      "builds": {
+        "default": {
+          "size_before_c": 54016,
+          "size_cpp": 167192,
+          "sha256_8": "44cba2ef"
+        },
+        "floor": {
+          "size_before_c": 53952,
+          "size_cpp": 167120,
+          "sha256_8": "a93d4bf5"
+        },
+        "gtk4": {
+          "size_before_c": 54480,
+          "size_cpp": 169920,
+          "sha256_8": "0ce25e43"
+        },
+        "static_cxx_runtime": {
+          "size_before_c": 301328,
+          "size_cpp": 1998448,
+          "sha256_8": "4d9be3da"
+        },
+        "note": "0 warnings in every build; details in evidence/gtkmm-cmake/linux-ubuntu-24.04-x86_64/build-measurements-before-after.txt"
+      },
+      "vectors": "15 of 15 passed for the four builds, 16 skipped as designed, 2 truncated to 1,000 characters (re-runs, not stored)"
+    },
+    "trial_date_c_ui": "2026-11-13",
     "evidence_note": "Figures of the re-run of 2026-11-13 on executable 733389c1 (probe series, vector log, X11 start, typing in four themes, most glyph captures): re-runs, NOT stored (CLAUDE.md: evidence is stored only when it proves something new); the files kept for this build are the visible scrollbar and entry-limit captures, the Wayland start and the end-of-life banner runs.",
-    "current_executable": {
+    "c_ui_executable_until_2026_11_14": {
       "name": "loomora-gtk3",
       "size_bytes": 54016,
       "sha256": "733389c175006a214dfc6202419581ca65a3c8780dd83b1905c09660459b6287",
@@ -551,5 +835,5 @@
     }
   },
   "decision": "keep",
-  "notes": "Environment: WSL2 distribution Ubuntu-24.04 with WSLg, see validation/platforms/linux-ubuntu-24.04-x86_64.json. TRIAL OF 2026-11-13 on the CURRENT build: executable sha256 733389c175006a214dfc6202419581ca65a3c8780dd83b1905c09660459b6287, 54,016 bytes, built with 'python tools/build.py linux modern' (up to date; ~/loomora-build/linux-modern/loomora-gtk3 and out/linux-modern/loomora-gtk3 have the same hash), from commit 08ac22c with an unmodified core/ and ui/. Commands (from the repository root, Windows host, Git Bash): (1) inside WSL, 'python3 tools/trials/linux-ubuntu-24.04-x86_64/probe-series.py ~/loomora-build/linux-modern/loomora-gtk3 <evidence dir> 733389c1 10' (10x --probe, 10x --probe --probe-input Marie, default GDK backend), then tools/check_probe.py on every line (with --input Marie for the second series): 0 problems; (2) 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --evidence-dir <scratch dir>' (15 of 15), the two output files (not stored: a re-run); (3) inside WSL, 'python3 gui-driver.py <exe> <evidence dir> 733389c1 startup startup-wayland default dark highcontrast highcontrast-inverse limit eol --preload ~/loomora-trial-scratch/fake-uname.so' (GDK_BACKEND=x11 for the window runs, GTK_THEME unset or Adwaita:dark, HighContrast, HighContrastInverse); (4) inside WSL, 'python3 glyphs-shoot.py <exe> <evidence dir> glyphs-733389c1 > glyphs-measurements-733389c1.json'; (5) one '--probe' run with LD_PRELOAD=fake-uname.so for probe-eol-simulated-733389c1.json. Differences from the first trial: the earlier agents' window driver (Gdk capture, XSendEvent key events, WM_DELETE_WINDOW) was not kept in the repository; gui-driver.py replaces it and injects the keys with the XTEST extension instead of XSendEvent, so they are real X server input events; the contrast is measured with the same method (WCAG ratio, most frequent colour against the most contrasting pixel of the band below the entry) and gives the same four ratios. The end-of-life banner uses an LD_PRELOAD uname shim built in a scratch directory (fake-uname.c): it is a simulation, not a real old kernel. Executable of each older evidence file (all kept as history): sha256 5bd33f1d990d01c13c19773523d491f3e0a4f806287133657dba9f81f16c12dd (296,848 bytes, static libstdc++): probe-default-*, probe-marie-*, trial-measurements.json, run-vectors-*-log.txt and -probe-lines.tsv without a suffix, window-*.png, gui-*.json without a suffix, glyphs-dejavu-only-* and glyphs-noto-before-fix-*; sha256 f83a1a130aef05a8cf2d883953bdcc6c4343707525f3268a58abdeb5350cde0c (296,952 bytes, static libstdc++, with the scrolled window): glyphs-noto-after-fix-asc250/long/max1000.png and glyphs-measurements-noto-after-fix.json (the vector run and the seven other captures of that build were not stored: byte-identical or re-runs); sha256 24b62cafff19e3e96cf2d716fd9894a46f7a7e5d75c9407402670d3a36b871cf (53,736 bytes, dynamic libstdc++, before the GTK version policy): gtk-floor-and-runtime-check-output.txt in adr-0004/ (the vector run and the glyph captures of that build were not stored: re-runs). The files with the suffix 733389c1 belong to the current build. History of the executable: 5bd33f1d (first trial, 2026-11-12) -> f83a1a13 (scrolled window, a long greeting no longer clipped) -> 24b62caf (ADR 0004: dynamic libstdc++) -> 733389c1 (ADR 0005: GTK version policy, 3.16 features behind macros, non-overlay scrollbar). The text files of the evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256. Glyph defect history: on the image with only DejaVu/Ubuntu/MathJax fonts, CJK, Thai, Devanagari and most emoji showed as hexadecimal boxes in both the field and the label (environment, glyphs-fonts-coverage.txt); after 'sudo apt install fonts-noto-cjk fonts-noto-color-emoji fonts-noto-core' both widgets draw them identically. One real UI defect was found with plain ASCII (a greeting longer than the label area was clipped, blank from 250 characters, and the window grew); the label now sits in a GtkScrolledWindow (no horizontal scrollbar, automatic vertical one) and the window stays 480x240 with a first-lines view and, in the current build, a visible scrollbar. No defect was found in the current build by this trial; the only oddity noted is the 480x430 window that does not shrink after the banner is closed (known, ADR 0005)."
+  "notes": "TRIAL OF 2026-11-14 on the C++ gtkmm build (ADR 0006), added to the C UI trial of 2026-11-13 below: executable sha256 44cba2efb5550d374205ccc58220162b4b2bca7a979f3ae0adcee9ce98c9a043, 167,192 bytes, built with 'python tools/build.py linux modern' from the branch refactor/gtk-gtkmm-cmake. Commands (inside WSL from the repository root, DISPLAY=:0): 'python3 tools/trials/linux-ubuntu-24.04-x86_64/probe-series.py ~/loomora-build/linux-modern/loomora-gtk3 <dir> gtkmm 10' then tools/check_probe.py on the first lines and on a --probe-input of accents, CJK, emoji, Cyrillic, Greek and the euro sign; 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern' (from Windows, through the launcher) and 'python3 tools/run_vectors.py ... --exe <exe>' for the four builds; 'python3 tools/trials/linux-ubuntu-24.04-x86_64/gtkmm-gui-driver.py <exe> <dir> <tag> startup startup-wayland default limit eol --preload fake-uname.so' and 'gtkmm-glyphs-shoot.py <exe> <dir> <tag> <vector>' (the stored gui-driver.py and glyphs-shoot.py, which are untouched, with a window lookup by process id, see the restriction on the shared X server); ctest and 'python tools/check_std.py --build-dir ~/loomora-build/check-std-gtkmm'. Executables: default 44cba2ef (stored files without a prefix and probe-*), floor a93d4bf5 (floor-*), GTK 4 0ce25e43 (gtk4-*), static C++ runtime 4d9be3da (static-*). The text files of the evidence folder keep their LF line endings (validation/evidence/.gitattributes). The files of validation/evidence/adr-0004, adr-0005, eol-banner, first-trial, scroll-long-greeting and the others are the C UI and stay as history; none of them is evidence for executable 44cba2ef. Environment: WSL2 distribution Ubuntu-24.04 with WSLg, see validation/platforms/linux-ubuntu-24.04-x86_64.json. C UI TRIAL OF 2026-11-13 on the build of that date: executable sha256 733389c175006a214dfc6202419581ca65a3c8780dd83b1905c09660459b6287, 54,016 bytes, built with 'python tools/build.py linux modern' (up to date; ~/loomora-build/linux-modern/loomora-gtk3 and out/linux-modern/loomora-gtk3 have the same hash), from commit 08ac22c with an unmodified core/ and ui/. Commands (from the repository root, Windows host, Git Bash): (1) inside WSL, 'python3 tools/trials/linux-ubuntu-24.04-x86_64/probe-series.py ~/loomora-build/linux-modern/loomora-gtk3 <evidence dir> 733389c1 10' (10x --probe, 10x --probe --probe-input Marie, default GDK backend), then tools/check_probe.py on every line (with --input Marie for the second series): 0 problems; (2) 'python tools/run_vectors.py linux-ubuntu-24.04-x86_64 modern --evidence-dir <scratch dir>' (15 of 15), the two output files (not stored: a re-run); (3) inside WSL, 'python3 gui-driver.py <exe> <evidence dir> 733389c1 startup startup-wayland default dark highcontrast highcontrast-inverse limit eol --preload ~/loomora-trial-scratch/fake-uname.so' (GDK_BACKEND=x11 for the window runs, GTK_THEME unset or Adwaita:dark, HighContrast, HighContrastInverse); (4) inside WSL, 'python3 glyphs-shoot.py <exe> <evidence dir> glyphs-733389c1 > glyphs-measurements-733389c1.json'; (5) one '--probe' run with LD_PRELOAD=fake-uname.so for probe-eol-simulated-733389c1.json. Differences from the first trial: the earlier agents' window driver (Gdk capture, XSendEvent key events, WM_DELETE_WINDOW) was not kept in the repository; gui-driver.py replaces it and injects the keys with the XTEST extension instead of XSendEvent, so they are real X server input events; the contrast is measured with the same method (WCAG ratio, most frequent colour against the most contrasting pixel of the band below the entry) and gives the same four ratios. The end-of-life banner uses an LD_PRELOAD uname shim built in a scratch directory (fake-uname.c): it is a simulation, not a real old kernel. Executable of each older evidence file (all kept as history): sha256 5bd33f1d990d01c13c19773523d491f3e0a4f806287133657dba9f81f16c12dd (296,848 bytes, static libstdc++): probe-default-*, probe-marie-*, trial-measurements.json, run-vectors-*-log.txt and -probe-lines.tsv without a suffix, window-*.png, gui-*.json without a suffix, glyphs-dejavu-only-* and glyphs-noto-before-fix-*; sha256 f83a1a130aef05a8cf2d883953bdcc6c4343707525f3268a58abdeb5350cde0c (296,952 bytes, static libstdc++, with the scrolled window): glyphs-noto-after-fix-asc250/long/max1000.png and glyphs-measurements-noto-after-fix.json (the vector run and the seven other captures of that build were not stored: byte-identical or re-runs); sha256 24b62cafff19e3e96cf2d716fd9894a46f7a7e5d75c9407402670d3a36b871cf (53,736 bytes, dynamic libstdc++, before the GTK version policy): gtk-floor-and-runtime-check-output.txt in adr-0004/ (the vector run and the glyph captures of that build were not stored: re-runs). The files with the suffix 733389c1 belong to the current build. History of the executable: 5bd33f1d (first trial, 2026-11-12) -> f83a1a13 (scrolled window, a long greeting no longer clipped) -> 24b62caf (ADR 0004: dynamic libstdc++) -> 733389c1 (ADR 0005: GTK version policy, 3.16 features behind macros, non-overlay scrollbar). The text files of the evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256. Glyph defect history: on the image with only DejaVu/Ubuntu/MathJax fonts, CJK, Thai, Devanagari and most emoji showed as hexadecimal boxes in both the field and the label (environment, glyphs-fonts-coverage.txt); after 'sudo apt install fonts-noto-cjk fonts-noto-color-emoji fonts-noto-core' both widgets draw them identically. One real UI defect was found with plain ASCII (a greeting longer than the label area was clipped, blank from 250 characters, and the window grew); the label now sits in a GtkScrolledWindow (no horizontal scrollbar, automatic vertical one) and the window stays 480x240 with a first-lines view and, in the current build, a visible scrollbar. No defect was found in the current build by this trial; the only oddity noted is the 480x430 window that does not shrink after the banner is closed (known, ADR 0005)."
 }

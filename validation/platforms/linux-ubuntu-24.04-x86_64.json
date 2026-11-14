@@ -13,7 +13,7 @@
   "eol": false,
   "kernel": "6.18.58.1-microsoft-standard-WSL2 (uname -r); a vendor kernel, so the kernel part of the Linux end-of-life rule of loomora_is_eol is evaluated on 6.18, which the backend does not treat as end of life",
   "glibc": "2.39 (ldd --version: Ubuntu GLIBC 2.39-0ubuntu8.12)",
-  "gtk_version": "3.24.41 (pkg-config gtk+-3.0; libgtk-3-0t64 3.24.41-4ubuntu1.3)",
-  "compiler": "gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04.1), meson 1.3.2, ninja 1.11.1",
+  "gtk_version": "3.24.41 (pkg-config gtk+-3.0; libgtk-3-0t64 3.24.41-4ubuntu1.3); gtkmm-3.0 3.24.9 (glibmm 2.66.7, libsigc++ 2.12.1) used by the Linux Modern UI since 2026-11-14; GTK 4.14.5 with gtkmm-4.0 4.10.0 (glibmm 2.68, libsigc++ 3.6.0) installed for the optional GTK 4 build",
+  "compiler": "gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04.1), cmake 3.31.12, ninja 1.11.1 (meson 1.3.2 was the build system of the Linux Modern UI until 2026-11-14, ADR 0006)",
   "release_date_source": "distro-info-data (/usr/share/distro-info/ubuntu.csv in the distribution): release 2024-04-25 for 24.04 LTS; age_years = days from that date to the trial date 2026-11-12 divided by 365.25"
 }
