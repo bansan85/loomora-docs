@@ -1,0 +1,118 @@
+Linux Modern UI, C (GTK 3 C API, Meson) before and C++ (gtkmm, CMake) after the 2026-11-14 change
+Machine: Ubuntu 24.04.5 LTS, 6.18.58.1-microsoft-standard-WSL2, g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, cmake 3.31.12, ninja 1.11.1, meson 1.3.2
+gtkmm-3.0 3.24.9 (glibmm 2.66.7, sigc++ 2.12.1), gtk+-3.0 3.24.41; gtkmm-4.0 4.10.0 (glibmm 2.78.1, sigc++ 3.6.0), gtk4 4.14.5
+
+######## BEFORE: master (d420297), C + Meson, built in ~/loomora-build/base-<variant> (tools/trials/.../baseline commands, release buildtype)
+1.3.2
+== default: size 54016 warnings 0
+NEEDED: libgtk-3.so.0 libpango-1.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libstdc++.so.6 libgcc_s.so.1 libc.so.6 
+highest GLIBCXX: GLIBCXX_3.4.21
+highest CXXABI: CXXABI_1.3
+highest GLIBC: GLIBC_2.34
+ldd count: 71
+== floor: size 53952 warnings 0
+NEEDED: libgtk-3.so.0 libpango-1.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libstdc++.so.6 libgcc_s.so.1 libc.so.6 
+highest GLIBCXX: GLIBCXX_3.4.21
+highest CXXABI: CXXABI_1.3
+highest GLIBC: GLIBC_2.34
+ldd count: 71
+== gtk4: size 54480 warnings 0
+NEEDED: libgtk-4.so.1 libpango-1.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libstdc++.so.6 libgcc_s.so.1 libc.so.6 
+highest GLIBCXX: GLIBCXX_3.4.21
+highest CXXABI: CXXABI_1.3
+highest GLIBC: GLIBC_2.34
+ldd count: 69
+== static: size 301328 warnings 0
+NEEDED: libgtk-3.so.0 libpango-1.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libc.so.6 ld-linux-x86-64.so.2 
+highest GLIBCXX: 
+highest CXXABI: 
+highest GLIBC: GLIBC_2.38
+ldd count: 69
+
+######## AFTER: this change, C++ + CMake (cmake -S . -B ~/loomora-build/new-<variant> -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DLOOMORA_BUILD_LINUX_MODERN=ON [-DLOOMORA_GTK_FLOOR=ON | -DLOOMORA_GTK_API=4 | -DLOOMORA_STATIC_CXX_RUNTIME=ON])
+== default: size 167192 warnings 0
+std flags in compile commands:
+  core c_api.cpp ['-std=c++11']
+  core eol.cpp ['-std=c++11']
+  core greet.cpp ['-std=c++11']
+  core probe.cpp ['-std=c++11']
+  core utf8.cpp ['-std=c++11']
+  core version.cpp ['-std=c++11']
+  ui main.cpp ['-std=c++11']
+  ui main_window.cpp ['-std=c++11']
+  ui probe.cpp ['-std=c++11']
+NEEDED: libgtkmm-3.0.so.1 libatkmm-1.6.so.1 libgiomm-2.4.so.1 libpangomm-1.4.so.1 libglibmm-2.4.so.1 libsigc-2.0.so.0 libstdc++.so.6 libgcc_s.so.1 libc.so.6 
+highest GLIBCXX: GLIBCXX_3.4.21
+highest CXXABI: CXXABI_1.3
+highest GLIBC: GLIBC_2.34
+ldd lines: 79  not found: 0
+== floor: size 167120 warnings 0
+std flags in compile commands:
+  core c_api.cpp ['-std=c++11']
+  core eol.cpp ['-std=c++11']
+  core greet.cpp ['-std=c++11']
+  core probe.cpp ['-std=c++11']
+  core utf8.cpp ['-std=c++11']
+  core version.cpp ['-std=c++11']
+  ui main.cpp ['-std=c++11']
+  ui main_window.cpp ['-std=c++11']
+  ui probe.cpp ['-std=c++11']
+NEEDED: libgtkmm-3.0.so.1 libatkmm-1.6.so.1 libgiomm-2.4.so.1 libpangomm-1.4.so.1 libglibmm-2.4.so.1 libsigc-2.0.so.0 libstdc++.so.6 libgcc_s.so.1 libc.so.6 
+highest GLIBCXX: GLIBCXX_3.4.21
+highest CXXABI: CXXABI_1.3
+highest GLIBC: GLIBC_2.34
+ldd lines: 79  not found: 0
+== gtk4: size 169920 warnings 0
+std flags in compile commands:
+  core c_api.cpp ['-std=c++11']
+  core eol.cpp ['-std=c++11']
+  core greet.cpp ['-std=c++11']
+  core probe.cpp ['-std=c++11']
+  core utf8.cpp ['-std=c++11']
+  core version.cpp ['-std=c++11']
+  ui main.cpp ['-std=c++17']
+  ui main_window.cpp ['-std=c++17']
+  ui probe.cpp ['-std=c++17']
+NEEDED: libgtkmm-4.0.so.0 libpangomm-2.48.so.1 libgiomm-2.68.so.1 libglibmm-2.68.so.1 libsigc-3.0.so.0 libstdc++.so.6 libgcc_s.so.1 libc.so.6 
+highest GLIBCXX: GLIBCXX_3.4.21
+highest CXXABI: CXXABI_1.3.9
+highest GLIBC: GLIBC_2.34
+ldd lines: 75  not found: 0
+== static: size 1998448 warnings 0
+std flags in compile commands:
+  core c_api.cpp ['-std=c++11']
+  core eol.cpp ['-std=c++11']
+  core greet.cpp ['-std=c++11']
+  core probe.cpp ['-std=c++11']
+  core utf8.cpp ['-std=c++11']
+  core version.cpp ['-std=c++11']
+  ui main.cpp ['-std=c++11']
+  ui main_window.cpp ['-std=c++11']
+  ui probe.cpp ['-std=c++11']
+NEEDED: libgtkmm-3.0.so.1 libatkmm-1.6.so.1 libgiomm-2.4.so.1 libpangomm-1.4.so.1 libglibmm-2.4.so.1 libsigc-2.0.so.0 libc.so.6 ld-linux-x86-64.so.2 
+highest GLIBCXX: 
+highest CXXABI: 
+highest GLIBC: GLIBC_2.38
+ldd lines: 79  not found: 0
+
+######## sha256 of the executables
+44cba2efb5550d374205ccc58220162b4b2bca7a979f3ae0adcee9ce98c9a043  /home/legar/loomora-build/new-default/loomora-gtk3
+a93d4bf56a75c41f71a9b91f88ff3da9fb4bafce21fb39c020060d1980526713  /home/legar/loomora-build/new-floor/loomora-gtk3
+0ce25e4390814a611ff170be202e5af507cada74ab088cf6f58dfd599d919e90  /home/legar/loomora-build/new-gtk4/loomora-gtk3
+4d9be3da4f122606d3f4c15e866c16497a0727c04d6cc90de9a73c9a7d4c02d1  /home/legar/loomora-build/new-static/loomora-gtk3
+44cba2efb5550d374205ccc58220162b4b2bca7a979f3ae0adcee9ce98c9a043  /home/legar/loomora-build/linux-modern/loomora-gtk3
+
+######## floor build checks
+--- gtkmm symbols (undefined) used by the UI objects: default vs floor
+[default]
+                 U Gtk::ScrolledWindow::set_overlay_scrolling(bool)
+                 U Gtk::Label::set_xalign(float)
+[floor]
+                 U Gtk::Misc::set_alignment(float, float)
+--- the floor flags reject a GTK C symbol newer than 3.10
+/home/legar/loomora-build/floor-neg.cpp:2:45: error: ‘void gtk_label_set_xalign(GtkLabel*, gfloat)’ is deprecated: Not available before 3.16 [-Werror=deprecated-declarations]
+cc1plus: some warnings being treated as errors
+without the floor flags:
+compiles
+--- static variant: libstdc++ also in ldd?
+1
