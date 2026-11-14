@@ -1,0 +1,128 @@
+linux-i686 Legacy UI: run observed on 2026-11-14 (text log, no screenshot stored)
+Machine: Ubuntu 24.04.5 in WSL2 with WSLg (DISPLAY=:0, XWayland), 64-bit kernel; the 32-bit executable runs through the i386 multiarch libraries (see validation/platforms/linux-i686.json).
+Build (inside WSL, worktree of branch feat/report-sharing):
+  export LOOMORA_BUILD_DIR=$HOME/loomora-build/report2
+  python3 tools/build.py linux legacy --arch i686
+  CMake: "Linux Legacy UI: text drawn with Xft (xft 2.3.6, fontconfig 2.15.0)"; 12 of 12 build steps; artifact out/linux-legacy/i686/loomora-xlib (73348 bytes).
+  The deliverable record rewritten by build.py was discarded (same size and sha256 as the stored record).
+Commands below are those of validation/procedures/linux.md (L.3, L.5, L.6, L.7) run on the i686 executable; the probe line carries the platform_id of the host (linux-ubuntu-24.04-x86_64), as the platform record says.
+The run_vectors.py lines are cut to the summary of each run where stated; "== window run" is tools/trials/linux-ubuntu-24.04-x86_64/xlib-driver.c with synthetic key events, a screenshot taken for the observer only and not stored.
+
+== host
+Linux 6.18.58.1-microsoft-standard-WSL2 x86_64
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+i386
+== file
+/home/legar/loomora-build/report2/linux-legacy-i686/loomora-xlib: ELF 32-bit LSB pie executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=60a1ac0e5b5b894e25ef02a6ca4fef21337fb6e0, for GNU/Linux 3.2.0, not stripped
+11040a8e1818e3f25deb9fa3f18b3bdf18b7567de31d238012149340d5d3a15b  /home/legar/loomora-build/report2/linux-legacy-i686/loomora-xlib
+73348
+== needed
+  NEEDED               libX11.so.6
+  NEEDED               libXft.so.2
+  NEEDED               libfontconfig.so.1
+  NEEDED               libstdc++.so.6
+  NEEDED               libgcc_s.so.1
+  NEEDED               libc.so.6
+== probe default
+exit 0
+{"schema":1,"platform_id":"linux-ubuntu-24.04-x86_64","ui_variant":"legacy","input":"Coucou","message":"Bonjour Coucou","greeting_matches":true,"core":"cpp","compiler":"gcc 13.3.0","displayed":true,"display_ms":22,"peak_rss_kb":8032,"eol_warning_shown":false,"disabled_features":[],"timestamp_utc":"2026-11-14T17:59:28Z"}
+OK
+check rc 0
+== probe mixed
+exit 0
+{"schema":1,"platform_id":"linux-ubuntu-24.04-x86_64","ui_variant":"legacy","input":"Zo\u00e9 \u20ac5 \u03b1\u03b2\u03b3 \u041f\u0440\u0438\u0432\u0435\u0442 \u65e5\u672c\u8a9e \u05e9\u05dc\u05d5\u05dd \u0645\u0631\u062d\u0628\u0627 \u00e9 \ud83e\udd8a \ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67 x\u200by \u0378","message":"Bonjour Zo\u00e9 \u20ac5 \u03b1\u03b2\u03b3 \u041f\u0440\u0438\u0432\u0435\u0442 \u65e5\u672c\u8a9e \u05e9\u05dc\u05d5\u05dd \u0645\u0631\u062d\u0628\u0627 \u00e9 \ud83e\udd8a \ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67 x\u200by \u0378","greeting_matches":true,"core":"cpp","compiler":"gcc 13.3.0","displayed":true,"display_ms":26,"peak_rss_kb":11728,"eol_warning_shown":false,"disabled_features":["missing-glyph"],"timestamp_utc":"2026-11-14T17:59:30Z"}
+OK
+check rc 0
+== vectors
+run_vectors linux-ubuntu-24.04-x86_64 legacy: 15 vector(s) to run, 16 skipped (/mnt/h/repos/loomora-report2/core/tests/vectors.json)
+skip too_long_4097_ascii                expects error -1 (not enterable in a UI field)
+skip too_long_4098_two_byte_chars       expects error -1 (not enterable in a UI field)
+skip invalid_overlong_two_byte          expects error -3 (not enterable in a UI field)
+skip invalid_overlong_three_byte        expects error -3 (not enterable in a UI field)
+skip invalid_surrogate                  expects error -3 (not enterable in a UI field)
+skip invalid_above_10ffff               expects error -3 (not enterable in a UI field)
+skip invalid_byte_ff                    expects error -3 (not enterable in a UI field)
+skip invalid_lone_continuation          expects error -3 (not enterable in a UI field)
+skip invalid_truncated_sequence         expects error -3 (not enterable in a UI field)
+skip invalid_after_valid_text           expects error -3 (not enterable in a UI field)
+skip null_pointer                       expects error -3 (not enterable in a UI field)
+skip capacity_too_small                 expects error -2 (not enterable in a UI field)
+skip capacity_one_byte_short            expects error -2 (not enterable in a UI field)
+skip capacity_zero                      expects error -2 (not enterable in a UI field)
+skip capacity_exact                     API-only case (explicit buffer capacity)
+skip capacity_exact_empty_input         API-only case (explicit buffer capacity)
+launcher: /home/legar/loomora-build/report2/linux-legacy-i686/loomora-xlib
+FAIL empty (exact, 0 chars)  0.0s
+       exit status 1, stderr: XIO:  fatal IO error 2 (No such file or directory) on X server ":0"
+      after 25 requests (25 known processed) with 0 events remaining.
+       stdout: expected exactly one line starting with '{', found 0
+FAIL ascii (exact, 6 chars)  0.0s
+       exit status 1, stderr: XIO:  fatal IO error 2 (No such file or directory) on X server ":0"
+      after 25 requests (25 known processed) with 0 events remaining.
+       stdout: expected exactly one line starting with '{', found 0
+FAIL ascii_punctuation (exact, 11 chars)  0.0s
+       exit status 1, stderr: XIO:  fatal IO error 2 (No such file or directory) on X server ":0"
+      after 25 requests (25 known processed) with 0 events remaining.
+       stdout: expected exactly one line starting with '{', found 0
+FAIL accented (exact, 9 chars)  0.0s
+       exit status 1, stderr: XIO:  fatal IO error 2 (No such file or directory) on X server ":0"
+      after 25 requests (25 known processed) with 0 events remaining.
+       stdout: expected exactly one line starting with '{', found 0
+ok   cjk (exact, 8 chars)  2.0s
+ok   right_to_left_arabic (exact, 5 chars)  2.0s
+ok   right_to_left_hebrew (exact, 4 chars)  2.0s
+ok   emoji (exact, 1 chars)  2.0s
+ok   emoji_zwj_sequence (exact, 5 chars)  2.0s
+ok   combining_characters (exact, 6 chars)  2.0s
+ok   control_characters (exact, 6 chars)  2.0s
+ok   one_thousand_ascii (exact, 1000 chars)  2.0s
+ok   one_thousand_two_byte_chars (exact, 1000 chars)  2.0s
+ok   limit_4096_ascii (truncated, 4096 chars)  2.1s
+ok   limit_4096_two_byte_chars (truncated, 2048 chars)  2.0s
+summary: 15 vector(s) run, 11 passed, 4 failed, 16 skipped; 2 truncated to 1000 chars; 6.3 s with 4 worker(s)
+result: FAILED
+== vectors, run-time switch LOOMORA_XLIB_NO_XFT=1 (core-font path)
+ok   limit_4096_two_byte_chars (truncated, 2048 chars)  2.0s
+summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars; 8.2 s with 4 worker(s)
+result: PASSED
+== window run
+driver built
+pre-existing procs above
+key BackSpace
+key BackSpace
+key BackSpace
+key BackSpace
+key BackSpace
+key BackSpace
+typed 5 characters
+shot 480x320 -> /home/legar/loomora-build/report2/marie.ppm
+close sent
+ui exit 0
+leftover check done
+
+NOTE on the first vector run above: 4 of its 15 vectors (the first four launched in parallel, 0.0 s each: empty, ascii, ascii_punctuation and accented)
+failed with 'XIO: fatal IO error 2 on X server ":0"' (the connection to the WSLg X server was refused or dropped), the other 11 passed. It was NOT reproduced:
+the 5 repeated runs below of the same executable passed 15 of 15 each, as did 3 runs of the x86_64 build. The cause was not investigated (a WSLg display
+hiccup is the likely reading, not proven). The run is kept here as observed, not replaced by a passing one.
+
+== repeated vector runs (summary lines only), same executable then the x86_64 build of the same UI
+i686 run 1
+      1 summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars; 8.3 s with 4 worker(s)
+i686 run 2
+      1 summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars; 8.3 s with 4 worker(s)
+i686 run 3
+      1 summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars; 8.3 s with 4 worker(s)
+i686 run 4
+      1 summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars; 8.3 s with 4 worker(s)
+i686 run 5
+      1 summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars; 8.3 s with 4 worker(s)
+x86_64 run 1
+      1 summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars; 8.3 s with 4 worker(s)
+x86_64 run 2
+      1 summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars; 8.3 s with 4 worker(s)
+x86_64 run 3
+      1 summary: 15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars; 8.3 s with 4 worker(s)
+
+OBSERVER NOTE on the window run above (screenshot not stored): the picture taken after the typing showed the field with "Marie" and the label "Bonjour Marie" (client area 480x320); the UI exited with status 0 after the close and no loomora-xlib process was left.
+A first run of the same script, made before this one, had the vectors 15 of 15 in both modes and the same probe lines; it was not kept.

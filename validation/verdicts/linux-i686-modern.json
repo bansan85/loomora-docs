@@ -1,0 +1,6 @@
+{
+  "platform_id": "linux-i686",
+  "ui_variant": "modern",
+  "status": "not_tested",
+  "reason": "Not attempted on this platform, by choice of scope, not by a failure. The Linux Modern UI (gtkmm on GTK 3, ui/modern/linux-gtk3) was built and judged for the 64-bit platform only (validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json). For the 32-bit build the machine (validation/platforms/linux-i686.json, a 64-bit WSL2 Ubuntu 24.04 running 32-bit programs through the i386 multiarch libraries) has no 32-bit GTK 3, glib or gtkmm libraries: the i386 packages measured with dpkg on 2026-11-14 are the C library, libX11, libXft, fontconfig, freetype and their development files, none of the GTK family. tools/build.py builds the Modern UI for the host architecture only (its --arch option is for the Legacy UI only). Whether the i386 GTK 3 and gtkmm development packages could be installed with multiarch on this machine, and whether the Modern UI would build and run as a 32-bit program, was not tried, so nothing is claimed about it."
+}
