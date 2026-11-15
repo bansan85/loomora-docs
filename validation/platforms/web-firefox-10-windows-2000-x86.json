@@ -1,0 +1,17 @@
+{
+  "id": "web-firefox-10-windows-2000-x86",
+  "family": "web",
+  "os_name": "Mozilla Firefox on Windows 2000 Professional",
+  "os_version": "Firefox 10.0 (Gecko 10.0, build ID 20120129021758, release channel, installed by the owner) on Windows 2000 Professional 5.00.2195 (build 2195, no service pack), English (US), 32-bit",
+  "arch": "js",
+  "release_date": "2012-01-31",
+  "age_years": 14.8,
+  "is_floor": true,
+  "in_scope": true,
+  "environment": "vm",
+  "environment_detail": "The VirtualBox 7.2.22 virtual machine 'Windows 2000' of validation/platforms/windows-2000-x86.json (1 vCPU, 168 MB RAM, NAT network, Guest Additions 6.1.18), restored on 2026-11-15 from the owner's snapshot 'Claude Firefox 10' (taken with Firefox 10.0 installed) because the VM had been paused by the host power management and could not be resumed (see the verdict). The page is served over HTTP by tools/run_vectors.py on the Windows 11 host and reached by the guest at 10.0.2.2 (the NAT address of the host). Firefox runs from C:\\Program Files\\Mozilla Firefox\\firefox.exe with a new profile (-no-remote -profile), the preferences listed in validation/procedures/web.md and no other change. The browser path of this record is the JavaScript one (loomora.js, Emscripten 1.39.20 fastcomp): Firefox 10 has no WebAssembly.",
+  "eol": false,
+  "release_date_source": "Release date of Firefox 10.0 (2012-01-31), from the author's knowledge, not from a page re-read for this record; the build ID 20120129021758 and the date of firefox.exe in the guest (2012-01-29) agree with it. age_years = days from 2012-01-31 to the trial date 2026-11-15 divided by 365.25, rounded to 0.1.",
+  "eol_note": "false on purpose: the Web page cannot read the browser or system version and asks the backend about family Web, version 0.0, which is never end of life (the end-of-life banner was not shown, eol_warning_shown false in every record). Firefox 10 and Windows 2000 are in fact long out of vendor support: the owner decides whether a Web platform must carry the warning (it would need a browser version check in the page).",
+  "floor_note": "Floor of the Web Legacy JavaScript path for the PoC (owner decision 2026-11-15: Internet Explorer up to 9 is dropped because it has no typed arrays, the path is validated on ONE lowest testable browser, a Firefox compatible with Windows 2000, and success there stands for newer browsers). Firefox 10.0 is the browser the owner installed in the Windows 2000 VM (Firefox 10 is the last release that installs on Windows 2000: later ones need Windows XP). Older Firefox (4 to 9 have typed arrays) and other browsers were not run."
+}
