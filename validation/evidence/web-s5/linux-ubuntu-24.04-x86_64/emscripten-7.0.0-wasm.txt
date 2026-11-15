@@ -1,0 +1,91 @@
+# Emscripten 7.0.0, WebAssembly (emscripten-wasm.cmake)
+# date: 2026-11-15T08:18Z  host: Linux 6.18.58.1-microsoft-standard-WSL2 x86_64, node v26.13.1
+# emcc: emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 7.0.0 (777e6e5db7b4990bcaeb1b9998ed642cc84e6629)
+# toolchain: cmake/toolchains/emscripten-wasm.cmake
+
+## link command of the module (ninja -t commands loomora_web | tail -1)
+: && /home/legar/emsdk/upstream/emscripten/em++ -fexceptions -fexceptions -O3 -DNDEBUG -fexceptions -sEXPORTED_FUNCTIONS=@<repo>/bridge/wasm/exports.txt -fexceptions -sEXPORTED_FUNCTIONS=@<repo>/bridge/wasm/exports.txt    -sMODULARIZE=1 -sEXPORT_NAME=createLoomora --no-entry -sEXPORTED_RUNTIME_METHODS=@<repo>/bridge/wasm/runtime-methods.txt -sALLOW_MEMORY_GROWTH=1 -sENVIRONMENT=web,worker,node bridge/wasm/CMakeFiles/loomora_web.dir/module.cpp.o -o bridge/wasm/loomora.js  core/libloomora.a && :
+
+## files (size, sha256)
+14152 628eeb928726e0013504a5f9919187f0c1a3cbdeb74939e311ed7bd15bde3446 loomora.js
+23971 429dca8d3a7526bac55945c4fa1e8019f38d95fcc7416cec5182e26a02ab7e84 loomora.wasm
+
+## lowest ECMAScript edition that parses loomora.js (acorn from the emsdk 7.0.0)
+acorn 8.19.0, file bridge/wasm/loomora.js (14152 bytes)
+lowest edition that parses: ecmaVersion 2021
+ES5 error: Unexpected token (1:20) near: "var createLoomora=(()=>{var _scriptName=globalThis.document?"
+
+## ctest
+1/1 Test #1: selftest .........................   Passed    0.04 sec
+100% tests passed, 0 tests failed out of 1
+
+## loomora_selftest under node (exit code after)
+all passed
+exit code 0
+
+## s5-node-driver.js (the module, the six exports, every greet vector)
+ok   export _loomora_abi_version
+ok   export _loomora_greet
+ok   export _loomora_is_eol
+ok   export _loomora_eol_warning
+ok   export _loomora_build_compiler
+ok   export _loomora_probe_record
+ok   no other C++ or main symbol exported
+info abi_version=1
+info build_compiler=clang 24.0.0git (https://github.com/llvm/llvm-project 84ba7b37f02df5a5567e31a1bcfa0f607e578f12)
+info eol_warning="Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection."
+ok   is_eol(WEB, 0, 0) == 0
+ok   is_eol(WINDOWS, 5, 0) == 1
+info greet("Coucou") -> {"status":14,"text":"Bonjour Coucou"}
+ok   loomora_greet("Coucou") == "Bonjour Coucou"
+ok   vector empty
+ok   vector ascii
+ok   vector ascii_punctuation
+ok   vector accented
+ok   vector cjk
+ok   vector right_to_left_arabic
+ok   vector right_to_left_hebrew
+ok   vector emoji
+ok   vector emoji_zwj_sequence
+ok   vector combining_characters
+ok   vector control_characters
+ok   vector one_thousand_ascii
+ok   vector one_thousand_two_byte_chars
+ok   vector limit_4096_ascii
+ok   vector limit_4096_two_byte_chars
+ok   vector too_long_4097_ascii -> -1 (got -1)
+ok   vector too_long_4098_two_byte_chars -> -1 (got -1)
+ok   vector invalid_overlong_two_byte -> -3 (got -3)
+ok   vector invalid_overlong_three_byte -> -3 (got -3)
+ok   vector invalid_surrogate -> -3 (got -3)
+ok   vector invalid_above_10ffff -> -3 (got -3)
+ok   vector invalid_byte_ff -> -3 (got -3)
+ok   vector invalid_lone_continuation -> -3 (got -3)
+ok   vector invalid_truncated_sequence -> -3 (got -3)
+ok   vector invalid_after_valid_text -> -3 (got -3)
+ok   vector null_pointer -> -3 (got -3)
+ok   vector capacity_too_small -> -2 (got -2)
+ok   vector capacity_one_byte_short -> -2 (got -2)
+ok   vector capacity_zero -> -2 (got -2)
+ok   vector capacity_exact
+ok   vector capacity_exact_empty_input
+ok   probe_record core_kind 3 is JSON with greeting_matches true
+ok   probe_record core_kind 2 is JSON with greeting_matches true
+info rss_kb (int64) is passed as a one BigInt
+summary: 43 passed, 0 failed
+exit code 0
+
+## same, with the WebAssembly global deleted first (LOOMORA_NO_WASM=1)
+info WebAssembly global removed: typeof WebAssembly = undefined
+failed to asynchronously prepare wasm: ReferenceError: WebAssembly is not defined
+Aborted(ReferenceError: WebAssembly is not defined)
+/home/legar/loomora-build/web-wasm/bridge/wasm/loomora.js:1
+var createLoomora=(()=>{var _scriptName=globalThis.document?.currentScript?.src;return async function(moduleArg={}){var Module=moduleArg;var ENVIRONMENT_IS_WEB=!!globalThis.window;var ENVIRONMENT_IS_WORKER=!!globalThis.WorkerGlobalScope;var ENVIRONMENT_IS_NODE=globalThis.process?.versions?.node&&glo
+                                                                                                                                                                                                                                                                                                            
+
+ReferenceError: WebAssembly is not defined
+    at abort (/home/legar/loomora-build/web-wasm/bridge/wasm/loomora.js:1:2535)
+    at instantiateArrayBuffer (/home/legar/loomora-build/web-wasm/bridge/wasm/loomora.js:1:3155)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async /home/legar/loomora-build/web-wasm/bridge/wasm/loomora.js:1:13521
+exit code 1
