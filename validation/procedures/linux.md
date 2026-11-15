@@ -238,3 +238,38 @@ Expected: `15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 100
 5. Window run and probe facts: `tools/trials/linux-manylinux2010-x86_64/window-run.sh` (compiles `xlib-driver.c`, starts its own Xvfb :98, types, compares two screenshots by hash, closes; expected exit status 0, empty stderr, 2 distinct screenshots), run with `docker run --rm -v "${PWD}:/src" -v loomora-build:/root/loomora-build -v "${PWD}/tools/trials/linux-manylinux2010-x86_64/window-run.sh:/run.sh" loomora-manylinux2010 bash /run.sh`. The probe line alone: `docker run ... bash -c "Xvfb :97 & sleep 2; DISPLAY=:97 /src/out/linux-legacy/x86_64/loomora-xlib --probe"`.
 
 Result of 2026-11-15: build with no warning (131,712 bytes, needs GLIBC_2.4 and GLIBCXX_3.4 at most), ctest 2 of 2, 15 of 15 vectors, window opened, typed into and closed with exit 0. Not covered: a CentOS 6 kernel, a real X server, the end-of-life banner (the kernel is the host's), a real keyboard, any other distribution, i686 and ARM.
+
+## L.11 Linux Legacy UI on an older userland: manylinux1 in Docker (platform `linux-centos-5.11-x86_64`)
+
+Written and replayed on 2026-11-15, after L.10, at the owner's request to try an older Linux userland than CentOS 6.10. Verdict `validation/verdicts/linux-centos-5.11-x86_64-legacy.json` (`ok_restricted`), platform record `validation/platforms/linux-centos-5.11-x86_64.json` (`is_floor` true; that of `linux-centos-6.10-x86_64` became false, its verdict is kept), evidence `validation/evidence/linux-manylinux1/linux-centos-5.11-x86_64/`. Same method as L.10: build and run inside the container, commands from Git Bash or PowerShell on the Windows host (`MSYS_NO_PATHCONV=1` in Git Bash).
+
+What the system is: a container of the PyPA image `quay.io/pypa/manylinux1_x86_64` (CentOS 5.11, glibc 2.5, devtoolset-2 gcc 4.8.2, Python 2.4 as system Python and 3.5 to 3.9 under `/opt/python`, no CMake). Only its schema-2 manifest is pullable by Docker 29 (images of 2015 and before, schema 1, are not). The kernel is the Docker Desktop one (WSL2 6.18), so only the userland is the old system's. The platform id comes from `/etc/redhat-release` (`CentOS release 5.11 (Final)`, no `/etc/os-release`: the same fallback `linux-platform-id-redhat-release`, no change of code).
+
+The unmodified image does not run on that kernel: glibc 2.5 reads the time through the vsyscall page, which the kernel does not map, so bash, perl, python3, yum and the compiler proper die with exit status 139. The Dockerfile therefore starts with `patch-vsyscall.py` (Python 2.4, exec form: no shell is needed), which replaces the two call sites of `/lib64/libc-2.5.so` by the real system calls. Two more defects are worked around there: Xvfb 1.1.1 needs `rgb.txt` (`xorg-x11-server-utils`) or the UI silently falls back to the core font (probe lines then carry `glyph-substitution` where Xft would give `missing-glyph`: check that the mixed string gives `missing-glyph`), and a wrapper gives it a font path, without which every probe takes 2 to 5 seconds to display. CMake is the pip wheel `cmake<3.23` (manylinux1 build), installed with `--progress-bar off`.
+
+1. The image (the yum repositories are already on `http://archive.kernel.org/centos-vault/5.11/`; http only):
+
+```
+PS> docker build -t loomora-manylinux1 tools/trials/linux-manylinux1-x86_64
+PS> docker volume create loomora-build-m1
+```
+
+2. Build inside the container (Python 3.8 of the image runs `tools/build.py`; gcc 4.8 has no `-dumpfullversion`, `tools/build.py` falls back to `-dumpversion`):
+
+```
+PS> docker run --rm -v "${PWD}:/src" -v loomora-build-m1:/root/loomora-build -w /src loomora-manylinux1 /opt/python/cp38-cp38/bin/python3 tools/build.py linux legacy --arch x86_64
+```
+
+3. ctest (as L.10 step 3, plus `-DPython3_EXECUTABLE=/opt/python/cp38-cp38/bin/python3` because the system Python is 2.4, and `-DLOOMORA_XLIB_XFT=OFF`, the build directory being a second one).
+
+4. The 15 reference vectors, from the Windows host (the launcher is unchanged; the volume is the one of step 2):
+
+```
+PS> python tools/run_vectors.py linux-centos-5.11-x86_64 legacy --docker loomora-manylinux1 --docker-volume loomora-build-m1 --evidence-dir docs/implementation/validation/evidence/<change>/linux-centos-5.11-x86_64
+```
+
+Expected: `15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars`, `result: PASSED`, `display_ms` below about 100.
+
+5. Window run: `tools/trials/linux-manylinux1-x86_64/window-run.sh`, run as in L.10 step 5 (`docker run --rm -v "${PWD}:/src" -v loomora-build-m1:/root/loomora-build -w /src loomora-manylinux1 bash /src/tools/trials/linux-manylinux1-x86_64/window-run.sh`); expected exit status 0, empty stderr, 2 distinct screenshots.
+
+Result of 2026-11-15: build with no warning (66,208 bytes, needs GLIBC_2.2.5, GLIBCXX_3.4 and CXXABI_1.3 only, so the stock libstdc++ 4.1.2 suffices), ctest 2 of 2, 15 of 15 vectors, window opened, typed into and closed with exit 0. Not covered: a CentOS 5 kernel (2.6.18), an unpatched libc (needs `vsyscall=emulate` on the host kernel or a real CentOS 5 kernel), a real X server, the end-of-life banner (the kernel is the host's), a real keyboard, CentOS 5.0 to 5.10, any other distribution, i686 and ARM.

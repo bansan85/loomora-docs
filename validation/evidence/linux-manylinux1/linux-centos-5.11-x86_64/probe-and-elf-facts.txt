@@ -1,0 +1,64 @@
+# system
+CentOS release 5.11 (Final)
+ls: /etc/os-release: No such file or directory
+Linux 6.18.58.1-microsoft-standard-WSL2 x86_64
+ldd (GNU libc) 2.5
+# toolchain
+g++ (GCC) 4.8.2 20140120 (Red Hat 4.8.2-15)
+cmake version 3.22.6
+Python 3.8.19
+Python 2.4.3
+/usr/local/bin/cmake
+glibc-2.5-123.el5_11.3
+libstdc++-4.1.2-55.el5
+libX11-1.0.3-11.el5_7.1
+libX11-devel-1.0.3-11.el5_7.1
+libXft-2.1.10-1.1
+libXft-devel-2.1.10-1.1
+fontconfig-2.4.1-7.el5
+fontconfig-devel-2.4.1-7.el5
+freetype-2.2.1-32.el5_9.1
+xorg-x11-server-Xvfb-1.1.1-48.107.el5.centos
+xorg-x11-server-utils-7.1-5.el5_6.2
+dejavu-lgc-fonts-2.10-1
+# executable
+-rwxr-xr-x 1 root root 66208 Nov 15 09:47 /src/out/linux-legacy/x86_64/loomora-xlib
+ac52e9d6252838ff6943b919620485bbc91720fb58f15a6a6639e262948a5f15  /src/out/linux-legacy/x86_64/loomora-xlib
+  NEEDED               libX11.so.6
+  NEEDED               libXft.so.2
+  NEEDED               libXrender.so.1
+  NEEDED               libfreetype.so.6
+  NEEDED               libfontconfig.so.1
+  NEEDED               libstdc++.so.6
+  NEEDED               libm.so.6
+  NEEDED               libgcc_s.so.1
+  NEEDED               libc.so.6
+# symbol versions needed
+CXXABI_1.3 GLIBC_2.2.5 GLIBCXX_3.4 
+# ldd
+	linux-vdso.so.1 =>  (0x000070f112b8e000)
+	libX11.so.6 => /usr/lib64/libX11.so.6 (0x000070f1124f4000)
+	libXft.so.2 => /usr/lib64/libXft.so.2 (0x000070f1122e1000)
+	libXrender.so.1 => /usr/lib64/libXrender.so.1 (0x000070f1120d8000)
+	libfreetype.so.6 => /usr/lib64/libfreetype.so.6 (0x000070f111e54000)
+	libfontconfig.so.1 => /usr/lib64/libfontconfig.so.1 (0x000070f111c20000)
+	libstdc++.so.6 => /usr/lib64/libstdc++.so.6 (0x000070f111920000)
+	libm.so.6 => /lib64/libm.so.6 (0x000070f11169d000)
+	libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x000070f11148f000)
+	libc.so.6 => /lib64/libc.so.6 (0x000070f111136000)
+	libXau.so.6 => /usr/lib64/libXau.so.6 (0x000070f110f34000)
+	libXdmcp.so.6 => /usr/lib64/libXdmcp.so.6 (0x000070f110d2f000)
+	libdl.so.2 => /lib64/libdl.so.2 (0x000070f110b2b000)
+	libexpat.so.0 => /lib64/libexpat.so.0 (0x000070f110908000)
+	/lib64/ld-linux-x86-64.so.2 (0x000070f112800000)
+# vsyscall patch check: vsyscall addresses left in libc (0 expected)
+0
+# probe, default input
+{"schema":1,"platform_id":"linux-centos-5.11-x86_64","ui_variant":"legacy","input":"Coucou","message":"Bonjour Coucou","greeting_matches":true,"core":"cpp","compiler":"gcc 4.8.2 20140120 (Red Hat 4.8.2-15)","displayed":true,"display_ms":13,"peak_rss_kb":5328,"eol_warning_shown":false,"disabled_features":[],"timestamp_utc":"2026-11-15T09:52:52Z"}
+exit=0
+# probe, mixed string
+{"schema":1,"platform_id":"linux-centos-5.11-x86_64","ui_variant":"legacy","input":"Zo\u00e9 \u20ac5 \u03b1\u03b2\u03b3 \u041f\u0440\u0438\u0432\u0435\u0442 \u65e5\u672c\u8a9e \u05e9\u05dc\u05d5\u05dd \u0645\u0631\u062d\u0628\u0627 \u00e9 \ud83e\udd8a","message":"Bonjour Zo\u00e9 \u20ac5 \u03b1\u03b2\u03b3 \u041f\u0440\u0438\u0432\u0435\u0442 \u65e5\u672c\u8a9e \u05e9\u05dc\u05d5\u05dd \u0645\u0631\u062d\u0628\u0627 \u00e9 \ud83e\udd8a","greeting_matches":true,"core":"cpp","compiler":"gcc 4.8.2 20140120 (Red Hat 4.8.2-15)","displayed":true,"display_ms":60,"peak_rss_kb":5596,"eol_warning_shown":false,"disabled_features":["missing-glyph"],"timestamp_utc":"2026-11-15T09:52:54Z"}
+exit=0
+# probe, usage error
+usage: /src/out/linux-legacy/x86_64/loomora-xlib [--probe [--probe-input <utf8>]]
+exit=2

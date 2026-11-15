@@ -1,0 +1,21 @@
+{
+  "platform_id": "linux-centos-5.11-x86_64",
+  "ui_variant": "legacy",
+  "cpp_std": "c++11",
+  "compiler": "gcc-4.8.2",
+  "target": "x86_64-redhat-linux",
+  "output": "native",
+  "ui_language": "c++",
+  "ui_toolkit": "Xlib (libX11, no toolkit); text drawn with libXft and fontconfig, linked (the core X11 font fixed only when Xft opens no font); C++11 with RAII classes for the Xlib and Xft handles, POSIX",
+  "ui_compiler": "gcc-4.8.2",
+  "artifact": {
+    "name": "loomora-xlib",
+    "size": 66208
+  },
+  "disabled_features": [],
+  "fallbacks": [
+    "cxx17-nodiscard",
+    "linux-platform-id-redhat-release"
+  ],
+  "notes": "cmake 3.22.6 (ui/legacy/linux-xlib/CMakeLists.txt, x86_64, Release with -O2) on linux-centos-5.11-x86_64 (glibc 2.5); the UI is C++11 (-std=c++11, -Wall -Wextra -pedantic); static libloomora.a built from core/src with -std=c++11; libstdc++ and libgcc_s linked dynamically; text drawn with Xft (xft 2.1.10, fontconfig 2.4.1, found by pkg-config and linked; no fallback); shared libraries needed (objdump -p): libX11.so.6, libXft.so.2, libXrender.so.1, libfreetype.so.6, libfontconfig.so.1, libstdc++.so.6, libm.so.6, libgcc_s.so.1, libc.so.6; 15 libraries resolved by ldd. BUILT NATIVELY ON THE MACHINE IT IS FOR (ADR 0007), so no glibc or libstdc++ version ceiling is checked and it was not run on any other system. Artifact copied to out/linux-legacy/x86_64/, sha256 ac52e9d6252838ff6943b919620485bbc91720fb58f15a6a6639e262948a5f15."
+}

@@ -1,0 +1,6 @@
+{
+  "platform_id": "linux-centos-5.11-x86_64",
+  "ui_variant": "modern",
+  "status": "not_tested",
+  "reason": "Not attempted on this platform, by choice of scope, not by a failure. The owner's request of 2026-11-15 asks only for the Linux Legacy UI on an older Linux userland. The Linux Modern UI needs gtkmm and GTK 3.10 or later (ui/modern/linux-gtk3), which are not part of CentOS 5 (it ships GTK 2.10; the packages were not queried in the image); whether GTK 3 could be built there was not tried, so nothing is claimed about it."
+}
