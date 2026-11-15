@@ -15,7 +15,7 @@ Replayable procedure for the Android Legacy UI (Java views, JNI glue, C++11 back
 - Written on 2026-11-14 from the commands that were run. One machine: the Windows 11 host of `validation/platforms/windows-11-x64.json`, no WSL (the Android Legacy build runs on the Windows host, ADR 0016).
 - **The only system that was run is Android 4.1.2 (API 16) on x86, in the emulator.** The UI is built for API 9 (`minSdkVersion 9`), but the emulator cannot start below API 16, so Android 2.3 to 4.0 and every ARM ABI were NOT run. Read the verdicts as "built for API 9, run on API 16".
 - Modern UI (Kotlin, API 24): see parts E to H. The `modern` verdicts of the three Legacy platforms are `not_tested` (below its floor, API 24).
-- **Package id**: from 2026-11-15 the Java / Kotlin package is `fr.bansan.loomora.probe` (JNI exports `Java_fr_bansan_loomora_probe_Native_*`), Legacy applicationId `fr.bansan.loomora.probe`, Modern `fr.bansan.loomora.probe.modern`. The Legacy run of 2026-11-14 (parts B to D, and the evidence under `validation/evidence/android-legacy/`) used the earlier id `fr.loomora.probe`: that evidence is history and was not edited; the text of this procedure follows the new id. After the rename the Legacy APK was rebuilt (`python tools/build.py android legacy`) and its 15 vectors passed again on the API 24 emulator (not stored).
+- **Package id**: from 2026-11-15 the Java / Kotlin package is `fr.bansan.loomora.probe` (JNI exports `Java_fr_bansan_loomora_probe_Native_*`), Legacy applicationId `fr.bansan.loomora.probe`, Modern `fr.bansan.loomora.probe.modern`. The Legacy run of 2026-11-14 (parts B to D, and the evidence under `validation/evidence/android-legacy/`) used the earlier id `fr.loomora.probe`: that evidence is history and was not edited; the text of this procedure follows the new id. After the rename the Legacy APK was rebuilt on 2026-11-15 (`python tools/build.py android legacy`: 228,663 bytes, sha256 7eb8d186b4bf3447000b756fd6a3357aa146a7b359bbb1f4de48211dccfd5b6b) and the three Legacy deliverable records were regenerated from that build, so they no longer describe the stored evidence of the 2026-11-14 run (sha256 d4b0d066...). The 15 vectors were rerun through the rebuilt APK on API 16 (`android-4.1.2-x86`, 15 passed, 43.8 s) and on API 24 (`android-7.0-x86_64 legacy --ui-abi x86`, 15 passed, 46.7 s); the reruns are written in the notes of the verdicts, not stored again (ADR 0014). The Modern UI was built after the rename: its record and APK are unchanged.
 
 ## A. Tools (versions read on 2026-11-14)
 
@@ -37,7 +37,7 @@ PS> $env:LOOMORA_ANDROID_SDK = "E:\Program\Android\Sdk"
 PS> python tools/build.py android legacy
 ```
 
-For each ABI (`armeabi`, `armeabi-v7a`, `x86`, `arm64-v8a`) it runs CMake + Ninja with `cmake/toolchains/android-ndk-r15c.cmake` (sysroot `platforms/android-9`, `android-21` for `arm64-v8a`; static backend `libloomora.a` with `-std=c++11`, `libloomora_jni.so`, `loomora_selftest`), checks `-std=c++11` in `compile_commands.json`, the `DT_NEEDED` list, the exported symbols (only `Java_fr_bansan_loomora_probe_Native_*`) and the undefined symbols (the link uses `--no-undefined` against the API 9 / 21 libraries), then runs `ui/legacy/android-views/build_apk.py` (javac, `d8 --min-api 9`, aapt, zipalign, apksigner v1 only) and writes `out/android-legacy/loomora.apk` (228,623 bytes), the self-tests in `out/android-legacy/selftest/<abi>/` and one deliverable record per Android platform record. The output of the last run is in `build-output-tail.txt` of the evidence folder.
+For each ABI (`armeabi`, `armeabi-v7a`, `x86`, `arm64-v8a`) it runs CMake + Ninja with `cmake/toolchains/android-ndk-r15c.cmake` (sysroot `platforms/android-9`, `android-21` for `arm64-v8a`; static backend `libloomora.a` with `-std=c++11`, `libloomora_jni.so`, `loomora_selftest`), checks `-std=c++11` in `compile_commands.json`, the `DT_NEEDED` list, the exported symbols (only `Java_fr_bansan_loomora_probe_Native_*`) and the undefined symbols (the link uses `--no-undefined` against the API 9 / 21 libraries), then runs `ui/legacy/android-views/build_apk.py` (javac, `d8 --min-api 9`, aapt, zipalign, apksigner v1 only) and writes `out/android-legacy/loomora.apk` (228,663 bytes since the rename to `fr.bansan.loomora`; 228,623 bytes in the 2026-11-14 run), the self-tests in `out/android-legacy/selftest/<abi>/` and one deliverable record per Android platform record. The output of the last run is in `build-output-tail.txt` of the evidence folder.
 
 ## C. Run on the emulator (API 16, x86)
 
@@ -55,7 +55,15 @@ PS> adb shell getprop sys.boot_completed            # wait for 1
 4. **Typing**: start the activity without probe mode, `adb shell input keyevent KEYCODE_MOVE_END`, six times `KEYCODE_DEL`, `adb shell input text Marie`, then `adb shell uiautomator dump /sdcard/ui.xml` and read the `text=` attributes: `Marie` and `Bonjour Marie` (`typing-uiautomator.txt`). The end-of-life banner is on screen.
 5. **Kill the emulator**: `adb emu kill`, then `adb kill-server`; check with `Get-Process emulator, qemu*` that nothing is left.
 
-The platform id of the probe line is `android-<ro.build.version.release>-<ro.product.cpu.abi>` (here `android-4.1.2-x86`), the same rule in `Probe.java`.
+The platform id of the probe line is `android-<ro.build.version.release>-<Build.CPU_ABI>` (here `android-4.1.2-x86`), the same rule in `Probe.java`. `Build.CPU_ABI` is the ABI of the process, not of the device.
+
+**A device that runs the Legacy UI as another ABI than its platform record.** The Legacy APK holds `armeabi`, `armeabi-v7a`, `x86` and `arm64-v8a` libraries and no `x86_64` one, so on the x86_64 API 24 image (platform `android-7.0-x86_64`) the UI runs as a 32-bit `x86` process and its probe line says `android-7.0-x86`, which is truthful. `tools/check_probe.py` is not changed (it never compares the platform id with anything). `tools/run_vectors.py` compares it with the platform id of the command line, so such a device is run with `--ui-abi`:
+
+```
+PS> python tools/run_vectors.py android-7.0-x86_64 legacy --serial emulator-5556 --ui-abi x86
+```
+
+`--ui-abi` states the ABI the UI process runs as. The launcher then expects the platform id `android-7.0-x86` (only the ABI part changes, the release must still match), prints that expectation, checks that `ro.product.cpu.abilist` of the device lists the ABI, and names its evidence files `...-ui-x86-...`. Only the 32-bit companion of the device's ABI is accepted (`x86` on `x86_64`; `armeabi-v7a` or `armeabi` on `arm64-v8a`; see `android_probe_platform_id`) and any other value is refused. Without the option the probe line must carry exactly the platform id of the command line, so every other platform is checked as before (without `--ui-abi`, the 15 vectors fail on `platform_id` alone on this image). The rule is checked by `python tools/run_vectors.py --self-test`, which `tools/verify.py` runs.
 
 ## D. What was NOT done
 
