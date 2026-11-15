@@ -3,5 +3,5 @@
   "ui_variant": "modern",
   "web_path": "js",
   "status": "not_tested",
-  "reason": "There is no Web Modern UI yet (ui/modern/web-ts is not written) and Firefox 10 is the Legacy floor browser of the JavaScript path, not a target of a modern TypeScript UI; the Modern Web UI would run on a current browser with the WebAssembly path."
+  "reason": "The Web Modern UI (ui/modern/web-ts) exists and is validated on Chrome 157 on Windows 11 (PoC rule: one current browser); it is not run on Firefox 10, the Legacy floor browser of the JavaScript path, which is not a target of a modern TypeScript UI (the Modern UI uses the WebAssembly path of a current browser)."
 }
