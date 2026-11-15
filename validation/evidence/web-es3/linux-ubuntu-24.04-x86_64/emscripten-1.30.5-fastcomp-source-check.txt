@@ -1,0 +1,18 @@
+# Emscripten 1.30.x (first release with fastcomp only): source check, nothing run
+# date: 2026-11-15T09:49Z  host: Linux 6.18.58.1-microsoft-standard-WSL2 x86_64, node v14.18.2 (emsdk)
+
+git tag 1.30.5 (shallow clone, ~/loomora-es3-old/emscripten-1.30.5); no fastcomp LLVM was built for it
+
+## emcc: what fastcomp accepts
+903:      assert shared.Settings.ASM_JS > 0, 'ASM_JS must be enabled in fastcomp'
+914:      assert shared.Settings.USE_TYPED_ARRAYS == 2, 'fastcomp assumes ta2'
+762:  assert settings['ASM_JS'], 'fastcomp is asm.js-only (mode 1 or 2)'
+1562:  logging.critical('Non-fastcomp compiler is no longer available, please use fastcomp or an older version of emscripten')
+
+## the old compiler core was gone from 1.30.0: no 'no longer available' text in 1.29.12, present in 1.30.0 (emscripten.py of each tag)
+1.29.12: 0
+1.30.0: 1
+
+## ChangeLog.md of 1.39.20
+2072: - Removed old deprecated functionalities USE_TYPED_ARRAYS, FHEAP, GC emulation
+3985: - Deprecated -s USE_TYPED_ARRAYS=1 and -s QUANTUM_SIZE=1.
