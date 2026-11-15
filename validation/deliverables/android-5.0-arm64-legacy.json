@@ -10,11 +10,11 @@
   "ui_compiler": "javac -source 8 -target 8 against android-9/android.jar, d8 --min-api 9 (dex 035), aapt, zipalign, apksigner v1 only",
   "artifact": {
     "name": "loomora.apk",
-    "size": 228623
+    "size": 228663
   },
   "disabled_features": [],
   "fallbacks": [
     "cxx17-nodiscard"
   ],
-  "notes": "cmake + ninja with cmake/toolchains/android-ndk-r15c.cmake (NDK 15.2.4203891, Clang 5.0.300080, unified headers, --sysroot platforms/android-9, gnustl linked statically, no ndk-build); static libloomora.a built from core/src with -std=c++11 and libloomora_jni.so per ABI (arm64-v8a: needs libdl.so, libc.so, 6 JNI export(s); armeabi: needs libc.so, 6 JNI export(s); armeabi-v7a: needs libc.so, 6 JNI export(s); x86: needs libdl.so, libc.so, 6 JNI export(s)); ONE universal APK holding libraries of the four ABIs, named by every Android platform record; the ABIs of this platform: arm64-v8a; artifact sha256 d4b0d066769637cb96dd16205d8a128d0561568c3d9c073f10bce73a2cebaa9e; artifact copied to out/android-legacy/."
+  "notes": "cmake + ninja with cmake/toolchains/android-ndk-r15c.cmake (NDK 15.2.4203891, Clang 5.0.300080, unified headers, --sysroot platforms/android-9, gnustl linked statically, no ndk-build); static libloomora.a built from core/src with -std=c++11 and libloomora_jni.so per ABI (arm64-v8a: needs libdl.so, libc.so, 6 JNI export(s); armeabi: needs libc.so, 6 JNI export(s); armeabi-v7a: needs libc.so, 6 JNI export(s); x86: needs libdl.so, libc.so, 6 JNI export(s)); ONE universal APK holding libraries of the four ABIs, named by every Android platform record; the ABIs of this platform: arm64-v8a; artifact sha256 7eb8d186b4bf3447000b756fd6a3357aa146a7b359bbb1f4de48211dccfd5b6b; artifact copied to out/android-legacy/."
 }
