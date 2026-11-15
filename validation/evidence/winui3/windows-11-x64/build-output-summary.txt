@@ -1,0 +1,12 @@
+Key lines of `python tools/build.py windows modern` (2026-11-15; the cmake and dotnet output between them is not stored):
+Visual Studio: C:\Program Files\Microsoft Visual Studio\18\Community; MSVC toolset 14.52.37025 (cl.exe 19.52.37029); .NET SDK 10.0.404 (ui/modern/windows-winui3/global.json)
+build/host-msvc/core/Release/loomora.dll: x64, exports exactly the 6 loomora_* functions, imports KERNEL32.dll, 146432 bytes
+net8 x64: published folder 34 files, 37792741 bytes; loomora-winui-net8-x64.zip 9925788 bytes (sha256 f8dbf3761221a90dfef8876199e54f0f39d92f008850270016d757eabcc19c34)
+net10 x64: published folder 34 files, 37803469 bytes; loomora-winui-net10-x64.zip 9930841 bytes (sha256 08a2abd68bd186f0f19c2b7804cec1321b1889d720e7fe9880004be8303fe2bf)
+build/host-msvc-arm64/core/Release/loomora.dll: ARM64, exports exactly the 6 loomora_* functions, imports KERNEL32.dll, 132096 bytes
+net8 arm64: published folder 34 files, 38063631 bytes; loomora-winui-net8-arm64.zip 9906558 bytes (sha256 1b23dade3e1b216c7852cfe0fc933f645eda0e38d731193ab0f41bab252207c3)
+net10 arm64: published folder 34 files, 38070775 bytes; loomora-winui-net10-arm64.zip 9909684 bytes (sha256 6480b89995d20c5dfabfc07c3539870f174fe5855107efb1fdbae79c7e217a48)
+artifact: out/windows-modern/loomora-winui-net10-x64.zip (9930841 bytes)
+deliverable record: docs/implementation/validation/deliverables/windows-11-x64-modern.json
+artifact: out/windows-modern/loomora-winui-net10-arm64.zip (9909684 bytes)
+deliverable record: docs/implementation/validation/deliverables/windows-arm64-modern.json

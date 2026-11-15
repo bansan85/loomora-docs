@@ -1,0 +1,196 @@
+{
+  "platform_id": "windows-11-x64",
+  "ui_variant": "modern",
+  "status": "ok_restricted",
+  "restrictions": [
+    "ONE MACHINE, ONE WINDOWS, X64 ONLY: run on the physical Windows 11 26H2 host of validation/platforms/windows-11-x64.json (Intel Core i5-8300H, 96 DPI, French) with the .NET runtimes 6, 8, 9, 10 and 11 and the Windows App Runtime 2.6.5 installed. Nothing was run on Windows 10 1809 or any Windows 10 (no machine, so no verdict for the net8 fallback, which was only run on this Windows 11), on another Windows 11 machine, or on any virtual machine.",
+    "ARM64 WAS BUILT, NEVER RUN: loomora.dll (MSVC ARM64) and the WinUI app for win-arm64, net8 and net10, were built (machine type 0xAA64 checked for Loomora.WinUI.exe, loomora.dll and the bootstrapper DLL of each folder) but there is no ARM64 machine: ARM64 execution is not_tested. There is no platform record for an ARM64 machine, so no ARM64 verdict file and the deliverable is recorded under the generic id windows-arm64 (validation/deliverables/windows-arm64-modern.json).",
+    "THE END-OF-LIFE INFOBAR WAS NEVER SEEN: Windows 11 is not end of life for the backend, eol_warning_shown is false in every run, so the InfoBar (Severity Warning, shown above the field, non-blocking) was never displayed and its look and contrast were not checked. Its code path (SystemInfo.IsEndOfLife, Native.EolWarning) was only exercised in the not-end-of-life branch.",
+    "THEMES: the light and dark themes were looked at and their contrast measured on rendered pixels (15.68:1 and 16.29:1, contrast-measure.txt; only the light screenshots are stored, no third image). High contrast themes were NOT switched on: the colours are theme resources (ApplicationPageBackgroundThemeBrush, TextFillColorPrimaryBrush, the system InfoBar styles) so the system applies its high contrast palette, but that is not checked on a screen.",
+    "TYPING: the run types 'Marie' with SendKeys (real keyboard events to the focused field, from a script; 177 ms to the greeting), not a person on a keyboard. The 1,000-character limit was exercised through the probe input only (the two vectors of more than 1,000 UTF-16 units are cut to 1,000 by the code, TextBox MaxLength is 1000), not by typing 1,001 characters or by pasting. The Enter key is swallowed in PreviewKeyDown (the field has AcceptsReturn on, see notes) and was not tried.",
+    "DISPLAY TIME IS FROM THE PROCESS START: display_ms is the delay from the creation of the process to the first frame drawn after Activate, so it includes the start of the .NET runtime and of the Windows App Runtime: 2053 ms for the first run after a build (cold), 365 to 545 ms for the next nine on this PC. The Legacy UI measures from WinMain: the two figures are not comparable. peak_rss_kb is about 112.8 MB (the Legacy UI: 14 MB).",
+    "FRAMEWORK-DEPENDENT: the 38 MB folder works only where the .NET Desktop Runtime (8 or 10) and the Windows App Runtime 2.6 of the same architecture are installed (procedures/windows.md C.1). The failure path without the Windows App Runtime (message box, status 1) was not exercised (the runtime cannot be removed from this machine); the failure path without a .NET runtime was exercised as the framework-error dialog of the apphost on private .NET roots (rollforward-net8-*.txt).",
+    "THE BUILD IS PINNED AND RECORDED, NOT AUDITED: .NET SDK 10.0.404 (global.json), Windows App SDK 2.6.5 (WinUI and Runtime components), Microsoft.Windows.SDK.NET.Ref 10.0.19041.57, BuildTools 10.0.26100.4654, BuildTools.MSIX 1.7.251221100, WebView2 1.0.3719.77, MSVC 14.52.37025 (cl.exe 19.52.37029), CMake 4.4.0; the net10 zips came out byte-identical in four builds, the net8 zips differ by a few bytes from build to build (the verdict names the sha256 of the build that was run). The packages were not inspected beyond their presence (Microsoft.Windows.SDK.NET.dll, 24.9 MB, is the Windows SDK projection of the target).",
+    "ONE DAY: runs of 2026-11-15. Not covered: DPI above 100%, per-monitor DPI changes, accessibility tools, a store or MSIX installation (the app is unpackaged), a start with the zip unzipped to a path with non-ASCII characters, Windows Defender or SmartScreen behaviour on a downloaded zip."
+  ],
+  "disabled_features": [],
+  "evidence": [
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/probe-default.json",
+      "sha256": "d179018da52f66ab80fff3223ec520974e5891136d75c6ec938cc922360b9859",
+      "kind": "probe",
+      "description": "First line of the series of 10 default runs (net10 x64 published folder, `--probe`): message \"Bonjour Coucou\", platform_id windows-11-x64, ui_variant modern, compiler \"msvc 195237029\", display_ms 2053 (the first run after a build, cold), peak_rss_kb 112848, disabled_features [], eol_warning_shown false."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/probe-default-runs.txt",
+      "sha256": "1b73955ca1548cef30d836a75b2532c56da3d21d7051443c66841ce3c8f70d4a",
+      "kind": "check-data",
+      "description": "The 10 probe lines of the series (one fresh process per run, from a scratch copy of the folder): display_ms 2053, 383, 365, 425, 471, 425, 461, 409, 545, 448 (median 436.5), peak_rss_kb 112696 to 112952, every line valid, exit status 0, no process left after any run."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/run-vectors-windows-11-x64-modern-net10-x64-log.txt",
+      "sha256": "8930f05dfedf296a137cc23a793ac7c0885267d8d382558b0d5ce2de0e86e6cd",
+      "kind": "check-log",
+      "description": "tools/run_vectors.py windows-11-x64 modern on the net10 x64 folder: 15 valid vectors, 15 passed, 0 failed, 16 skipped (error and API-only vectors), 2 truncated to 1,000 UTF-16 units, serial, about 40 s; the probe line read from standard output equals loomora-probe.json in every run."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/run-vectors-windows-11-x64-modern-net10-x64-probe-lines.tsv",
+      "sha256": "3a88157d679012c345c39536ee4e646397d6761c9b8d77b07cc1e462ff21f2a4",
+      "kind": "check-data",
+      "description": "The 15 probe lines of that run (TSV: vector id, line), each checked by tools/check_probe.py against its vector."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/run-vectors-windows-11-x64-modern-net8-x64-log.txt",
+      "sha256": "e13675fdb6f0c9b939ca9ea5bffc08a1018a1619862d687f92dc8c73ad828843",
+      "kind": "check-log",
+      "description": "The same run on the net8 x64 folder (RollForward Major, loaded on the .NET 8.0.34 runtime, see rollforward-net8-resolution.txt): 15 passed, 0 failed, 16 skipped, 2 truncated."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/run-vectors-windows-11-x64-modern-net8-x64-probe-lines.tsv",
+      "sha256": "84c07b79c3bc0b586577e6008801fbbd52478961d19dfb76ff530bd41c683144",
+      "kind": "check-data",
+      "description": "The 15 probe lines of the net8 run."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/probe-attachconsole.txt",
+      "sha256": "0be8708c6e2af538cf5f8fa00e9507ca86526ec62e0dbca069cace3f41028499",
+      "kind": "check-log",
+      "description": "The AttachConsole path: the UI started with no redirection from a process that owns a console (a GUI program has no standard output handle there): it attaches to the parent console, writes the probe line to CONOUT$ (read back from the console screen buffer, identical to loomora-probe.json), exit code 0."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/typing-uia.json",
+      "sha256": "5bdc2d2f34bbd1ec03981e4acf43dfb9e1626b5bdc63837abfb08c6f567aacc8",
+      "kind": "check-log",
+      "description": "Window run without probe mode (UI Automation reads, SendKeys types): field \"Coucou\" and greeting \"Bonjour Coucou\" at start; after Ctrl+A and the keys M a r i e the field reads \"Marie\" and the greeting \"Bonjour Marie\" (177 ms after the keys were sent, SendKeys time included); WM_CLOSE gives exit code 0."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/rollforward-net8-resolution.txt",
+      "sha256": "a2f2962ec5b4ec95509f5efcc6cc427d1e6757304697fcd8ca89fdecf7acb6d3",
+      "kind": "check-log",
+      "description": "Which .NET runtime the net8 x64 folder loads on this host (.NET 8.0.34 and 11.0.0 installed among others): RollForward Major as published loads 8.0.34; DOTNET_ROLL_FORWARD=LatestMajor loads 11.0.0 although 8 is installed."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/rollforward-net8-dotnet10-only.txt",
+      "sha256": "67447b8f10b10b29378600f69bbbdc93c5f7d598da61c16491ba08bb962d8c69",
+      "kind": "check-log",
+      "description": "The net8 x64 folder started from a private .NET root holding only .NET 10.0.15: as published (rollForward Major) it starts, valid probe line, exit 0; without rollForward the apphost refuses (\"You must install or update .NET\", framework 8.0.0); with DOTNET_ROLL_FORWARD=LatestMajor it starts."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/rollforward-net8-dotnet11-only.txt",
+      "sha256": "235eefd32ac000571bb994b33825dfc84289114659f689c807cf8afabd935da4",
+      "kind": "check-log",
+      "description": "The same with a private .NET root holding only .NET 11.0.0: same three results."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/loomora-dll-msvc.txt",
+      "sha256": "cde14a017cbe20c2cd15a5d4ed60aa6903b4259eaf49676259180b5fc9abc006",
+      "kind": "check-log",
+      "description": "loomora.dll built by MSVC (cl.exe 19.52.37029): compile flags (/MT, no /std option so the default /std:c++14), x64 and ARM64 machine types, exports exactly the six loomora_* functions, imports KERNEL32.dll only, sizes and sha256 (146,432 and 132,096 bytes)."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/build-output-summary.txt",
+      "sha256": "acce544a6f0d7d881b762e22454440e53f0427cb36e4e4b63a35d58585a34f41",
+      "kind": "check-log",
+      "description": "Key lines of `python tools/build.py windows modern`: toolchain versions, both DLL checks, the four published folders (files, bytes) and zips (bytes, sha256), the two deliverable records written."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/contrast-measure.txt",
+      "sha256": "fae6b6431e4715e7c263040e8b94aef17b5b257f5803c685e25540cb011dee84",
+      "kind": "check-data",
+      "description": "Contrast of the greeting text measured on the captured pixels: 15.68:1 in the light theme (#1a1a1a on #f3f3f3), 16.29:1 in the dark theme (#ffffff on #202020; that capture is not stored)."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/screenshot-default.png",
+      "sha256": "db452681c5fe3048a532dd4ea56180f809c5f1fcd90ef9295738cd7004357841",
+      "kind": "screenshot",
+      "description": "Windows 11 x64, net10 build, light theme, 96 DPI, started normally: field \"Coucou\", label \"Bonjour Coucou\" (546x353 px, window frame cropped from a PrintWindow capture)."
+    },
+    {
+      "path": "validation/evidence/winui3/windows-11-x64/screenshot-mixed-unicode.png",
+      "sha256": "ff4b36b6593766393abdb644a75fff6b9f4c1bd08d46dffe689e103fd64a6c93",
+      "kind": "screenshot",
+      "description": "Same build, probe-mode launch with the input \"Zoé € Ελ 日本\" shot inside the 2 s window: field and label \"Bonjour Zoé € Ελ 日本\" show the accent, the euro sign, Greek and CJK, no missing-glyph box."
+    },
+    {
+      "path": "tools/trials/windows-11-x64/winui-trial.py",
+      "sha256": "e0ccc75a5a8454a85224a79db013d07a7053edea19b2a28159a55d47776b0413",
+      "kind": "script",
+      "description": "Driver of probe-default-runs.txt (series), probe-attachconsole.txt (console), rollforward-net8-resolution.txt (resolution) and rollforward-net8-dotnet10-only.txt / -dotnet11-only.txt (rollforward, private .NET roots through DOTNET_ROOT of the child only)."
+    },
+    {
+      "path": "tools/trials/windows-11-x64/winui-typing.ps1",
+      "sha256": "ae2e327c62c68cdb21b0930903d19f1acf9c8461d18de9dd81628641edbafeae",
+      "kind": "script",
+      "description": "Driver of typing-uia.json: UI Automation reads the field and the greeting, SendKeys types, WM_CLOSE closes."
+    },
+    {
+      "path": "tools/trials/windows-11-x64/winui-shoot.py",
+      "sha256": "44e8093db35d9d51bf155fc06014edbdb91acbe2b70ef7a4c5808c39761e6e47",
+      "kind": "script",
+      "description": "Driver of the two screenshots and of contrast-measure.txt: PrintWindow capture cropped to the visible frame, optional dark theme (registry value restored), contrast ratio of the greeting from the captured pixels."
+    }
+  ],
+  "measurements": {
+    "trial_date": "2026-11-15",
+    "scope": "Windows 11 x64 only, on the physical host of platforms/windows-11-x64.json: says nothing about Windows 10, ARM64 or any other machine",
+    "published_folders": {
+      "net8-x64": {
+        "files": 34,
+        "bytes": 37792741,
+        "zip_bytes": 9925788,
+        "zip_sha256": "f8dbf3761221a90dfef8876199e54f0f39d92f008850270016d757eabcc19c34",
+        "run": "vectors: 15 of 15 on the .NET 8.0.34 runtime"
+      },
+      "net10-x64": {
+        "files": 34,
+        "bytes": 37803469,
+        "zip_bytes": 9930841,
+        "zip_sha256": "08a2abd68bd186f0f19c2b7804cec1321b1889d720e7fe9880004be8303fe2bf",
+        "run": "vectors: 15 of 15, 10 probe runs, typing, screenshots"
+      },
+      "net8-arm64": {
+        "files": 34,
+        "bytes": 38063631,
+        "zip_bytes": 9906558,
+        "zip_sha256": "1b23dade3e1b216c7852cfe0fc933f645eda0e38d731193ab0f41bab252207c3",
+        "run": "not run (built only)"
+      },
+      "net10-arm64": {
+        "files": 34,
+        "bytes": 38070775,
+        "zip_bytes": 9909684,
+        "zip_sha256": "6480b89995d20c5dfabfc07c3539870f174fe5855107efb1fdbae79c7e217a48",
+        "run": "not run (built only)"
+      }
+    },
+    "size_with_windows_app_sdk_metapackage_bytes": 81863410,
+    "built_for": "TargetPlatformMinVersion 10.0.17763.0, WindowsPackageType None, WindowsAppSDKSelfContained false, SelfContained false, RollForward Major for net8 only; Windows App SDK 2.6.5; .NET SDK 10.0.404; loomora.dll MSVC 14.52.37025 /MT /std:c++14 (cl.exe default)",
+    "display_ms": {
+      "runs": 10,
+      "min": 365,
+      "median": 436.5,
+      "max": 2053
+    },
+    "peak_rss_kb": {
+      "min": 112696,
+      "max": 112952
+    },
+    "typing_to_greeting_ms": 177,
+    "contrast_ratio": {
+      "light": 15.68,
+      "dark": 16.29
+    },
+    "rollforward_net8": {
+      "rollForward_Major_with_net8_and_net11_installed": "loads .NET 8.0.34",
+      "LatestMajor_with_net8_and_net11_installed": "loads .NET 11.0.0",
+      "private_root_dotnet10_only": "Major: starts; default policy: refuses; LatestMajor: starts",
+      "private_root_dotnet11_only": "Major: starts; default policy: refuses; LatestMajor: starts"
+    }
+  },
+  "reproduction": "validation/procedures/windows.md",
+  "decision": "keep",
+  "sources": [
+    "eol-windows-11"
+  ],
+  "notes": "Windows 11 x64 trial of the Windows Modern UI (WinUI 3, C#, LibraryImport, MSVC loomora.dll), written 2026-11-15 after real runs on the physical host described in validation/platforms/windows-11-x64.json. STATUS ok_restricted: the greeting 'Bonjour Coucou' / 'Bonjour Marie' is computed by the backend DLL and displayed, typing updates it within 1 s, the 15 reference vectors pass for the net10 and for the net8 build, the probe line is valid on standard output and in loomora-probe.json, the window closes with exit code 0 and leaves no process, two screenshots (default and mixed Unicode) and a light and dark contrast measurement were looked at; the restrictions above are real: one machine, x64 only, no Windows 10, ARM64 not run, InfoBar never shown, no high contrast. DECISION keep: nothing found makes the UI unusable on this system. Facts worth knowing. (1) The app is unpackaged and framework-dependent (the owner's decision: the self-contained size of 100 to 250 MB is unacceptable): 37.8 MB unzipped, 9.9 MB zipped, and it needs the .NET Desktop Runtime and the Windows App Runtime 2.6 installed (procedures/windows.md C.1). Referencing only the WinUI and Runtime components of Windows App SDK 2.6.5 instead of the Microsoft.WindowsAppSDK metapackage saves 44 MB (81.9 MB to 37.7 MB): the metapackage ships onnxruntime.dll and DirectML.dll for components this app never uses. (2) Windows App SDK 2.6.5 accepts net8.0-windows10.0.19041.0: no older SDK was needed for the .NET 8 build. (3) The .NET 8 build is the Windows 10 1809 fallback (validation/fallbacks.json dotnet8-windows10, no platform takes it yet): it has RollForward Major, so it uses .NET 8 where installed and the lowest higher major otherwise; LatestMajor was measured and rejected because it loads .NET 11 even where .NET 8 is installed. It starts on a machine that only has .NET 10 or only .NET 11 (measured on private .NET roots). (4) MSVC compiles the C++11 backend with its default /std:c++14 (MSVC has no /std:c++11); the SDK pair .NET 11.0.100 also builds both targets (dotnet build, 0 warnings, scratch copy without global.json, not stored) but the build is pinned to 10.0.404. (5) A single-line WinUI TextBox drops the text after a line feed set by the program: the field has AcceptsReturn on, Enter is swallowed so it behaves as a single-line field, and WinUI's carriage return is converted back to a line feed so the control_characters vector passes (14 of 15 before). (6) dotnet publish of an unpackaged app needs EnableMsixTooling for Loomora.WinUI.pri to be in the folder. (7) MSVC's loomora_build_compiler() reads 'msvc 195237029' (_MSC_FULL_VER), the same form as the backend's other compilers. The loomora_probe_record platform_id is computed by the UI from the OS version and architecture (windows-11-x64 here, windows-11-arm64 on an ARM64 Windows 11). Spike S8, WinUI half: confirmed on this machine (validation/spikes.json). Screenshots stored by authorization of the owner (at most two, one per rendering scenario)."
+}

@@ -1,4 +1,4 @@
-# Procedure: Windows (Legacy UI)
+# Procedure: Windows (Legacy and Modern UIs)
 
 Replayable procedure for the platforms that were really run in this project (FR-016, SC-004, SC-008):
 
@@ -6,13 +6,14 @@ Replayable procedure for the platforms that were really run in this project (FR-
 |---|---|---|---|
 | `windows-11-x64` | legacy | `validation/verdicts/windows-11-x64-legacy.json` | the physical Windows 11 host (part A) |
 | `windows-2000-x86` | legacy | `validation/verdicts/windows-2000-x86-legacy.json` | the VirtualBox VM "Windows 2000" (part B) |
+| `windows-11-x64` | modern (WinUI 3) | `validation/verdicts/windows-11-x64-modern.json` | the physical Windows 11 host (part C) |
 
 Every command is the one that was run, taken from `tools/`, the ADRs, the platform records and the verdicts.
 
 ## Status of this document
 
 - Written on 2026-11-14 from the records and the scripts. Part A was replayed on the same host on that day: the build, the host quick check, the probe runs, `tools/run_vectors.py` for both executables, the import check, the self-tests and the Windows 11 trial driver, with the results quoted below. Part B (the VM) was **not** replayed on 2026-11-14: the VM was powered off and this procedure never starts it. Its expected results are those stored in the verdict and the evidence.
-- Only the Legacy UI exists on Windows. No Modern UI (WinUI 3) was built or run, so there is no `modern` verdict and no procedure for it (the validator reports the missing verdicts as warnings).
+- The Modern UI (WinUI 3) was built and run on 2026-11-15 on the Windows 11 x64 host only (part C). It has no Windows 10 1809 verdict (no machine) and no ARM64 verdict (built, never run; no ARM64 platform record), so the validator still reports the missing verdicts as warnings.
 - Windows 2000 was run on build 2195 **without service pack**. The decided floor (SP4), Windows XP, Vista, 7, 8.1, 10, ARM64 and real hardware were not run: nothing here says anything about them.
 - The ordinary build and run need only the main repository. The records (`validation/`) are in the docs submodule: `git -c protocol.file.allow=always submodule update --init`.
 
@@ -267,3 +268,101 @@ The verdict is `ok_restricted` for the x86 executable on Windows 2000 build 2195
 ### B.10 What to record, and where
 
 Same rules as A.9, with the folder `validation/evidence/<adr-or-change>/windows-2000-x86/` and the verdict `validation/verdicts/windows-2000-x86-legacy.json`. Record the guest facts (`vm-environment.json`: VM state before and after, snapshot name, Guest Additions version) with every new run, and state in the notes whether the snapshot was restored. After a trial, remove the guest folder (`trial-driver.py cleanup`) and leave the VM as found.
+
+## Part C: Windows 11 x64, Modern UI (WinUI 3, host)
+
+Verdict `validation/verdicts/windows-11-x64-modern.json`, deliverable `validation/deliverables/windows-11-x64-modern.json`, evidence `validation/evidence/winui3/windows-11-x64/`. Run on 2026-11-15 on the same physical host as part A. The commands below are the ones that were run, from the repository root, in PowerShell on the Windows host (no WSL, no Visual Studio window).
+
+### C.1 What must be installed
+
+To BUILD (the machine of the trial; versions read on 2026-11-15):
+
+| Tool | Version |
+|---|---|
+| Visual Studio 2026 Community (C++ desktop workload, and for ARM64 the component "MSVC Build Tools for ARM64/ARM64EC (Latest)") | MSVC toolset 14.52.37025 (`cl.exe` 19.52.37029); 14.44 is also installed and not used |
+| CMake | 4.4.0 (the `Visual Studio 18 2026` generator needs 4.2 or later) |
+| .NET SDK | 10.0.404, pinned by `ui/modern/windows-winui3/global.json` (`rollForward` `latestPatch`); SDKs 9.0.321 and 11.0.100 are also installed and are not used by the build (see C.8) |
+| NuGet (network, or a filled cache) | `Microsoft.WindowsAppSDK.WinUI` and `Microsoft.WindowsAppSDK.Runtime` 2.6.5 (with `.Base`, `.Foundation`, `.InteractiveExperiences` 2.6.5), `Microsoft.Windows.SDK.BuildTools` 10.0.26100.4654, `Microsoft.Windows.SDK.BuildTools.MSIX` 1.7.251221100, `Microsoft.Web.WebView2` 1.0.3719.77, `Microsoft.Windows.SDK.NET.Ref` 10.0.19041.57, the `Microsoft.NETCore.App.Runtime.win-x64` / `win-arm64` packs 8.0.34 and 10.0.15 (all restored from nuget.org, cache `NUGET_PACKAGES`) |
+
+To RUN a published folder on a machine (unpackaged, framework-dependent: the folder carries neither the .NET runtime nor the Windows App Runtime, which is why it is 38 MB and not the 100 to 250 MB of a self-contained one):
+
+1. the **.NET Desktop Runtime** of the build: 8 (`net8` zip, the Windows 10 1809 fallback, `RollForward` `Major` so a later major is used when 8 is missing) or 10 (`net10` zip), x64 or ARM64 as the zip;
+2. the **Windows App Runtime 2.6** of the same architecture (package `Microsoft.WindowsAppRuntime.2`, version 2.6.x). Without it the program says so and exits with status 1 (message box outside probe mode, standard error in probe mode); it is found by the bootstrapper API (`Bootstrap.TryInitialize(0x00020006)` in `Program.cs`);
+3. Windows 10 1809 (build 17763) or later. Installing the runtimes needs administrator rights on the machine; the application itself needs none.
+
+The host of the trial had the .NET runtimes 6.0.36, 8.0.34, 9.0.23, 10.0.15 and 11.0.0 and the Windows App Runtime packages `Microsoft.WindowsAppRuntime.2` 2.4.0, 2.5.1, 2.6.4 and 2.6.5 (x64; 2.6.5 also x86) installed before the trial.
+
+### C.2 Build
+
+```
+PS> python tools/build.py windows modern
+```
+
+It runs `cmake --preset host-msvc` and `--build --preset host-msvc` (x64) and, when `Hostx64\arm64\cl.exe` exists, the same with `host-msvc-arm64`: `loomora.dll` by MSVC with `/MT` and `cl.exe`'s default `/std:c++14` (MSVC has no `/std:c++11`; CMake's `CXX_STANDARD 11` target property adds no flag), exporting exactly the six `loomora_*` functions and importing only `KERNEL32.dll` (`validation/evidence/winui3/windows-11-x64/loomora-dll-msvc.txt`). Then `dotnet publish` of `ui/modern/windows-winui3` for each of `net8.0-windows10.0.19041.0` and `net10.0-windows10.0.19041.0` and for `win-x64` and `win-arm64` (`-p:Platform=...`, `-p:LoomoraDll=...`), checks the machine type of the three native files of each folder, and zips each folder: `out/windows-modern/loomora-winui-<net8|net10>-<x64|arm64>.zip`, published folders in `build/windows-modern/<net8|net10>-<x64|arm64>/`. Measured on 2026-11-15:
+
+| Target | Published folder | Zip |
+|---|---|---|
+| net8 x64 | 34 files, 37,792,741 bytes | 9,925,788 bytes |
+| net10 x64 | 34 files, 37,803,469 bytes | 9,930,841 bytes |
+| net8 arm64 | 34 files, 38,063,631 bytes | 9,906,558 bytes |
+| net10 arm64 | 34 files, 38,070,775 bytes | 9,909,684 bytes |
+
+The biggest file is `Microsoft.Windows.SDK.NET.dll` (24.9 MB, the Windows SDK projection of the target). With the `Microsoft.WindowsAppSDK` metapackage instead of the two component packages the net10 x64 folder was 81,863,410 bytes: the metapackage adds the AI, ML, Search and Widgets components (`onnxruntime.dll`, `DirectML.dll`, about 44 MB), so the project references only `Microsoft.WindowsAppSDK.WinUI` and `.Runtime` (same version 2.6.5). The ARM64 folders were built, their native files are ARM64 (machine 0xAA64), and they were never run: there is no ARM64 machine. Windows App SDK 2.6.5 accepted `net8.0` (no older SDK was needed). The zips of an identical source are byte-identical for net10 (the sha256 came out the same in four builds); the net8 zips differ by a few bytes from one build to the next.
+
+The XAML compiles with `dotnet build`/`dotnet publish` of the .NET SDK 10.0.404: the Visual Studio MSBuild was not needed. `EnableMsixTooling` is on: without it `dotnet publish` of an unpackaged app leaves `Loomora.WinUI.pri` (the XAML resources) out of the folder and the window fails to load (`XamlParseException`).
+
+### C.3 The reference vectors
+
+```
+PS> python tools/run_vectors.py windows-11-x64 modern --evidence-dir docs/implementation/validation/evidence/winui3/windows-11-x64
+PS> python tools/run_vectors.py windows-11-x64 modern --exe build/windows-modern/net8-x64/Loomora.WinUI.exe --evidence-dir docs/implementation/validation/evidence/winui3/windows-11-x64
+```
+
+The launcher `WindowsModernLauncher` copies the published folder to a scratch folder, starts `Loomora.WinUI.exe --probe --probe-input <text>` once per vector (serially, one WinUI process at a time, through an argument list), reads the probe line from standard output (a pipe), compares it with `loomora-probe.json` next to the executable and runs the checks of `tools/check_probe.py`. Result for the net10 and for the net8 folder: 15 valid vectors run, 15 passed, 16 error or API-only vectors skipped, two truncated to 1,000 UTF-16 units (limit_4096_ascii, limit_4096_two_byte_chars), about 40 s each. The net8 folder ran on the .NET 8.0.34 runtime (`rollforward-net8-resolution.txt`). The `control_characters` vector (`a<TAB>b<LF>c<SOH>`) needs the field to accept a line break set by the program: a single-line WinUI `TextBox` drops everything after it (measured: 14 of 15 passed with `AcceptsReturn` off), so the field has `AcceptsReturn` on, the Enter key is swallowed so that it behaves as a single-line field, and WinUI's lone carriage return is converted back to the line feed.
+
+`python tools/verify.py quick` includes `run_vectors windows modern` when `python tools/build.py windows modern` has left `build/windows-modern/net10-x64/` (it does not build it: the build needs Visual Studio, the .NET SDK and NuGet).
+
+### C.4 Probe line, memory, time to the first frame
+
+```
+PS> python tools/trials/windows-11-x64/winui-trial.py series build/windows-modern/net10-x64/Loomora.WinUI.exe --runs 10 --out <file>
+```
+
+Ten runs of `Loomora.WinUI.exe --probe` from a scratch copy: all exit status 0, no `Loomora.WinUI.exe` process left after any run, every line valid (`greeting_matches` true, `platform_id` `windows-11-x64`, `ui_variant` `modern`, `compiler` `msvc 195237029`, `disabled_features` empty, `eol_warning_shown` false). `display_ms` (from the creation of the process, so it includes the start of the .NET runtime and of the Windows App Runtime, to the first frame drawn after `Activate`): 2053 (the first run after a build, cold), then 365 to 545; median 436.5. `peak_rss_kb` 112,696 to 112,952. The probe line goes to standard output (a pipe in the vectors run; when the process has no standard output handle, as when started from a console without redirection, the program attaches to the parent console with `AttachConsole` and writes to `CONOUT$`: `python tools/trials/windows-11-x64/winui-trial.py console <exe> --out <file>` starts it from a process that owns a console and reads the line back from the screen buffer, `probe-attachconsole.txt`) and to `loomora-probe.json` next to the executable. The Legacy UI measures from `WinMain`, this one from the process start: the two numbers are not comparable.
+
+### C.5 The window: typing, screenshots, themes
+
+```
+PS> powershell -NoProfile -ExecutionPolicy Bypass -File tools/trials/windows-11-x64/winui-typing.ps1 -Exe <abs path>\Loomora.WinUI.exe -Text Marie
+PS> python tools/trials/windows-11-x64/winui-shoot.py <exe> <png>                                  # default start
+PS> python tools/trials/windows-11-x64/winui-shoot.py <exe> <png> --probe-input "Zoé € Ελ 日本"    # inside the 2 s probe window
+PS> python tools/trials/windows-11-x64/winui-shoot.py <exe> <png> --dark                          # dark theme, registry value restored afterwards
+```
+
+`winui-typing.ps1` starts the UI normally, reads the field and the greeting through UI Automation (`Coucou` / `Bonjour Coucou`), focuses the field, selects its content (Ctrl+A) and types `Marie` with `SendKeys` (keyboard events, not a value set through UI Automation): the greeting reads `Bonjour Marie` 177 to 189 ms after the keys were sent, including the time `SendKeys` takes; the window closes with `WM_CLOSE` and the exit code is 0 (`typing-uia.json`). `winui-shoot.py` captures the window with `PrintWindow` and crops it to the visible frame. The two screenshots stored (owner's authorization: at most two, one per rendering scenario) show the default start and the mixed Unicode input `Zoé € Ελ 日本`: accent, euro sign, Greek and CJK are drawn, no missing-glyph box. A dark-theme capture was taken, looked at and NOT stored: white text on `#202020`. The contrast of the greeting text measured on the captured pixels is 15.68:1 (light, `#1a1a1a` on `#f3f3f3`) and 16.29:1 (dark, `#ffffff` on `#202020`), both above 4.5:1 (`contrast-measure.txt`). The colours are theme resources only (`ApplicationPageBackgroundThemeBrush`, `TextFillColorPrimaryBrush`), so a high contrast theme applies by itself, but no high contrast theme was switched on.
+
+### C.6 RollForward of the .NET 8 build
+
+`net8` has `<RollForward>Major</RollForward>` (only for that target framework). The measurements (`winui-trial.py rollforward` and `resolution`, a private .NET root made for the child process only through `DOTNET_ROOT`, no global setting touched; evidence `rollforward-net8-*.txt`):
+
+- Machine with .NET 8.0.34 and 11.0.0 (the host): `Major` loads 8.0.34; `DOTNET_ROLL_FORWARD=LatestMajor` loads 11.0.0 although 8 is installed, which is why `LatestMajor` was NOT kept.
+- Private root with only .NET 10.0.15, and with only .NET 11.0.0: the net8 build with `rollForward` `Major` starts and writes a valid probe line (exit 0); without `rollForward` (the default policy) the apphost shows the message "You must install or update .NET to run this application" (Framework Microsoft.NETCore.App 8.0.0) and does not start; with `DOTNET_ROLL_FORWARD=LatestMajor` it starts.
+- So the .NET 8 build starts on a machine that has only .NET 10 or only .NET 11 and uses .NET 8 where it is installed. Windows 10 1809 itself was not available: nothing is known about it.
+
+The apphost of a `WinExe` shows a message box on a framework error: the trial script reads its text and ends the process.
+
+### C.7 Spike S8, WinUI half
+
+WinUI 3 (C#, `LibraryImport`, no C++/CLI and no C++/WinRT) calls the C++11 `loomora.dll` built by MSVC: the six functions are imported with `LibraryImport` (`ui/modern/windows-winui3/Native.cs`), the ABI version is checked at start, the greeting, the end-of-life test and the probe record come from the DLL, and 15 of 15 reference vectors pass on Windows 11 x64 for the net8 and the net10 build. Recorded in `validation/spikes.json` (S8).
+
+### C.8 The .NET SDKs
+
+`global.json` pins the SDK 10.0.404 (`latestPatch`): both target frameworks are built by it (net8 and net10 reference packs come with the SDK or from NuGet). The SDK 11.0.100 builds the project as well when `global.json` is not there: see the verdict notes for the result of that check. The .NET 11 runtime ran the net8 build (rollForward).
+
+### C.9 What the verdict claims, and what this procedure does not cover
+
+Covered: the x64 build of the net10 and net8 folders on this Windows 11 host (15 of 15 vectors each, 10 probe runs of net10, the typing run, two screenshots, light and dark contrast, the roll-forward measurements). Not covered: Windows 10 1809 or any Windows 10 (no machine: no verdict, the net8 fallback is declared in `validation/fallbacks.json` with no platform), ARM64 execution (built only, no verdict: there is no platform record for an ARM64 machine), the end-of-life InfoBar (this system is not end of life, so `eol_warning_shown` is false in every run and the InfoBar was never seen on screen), high contrast, DPI above 100%, the 1,000-character limit by keystrokes, other machines.
+
+### C.10 What to record, and where
+
+As A.9: evidence in `validation/evidence/winui3/windows-11-x64/`, the verdict `validation/verdicts/windows-11-x64-modern.json`, the deliverable records written by `tools/build.py windows modern` (`windows-11-x64-modern.json`, and `windows-arm64-modern.json` for the ARM64 build, which has no platform record yet). A rebuild of the net8 zip changes its sha256 by a few bytes: a verdict that names it must be updated with it.

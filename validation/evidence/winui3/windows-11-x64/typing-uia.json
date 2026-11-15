@@ -1,0 +1,13 @@
+{
+    "window_after_ms":  483,
+    "initial_field":  "Coucou",
+    "initial_greeting":  "Bonjour Coucou",
+    "method":  "SendKeys",
+    "typed_text":  "Marie",
+    "field_after":  "Marie",
+    "greeting_after":  "Bonjour Marie",
+    "greeting_matches":  true,
+    "typing_to_greeting_ms":  177,
+    "exited":  true,
+    "exit_code":  0
+}
