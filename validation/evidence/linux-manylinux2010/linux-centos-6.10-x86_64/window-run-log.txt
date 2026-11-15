@@ -1,0 +1,19 @@
+== LANG=C.UTF-8
+shot 480x320 -> /tmp/a.ppm
+typed 6 characters
+shot 480x320 -> /tmp/b.ppm
+distinct screenshots (2 = typing changed the window): 2
+close sent
+ui exit status: 0
+ui stderr bytes: 0
+== LANG=en_US.UTF-8
+shot 480x320 -> /tmp/a.ppm
+typed 6 characters
+shot 480x320 -> /tmp/b.ppm
+distinct screenshots (2 = typing changed the window): 2
+close sent
+ui exit status: 0
+ui stderr bytes: 0
+C
+en_US.utf8
+POSIX

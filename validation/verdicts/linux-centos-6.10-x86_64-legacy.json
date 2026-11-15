@@ -1,0 +1,118 @@
+{
+  "platform_id": "linux-centos-6.10-x86_64",
+  "ui_variant": "legacy",
+  "status": "ok_restricted",
+  "restrictions": [
+    "SCOPE: A DOCKER CONTAINER, NOT A CENTOS 6 MACHINE (validation/platforms/linux-centos-6.10-x86_64.json). The Linux Legacy UI was built and run inside the PyPA image quay.io/pypa/manylinux2010_x86_64 (CentOS 6.10 userland, glibc 2.12, gcc 8.3.1 from devtoolset-8, cmake 3.23.3) on Docker Desktop 29.8.0 on the Windows 11 laptop. The container shares the host's kernel, the Microsoft WSL2 kernel 6.18.58.1, so this verdict proves the CentOS 6 / glibc 2.12 USERLAND (compiler, headers, libX11 1.6.4, libXft 2.3.2, fontconfig 2.8.0, libstdc++ 4.4.7 at run time) and says nothing about a CentOS 6 kernel (2.6.32), a CentOS 6 boot, or any other distribution, architecture or machine. Per the PoC scope rule (2026-11-15) success on this lowest testable system counts for newer ones; nothing newer was run for this verdict.",
+    "NO END-OF-LIFE BANNER: the distribution is end of life (CentOS 6, 2020-11-30) but loomora_is_eol reads the kernel release from uname, which inside the container is 6.18 (not end of life), so eol_warning_shown is false in every probe line and the banner of the Linux Legacy UI was not shown on this platform. The banner path was shown only by a test-only build on the Ubuntu platform (verdict linux-ubuntu-24.04-x86_64-legacy) and never by a real end-of-life kernel.",
+    "X SERVER: every run used a private Xvfb 1.17.4 (the CentOS 6 package) on display :99 or :98 or :97, never a real Xorg, a window manager, a desktop session or a physical display. The window runs show the client area only (no decorations).",
+    "INPUT WAS SYNTHETIC AND ONLY CHECKED BY PIXELS: window-run-log.txt shows the executable opening a 480x320 window, six synthetic key events (xlib-driver.c, XSendEvent with a remapped spare keycode, the driver of the Ubuntu platform) changing the window contents (two distinct screenshots) and a WM_DELETE_WINDOW ending the UI with exit 0 and an empty stderr, with LANG=C.UTF-8 and LANG=en_US.UTF-8. The screenshots (PPM) were compared by hash and NOT stored and NOT looked at: what was drawn, and that the greeting reads 'Bonjour Coucou Marie', is not shown by that run (the probe line and the 15 vectors prove the greeting, not the picture). C.UTF-8 does not exist on glibc 2.12 (locale -a lists C, en_US.utf8 and POSIX), so the first run used the C locale. No input method, dead key, compose sequence or real keyboard was tried.",
+    "FONTS: the image has the DejaVu fonts, the misc and Type1 X fonts (34 fontconfig fonts) and no other font (no CJK font). The mixed Unicode string (Latin, euro sign, Greek, Cyrillic, CJK, Hebrew, Arabic, an emoji) gave disabled_features ['missing-glyph'] (CJK and the emoji have no glyph) with greeting_matches true. Which vectors carry a missing-glyph marker depends on that font set; check_probe does not require it to be empty.",
+    "NO TEXT SHAPING AND NO BIDIRECTIONAL LAYOUT, by decision (accepted by the owner, see the verdict linux-ubuntu-24.04-x86_64-legacy and the fallback xlib-core-font-glyphs): not re-checked on this platform, the Xft drawing path is the same code.",
+    "SINGLE RUNS, NO SERIES: the probe lines give display_ms 20 (default input) and 38 (mixed string), peak_rss_kb 6340 and 6404, one run each; the 15 vectors ran in 4 parallel docker exec calls (2.3 to 2.4 s each, including docker start-up). No series, no ASan or UBSan run, no HiDPI, no memory over time. The numbers are not a performance claim.",
+    "BUILD ENVIRONMENT WORKAROUNDS (recorded in the Dockerfile tools/trials/linux-manylinux2010-x86_64/Dockerfile): vault.centos.org answered 403 Forbidden to the CentOS 6 TLS stack for the repodata files, so base, updates and extras were pointed at archive.kernel.org/centos-vault/6.10 (same content) and the SCLo and EPEL repositories were not used; the yum run dropped libcrypt.so.2 (which the image's Pythons need, in /usr/local/lib) from the ld cache, so /usr/local/lib was added to the ld configuration. The Xft and fontconfig development files, Xvfb and fonts were added to the image (it has libX11-devel only). No source change was needed for the old compiler or the old Xlib: the only source change is the platform-id fallback linux-platform-id-redhat-release (CentOS 6 has no /etc/os-release).",
+    "THE BACKEND TESTS RAN FROM A SEPARATE BUILD: ctest 2 of 2 (selftest and the Catch2 tests loomora_tests, Catch2 initialised in the worktree) used a second CMake build directory (-DLOOMORA_XLIB_XFT=OFF, which only affects the UI that build also compiled), not the build of the deliverable; both use the same backend sources and the same C++11 target property. No ASan, UBSan or valgrind run.",
+    "NOT DONE: the Linux Modern UI (GTK 3.10 is not available on CentOS 6, verdict linux-centos-6.10-x86_64-modern is not_tested), any other distribution, a 32-bit build, ARM, a native CentOS 6 machine or kernel, and a re-run of the shipped file after copying it out of the container (the executable was run from the build volume and from out/linux-legacy/x86_64/ of the mounted worktree, sha256 e69caea7...)."
+  ],
+  "disabled_features": [
+    "missing-glyph (Xft path, the normal path of this platform: a code point that no installed font has is drawn as an empty box and the probe line carries it; with the DejaVu-only font set of the image the mixed string (CJK, emoji) carries it. The greeting and the probe record are unchanged. Measured in probe-mixed.json)",
+    "text-shaping-and-bidi (not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it)"
+  ],
+  "evidence": [
+    {
+      "path": "validation/evidence/linux-manylinux2010/linux-centos-6.10-x86_64/build-log.txt",
+      "sha256": "c5e6104bf0299087d79ddb37e07aaa26389600743d69e9bf1dfa45b09cdde145",
+      "kind": "build-measurements",
+      "description": "Output of 'python tools/build.py linux legacy --arch x86_64' run inside the image (Python 3.8 from /opt/python, gcc 8.3.1, cmake 3.23.3, Xft 2.3.2 and fontconfig 2.8.0 found): the build of both libloomora.a and loomora-xlib with no warning, the artifact (131,712 bytes) and the deliverable record written."
+    },
+    {
+      "path": "validation/evidence/linux-manylinux2010/linux-centos-6.10-x86_64/probe-and-elf-facts.txt",
+      "sha256": "8ec1fcfa7675722a90402c793b83edd7319b6aea4754ca84d815f253eb324c73",
+      "kind": "build-measurements",
+      "description": "System facts (CentOS release 6.10, no /etc/os-release, kernel 6.18.58.1-microsoft-standard-WSL2, ldd 2.12), toolchain and package versions, the executable (131,712 bytes, sha256 e69caea7a8abd413aaaf7400c1a915fa133e2330459b6ddfdb53a999992cd7e5), its DT_NEEDED list (libX11, libXft, libfontconfig, libstdc++, libm, libgcc_s, libc), the symbol versions it needs (GLIBC_2.2.5, GLIBC_2.4, GLIBCXX_3.4, CXXABI_1.3: nothing above glibc 2.4, the stock libstdc++ 4.4.7 suffices), ldd, and three runs: the default probe (greeting_matches true, display_ms 20, peak_rss_kb 6340), the mixed string probe and the usage error (exit 2)."
+    },
+    {
+      "path": "validation/evidence/linux-manylinux2010/linux-centos-6.10-x86_64/probe-mixed.json",
+      "sha256": "c48d3fbac9dc0347d6995a919c5cd756e72a0490ae1b0e8e12422499a4badb26",
+      "kind": "probe",
+      "description": "Probe line of --probe --probe-input with the mixed string 'Zoé €5 αβγ Привет 日本語 שלום مرحبا é 🦊': platform_id linux-centos-6.10-x86_64 (the redhat-release fallback), greeting_matches true, displayed true, eol_warning_shown false, display_ms 38, peak_rss_kb 6404, disabled_features ['missing-glyph']."
+    },
+    {
+      "path": "validation/evidence/linux-manylinux2010/linux-centos-6.10-x86_64/run-vectors-linux-centos-6.10-x86_64-legacy-log.txt",
+      "sha256": "b6c86ff7252b68ec074bca796b9dceb242b97be8bee48e519d9e756e3adaa7cd",
+      "kind": "check-log",
+      "description": "tools/run_vectors.py linux-centos-6.10-x86_64 legacy --docker loomora-manylinux2010: 15 vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped, 2 truncated to 1,000 characters; every probe line carries platform_id linux-centos-6.10-x86_64 and ui_variant legacy."
+    },
+    {
+      "path": "validation/evidence/linux-manylinux2010/linux-centos-6.10-x86_64/run-vectors-linux-centos-6.10-x86_64-legacy-probe-lines.tsv",
+      "sha256": "c53c7f6c6b998aeba133b582c76546ae7fdc3b193c9a027cbc7c09fdbaf19fd1",
+      "kind": "check-data",
+      "description": "The probe lines of the 15 vectors of the run above (vector id, tab, probe line)."
+    },
+    {
+      "path": "validation/evidence/linux-manylinux2010/linux-centos-6.10-x86_64/ctest-log.txt",
+      "sha256": "638cc48bb90ee31c76ebb8d5b6c8d9d80ffdeb0c6470f5218740122c80ff831c",
+      "kind": "check-log",
+      "description": "ctest 2 of 2 inside the image (selftest and loomora_tests, the Catch2 tests on core/tests/vectors.json), from a second CMake build directory of the same sources (see the restrictions)."
+    },
+    {
+      "path": "validation/evidence/linux-manylinux2010/linux-centos-6.10-x86_64/window-run-log.txt",
+      "sha256": "21b2ba969081e8f54d80f0aee68aa0e911a0a2ce0a4b30edcd5f2cf624066c57",
+      "kind": "check-log",
+      "description": "Window run in a private Xvfb: the executable without --probe opened its 480x320 window, six synthetic key events changed it (two distinct screenshots, not stored), close ended it with exit status 0 and an empty stderr; with LANG=C.UTF-8 (falls back to the C locale on glibc 2.12) and LANG=en_US.UTF-8."
+    },
+    {
+      "path": "tools/trials/linux-manylinux2010-x86_64/Dockerfile",
+      "sha256": "5961b1d364950ec5d83fe5a89b04ee68677a584919948a59cb1f775c805009f3",
+      "kind": "driver",
+      "description": "Dockerfile of the test image (the PyPA manylinux2010 image plus the Xft and fontconfig development files, Xvfb and fonts, with the archive.kernel.org repository workaround and the ld configuration fix)."
+    },
+    {
+      "path": "tools/trials/linux-manylinux2010-x86_64/window-run.sh",
+      "sha256": "9127ee6871d7bb18dc8ac8ff16e6b30b5fcedcaecd2d4b572717a08511659758",
+      "kind": "driver",
+      "description": "Script run inside the container for the window run (compiles the xlib-driver, starts Xvfb :98, types ' Marie', compares two screenshots by hash, sends close)."
+    },
+    {
+      "path": "tools/trials/linux-ubuntu-24.04-x86_64/xlib-driver.c",
+      "sha256": "fa1ef323b49f08de47b119646153fd4d2aafad6812325835662e24676bca133a",
+      "kind": "driver",
+      "description": "Window driver of the Ubuntu platform, compiled and reused unchanged inside the container: SYNTHETIC key events (XSendEvent), screenshots, WM_DELETE_WINDOW."
+    }
+  ],
+  "measurements": {
+    "trial_date": "2026-11-15",
+    "scope": "PyPA manylinux2010 image (CentOS 6.10 userland, glibc 2.12) in a Docker container on Docker Desktop 29.8.0, Windows 11 host, shared WSL2 kernel 6.18.58.1, x86_64 only: nothing is claimed about a real CentOS 6 kernel or machine, another distribution, i686 or ARM",
+    "executables": {
+      "x86_64_deliverable_record": {
+        "name": "loomora-xlib",
+        "size_bytes": 131712,
+        "sha256": "e69caea7a8abd413aaaf7400c1a915fa133e2330459b6ddfdb53a999992cd7e5",
+        "source": "validation/deliverables/linux-centos-6.10-x86_64-legacy.json and probe-and-elf-facts.txt; text path xft (xft 2.3.2, fontconfig 2.8.0); symbol versions GLIBC_2.2.5, GLIBC_2.4, GLIBCXX_3.4, CXXABI_1.3"
+      },
+      "toolchain": "gcc 8.3.1 (devtoolset-8), cmake 3.23.3, Unix Makefiles, Release -O2, UI and backend -std=c++11 -Wall -Wextra -pedantic, no warning"
+    },
+    "probe_lines": {
+      "default_input": {
+        "display_ms": 20,
+        "peak_rss_kb": 6340,
+        "disabled_features": [],
+        "greeting_matches": true
+      },
+      "mixed_string": {
+        "display_ms": 38,
+        "peak_rss_kb": 6404,
+        "disabled_features": [
+          "missing-glyph"
+        ],
+        "greeting_matches": true
+      }
+    },
+    "run_vectors": "15 run, 15 passed, 0 failed, 16 skipped, 2 truncated to 1,000 characters (stored)",
+    "ctest": "2 of 2 (stored)",
+    "window_run": "opened, typing changed the window, close exit 0, stderr empty, LANG=C.UTF-8 and en_US.UTF-8 (stored as text)"
+  },
+  "reproduction": "validation/procedures/linux.md",
+  "decision": "keep",
+  "notes": "Verdict of the Linux Legacy UI (Xlib, C++11, CMake, Xft) on the lowest testable Linux system, the manylinux2010 container (CentOS 6.10 userland, glibc 2.12), written 2026-11-15; it covers T092 as re-scoped by the PoC rule (the lowest testable system; i686 and other distributions are not required). STATUS ok_restricted: the UI built with the old compiler, headers and Xlib with no source change beyond the platform id, runs against the stock CentOS 6 libraries (nothing above GLIBC_2.4 or GLIBCXX_3.4 is needed), greets correctly (greeting_matches true, 15 of 15 vectors, ctest 2 of 2) and opens, takes synthetic typing and closes cleanly; the restrictions are real: a container sharing a 6.18 kernel (not CentOS 6's), no real X server, no end-of-life banner, synthetic and pixel-only checked input, single runs, no sanitizer run. Decision of the owner needed for is_floor of the platform record (true, as the lowest tried Linux Legacy system)."
+}
