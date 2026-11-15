@@ -1,0 +1,14 @@
+Chrome 157.0.8103.51 (C:\Program Files\Google\Chrome\Application\chrome.exe), headless=new, new --user-data-dir per run under C:\Users\legar\AppData\Local\Temp\loomora-chrome-cvixm2on, server http://127.0.0.1:65111/ serving \\wsl.localhost\Ubuntu-24.04\home\legar\loomora-build\web-chrome\web-modern\dist (index.html sha256 d9d9fe09a658cd2f, main.js sha256 7d55e83ec68dd6bf, native.js sha256 b994b00a1523d69a, loomora.js sha256 628eeb928726e001, loomora.wasm sha256 429dca8d3a7526ba)
+run  1  message 'Bonjour Coucou'  display_ms 95  peak_rss_kb 886  chrome.exe start to exit 1008 ms  chrome.exe left 0
+run  2  message 'Bonjour Coucou'  display_ms 92  peak_rss_kb 886  chrome.exe start to exit 1087 ms  chrome.exe left 0
+run  3  message 'Bonjour Coucou'  display_ms 91  peak_rss_kb 886  chrome.exe start to exit 993 ms  chrome.exe left 0
+run  4  message 'Bonjour Coucou'  display_ms 84  peak_rss_kb 886  chrome.exe start to exit 970 ms  chrome.exe left 0
+run  5  message 'Bonjour Coucou'  display_ms 77  peak_rss_kb 886  chrome.exe start to exit 929 ms  chrome.exe left 0
+run  6  message 'Bonjour Coucou'  display_ms 113  peak_rss_kb 887  chrome.exe start to exit 956 ms  chrome.exe left 0
+run  7  message 'Bonjour Coucou'  display_ms 80  peak_rss_kb 886  chrome.exe start to exit 891 ms  chrome.exe left 0
+run  8  message 'Bonjour Coucou'  display_ms 87  peak_rss_kb 886  chrome.exe start to exit 921 ms  chrome.exe left 0
+run  9  message 'Bonjour Coucou'  display_ms 237  peak_rss_kb 886  chrome.exe start to exit 1113 ms  chrome.exe left 0
+run 10  message 'Bonjour Coucou'  display_ms 89  peak_rss_kb 886  chrome.exe start to exit 1060 ms  chrome.exe left 0
+display_ms: n 10, min 77, median 90.0, max 237
+chrome.exe start to exit ms: n 10, min 891, median 981.5, max 1113
+series passed

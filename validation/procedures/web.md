@@ -6,6 +6,8 @@ Replayable procedure for the platform that was really run in this project (FR-01
 |---|---|---|---|---|
 | `web-firefox-10-windows-2000-x86` | legacy | `js` | `validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json` | Firefox 10.0 in the VirtualBox VM "Windows 2000" |
 | `web-firefox-10-windows-2000-x86` | modern | `js` | `validation/verdicts/web-firefox-10-windows-2000-x86-modern.json` (`not_tested`) | not written yet |
+| `web-chrome-157-windows-11-x64` | modern | `wasm` | `validation/verdicts/web-chrome-157-windows-11-x64-modern.json` | Chrome 157.0.8103.51, headless, on the Windows 11 x64 host (last section below) |
+| `web-chrome-157-windows-11-x64` | legacy | `wasm` | `validation/verdicts/web-chrome-157-windows-11-x64-legacy.json` (`not_tested`) | not run on purpose: Web Legacy is validated on Firefox 10 |
 
 Every command is the one that was run, taken from `tools/` and the records.
 
@@ -67,3 +69,60 @@ A probe run with `input=Marie`, then the page without parameters: screenshot of 
 
 - `post=1` in the URL makes the page POST its probe record (`/probe`, or `/probe-error` with the message when the page fails) to the server that served it; it exists because Firefox 10 has no headless mode and no DOM dump. Without it the page behaves as before.
 - Firefox 10 has no `performance.memory`: `peak_rss_kb` is `null`.
+
+# Web Modern in Chrome on the Windows 11 host (WebAssembly path)
+
+Run on 2026-11-15 (task T063). PoC rule (owner decision): the Modern UI is validated on ONE system and ONE current browser, here the Chrome installed on the Windows 11 x64 host of `validation/platforms/windows-11-x64.json`; Firefox and Safari (recent) are not required and were not run. The Legacy page is not run here (`not_tested` verdict): Chrome does not run on Windows 2000 and Firefox 10 alone covers Web Legacy.
+
+## Prerequisites
+
+- Chrome (stable) in `C:\Program Files\Google\Chrome\Application\` (or `LOOMORA_CHROME` = a `chrome.exe`); 157.0.8103.51 on 2026-11-15. The launcher takes the version from the version folder next to `chrome.exe` (`chrome.exe --version` prints nothing on Windows) and refuses to run when its major differs from the one in the platform id.
+- WSL Ubuntu-24.04 with the current emsdk (`~/emsdk`, Emscripten 7.0.0), node and npm (TypeScript 7.0.2 comes from `package-lock.json`).
+- Nothing touches the owner's Chrome profile: every run uses a new `--user-data-dir` in a folder of the system temp folder, deleted by the launcher. The launcher never closes chrome.exe by name: it only counts and terminates (`taskkill /PID`) the processes whose command line names the run's own profile folder.
+
+## Build
+
+```
+wsl -d Ubuntu-24.04 --cd <repo> -- bash -lc 'LOOMORA_BUILD_DIR=$HOME/loomora-build/web-chrome python3 tools/build.py web modern'
+```
+
+Builds the WebAssembly module and its self-test, compiles `ui/modern/web-ts` with `tsc` in a copy (`npm ci`), assembles `dist/` (`index.html`, `main.js`, `native.js`, `loomora.js`, `loomora.wasm`; 3,384 + 6,146 + 6,215 + 14,152 + 23,971 bytes on 2026-11-15, identical sha256 in two builds) and, because `validation/platforms/web-chrome-157-windows-11-x64.json` exists, writes `validation/deliverables/web-chrome-157-windows-11-x64-modern.json`. Then `python tools/measure_sharing.py --write --platform web-chrome-157-windows-11-x64` stores the line counts (493 shared, 0 glue, 420 UI, 54.0%, below 80% like the Legacy page: a web page is almost all UI).
+
+## Vectors in Chrome (the verdict)
+
+```
+$env:LOOMORA_WEB_DIST = "\\wsl.localhost\Ubuntu-24.04\home\<user>\loomora-build\web-chrome\web-modern\dist"
+python tools/run_vectors.py web-chrome-157-windows-11-x64 modern --timeout 60 --evidence-dir <folder>
+```
+
+`WebChromeHostLauncher` (in `tools/run_vectors.py`) serves the dist folder over HTTP on `127.0.0.1` (a free port, `Cache-Control: no-store`, every request logged) and, for each valid vector, serially, starts
+
+```
+chrome.exe --headless=new --disable-gpu --no-first-run --no-default-browser-check --disable-extensions --disable-component-update --disable-background-networking --disable-sync --metrics-recording-only --dump-dom --virtual-time-budget=15000 --user-data-dir=<temp>\runN "http://127.0.0.1:<port>/index.html?probe=1&input=<percent-encoded text>&platform=web-chrome-157-windows-11-x64"
+```
+
+It takes the DOM Chrome dumps on standard output, requires the title `LOOMORA_PROBE_DONE`, reads the probe record from `<pre id="probe">`, then counts (and terminates) the chrome.exe processes that still name the run's profile. The record goes through the same `check_probe.py` and vector checks as every other launcher (`message` = "Bonjour " + input, `platform_id`, `ui_variant` modern, `core` cpp-wasm). A text longer than 1,000 UTF-16 units must come back cut to its first 1,000.
+
+Expected (2026-11-15): 15 vectors run, 15 passed, 16 skipped, 2 truncated to 1,000 UTF-16 units, about 24 s; `core` cpp-wasm in every record; the request log has one `loomora.wasm` request per run; no chrome.exe left. `control_characters` passes (the Modern page uses a `<textarea>`, which keeps the line feed; the Legacy `<input type="text">` on Firefox 10 does not). `display_ms` 74 to 110: `--virtual-time-budget` virtualises the page clock, so it is not a wall-clock figure; chrome.exe start to exit 0.9 to 1.2 s.
+
+Without Chrome, the launcher is covered by `python tools/run_vectors.py --self-test` (platform id rules, the DOM parser); the page itself also runs under node: `python tools/run_vectors.py web-node-wasm modern --exe <dist as seen by WSL>`.
+
+## Default series, typing and colour scheme
+
+```
+python tools/trials/web-chrome-157-windows-11-x64/default-series.py
+node tools/trials/web-chrome-157-windows-11-x64/typing-check.mjs "C:\Program Files\Google\Chrome\Application\chrome.exe" <dist folder>
+```
+
+`default-series.py` runs the default text ten times in new profiles (cold start) and prints the probe figures and the wall time of chrome.exe: 'Bonjour Coucou' every time, `display_ms` 77 to 237 (median 90), start to exit 891 to 1,113 ms (median 981.5).
+
+`typing-check.mjs` serves the dist folder, starts Chrome with `--remote-debugging-port=0` (the port is read from `DevToolsActivePort` of the throw-away profile) and drives it through the DevTools protocol with node's own WebSocket: it opens the page without probe mode (greeting 'Bonjour Coucou'), focuses and selects the textarea, types 'Marie' with `Input.dispatchKeyEvent` (greeting 'Bonjour Marie'), reads the computed colours with `Emulation.setEmulatedMedia` prefers-color-scheme dark and light and computes the contrast, closes the browser with `Browser.close` and counts the leftover processes. It is not a person at a keyboard (see the restrictions of the verdict). Run it from PowerShell: Git Bash rewrites the `\\wsl.localhost\...` path of the dist folder.
+
+## Screenshots
+
+Two screenshots only, with `chrome.exe --headless=new --disable-gpu --window-size=800,420 --virtual-time-budget=15000 --user-data-dir=<temp> --screenshot=<file> [--force-dark-mode] http://127.0.0.1:<port>/index.html` (any static server on `127.0.0.1` for the dist folder, for example `python -m http.server <port> --bind 127.0.0.1 --directory <dist>`, stopped by PID afterwards): the light scheme (default) and `--force-dark-mode`. In this headless Chrome `--blink-settings=preferredColorScheme=1` did not switch the scheme (`evidence/web-chrome/web-chrome-157-windows-11-x64/screenshots-log.txt`).
+
+## Notes
+
+- Everything above was observed on 2026-11-15; the restrictions of `web-chrome-157-windows-11-x64-modern.json` list what was not (other browsers, headed mode, a person typing, forced colours, DPI, file://, HTTPS).
+- Chrome's user agent hides the real version of Windows (`Windows NT 10.0` on Windows 11) and the minor parts of the Chrome version (`157.0.0.0`): the page cannot read either, which is why it asks the backend about family Web, version 0.0.

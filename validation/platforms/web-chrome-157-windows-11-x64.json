@@ -1,0 +1,17 @@
+{
+  "id": "web-chrome-157-windows-11-x64",
+  "family": "web",
+  "os_name": "Google Chrome on Windows 11 Pro",
+  "os_version": "Chrome 157.0.8103.51 (official build, stable channel, 64-bit, chrome.exe and chrome.dll file version 157.0.8103.51, installed in C:\\Program Files\\Google\\Chrome\\Application\\) on Windows 11 Pro 10.0.26300.9974 (version 26H2), French (fr-FR), 64-bit",
+  "arch": "wasm",
+  "release_date": "2026-11-07",
+  "age_years": 0.0,
+  "is_floor": false,
+  "in_scope": true,
+  "environment": "physical",
+  "environment_detail": "The physical laptop of validation/platforms/windows-11-x64.json (MSI GL63 8RD, Intel Core i5-8300H, 24 GiB RAM, 96 DPI; the owner's own machine). Chrome 157.0.8103.51 is the browser the owner installed there; it is run headless (--headless=new --disable-gpu) with a throw-away --user-data-dir in a folder of the system temp folder created and deleted by tools/run_vectors.py (the owner's profile is never opened). The page is served over HTTP on 127.0.0.1 by tools/run_vectors.py (any free port). The browser path of this record is the WebAssembly one: ui/modern/web-ts (TypeScript, ES modules) and loomora.wasm built by python tools/build.py web modern (Emscripten 7.0.0, TypeScript 7.0.2) in WSL2 Ubuntu-24.04 on the same machine.",
+  "eol": false,
+  "release_date_source": "NOT a verified release date: the stable release date of Chrome 157 was not looked up. 2026-11-07 is the date of the file 157.0.8103.51/157.0.8103.51.manifest in the install folder (modified 2026-11-07 18:57 local time; chrome.exe and chrome.dll were written on 2026-11-08 00:23 local time, which is the install), so the build is at least that old and was installed on 2026-11-08. age_years = days from 2026-11-07 to the trial date 2026-11-15 divided by 365.25, rounded to 0.1 (0.0).",
+  "eol_note": "false: Chrome 157 is the current stable release on the trial date, and the Web page cannot read the browser or system version: it asks the backend about family Web, version 0.0, which is never end of life (eol_warning_shown false in every record).",
+  "floor_note": "Not a floor. PoC rule (owner decision 2026-11-15): the Modern UI is validated on ONE system and ONE current browser, here Chrome on the Windows 11 x64 host. Firefox and Safari (recent) are not required and were not run. The Legacy Web page is validated on Firefox 10 (web-firefox-10-windows-2000-x86), not here."
+}

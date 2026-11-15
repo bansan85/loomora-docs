@@ -1,0 +1,7 @@
+{
+  "platform_id": "web-chrome-157-windows-11-x64",
+  "ui_variant": "legacy",
+  "web_path": "wasm",
+  "status": "not_tested",
+  "reason": "Not run on purpose (owner decision 2026-11-15, PoC rule): the Web Legacy page (ui/legacy/web) is validated on ONE lowest testable browser, Firefox 10 on Windows 2000 (validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json, JavaScript path), and success there stands for newer browsers; Chrome does not run on Windows 2000, and the WebAssembly path of the Legacy page is only smoke-tested (under node and in one headless Chrome run, spike S5), so it gets no verdict. The Modern page is the one validated on this platform (validation/verdicts/web-chrome-157-windows-11-x64-modern.json)."
+}
