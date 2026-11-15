@@ -1,0 +1,7 @@
+{
+  "platform_id": "web-firefox-10-windows-2000-x86",
+  "ui_variant": "modern",
+  "web_path": "js",
+  "status": "not_tested",
+  "reason": "There is no Web Modern UI yet (ui/modern/web-ts is not written) and Firefox 10 is the Legacy floor browser of the JavaScript path, not a target of a modern TypeScript UI; the Modern Web UI would run on a current browser with the WebAssembly path."
+}

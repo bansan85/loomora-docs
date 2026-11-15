@@ -209,5 +209,25 @@
       "linux-centos-5.11-x86_64"
     ],
     "reason": "systemd's os-release file exists on every distribution of the last decade but not on CentOS 6 (the manylinux2010 image has /etc/redhat-release, /etc/centos-release and /etc/system-release only), so without this path its probe line would carry the ambiguous id linux-x86_64. The path is used only where os-release is absent; every other platform keeps reading os-release. Taken and measured 2026-11-15 on linux-centos-6.10-x86_64 (probe lines carry platform_id linux-centos-6.10-x86_64, the 15 vectors check it). UPDATE 2026-11-15: taken and measured on linux-centos-5.11-x86_64 too (the manylinux1 image has /etc/redhat-release 'CentOS release 5.11 (Final)' and no os-release, so the id is linux-centos-5.11-x86_64; the same parser, no change; the 15 vectors check the id). Not tried: another Red Hat family release file (Fedora, RHEL, Scientific Linux) or a release line of another shape."
+  },
+  {
+    "id": "web-js-instead-of-wasm",
+    "description": "The Web Legacy page loads the JavaScript build of the backend (loomora.js, asm.js produced by Emscripten 1.39.20 fastcomp, memory image embedded) instead of the WebAssembly module (loomora-wasm.js + loomora.wasm, Emscripten 7.0.0).",
+    "macro": "LOOMORA_WEB_JS_PATH",
+    "min_compiler": "emscripten 7.0.0 for the WebAssembly path; emscripten 1.39.20 fastcomp for the JavaScript path",
+    "platform_ids": [
+      "web-firefox-10-windows-2000-x86"
+    ],
+    "reason": "LOOMORA_WEB_JS_PATH is a label, not a preprocessor macro: the choice is a run-time check in ui/legacy/web/app.js (typeof WebAssembly === \"object\" and no path=js in the URL selects the WebAssembly files). A browser without WebAssembly (Firefox 10 has none) takes the JavaScript build; every browser that has WebAssembly keeps the WebAssembly one (the most restrictive build is never applied to everyone). Taken by web-firefox-10-windows-2000-x86: Firefox 10.0 on Windows 2000, 'core' is cpp-js in the probe records and the request log shows no request for loomora-wasm.js or loomora.wasm. The JavaScript build needs typed arrays (Firefox 4 and later, Internet Explorer 10 and later): Internet Explorer up to 9 is dropped (spike S5)."
+  },
+  {
+    "id": "web-es3-glue",
+    "description": "The page script app.js and the JavaScript build are written and generated in ECMAScript 3 syntax (var and function only, no arrow function, let, const, class or template string; the 64-bit rss_kb of loomora_probe_record is passed as two 32-bit numbers instead of a BigInt; the backend is reached through ccall / cwrap).",
+    "macro": "LOOMORA_WEB_ES3",
+    "min_compiler": "Emscripten 1.39.20 fastcomp (output parses as ECMAScript 3); acorn of that emsdk for the check",
+    "platform_ids": [
+      "web-firefox-10-windows-2000-x86"
+    ],
+    "reason": "LOOMORA_WEB_ES3 is a label, not a preprocessor macro: it is a source rule of ui/legacy/web/app.js and of the fastcomp output, checked at build time by tools/build.py with tools/trials/web-node/es-level.js (both files must parse as ecmaVersion 3). Firefox 10.0 parses and runs it (the probe record of every run says displayed true). The syntax rule is stricter than Firefox 10 needs (it supports ECMAScript 5 syntax) and is kept from the time Internet Explorer 6 to 9 were candidates; app.js is the same file for every browser, so this fallback is not limited to the platform listed (a build check, not a per-platform switch); Firefox 10 is the only browser that ran it. It also uses the ES5 library function Function.prototype.bind in the generated glue and typed arrays (ArrayBuffer and the typed array views), which Firefox 10 has."
   }
 ]

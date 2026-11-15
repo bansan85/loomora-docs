@@ -1,0 +1,13 @@
+[App]
+Vendor=Mozilla
+Name=Firefox
+Version=10.0
+BuildID=20120129021758
+SourceRepository=http://hg.mozilla.org/releases/mozilla-release
+SourceStamp=baefae4b6685
+ID={ec8030f7-c20a-464f-9b0e-13a3a9e97384}
+
+[Gecko]
+MinVersion=10.0
+MaxVersion=10.0
+

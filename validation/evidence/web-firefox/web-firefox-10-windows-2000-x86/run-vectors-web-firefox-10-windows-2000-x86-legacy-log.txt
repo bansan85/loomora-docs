@@ -1,0 +1,39 @@
+run_vectors web-firefox-10-windows-2000-x86 legacy: 15 vector(s) to run, 16 skipped (H:\repos\loomora-web-vm\core\tests\vectors.json)
+skip too_long_4097_ascii                expects error -1 (not enterable in a UI field)
+skip too_long_4098_two_byte_chars       expects error -1 (not enterable in a UI field)
+skip invalid_overlong_two_byte          expects error -3 (not enterable in a UI field)
+skip invalid_overlong_three_byte        expects error -3 (not enterable in a UI field)
+skip invalid_surrogate                  expects error -3 (not enterable in a UI field)
+skip invalid_above_10ffff               expects error -3 (not enterable in a UI field)
+skip invalid_byte_ff                    expects error -3 (not enterable in a UI field)
+skip invalid_lone_continuation          expects error -3 (not enterable in a UI field)
+skip invalid_truncated_sequence         expects error -3 (not enterable in a UI field)
+skip invalid_after_valid_text           expects error -3 (not enterable in a UI field)
+skip null_pointer                       expects error -3 (not enterable in a UI field)
+skip capacity_too_small                 expects error -2 (not enterable in a UI field)
+skip capacity_one_byte_short            expects error -2 (not enterable in a UI field)
+skip capacity_zero                      expects error -2 (not enterable in a UI field)
+skip capacity_exact                     API-only case (explicit buffer capacity)
+skip capacity_exact_empty_input         API-only case (explicit buffer capacity)
+launcher: Firefox 10.0 in VirtualBox VM 'Windows 2000' (168 MB RAM), guest user 'name', folder C:\Documents and Settings\name\loomora-web, server http://10.0.2.2:62826/ serving \\wsl.localhost\Ubuntu-24.04\home\legar\loomora-build\web-vm\web-legacy\dist (index.html sha256 0b3db6e247a640bc, app.js sha256 05c91d1a5c3252ca, loomora.js sha256 dda4c387549e78cd); 0 firefox.exe process(es) terminated before the series
+ok   empty (exact, 0 chars)  2.8s (browser start to record 715 ms)
+ok   ascii (exact, 6 chars)  2.8s (browser start to record 733 ms)
+ok   ascii_punctuation (exact, 11 chars)  2.8s (browser start to record 734 ms)
+ok   accented (exact, 9 chars)  2.8s (browser start to record 740 ms)
+ok   cjk (exact, 8 chars)  2.8s (browser start to record 747 ms)
+ok   right_to_left_arabic (exact, 5 chars)  2.8s (browser start to record 704 ms)
+ok   right_to_left_hebrew (exact, 4 chars)  2.8s (browser start to record 710 ms)
+ok   emoji (exact, 1 chars)  2.8s (browser start to record 711 ms)
+ok   emoji_zwj_sequence (exact, 5 chars)  2.8s (browser start to record 724 ms)
+ok   combining_characters (exact, 6 chars)  2.8s (browser start to record 711 ms)
+FAIL control_characters (exact, 6 chars)  2.8s
+       input: record has 'a\tbc\x01', expected 'a\tb\nc\x01'
+       message: 'Bonjour a\tbc\x01' != 'Bonjour ' + input = 'Bonjour a\tb\nc\x01'
+       greeting_matches is True but the message differs from 'Bonjour ' + input
+       message: 'Bonjour a\tbc\x01', the vector expects 'Bonjour a\tb\nc\x01'
+ok   one_thousand_ascii (exact, 1000 chars)  2.8s (browser start to record 769 ms)
+ok   one_thousand_two_byte_chars (exact, 1000 chars)  2.9s (browser start to record 798 ms)
+ok   limit_4096_ascii (truncated, 4096 chars)  2.9s (browser start to record 785 ms)
+ok   limit_4096_two_byte_chars (truncated, 2048 chars)  2.9s (browser start to record 843 ms)
+summary: 15 vector(s) run, 14 passed, 1 failed, 16 skipped; 2 truncated to 1000 UTF-16 units; 42.6 s with 1 worker(s)
+result: FAILED
