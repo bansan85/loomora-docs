@@ -1,0 +1,69 @@
+# Emscripten 1.39.20 fastcomp: is there a mode without typed arrays, and what does the ES3-parsing build need
+# date: 2026-11-15T09:49Z  host: Linux 6.18.58.1-microsoft-standard-WSL2 x86_64, node v14.18.2 (emsdk)
+
+## emcc
+emcc (Emscripten gcc/clang-like replacement) 1.39.20 (45d43807ec2b74673acc703dd1145ac0d2d1040a)
+
+## settings that existed in old releases (src/settings.js of this release)
+matches of USE_TYPED_ARRAYS|EMULATE_ARRAYS in src/settings.js: 0
+ChangeLog.md:2072: - Removed old deprecated functionalities USE_TYPED_ARRAYS, FHEAP, GC emulation
+ChangeLog.md:3985: - Deprecated -s USE_TYPED_ARRAYS=1 and -s QUANTUM_SIZE=1.
+
+## emcc refuses the settings (a one-line C file)
+$ emcc t.c -O2 -sUSE_TYPED_ARRAYS=0
+emcc: error: Attempt to set a non-existent setting: 'USE_TYPED_ARRAYS'
+ - perhaps a typo in emcc's  -s X=Y  notation?
+ - (see src/settings.js for valid values)
+$ emcc t.c -O2 -sWASM=0 -sASM_JS=0
+emcc: error: emcc: ASM_JS can only be set to either 1 or 2
+
+## build of the Loomora module: emscripten-js.cmake + --memory-init-file 0 (cmake -DCMAKE_TOOLCHAIN_FILE=<wrapper that includes emscripten-js.cmake and adds the flag>)
+  total 104
+  drwxr-xr-x 3 legar legar  4096 Nov 15 10:03 CMakeFiles
+  -rw-r--r-- 1 legar legar   315 Nov 15 10:03 CTestTestfile.cmake
+  -rw-r--r-- 1 legar legar  1412 Nov 15 10:03 cmake_install.cmake
+  -rw-r--r-- 1 legar legar 91529 Nov 15 10:03 loomora.js
+dda4c387549e78cd7ba7b9cf2c7099da753a51c9d662ceba73537a2acb944edb  loomora.js
+(no loomora.js.mem next to it: the memory image is inside loomora.js)
+
+## lowest ECMAScript edition that parses loomora.js (acorn 7.3.1 of the emsdk)
+acorn 7.3.1, file /home/legar/loomora-build/web-es3/fastcomp-1.39.20/bridge/wasm/loomora.js (91529 bytes)
+lowest edition that parses: ecmaVersion 3
+
+## typed array constructors the file calls with new
+      2 new ArrayBuffer
+      1 new Float32Array
+      1 new Float64Array
+      2 new Int16Array
+      2 new Int32Array
+      3 new Int8Array
+      2 new Uint16Array
+      1 new Uint32Array
+      7 new Uint8Array
+
+## s5-node-driver.js, WebAssembly deleted (LOOMORA_NO_WASM=1)
+info WebAssembly global removed: typeof WebAssembly = undefined
+info abi_version=1
+info build_compiler=clang 6.0.1 (/b/s/w/ir/cache/git/chromium.googlesource.com-external-github.com-emscripten--core-emscripten--fastcomp--clang d7c19e389e4bfb36fbc4558c3d86231b69d9e05f) (/b/s/w/ir/cac
+info eol_warning="Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection."
+info greet("Coucou") -> {"status":14,"text":"Bonjour Coucou"}
+info rss_kb (int64) is passed as a two 32-bit numbers (low, high)
+summary: 43 passed, 0 failed
+
+## s5-node-driver.js, every typed array global deleted (LOOMORA_NO_TYPED_ARRAYS=1)
+info WebAssembly global removed: typeof WebAssembly = undefined
+info typed arrays removed: typeof ArrayBuffer = undefined, typeof Int8Array = undefined, typeof Uint8Array = undefined, typeof Int16Array = undefined, typeof Uint16Array = undefined, typeof Int32Array
+/home/legar/loomora-build/web-es3/fastcomp-1.39.20/bridge/wasm/loomora.js:9
+ReferenceError: ArrayBuffer is not defined
+    at /home/legar/loomora-build/web-es3/fastcomp-1.39.20/bridge/wasm/loomora.js:9:13534
+    at start (/mnt/h/repos/loomora-web-es3/tools/trials/web-node/s5-node-driver.js:67:11)
+    at Object.<anonymous> (/mnt/h/repos/loomora-web-es3/tools/trials/web-node/s5-node-driver.js:260:1)
+    at Module._compile (internal/modules/cjs/loader.js:1085:14)
+
+## ES5 library features called by the module (LOOMORA_ES5=trace, WebAssembly deleted, typed arrays present)
+summary: 43 passed, 0 failed
+info ES5 library features the module called: Function.prototype.bind
+info   Function.prototype.bind: 52 call(s), first from     at /home/legar/loomora-build/web-es3/fastcomp-1.39.20/bridge/wasm/loomora.js:9:7005
+
+## the same with those ES5 features deleted (LOOMORA_ES5=off): the first one the module needs
+TypeError: console.log.bind is not a function

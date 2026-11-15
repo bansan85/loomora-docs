@@ -1,0 +1,55 @@
+# Emscripten 1.29.12 (last release with the non-fastcomp compiler core and USE_TYPED_ARRAYS=0), stock clang 3.3, Python 2.7.18
+# date: 2026-11-15T09:49Z  host: Linux 6.18.58.1-microsoft-standard-WSL2 x86_64, node v14.18.2 (emsdk)
+
+## environment (scripts old-env.sh and old-build.sh, kept in the scratchpad, not in the repository)
+export PATH=$HOME/loomora-es3-old/py27/bin:$PATH
+export EM_CONFIG=$HOME/loomora-es3-old/em-1.29.12.conf
+export EMCC_FAST_COMPILER=0
+export EMCC_LLVM_TARGET=i386-pc-linux-gnu
+export EM=$HOME/loomora-es3-old/emscripten-1.29.12
+clang: clang version 3.3 (tags/RELEASE_33/final)  (releases.llvm.org/3.3, Ubuntu 12.04.2 binary)
+python2: Python 2.7.18  (built from the python.org 2.7.18 source in ~/loomora-es3-old/py27)
+emscripten: git tag 1.29.12 (e593b744f106af296ee9f05171b949cfa49b3b2f), local patches:
+-typedef char compiler_defines_long_double_incorrectly[9-(int)sizeof(long double)];
++typedef char compiler_defines_long_double_incorrectly[13-(int)sizeof(long double)];
+-        self.attrs['RELOOP'] = 1
++        pass # local patch (spike ES3): no relooper.js, so no RELOOP=1 at -O1 and above
++      open(relooper, 'w').close() # local patch (spike ES3): stops the recursion of emcc into ensure_relooper
+
+## C hello world, -O0 -s USE_TYPED_ARRAYS=0 -s ASM_JS=0 -s RELOOP=0, run with every typed array global deleted
+  -rw-r--r-- 1 legar legar 335995 Nov 15 10:45 hello.js
+acorn 7.3.1, file hello.js (335995 bytes)
+lowest edition that parses: ecmaVersion 3
+$ node nota.js   (nota.js: delete WebAssembly, ArrayBuffer, DataView and the eight typed arrays, then require hello.js)
+hi 42
+ 
+ES5 library features the glue calls (es5trace.js; part of the calls come from node itself):
+ES5 library features called: Array.prototype.filter x87, Array.prototype.forEach x2, Date.now x18, Function.prototype.bind x3, Object.defineProperties x2
+with them deleted (es5off.js) the glue stops at:
+TypeError: [ERRNO_CODES.ENOENT].forEach is not a function
+
+## the same compiler on a C++11 program that uses std::string (str.cpp: Bonjour + Coucou)
+default typed arrays (-s ASM_JS=0 -s RELOOP=0, USE_TYPED_ARRAYS=2):
+  -rw-r--r-- 1 legar legar 2125854 Nov 15 10:47 str.js
+Bonjour Coucou 14
+plain arrays (-s USE_TYPED_ARRAYS=0 -s ASM_JS=0 -s RELOOP=0), -O0 and -O1 --llvm-lto 1:
+warning: unresolved symbol: __fpclassifyl
+warning: unresolved symbol: __signbitl
+// Warning: 64 bit XOR - precision limit may be hit on llvm line 239
+warning: Cannot correct overflows of this many bits: 64
+Internal compiler error in src/compiler.js! Please raise a bug report at https://github.com/kripken/emscripten/issues/ with a log of the build and the input files used to run. Exception message: "TypeError: Cannot read property '0' of undefined" | TypeError: C
+warning: unresolved symbol: __fpclassifyl
+warning: unresolved symbol: __signbitl
+// Warning: 64 bit XOR - precision limit may be hit on llvm line 239
+warning: Cannot correct overflows of this many bits: 64
+Internal compiler error in src/compiler.js! Please raise a bug report at https://github.com/kripken/emscripten/issues/ with a log of the build and the input files used to run. Exception message: "TypeError: Cannot read property '0' of undefined" | TypeError: C
+  -rw-r--r-- 1 legar legar 0 Nov 15 10:47 str.js
+
+## the Loomora backend (core/src/*.cpp, bridge exports), plain arrays, -O0
+warning: unresolved symbol: __fpclassifyl
+warning: unresolved symbol: __signbitl
+warning: Cannot correct overflows of this many bits: 64
+// Warning: 64 bit XOR - precision limit may be hit on llvm line 5440
+warning: Cannot correct overflows of this many bits: 64
+Internal compiler error in src/compiler.js! Please raise a bug report at https://github.com/kripken/emscripten/issues/ with a log of the build and the input files used to run. Exception message: "TypeError: Cannot read property '0' of undefined" | TypeError: C
+  -rw-r--r-- 1 legar legar 0 Nov 15 10:46 /home/legar/loomora-build/web-es3/emcc-1.29.12/loomora.js
