@@ -10,7 +10,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 |---|---|---|
 | SC-002 | NOT MET | 2 of 3 required families validated with the Legacy UI on a system 10 years old or more (Windows, Android); the oldest working platform is identified with evidence for 3 of 6 families |
 | SC-003 | MET | validated with the Legacy UI on a system 15 years old or more: Windows (read the restrictions of that verdict: a virtual machine, one build) |
-| SC-004 | MET | 10 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
+| SC-004 | MET | 11 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
 | SC-010 | MET | 0 absent variant(s) without a recorded justification |
 | SC-005 | MET | 20 of 20 hypotheses recorded, 5 with a verdict, 15 not covered by this probe |
 | SC-009 | MET | go / no-go concluded for 2 of 2 systems |
@@ -20,7 +20,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 
 - Windows: windows-2000-x86, 2000-02-17, 26.7 years old, OK with restrictions, evidence: 41 file(s), 7 screenshot(s)
 - macOS: not tested
-- Linux: linux-i686, linux-ubuntu-24.04-x86_64, 2024-04-25, 2.55 years old, OK with restrictions, evidence: 17 file(s), 2 screenshot(s)
+- Linux: linux-centos-6.10-x86_64, 2018-07-03, 8.37 years old, OK with restrictions, evidence: 10 file(s)
 - Android: android-4.1.2-x86, 2012-10-09, 14.1 years old, OK with restrictions, evidence: 9 file(s), 2 screenshot(s)
 - iOS / iPadOS: not tested
 - Web: not tested
@@ -42,6 +42,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 - android-4.1.2-x86 legacy: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 - android-5.0-arm64 legacy: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 - android-7.0-x86_64 modern: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
+- linux-centos-6.10-x86_64 legacy: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 - windows-arm64 modern: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 
 ## 2. Go / no-go: Windows 2000 and Windows XP (SC-009)
@@ -78,6 +79,7 @@ No Windows XP system was run. Under the PoC scope rule (the Legacy UI is tried o
 |---|---|---|---|---|---|---|---|---|
 | windows-2000-x86 | Windows | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service pack (RTM; no ... | x86 | 2000-02-17 | 26.7 | vm | yes | no |
 | windows-11-x64 | Windows | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974), French ... | x86_64 | 2021-10-05 | 5.1 | physical | no | no |
+| linux-centos-6.10-x86_64 | Linux | CentOS 6.10 (Final), userland of the PyPA image ... | x86_64 | 2018-07-03 | 8.37 | vm | yes | yes |
 | linux-i686 | Linux | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) kernel and ... | x86 | 2024-04-25 | 2.55 | vm | no | no |
 | linux-ubuntu-24.04-x86_64 | Linux | Ubuntu 24.04.5 LTS (Noble Numbat) | x86_64 | 2024-04-25 | 2.55 | vm | no | no |
 | android-2.3-arm | Android | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and armeabi-v7a; NOT RUN | arm | 2010-12-06 | 15.9 | emulator | yes | yes |
@@ -95,6 +97,8 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | modern | not attempted | - | - | - | justified: the Modern UI technology (WinUI 3) is not available on this system: WinUI 3 requires Windows 10 1809 or later (source winappsdk-support) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | legacy | OK with restrictions | keep | 37 file(s), 12 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 0 disabled feature(s) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | modern | OK with restrictions | keep | 19 file(s), 2 screenshot(s) | validation/procedures/windows.md | 9 restriction(s), 0 disabled feature(s) |
+| linux-centos-6.10-x86_64 | CentOS 6.10 (Final), userland of the PyPA image ... | legacy | OK with restrictions | keep | 10 file(s) | validation/procedures/linux.md | 10 restriction(s), 2 disabled feature(s) |
+| linux-centos-6.10-x86_64 | CentOS 6.10 (Final), userland of the PyPA image ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The PoC scope rule of 2026-11-15 asks only for the Linux Legacy UI on the lowest testable system. The Linux Modern UI needs gtkmm and GTK 3.10 or later (ui/modern/linux-gtk3), which are not part of CentOS 6 (it ships GTK 2; the packages were not queried in ... (full text in section 12) |
 | linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | legacy | OK with restrictions | keep | 3 file(s) | validation/procedures/linux.md | 6 restriction(s), 3 disabled feature(s) |
 | linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The Linux Modern UI (gtkmm on GTK 3, ui/modern/linux-gtk3) was built and judged for the 64-bit platform only (validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json). For the 32-bit build the machine (validation/platforms/linux-i686.json, a 64-bit WSL2 ... (full text in section 12) |
 | linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | legacy | OK with restrictions | keep | 17 file(s), 2 screenshot(s) | validation/procedures/linux.md | 10 restriction(s), 3 disabled feature(s) |
@@ -121,7 +125,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | Windows | modern | windows-11-x64 | 2021-10-05 | 5.1 | OK with restrictions | 19 file(s), 2 screenshot(s) |
 | macOS | legacy | not tested | - | - | - | - |
 | macOS | modern | not tested | - | - | - | - |
-| Linux | legacy | linux-i686, linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 17 file(s), 2 screenshot(s) |
+| Linux | legacy | linux-centos-6.10-x86_64 | 2018-07-03 | 8.37 | OK with restrictions | 10 file(s) |
 | Linux | modern | linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 101 file(s), 63 screenshot(s) |
 | Android | legacy | android-4.1.2-x86 | 2012-10-09 | 14.1 | OK with restrictions | 9 file(s), 2 screenshot(s) |
 | Android | modern | android-7.0-x86_64 | 2016-08-22 | 10.2 | OK with restrictions | 9 file(s), 2 screenshot(s) |
@@ -143,6 +147,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | windows-2000-x86 | legacy | loomora.exe: 696,127 bytes | 2 to 15 ms | 1,084 to 1,160 kB |
 | windows-11-x64 | legacy | loomora.exe: 703,383 bytes | 42 to 127 (median 50) ms | 11,548 to 14,420 kB |
 | windows-11-x64 | modern | loomora-winui-net10-x64.zip: 9,930,841 bytes | 365 to 2,053 ms | 112,696 to 112,952 kB |
+| linux-centos-6.10-x86_64 | legacy | loomora-xlib: 131,712 bytes | 20 to 38 ms | 6,340 to 6,404 kB |
 | linux-i686 | legacy | loomora-xlib: 73,348 bytes | 22 to 26 ms | 8,032 to 11,728 kB |
 | linux-ubuntu-24.04-x86_64 | legacy | loomora-xlib: 80,216 bytes | 164 ms | 13,680 kB |
 | linux-ubuntu-24.04-x86_64 | modern | loomora-gtk3: 167,192 bytes | 90 to 152 (median 101.5) ms | 45,820 to 46,600 (median 46,208) kB |
@@ -158,7 +163,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | Fallback | Macro | What it replaces | Platforms taking it (fallback record) | Deliverables listing it |
 |---|---|---|---|---|
 | builtin-expect | LOOMORA_HAS_BUILTIN_EXPECT | Branch prediction hint __builtin_expect through LOOMORA_LIKELY / LOOMORA_UNLIKELY (used in core/src/c_api.cpp); the fallback is the plain condition ... | windows-11-x64 | windows-11-x64 modern |
-| cxx17-nodiscard | LOOMORA_HAS_CXX17_NODISCARD | [[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty ... | windows-2000-x86, windows-11-x64, linux-ubuntu-24.04-x86_64, linux-i686, android-4.1.2-x86, android-2.3-arm, android-5.0-arm64, android-7.0-x86_64 | android-2.3-arm legacy, android-4.1.2-x86 legacy, android-5.0-arm64 legacy, android-7.0-x86_64 modern, linux-i686 legacy, linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern, windows-11-x64 legacy, windows-11-x64 modern, windows-2000-x86 legacy |
+| cxx17-nodiscard | LOOMORA_HAS_CXX17_NODISCARD | [[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty ... | windows-2000-x86, windows-11-x64, linux-ubuntu-24.04-x86_64, linux-i686, android-4.1.2-x86, android-2.3-arm, android-5.0-arm64, android-7.0-x86_64, linux-centos-6.10-x86_64 | android-2.3-arm legacy, android-4.1.2-x86 legacy, android-5.0-arm64 legacy, android-7.0-x86_64 modern, linux-centos-6.10-x86_64 legacy, linux-i686 legacy, linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern, windows-11-x64 legacy, windows-11-x64 modern, windows-2000-x86 legacy |
 | dark-mode | LOOMORA_FEATURE_DARK_MODE | Dark theme of the Windows Legacy UI (ui/legacy/windows-win32/dynfeatures.cpp): when the user's "apps use light theme" setting ... | windows-2000-x86 | windows-2000-x86 legacy |
 | dpi-awareness | LOOMORA_FEATURE_DPI_AWARENESS | DPI awareness of the Windows Legacy UI: SetProcessDPIAware (user32) is looked up at run time and called before the window exists, the layout and the ... | windows-2000-x86 | windows-2000-x86 legacy |
 | high-contrast-query | LOOMORA_FEATURE_HIGH_CONTRAST_QUERY | High contrast query of the Windows Legacy UI: SystemParametersInfoW(SPI_GETHIGHCONTRAST), looked up at run time in user32; when a high contrast ... | no platform takes it | - |
@@ -178,6 +183,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | android-armeabi-libatomic | LOOMORA_ANDROID_LINK_LIBATOMIC | The armeabi (ARMv5TE) libraries are linked with -latomic (the CMake variable LOOMORA_ANDROID_LINK_LIBATOMIC set by ... | android-2.3-arm | android-2.3-arm legacy |
 | android-uimode-contrast | LOOMORA_FEATURE_UIMODE_CONTRAST | High contrast of the Android Modern UI (ui/modern/android-compose/.../Theme.kt): on Android 14 (API 34) and later the UI reads ... | android-7.0-x86_64 | android-7.0-x86_64 modern |
 | dotnet8-windows10 | LOOMORA_WINUI_TARGET_NET8 | The Windows Modern UI (WinUI 3, ui/modern/windows-winui3) is built a second time for net8.0-windows10.0.19041.0 from the same sources ... | no platform takes it | - |
+| linux-platform-id-redhat-release | LOOMORA_PLATFORM_ID_REDHAT_RELEASE | Platform id of the Linux Legacy UI (ui/legacy/linux-xlib/probe.cpp, PlatformId) and of tools/build.py (linux_platform_id) ... | linux-centos-6.10-x86_64 | linux-centos-6.10-x86_64 legacy |
 
 ### Disabled features (FR-025)
 
@@ -185,6 +191,8 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 |---|---|---|---|
 | android-4.1.2-x86 | legacy | none recorded | - |
 | android-7.0-x86_64 | modern | uimode-contrast |  |
+| linux-centos-6.10-x86_64 | legacy | missing-glyph | Xft path, the normal path of this platform: a code point that no installed font has is drawn as an empty box and the probe line carries it; with the DejaVu-only font set of the image the mixed string (CJK, emoji) carries it. The greeting and the probe record ... |
+| linux-centos-6.10-x86_64 | legacy | text-shaping-and-bidi | not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it |
 | linux-i686 | legacy | missing-glyph | Xft path, the normal path of this build: only a code point that no installed font has, such as U+0378, is drawn as an empty box; the greeting and the probe record are unchanged. Measured in run-log.txt |
 | linux-i686 | legacy | glyph-substitution | core-font path, NOT taken by the build of this verdict: only when CMake finds no 32-bit libXft and fontconfig development files, LOOMORA_XLIB_XFT=OFF or the run-time switch LOOMORA_XLIB_NO_XFT; fallback xlib-core-font-glyphs, platform_ids empty on purpose. ... |
 | linux-i686 | legacy | text-shaping-and-bidi | not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it |
@@ -246,7 +254,7 @@ Status: 15 not covered by this probe, 5 OK with restrictions.
 | Windows legacy | Windows XP SP3 minimum, MFC UI (sections 2.1 and 2.1.2) | Windows 2000, plain Win32 UI | windows-11-x64 legacy: OK with restrictions; windows-2000-x86 legacy: OK with restrictions | contradicted: windows-2000-x86 works (OK with restrictions) | lower the floor of the requirements document to Windows 2000 Professional, as decided (Windows 2000, plain Win32 UI); the verdict is OK with restrictions: read its restrictions (section 12) before G0 |
 | Windows modern | Windows 10+, WinUI 3 (section 2.1) | WinUI 3 needs Windows 10 1809 (research R6; source winappsdk-support) | windows-11-x64 modern: OK with restrictions | not contradicted: only newer systems tried (oldest working: windows-11-x64) | reword the floor as decided (WinUI 3 needs Windows 10 1809 (research R6; source winappsdk-support)); older systems are not tried |
 | macOS legacy | macOS 11+ (section 2.1) | macOS 10.6 Snow Leopard | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
-| Linux legacy | Ubuntu 20.04+ / Debian 11+, AppImage and Flatpak (section 2.1) | any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007) | linux-i686 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions | not contradicted: only newer systems tried (oldest working: linux-i686, linux-ubuntu-24.04-x86_64) | reword the floor as decided (any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007)); older systems are not tried |
+| Linux legacy | Ubuntu 20.04+ / Debian 11+, AppImage and Flatpak (section 2.1) | any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007) | linux-centos-6.10-x86_64 legacy: OK with restrictions; linux-i686 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions | contradicted: linux-centos-6.10-x86_64 works (OK with restrictions) | lower the floor of the requirements document to CentOS, as decided (any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007)); the verdict is OK with restrictions: read its restrictions (section 12) before G0 |
 | Android legacy | minSdk API 21 (Android 5.0) (section 2.1) | Android 2.3 (API 9) | android-4.1.2-x86 legacy: OK with restrictions | contradicted: android-4.1.2-x86 works (OK with restrictions) | lower the floor of the requirements document to Android (AOSP emulator image, Jelly Bean), as decided (Android 2.3 (API 9)); the verdict is OK with restrictions: read its restrictions (section 12) before G0 |
 | iOS / iPadOS legacy | iOS 15.0 (section 2.1) | iOS 5 | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
 | Web legacy | Chrome, Safari and Firefox with WebAssembly (section 2.1) | WebAssembly mandatory, JavaScript build for the browsers of November 2011 | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
@@ -257,7 +265,7 @@ The Linux GTK 3.10 floor of the Modern UI is a compile-time rule: the floor buil
 
 | Tier | Requirements document | Trials | Proposed change |
 |---|---|---|---|
-| A | complete packaged application (table of section 2.1) | android-2.3-arm legacy: not tested; android-2.3-arm modern: not tested; android-5.0-arm64 legacy: not tested; android-5.0-arm64 modern: not tested; android-7.0-x86_64 legacy: not tested; android-7.0-x86_64 modern: OK with restrictions; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions; windows-11-x64 modern: OK with restrictions. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
+| A | complete packaged application (table of section 2.1) | android-2.3-arm legacy: not tested; android-2.3-arm modern: not tested; android-5.0-arm64 legacy: not tested; android-5.0-arm64 modern: not tested; android-7.0-x86_64 legacy: not tested; android-7.0-x86_64 modern: OK with restrictions; linux-centos-6.10-x86_64 legacy: OK with restrictions; linux-centos-6.10-x86_64 modern: not tested; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions; windows-11-x64 modern: OK with restrictions. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
 | B | Windows x86 32-bit, Linux x86 32-bit, ARM 32-bit, RISC-V, PowerPC 64 LE | Windows x86 (windows-2000-x86): OK with restrictions; Linux i686 built and run as a 32-bit program on a 64-bit kernel (not a native 32-bit system), legacy OK with restrictions, modern not tested; ARM 32-bit, RISC-V, PowerPC: out of scope or not tested | Windows x86 is reachable by the Legacy UI down to Windows 2000; the tier no longer depends on a Rust toolchain, so it should be redefined by "a C++11 compiler and the platform libraries exist" |
 | C | PowerPC big-endian, s390x, LoongArch64, FreeBSD: CPU engine, CLI, server | not tested; PowerPC and other architectures are out of scope (spec Clarifications) | no change proposed |
 
@@ -268,6 +276,8 @@ The disabled features listed for XP in section 2.1.2 (GPU, BLE, TLS, simplified 
 | Platform | Variant | Disabled feature | Proposed change |
 |---|---|---|---|
 | android-7.0-x86_64 | modern | uimode-contrast | add to section 2.3 for this platform (reason in the verdict) |
+| linux-centos-6.10-x86_64 | legacy | missing-glyph | add to section 2.3 for this platform (reason in the verdict) |
+| linux-centos-6.10-x86_64 | legacy | text-shaping-and-bidi | add to section 2.3 for this platform (reason in the verdict) |
 | linux-i686 | legacy | missing-glyph | add to section 2.3 for this platform (reason in the verdict) |
 | linux-i686 | legacy | glyph-substitution | add to section 2.3 for this platform (reason in the verdict) |
 | linux-i686 | legacy | text-shaping-and-bidi | add to section 2.3 for this platform (reason in the verdict) |
@@ -363,6 +373,25 @@ Evidence: 9 file(s), 2 screenshot(s). Reproduction: validation/procedures/androi
 - NOT CHECKED: rotation (the activity handles it with configChanges and rememberSaveable, never rotated), screen sizes other than 1080x1920 at 420 dpi, accessibility services (TalkBack), a build signed with anything but a throwaway key made by tools/build.py, installation from a store, the behaviour ...
 - THE BUILD IS PINNED AND RECORDED, NOT AUDITED: AGP 9.5.1, Gradle 9.9.1, Kotlin 2.3.21, Compose BOM 2026.09.00, activity-compose 1.13.0, JDK Temurin 25.0.4 (Gradle ran on it as is), NDK r30 (30.0.16248370), CMake 3.22.1, build-tools 36.0.0. R8 minification and resource shrinking are on for the ...
 - ONE DAY, ONE MACHINE: runs of 2026-11-15 (UTC 2026-11-14 23:33 to 23:40). The first vector run after the package rename of the same day is the one stored; the Legacy UI, renamed to the package id fr.bansan.loomora.probe in the same change, was rebuilt and its 15 vectors passed again (in the ...
+
+### linux-centos-6.10-x86_64 legacy: OK with restrictions (decision: keep)
+
+Evidence: 10 file(s). Reproduction: validation/procedures/linux.md.
+
+- SCOPE: A DOCKER CONTAINER, NOT A CENTOS 6 MACHINE (validation/platforms/linux-centos-6.10-x86_64.json). The Linux Legacy UI was built and run inside the PyPA image quay.io/pypa/manylinux2010_x86_64 (CentOS 6.10 userland, glibc 2.12, gcc 8.3.1 from devtoolset-8, cmake 3.23.3) on Docker Desktop ...
+- NO END-OF-LIFE BANNER: the distribution is end of life (CentOS 6, 2020-11-30) but loomora_is_eol reads the kernel release from uname, which inside the container is 6.18 (not end of life), so eol_warning_shown is false in every probe line and the banner of the Linux Legacy UI was not shown on this ...
+- X SERVER: every run used a private Xvfb 1.17.4 (the CentOS 6 package) on display :99 or :98 or :97, never a real Xorg, a window manager, a desktop session or a physical display. The window runs show the client area only (no decorations).
+- INPUT WAS SYNTHETIC AND ONLY CHECKED BY PIXELS: window-run-log.txt shows the executable opening a 480x320 window, six synthetic key events (xlib-driver.c, XSendEvent with a remapped spare keycode, the driver of the Ubuntu platform) changing the window contents (two distinct screenshots) and a ...
+- FONTS: the image has the DejaVu fonts, the misc and Type1 X fonts (34 fontconfig fonts) and no other font (no CJK font). The mixed Unicode string (Latin, euro sign, Greek, Cyrillic, CJK, Hebrew, Arabic, an emoji) gave disabled_features ['missing-glyph'] (CJK and the emoji have no glyph) with ...
+- NO TEXT SHAPING AND NO BIDIRECTIONAL LAYOUT, by decision (accepted by the owner, see the verdict linux-ubuntu-24.04-x86_64-legacy and the fallback xlib-core-font-glyphs): not re-checked on this platform, the Xft drawing path is the same code.
+- SINGLE RUNS, NO SERIES: the probe lines give display_ms 20 (default input) and 38 (mixed string), peak_rss_kb 6340 and 6404, one run each; the 15 vectors ran in 4 parallel docker exec calls (2.3 to 2.4 s each, including docker start-up). No series, no ASan or UBSan run, no HiDPI, no memory over ...
+- BUILD ENVIRONMENT WORKAROUNDS (recorded in the Dockerfile tools/trials/linux-manylinux2010-x86_64/Dockerfile): vault.centos.org answered 403 Forbidden to the CentOS 6 TLS stack for the repodata files, so base, updates and extras were pointed at archive.kernel.org/centos-vault/6.10 (same content) ...
+- THE BACKEND TESTS RAN FROM A SEPARATE BUILD: ctest 2 of 2 (selftest and the Catch2 tests loomora_tests, Catch2 initialised in the worktree) used a second CMake build directory (-DLOOMORA_XLIB_XFT=OFF, which only affects the UI that build also compiled), not the build of the deliverable; both use ...
+- NOT DONE: the Linux Modern UI (GTK 3.10 is not available on CentOS 6, verdict linux-centos-6.10-x86_64-modern is not_tested), any other distribution, a 32-bit build, ARM, a native CentOS 6 machine or kernel, and a re-run of the shipped file after copying it out of the container (the executable was ...
+
+### linux-centos-6.10-x86_64 modern: not tested (not attempted)
+
+Justification recorded in the verdict: Not attempted on this platform, by choice of scope, not by a failure. The PoC scope rule of 2026-11-15 asks only for the Linux Legacy UI on the lowest testable system. The Linux Modern UI needs gtkmm and GTK 3.10 or later (ui/modern/linux-gtk3), which are not part of CentOS 6 (it ships GTK 2; the packages were not queried in the image); whether GTK 3 could be built there was not tried, so nothing is claimed about it.
 
 ### linux-i686 legacy: OK with restrictions (decision: keep)
 
@@ -469,6 +498,7 @@ Shared code is the backend `core/` (the C++11 library and its C API), glue is th
 | android-4.1.2-x86 | legacy | legacy/android-views | Android framework views (Activity, EditText, TextView ... | - | - | - | not measured | not measured |
 | android-5.0-arm64 | legacy | legacy/android-views | Android framework views (Activity, EditText, TextView ... | - | - | - | not measured | not measured |
 | android-7.0-x86_64 | modern | modern/android-compose | Jetpack Compose (Material 3), Compose BOM 2026.09.00 ... | - | - | - | not measured | not measured |
+| linux-centos-6.10-x86_64 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | - | - | - | not measured | not measured |
 | linux-i686 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
 | linux-ubuntu-24.04-x86_64 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
 | linux-ubuntu-24.04-x86_64 | modern | modern/linux-gtk3 | gtkmm-3.0 3.24.9 on gtk+-3.0 3.24.41 (C++11 UI; GTK 3.10 ... | 493 | 0 | 519 | 48.7% | BELOW 80% |
@@ -477,9 +507,9 @@ Shared code is the backend `core/` (the C++11 library and its C API), glue is th
 | windows-2000-x86 | legacy | legacy/windows-win32 | Win32 API (user32, gdi32), EDIT + STATIC controls ... | 493 | 0 | 822 | 37.5% | BELOW 80% |
 | windows-arm64 | modern | modern/windows-winui3 | WinUI 3, Windows App SDK 2.6.5 (packages ... | - | - | - | not measured | not measured |
 
-Records that run the same UI sources have the same numbers, the code is counted once per record: `ui/legacy/android-views/`: android-2.3-arm, android-4.1.2-x86, android-5.0-arm64; `ui/legacy/linux-xlib/`: linux-i686, linux-ubuntu-24.04-x86_64; `ui/legacy/windows-win32/`: windows-11-x64, windows-2000-x86; `ui/modern/windows-winui3/`: windows-11-x64, windows-arm64.
+Records that run the same UI sources have the same numbers, the code is counted once per record: `ui/legacy/android-views/`: android-2.3-arm, android-4.1.2-x86, android-5.0-arm64; `ui/legacy/linux-xlib/`: linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64; `ui/legacy/windows-win32/`: windows-11-x64, windows-2000-x86; `ui/modern/windows-winui3/`: windows-11-x64, windows-arm64.
 
-Not measured: macOS, iOS / iPadOS, Web have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-i686 modern, windows-2000-x86 modern) have no row.
+Not measured: macOS, iOS / iPadOS, Web have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-centos-6.10-x86_64 modern, linux-i686 modern, windows-2000-x86 modern) have no row.
 
 ### Platform-specific code and why it is platform-specific
 
@@ -487,13 +517,13 @@ Every file counted as platform-specific, with its line count from the stored lis
 
 | File | Lines | Why platform-specific | Used by |
 |---|---|---|---|
-| ui/legacy/linux-xlib/keys.cpp | 54 | named by fallback record(s) `xlib-no-input-method`, besides the native UI code | linux-i686, linux-ubuntu-24.04-x86_64 |
-| ui/legacy/linux-xlib/keys.hpp | 6 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-i686, linux-ubuntu-24.04-x86_64 |
-| ui/legacy/linux-xlib/main.cpp | 873 | named by fallback record(s) `xlib-core-font-glyphs`, `xlib-no-input-method`, besides the native UI code | linux-i686, linux-ubuntu-24.04-x86_64 |
-| ui/legacy/linux-xlib/probe.cpp | 179 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-i686, linux-ubuntu-24.04-x86_64 |
-| ui/legacy/linux-xlib/probe.hpp | 19 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-i686, linux-ubuntu-24.04-x86_64 |
-| ui/legacy/linux-xlib/xftfonts.cpp | 119 | named by fallback record(s) `xlib-core-font-glyphs`, besides the native UI code | linux-i686, linux-ubuntu-24.04-x86_64 |
-| ui/legacy/linux-xlib/xftfonts.hpp | 80 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/keys.cpp | 54 | named by fallback record(s) `xlib-no-input-method`, besides the native UI code | linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/keys.hpp | 6 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/main.cpp | 873 | named by fallback record(s) `xlib-core-font-glyphs`, `xlib-no-input-method`, besides the native UI code | linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/probe.cpp | 179 | named by fallback record(s) `linux-platform-id-redhat-release`, besides the native UI code | linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/probe.hpp | 19 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/xftfonts.cpp | 119 | named by fallback record(s) `xlib-core-font-glyphs`, besides the native UI code | linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64 |
+| ui/legacy/linux-xlib/xftfonts.hpp | 80 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64 |
 | ui/modern/linux-gtk3/gtk_compat.hpp | 51 | named by fallback record(s) `gtk-label-xalign`, `gtk-overlay-scrolling`, `gtk4-ui`, besides the native UI code | linux-ubuntu-24.04-x86_64 |
 | ui/modern/linux-gtk3/main.cpp | 86 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
 | ui/modern/linux-gtk3/main_window.cpp | 156 | named by fallback record(s) `gtk-label-xalign`, `gtk-overlay-scrolling`, `gtk4-ui`, besides the native UI code | linux-ubuntu-24.04-x86_64 |
@@ -521,14 +551,14 @@ Common to every row: the shared part is the whole backend, 493 lines in 14 file(
 - **linux-i686 legacy** (`ui/legacy/linux-xlib/`): 27.0% shared. 493 shared lines, 1,330 platform-specific.
   - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 1,330, 10.8 times that.
   - Platform-specific code: 7 files, 1,330 lines; the largest is `main.cpp` with 873 lines (66% of it).
-  - Files that a fallback record names (`keys.cpp` 54, `main.cpp` 873, `xftfonts.cpp` 119): 1,046 lines, 79% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
-  - The same sources as linux-ubuntu-24.04-x86_64: one code base, counted again in this record.
+  - Files that a fallback record names (`keys.cpp` 54, `main.cpp` 873, `probe.cpp` 179, `xftfonts.cpp` 119): 1,225 lines, 92% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
+  - The same sources as linux-centos-6.10-x86_64, linux-ubuntu-24.04-x86_64: one code base, counted again in this record.
   - Fallbacks listed by the deliverable record: `cxx17-nodiscard`.
 - **linux-ubuntu-24.04-x86_64 legacy** (`ui/legacy/linux-xlib/`): 27.0% shared. 493 shared lines, 1,330 platform-specific.
   - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 1,330, 10.8 times that.
   - Platform-specific code: 7 files, 1,330 lines; the largest is `main.cpp` with 873 lines (66% of it).
-  - Files that a fallback record names (`keys.cpp` 54, `main.cpp` 873, `xftfonts.cpp` 119): 1,046 lines, 79% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
-  - The same sources as linux-i686: one code base, counted again in this record.
+  - Files that a fallback record names (`keys.cpp` 54, `main.cpp` 873, `probe.cpp` 179, `xftfonts.cpp` 119): 1,225 lines, 92% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
+  - The same sources as linux-centos-6.10-x86_64, linux-i686: one code base, counted again in this record.
   - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `gtk4-ui`.
 - **linux-ubuntu-24.04-x86_64 modern** (`ui/modern/linux-gtk3/`): 48.7% shared. 493 shared lines, 519 platform-specific.
   - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 519, 4.2 times that.

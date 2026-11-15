@@ -201,3 +201,40 @@ Both verdicts are `ok_restricted`, decision `keep`. Modern: gtkmm build 44cba2ef
 - Per CLAUDE.md, store evidence only when it proves something new; the tests (`run_vectors.py`, `ctest`, `check_std.py`) are the proof that behaviour is unchanged. A re-run is mentioned in the verdict notes with its result and is not stored again. Never edit stored evidence. The text files of the evidence folders keep their LF line endings (`validation/evidence/.gitattributes`) because the verdicts hold their SHA-256.
 - New evidence goes in `validation/evidence/<adr-or-change>/linux-ubuntu-24.04-x86_64/` of the docs submodule. Images and screenshots need the owner's authorization first.
 - Update `validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json` or `-legacy.json` and, for a new build, the deliverable records written by `tools/build.py`. Any fallback taken by a case must be declared in `validation/fallbacks.json` (CLAUDE.md, Fallbacks and Linux Modern UI rules). Then `python tools/validate_records.py` must report 0 errors.
+
+## L.10 Linux Legacy UI on the lowest testable system: manylinux2010 in Docker (platform `linux-centos-6.10-x86_64`)
+
+Written and replayed on 2026-11-15 (PoC scope rule: the lowest testable Linux system; success there counts for newer ones). Verdict `validation/verdicts/linux-centos-6.10-x86_64-legacy.json` (`ok_restricted`), platform record `validation/platforms/linux-centos-6.10-x86_64.json`, evidence `validation/evidence/linux-manylinux2010/linux-centos-6.10-x86_64/`. Commands run from Git Bash or PowerShell on the Windows host (Docker Desktop; `docker` is not available in WSL); from Git Bash set `MSYS_NO_PATHCONV=1` so that `/opt/...` paths are not rewritten.
+
+What the system is: a container of the PyPA image `quay.io/pypa/manylinux2010_x86_64` (CentOS 6.10, glibc 2.12, devtoolset-8 gcc 8.3.1, cmake 3.23.3). It shares the kernel of Docker Desktop (the WSL2 kernel), so only the userland is the old system's. The platform id comes from `/etc/redhat-release` (the image has no `/etc/os-release`, fallback `linux-platform-id-redhat-release`).
+
+1. The image (adds Xft and fontconfig development files, Xvfb and fonts; works around the 403 of vault.centos.org with archive.kernel.org and keeps `/usr/local/lib` in the ld configuration, see the comments of the file):
+
+```
+PS> docker build -t loomora-manylinux2010 tools/trials/linux-manylinux2010-x86_64
+```
+
+2. Build inside the container (the worktree is mounted at /src, the build directory is the Docker volume `loomora-build` mounted as `/root/loomora-build`, outside the repository; Python 3.8 of the image runs `tools/build.py`, which needs 3.8 or later; it builds with Unix Makefiles and writes `out/linux-legacy/x86_64/loomora-xlib` and the deliverable record):
+
+```
+PS> docker volume create loomora-build
+PS> docker run --rm -v "${PWD}:/src" -v loomora-build:/root/loomora-build -w /src loomora-manylinux2010 /opt/python/cp38-cp38/bin/python3 tools/build.py linux legacy --arch x86_64
+```
+
+3. ctest (selftest and the Catch2 tests; Catch2 first: `git -c protocol.file.allow=always submodule update --init third_party/catch2`):
+
+```
+PS> docker run --rm -v "${PWD}:/src" -v loomora-build:/root/loomora-build -w /src loomora-manylinux2010 bash -c "cmake -S . -B ~/loomora-build/core-gcc -DCMAKE_BUILD_TYPE=Release && cmake --build ~/loomora-build/core-gcc -j4 && ctest --test-dir ~/loomora-build/core-gcc --output-on-failure"
+```
+
+4. The 15 reference vectors, from the Windows host (the launcher starts one container with a private Xvfb on :99 and runs each vector through `docker exec`; `python3 tools/run_vectors.py ... --docker` works the same from a Linux host with Docker):
+
+```
+PS> python tools/run_vectors.py linux-centos-6.10-x86_64 legacy --docker loomora-manylinux2010 --evidence-dir docs/implementation/validation/evidence/<change>/linux-centos-6.10-x86_64
+```
+
+Expected: `15 vector(s) run, 15 passed, 0 failed, 16 skipped; 2 truncated to 1000 chars`, `result: PASSED`.
+
+5. Window run and probe facts: `tools/trials/linux-manylinux2010-x86_64/window-run.sh` (compiles `xlib-driver.c`, starts its own Xvfb :98, types, compares two screenshots by hash, closes; expected exit status 0, empty stderr, 2 distinct screenshots), run with `docker run --rm -v "${PWD}:/src" -v loomora-build:/root/loomora-build -v "${PWD}/tools/trials/linux-manylinux2010-x86_64/window-run.sh:/run.sh" loomora-manylinux2010 bash /run.sh`. The probe line alone: `docker run ... bash -c "Xvfb :97 & sleep 2; DISPLAY=:97 /src/out/linux-legacy/x86_64/loomora-xlib --probe"`.
+
+Result of 2026-11-15: build with no warning (131,712 bytes, needs GLIBC_2.4 and GLIBCXX_3.4 at most), ctest 2 of 2, 15 of 15 vectors, window opened, typed into and closed with exit 0. Not covered: a CentOS 6 kernel, a real X server, the end-of-life banner (the kernel is the host's), a real keyboard, any other distribution, i686 and ARM.
