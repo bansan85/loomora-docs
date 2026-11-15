@@ -1,0 +1,5 @@
+2026-11-15T11:22:03Z 127.0.0.1 GET /index.html -> 200 (1696 bytes) UA=Mozilla/5.0 (Windows NT 5.0; rv:10.0) Gecko/20100101 Firefox/10.0
+2026-11-15T11:22:03Z 127.0.0.1 GET /app.js -> 200 (17067 bytes) UA=Mozilla/5.0 (Windows NT 5.0; rv:10.0) Gecko/20100101 Firefox/10.0
+2026-11-15T11:22:04Z 127.0.0.1 GET /loomora.js -> 200 (91529 bytes) UA=Mozilla/5.0 (Windows NT 5.0; rv:10.0) Gecko/20100101 Firefox/10.0
+2026-11-15T11:22:04Z 127.0.0.1 GET /favicon.ico -> 404 (9 bytes) UA=Mozilla/5.0 (Windows NT 5.0; rv:10.0) Gecko/20100101 Firefox/10.0
+2026-11-15T11:22:04Z 127.0.0.1 GET /favicon.ico -> 404 (9 bytes) UA=Mozilla/5.0 (Windows NT 5.0; rv:10.0) Gecko/20100101 Firefox/10.0
