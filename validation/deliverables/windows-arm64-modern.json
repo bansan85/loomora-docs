@@ -13,6 +13,9 @@
     "size": 9909684
   },
   "disabled_features": [],
-  "fallbacks": [],
+  "fallbacks": [
+    "builtin-expect",
+    "cxx17-nodiscard"
+  ],
   "notes": "python tools/build.py windows modern: cmake --preset host-msvc-arm64 (Visual Studio 18 2026 generator; loomora.dll exports exactly the loomora_* functions of loomora.h and imports KERNEL32 only) then dotnet publish of ui/modern/windows-winui3 for net10.0-windows10.0.19041.0; the zip holds the published folder (34 files, 38070775 bytes unzipped) with loomora.dll next to Loomora.WinUI.exe; artifact sha256 6480b89995d20c5dfabfc07c3539870f174fe5855107efb1fdbae79c7e217a48; needs the .NET Desktop Runtime (.NET 10.0) and the Windows App Runtime 2.6 installed on the machine (validation/procedures/windows.md). Same build, other target: net8: loomora-winui-net8-arm64.zip, 9906558 bytes, sha256 1b23dade3e1b216c7852cfe0fc933f645eda0e38d731193ab0f41bab252207c3, published folder 34 files / 38063631 bytes. Artifacts copied to out/windows-modern/."
 }

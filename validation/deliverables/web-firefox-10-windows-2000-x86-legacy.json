@@ -15,7 +15,9 @@
   "disabled_features": [],
   "fallbacks": [
     "web-js-instead-of-wasm",
-    "web-es3-glue"
+    "web-es3-glue",
+    "cxx17-nodiscard",
+    "web-memory-measure"
   ],
   "notes": "Deliverable of platform web-firefox-10-windows-2000-x86 (validation/platforms/web-firefox-10-windows-2000-x86.json), the js path of the page. Built by python tools/build.py web legacy; the files are in $HOME/loomora-build/web-legacy/dist/ (never in the repository tree); sha256 index.html a1ac52ab3286cd7d642084578e02db8b9d6a2d4ef65366b98ce30e4cd65e579c, app.js 2122b38e84d78c4461616198af5c92cde21ea58964bb276637c8a61076567589, loomora.js dda4c387549e78cd7ba7b9cf2c7099da753a51c9d662ceba73537a2acb944edb. The same dist/ folder also holds the files of the other path; the page picks one at run time (typeof WebAssembly).",
   "shared_loc": 493,
