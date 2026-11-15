@@ -86,15 +86,15 @@ No Windows XP system was run. Under the PoC scope rule (the Legacy UI is tried o
 
 | Platform | Family | System | Arch | Released | Age (years) | Environment | End of life | Decided floor |
 |---|---|---|---|---|---|---|---|---|
-| windows-2000-x86 | Windows | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service pack (RTM; no ... | x86 | 2000-02-17 | 26.7 | vm | yes | no |
+| windows-2000-x86 | Windows | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service pack (RTM; no ... | x86 | 2000-02-17 | 26.7 | vm | yes | yes |
 | windows-11-x64 | Windows | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974), French ... | x86_64 | 2021-10-05 | 5.1 | physical | no | no |
 | windows-arm64 | Windows | Windows 11 (ARM64) 11, 64-bit ARM (arm64); NOT RUN, no build number: no ARM64 machine or ... | arm64 | 2021-10-05 | 5.1 | physical | no | no |
 | linux-centos-5.11-x86_64 | Linux | CentOS 5.11 (Final), userland of the PyPA image ... | x86_64 | 2014-09-29 | 12.13 | vm | yes | yes |
 | linux-centos-6.10-x86_64 | Linux | CentOS 6.10 (Final), userland of the PyPA image ... | x86_64 | 2018-07-03 | 8.37 | vm | yes | no |
 | linux-i686 | Linux | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) kernel and ... | x86 | 2024-04-25 | 2.55 | vm | no | no |
 | linux-ubuntu-24.04-x86_64 | Linux | Ubuntu 24.04.5 LTS (Noble Numbat) | x86_64 | 2024-04-25 | 2.55 | vm | no | no |
-| android-2.3-arm | Android | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and armeabi-v7a; NOT RUN | arm | 2010-12-06 | 15.9 | emulator | yes | yes |
-| android-4.1.2-x86 | Android | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image eng.wdu.20191218.182616 | x86 | 2012-10-09 | 14.1 | emulator | yes | no |
+| android-2.3-arm | Android | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and armeabi-v7a; NOT RUN | arm | 2010-12-06 | 15.9 | emulator | yes | no |
+| android-4.1.2-x86 | Android | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image eng.wdu.20191218.182616 | x86 | 2012-10-09 | 14.1 | emulator | yes | yes |
 | android-5.0-arm64 | Android | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | arm64 | 2014-11-12 | 12.0 | emulator | yes | no |
 | android-7.0-x86_64 | Android | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 (ro.build.id NYC ... | x86_64 | 2016-08-22 | 10.2 | emulator | yes | yes |
 | web-firefox-10-windows-2000-x86 | Web | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758, release channel ... | js | 2012-01-31 | 14.8 | vm | no | yes |

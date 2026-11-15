@@ -6,12 +6,12 @@
   "arch": "x86",
   "release_date": "2012-10-09",
   "age_years": 14.1,
-  "is_floor": false,
+  "is_floor": true,
   "in_scope": true,
   "environment": "emulator",
   "environment_detail": "Android emulator 37.2.13.0 (build_id 16740729) on the Windows 11 host of validation/platforms/windows-11-x64.json, started headless by the trial (-avd API16 -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect), WHPX acceleration; AVD 'API16': system image android-16 default x86 (SDK package revision 7, build eng.wdu.20191218.182616, ro.build.fingerprint generic_x86/sdk_x86/generic_x86:4.1.2/MASTER/eng.wdu.20191218.182616:eng/test-keys, kernel 3.10.0+), ro.product.model 'Android SDK built for x86', 2 virtual CPUs (Intel Core i5-8300H of the host), 1,024 MB of RAM (MemTotal 1,031,452 kB), 1080x1920 at 480 dpi. This is an emulated machine, not a phone: CPU, timing and memory figures are the emulator's.",
   "eol": true,
   "eol_source": "validation/sources.json eol-android-security: the backend (loomora_is_eol) treats Android marketing versions below 14 as end of life, so 4.1 is end of life; the Legacy UI showed the banner and wrote eol_warning_shown true in every run.",
   "release_date_source": "General availability of Android 4.1.2 (2012-10-09, author's knowledge, not re-read for this record); age_years = days from that date to the trial date 2026-11-14 divided by 365.25, rounded to 0.1.",
-  "floor_note": "NOT the floor: the decided floor of the Android Legacy UI is API 9 (Android 2.3, platform android-2.3-arm), but the emulator of this machine cannot run below API 16 (owner decision). This record is the oldest Android that was actually run: the UI built for minSdkVersion 9 runs and displays the greeting on API 16. Nothing older was tried."
+  "floor_note": "Legacy floor of the Android family under the PoC scope rule (owner, 2026-11-15: the lowest tested system, is_floor true). The first decided floor was API 9 (Android 2.3, platform android-2.3-arm, never run), but the emulator of this machine cannot run below API 16. The UI was BUILT for API 9 (minSdkVersion 9) and RUN on API 16. This record is the oldest Android that was actually run: the UI built for minSdkVersion 9 runs and displays the greeting on API 16. Nothing older was tried."
 }

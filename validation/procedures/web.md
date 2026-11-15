@@ -13,6 +13,7 @@ Every command is the one that was run, taken from `tools/` and the records.
 
 - Written and run on 2026-11-15. The WebAssembly path was built and run under node and in a current headless Chrome (task T085, spike S5), but has **no verdict and no platform record** in this project: the PoC rule is that success on the lowest testable browser stands for newer ones, and the WebAssembly path is only smoke-tested.
 - The browser is Firefox 10.0 (build ID 20120129021758) on Windows 2000 build 2195 without service pack. Internet Explorer up to 9 is dropped by the owner (no typed arrays). No other browser or operating system was run for the JavaScript path.
+- Safari (Legacy page, JavaScript path) is considered covered by inference from Firefox 10 Legacy (PoC scope rule, owner decision 2026-11-15). It was never run: there is no Safari platform record and no Safari verdict, and nothing here says it works.
 
 ## Prerequisites
 
