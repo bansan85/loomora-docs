@@ -1,0 +1,85 @@
+# Emscripten 1.39.20 fastcomp, -sWASM=0 -sLEGACY_VM_SUPPORT=1 (emscripten-js.cmake)
+# date: 2026-11-15T08:18Z  host: Linux 6.18.58.1-microsoft-standard-WSL2 x86_64, node v14.18.2
+# emcc: emcc (Emscripten gcc/clang-like replacement) 1.39.20 (45d43807ec2b74673acc703dd1145ac0d2d1040a)
+# toolchain: cmake/toolchains/emscripten-js.cmake
+
+## link command of the module (ninja -t commands loomora_web | tail -1)
+: && /home/legar/emsdk-fastcomp/fastcomp/emscripten/em++ -fexceptions -DNDEBUG -O2 -fexceptions -sEXPORTED_FUNCTIONS=@<repo>/bridge/wasm/exports.txt -sWASM=0 -sLEGACY_VM_SUPPORT=1 -O2   -sMODULARIZE=1 -sEXPORT_NAME=createLoomora --no-entry -sEXPORTED_RUNTIME_METHODS=@<repo>/bridge/wasm/runtime-methods.txt -sALLOW_MEMORY_GROWTH=1 -sENVIRONMENT=web,worker,node bridge/wasm/CMakeFiles/loomora_web.dir/module.cpp.o -o bridge/wasm/loomora.js  core/libloomora.a && :
+
+## files (size, sha256)
+86586 8b29c6101de2d718e02b8d5f24f15347d0d18125f4ac44df5fbb4e28656cb468 loomora.js
+2093 58fa3d8cb6f66834370abc77c257f0e45f3ad3c3914fd313c25c93fb77cb07c1 loomora.js.mem
+
+## lowest ECMAScript edition that parses loomora.js (acorn from the emsdk 7.0.0)
+acorn 8.19.0, file bridge/wasm/loomora.js (86586 bytes)
+lowest edition that parses: ecmaVersion 3
+
+## ctest
+1/1 Test #1: selftest .........................   Passed    0.14 sec
+100% tests passed, 0 tests failed out of 1
+
+## loomora_selftest under node (exit code after)
+all passed
+exit code 0
+
+## s5-node-driver.js (the module, the six exports, every greet vector)
+ok   export _loomora_abi_version
+ok   export _loomora_greet
+ok   export _loomora_is_eol
+ok   export _loomora_eol_warning
+ok   export _loomora_build_compiler
+ok   export _loomora_probe_record
+ok   no other C++ or main symbol exported
+info abi_version=1
+info build_compiler=clang 6.0.1 (/b/s/w/ir/cache/git/chromium.googlesource.com-external-github.com-emscripten--core-emscripten--fastcomp--clang d7c19e389e4bfb36fbc4558c3d86231b69d9e05f) (/b/s/w/ir/cache/git/chromium.googlesource.com-external-github.com-emscripten--core-emscripten--fastcomp ede231d349e048cf2971d1efe4d73f62325ebfe2)
+info eol_warning="Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection."
+ok   is_eol(WEB, 0, 0) == 0
+ok   is_eol(WINDOWS, 5, 0) == 1
+info greet("Coucou") -> {"status":14,"text":"Bonjour Coucou"}
+ok   loomora_greet("Coucou") == "Bonjour Coucou"
+ok   vector empty
+ok   vector ascii
+ok   vector ascii_punctuation
+ok   vector accented
+ok   vector cjk
+ok   vector right_to_left_arabic
+ok   vector right_to_left_hebrew
+ok   vector emoji
+ok   vector emoji_zwj_sequence
+ok   vector combining_characters
+ok   vector control_characters
+ok   vector one_thousand_ascii
+ok   vector one_thousand_two_byte_chars
+ok   vector limit_4096_ascii
+ok   vector limit_4096_two_byte_chars
+ok   vector too_long_4097_ascii -> -1 (got -1)
+ok   vector too_long_4098_two_byte_chars -> -1 (got -1)
+ok   vector invalid_overlong_two_byte -> -3 (got -3)
+ok   vector invalid_overlong_three_byte -> -3 (got -3)
+ok   vector invalid_surrogate -> -3 (got -3)
+ok   vector invalid_above_10ffff -> -3 (got -3)
+ok   vector invalid_byte_ff -> -3 (got -3)
+ok   vector invalid_lone_continuation -> -3 (got -3)
+ok   vector invalid_truncated_sequence -> -3 (got -3)
+ok   vector invalid_after_valid_text -> -3 (got -3)
+ok   vector null_pointer -> -3 (got -3)
+ok   vector capacity_too_small -> -2 (got -2)
+ok   vector capacity_one_byte_short -> -2 (got -2)
+ok   vector capacity_zero -> -2 (got -2)
+ok   vector capacity_exact
+ok   vector capacity_exact_empty_input
+ok   probe_record core_kind 3 is JSON with greeting_matches true
+ok   probe_record core_kind 2 is JSON with greeting_matches true
+info rss_kb (int64) is passed as a two 32-bit numbers (low, high)
+summary: 43 passed, 0 failed
+exit code 0
+
+## same, with the WebAssembly global deleted first (LOOMORA_NO_WASM=1)
+info WebAssembly global removed: typeof WebAssembly = undefined
+info abi_version=1
+info build_compiler=clang 6.0.1 (/b/s/w/ir/cache/git/chromium.googlesource.com-external-github.com-emscripten--core-emscripten--fastcomp--clang d7c19e389e4bfb36fbc4558c3d86231b69d9e05f) (/b/s/w/ir/cache/git/chromium.googlesource.com-external-github.com-emscripten--core-emscripten--fastcomp ede231d34
+info eol_warning="Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection."
+info greet("Coucou") -> {"status":14,"text":"Bonjour Coucou"}
+info rss_kb (int64) is passed as a two 32-bit numbers (low, high)
+summary: 43 passed, 0 failed
+exit code 0

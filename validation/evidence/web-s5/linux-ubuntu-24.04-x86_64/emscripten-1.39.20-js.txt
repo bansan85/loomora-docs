@@ -1,0 +1,85 @@
+# Emscripten 1.39.20 (upstream wasm backend), -sWASM=0 -sLEGACY_VM_SUPPORT=1 (emscripten-js.cmake)
+# date: 2026-11-15T08:18Z  host: Linux 6.18.58.1-microsoft-standard-WSL2 x86_64, node v26.13.1
+# emcc: emcc (Emscripten gcc/clang-like replacement) 1.39.20 (45d43807ec2b74673acc703dd1145ac0d2d1040a)
+# toolchain: cmake/toolchains/emscripten-js.cmake
+
+## link command of the module (ninja -t commands loomora_web | tail -1)
+: && /home/legar/emsdk-1.39.20/upstream/emscripten/em++ -fexceptions -DNDEBUG -O2 -fexceptions -sEXPORTED_FUNCTIONS=@<repo>/bridge/wasm/exports.txt -sWASM=0 -sLEGACY_VM_SUPPORT=1 -O2   -sMODULARIZE=1 -sEXPORT_NAME=createLoomora --no-entry -sEXPORTED_RUNTIME_METHODS=@<repo>/bridge/wasm/runtime-methods.txt -sALLOW_MEMORY_GROWTH=1 -sENVIRONMENT=web,worker,node bridge/wasm/CMakeFiles/loomora_web.dir/module.cpp.o -o bridge/wasm/loomora.js  core/libloomora.a && :
+
+## files (size, sha256)
+86727 63ab06a232c3b84ea4f4a6bd514dd7d47c8f98eb8219d4c0ad7d542050d323fe loomora.js
+2018 95bb63715db308dfed082b148ce246515e338dbda14f88fd1b6104cc90c467a9 loomora.js.mem
+
+## lowest ECMAScript edition that parses loomora.js (acorn from the emsdk 7.0.0)
+acorn 8.19.0, file bridge/wasm/loomora.js (86727 bytes)
+lowest edition that parses: ecmaVersion 3
+
+## ctest
+1/1 Test #1: selftest .........................   Passed    0.05 sec
+100% tests passed, 0 tests failed out of 1
+
+## loomora_selftest under node (exit code after)
+all passed
+exit code 0
+
+## s5-node-driver.js (the module, the six exports, every greet vector)
+ok   export _loomora_abi_version
+ok   export _loomora_greet
+ok   export _loomora_is_eol
+ok   export _loomora_eol_warning
+ok   export _loomora_build_compiler
+ok   export _loomora_probe_record
+ok   no other C++ or main symbol exported
+info abi_version=1
+info build_compiler=clang 12.0.0 (/b/s/w/ir/cache/git/chromium.googlesource.com-external-github.com-llvm-llvm--project 55fa315b0352b63454206600d6803fafacb42d5e)
+info eol_warning="Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection."
+ok   is_eol(WEB, 0, 0) == 0
+ok   is_eol(WINDOWS, 5, 0) == 1
+info greet("Coucou") -> {"status":14,"text":"Bonjour Coucou"}
+ok   loomora_greet("Coucou") == "Bonjour Coucou"
+ok   vector empty
+ok   vector ascii
+ok   vector ascii_punctuation
+ok   vector accented
+ok   vector cjk
+ok   vector right_to_left_arabic
+ok   vector right_to_left_hebrew
+ok   vector emoji
+ok   vector emoji_zwj_sequence
+ok   vector combining_characters
+ok   vector control_characters
+ok   vector one_thousand_ascii
+ok   vector one_thousand_two_byte_chars
+ok   vector limit_4096_ascii
+ok   vector limit_4096_two_byte_chars
+ok   vector too_long_4097_ascii -> -1 (got -1)
+ok   vector too_long_4098_two_byte_chars -> -1 (got -1)
+ok   vector invalid_overlong_two_byte -> -3 (got -3)
+ok   vector invalid_overlong_three_byte -> -3 (got -3)
+ok   vector invalid_surrogate -> -3 (got -3)
+ok   vector invalid_above_10ffff -> -3 (got -3)
+ok   vector invalid_byte_ff -> -3 (got -3)
+ok   vector invalid_lone_continuation -> -3 (got -3)
+ok   vector invalid_truncated_sequence -> -3 (got -3)
+ok   vector invalid_after_valid_text -> -3 (got -3)
+ok   vector null_pointer -> -3 (got -3)
+ok   vector capacity_too_small -> -2 (got -2)
+ok   vector capacity_one_byte_short -> -2 (got -2)
+ok   vector capacity_zero -> -2 (got -2)
+ok   vector capacity_exact
+ok   vector capacity_exact_empty_input
+ok   probe_record core_kind 3 is JSON with greeting_matches true
+ok   probe_record core_kind 2 is JSON with greeting_matches true
+info rss_kb (int64) is passed as a two 32-bit numbers (low, high)
+summary: 43 passed, 0 failed
+exit code 0
+
+## same, with the WebAssembly global deleted first (LOOMORA_NO_WASM=1)
+info WebAssembly global removed: typeof WebAssembly = undefined
+info abi_version=1
+info build_compiler=clang 12.0.0 (/b/s/w/ir/cache/git/chromium.googlesource.com-external-github.com-llvm-llvm--project 55fa315b0352b63454206600d6803fafacb42d5e)
+info eol_warning="Warning: this operating system is no longer maintained by its vendor and no longer receives security updates. Loomora keeps working and opens no network connection."
+info greet("Coucou") -> {"status":14,"text":"Bonjour Coucou"}
+info rss_kb (int64) is passed as a two 32-bit numbers (low, high)
+summary: 43 passed, 0 failed
+exit code 0
