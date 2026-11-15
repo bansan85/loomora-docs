@@ -20,7 +20,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 
 - Windows: windows-2000-x86, 2000-02-17, 26.7 years old, OK with restrictions, evidence: 41 file(s), 7 screenshot(s)
 - macOS: not tested
-- Linux: linux-centos-5.11-x86_64, 2014-09-29, 12.13 years old, OK with restrictions, evidence: 11 file(s)
+- Linux: linux-centos-5.11-x86_64, 2014-09-29, 12.13 years old, OK with restrictions, evidence: 14 file(s)
 - Android: android-4.1.2-x86, 2012-10-09, 14.1 years old, OK with restrictions, evidence: 9 file(s), 2 screenshot(s)
 - iOS / iPadOS: not tested
 - Web: not tested
@@ -99,7 +99,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | modern | not attempted | - | - | - | justified: the Modern UI technology (WinUI 3) is not available on this system: WinUI 3 requires Windows 10 1809 or later (source winappsdk-support) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | legacy | OK with restrictions | keep | 37 file(s), 12 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 0 disabled feature(s) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | modern | OK with restrictions | keep | 19 file(s), 2 screenshot(s) | validation/procedures/windows.md | 9 restriction(s), 0 disabled feature(s) |
-| linux-centos-5.11-x86_64 | CentOS 5.11 (Final), userland of the PyPA image ... | legacy | OK with restrictions | keep | 11 file(s) | validation/procedures/linux.md | 11 restriction(s), 2 disabled feature(s) |
+| linux-centos-5.11-x86_64 | CentOS 5.11 (Final), userland of the PyPA image ... | legacy | OK with restrictions | keep | 14 file(s) | validation/procedures/linux.md | 11 restriction(s), 2 disabled feature(s) |
 | linux-centos-5.11-x86_64 | CentOS 5.11 (Final), userland of the PyPA image ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The owner's request of 2026-11-15 asks only for the Linux Legacy UI on an older Linux userland. The Linux Modern UI needs gtkmm and GTK 3.10 or later (ui/modern/linux-gtk3), which are not part of CentOS 5 (it ships GTK 2.10; the packages were not queried in ... (full text in section 12) |
 | linux-centos-6.10-x86_64 | CentOS 6.10 (Final), userland of the PyPA image ... | legacy | OK with restrictions | keep | 10 file(s) | validation/procedures/linux.md | 10 restriction(s), 2 disabled feature(s) |
 | linux-centos-6.10-x86_64 | CentOS 6.10 (Final), userland of the PyPA image ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The PoC scope rule of 2026-11-15 asks only for the Linux Legacy UI on the lowest testable system. The Linux Modern UI needs gtkmm and GTK 3.10 or later (ui/modern/linux-gtk3), which are not part of CentOS 6 (it ships GTK 2; the packages were not queried in ... (full text in section 12) |
@@ -129,7 +129,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | Windows | modern | windows-11-x64 | 2021-10-05 | 5.1 | OK with restrictions | 19 file(s), 2 screenshot(s) |
 | macOS | legacy | not tested | - | - | - | - |
 | macOS | modern | not tested | - | - | - | - |
-| Linux | legacy | linux-centos-5.11-x86_64 | 2014-09-29 | 12.13 | OK with restrictions | 11 file(s) |
+| Linux | legacy | linux-centos-5.11-x86_64 | 2014-09-29 | 12.13 | OK with restrictions | 14 file(s) |
 | Linux | modern | linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 101 file(s), 63 screenshot(s) |
 | Android | legacy | android-4.1.2-x86 | 2012-10-09 | 14.1 | OK with restrictions | 9 file(s), 2 screenshot(s) |
 | Android | modern | android-7.0-x86_64 | 2016-08-22 | 10.2 | OK with restrictions | 9 file(s), 2 screenshot(s) |
@@ -151,7 +151,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | windows-2000-x86 | legacy | loomora.exe: 696,127 bytes | 2 to 15 ms | 1,084 to 1,160 kB |
 | windows-11-x64 | legacy | loomora.exe: 703,383 bytes | 42 to 127 (median 50) ms | 11,548 to 14,420 kB |
 | windows-11-x64 | modern | loomora-winui-net10-x64.zip: 9,930,841 bytes | 365 to 2,053 ms | 112,696 to 112,952 kB |
-| linux-centos-5.11-x86_64 | legacy | loomora-xlib: 66,208 bytes | 13 to 60 ms | 5,328 to 5,560 kB |
+| linux-centos-5.11-x86_64 | legacy | loomora-xlib: 66,208 bytes | 20 to 67 ms | 5,448 to 5,540 kB |
 | linux-centos-6.10-x86_64 | legacy | loomora-xlib: 131,712 bytes | 20 to 38 ms | 6,340 to 6,404 kB |
 | linux-i686 | legacy | loomora-xlib: 73,348 bytes | 22 to 26 ms | 8,032 to 11,728 kB |
 | linux-ubuntu-24.04-x86_64 | legacy | loomora-xlib: 80,216 bytes | 164 ms | 13,680 kB |
@@ -385,17 +385,17 @@ Evidence: 9 file(s), 2 screenshot(s). Reproduction: validation/procedures/androi
 
 ### linux-centos-5.11-x86_64 legacy: OK with restrictions (decision: keep)
 
-Evidence: 11 file(s). Reproduction: validation/procedures/linux.md.
+Evidence: 14 file(s). Reproduction: validation/procedures/linux.md.
 
 - SCOPE: A DOCKER CONTAINER, NOT A CENTOS 5 MACHINE (validation/platforms/linux-centos-5.11-x86_64.json). The Linux Legacy UI was built and run inside the PyPA image quay.io/pypa/manylinux1_x86_64 (CentOS 5.11 userland, glibc 2.5, gcc 4.8.2 from devtoolset-2, cmake 3.22.6 from a pip wheel) on Docker ...
-- THE LIBC OF THE IMAGE WAS PATCHED TO RUN ON THIS KERNEL: glibc 2.5 reads the time through the fixed vsyscall page, which the WSL2 kernel does not map (vsyscall=none), so every program that calls time() or gettimeofday() (bash, perl, python3, yum, the compiler proper cc1, getaddrinfo) died with ...
+- THE HOST KERNEL RUNS WITH vsyscall=emulate: glibc 2.5 reads the time through the fixed vsyscall page, which the WSL2 kernel of Docker Desktop does not map by default (vsyscall=none); on that default kernel every program that calls time() or gettimeofday() (bash, perl, python3, yum, the compiler ...
 - NO END-OF-LIFE BANNER: the distribution is end of life (CentOS 5, 2017-03-31) but loomora_is_eol reads the kernel release from uname, which inside the container is 6.18 (not end of life), so eol_warning_shown is false in every probe line and the banner of the Linux Legacy UI was not shown on this ...
 - X SERVER: every run used a private Xvfb 1.1.1 (the CentOS 5 package, through the wrapper /usr/local/bin/Xvfb of the image that adds -fp for the misc and Type1 font directories) on display :99, :98 or :97, never a real Xorg, a window manager, a desktop session or a physical display. The window runs ...
 - INPUT WAS SYNTHETIC AND ONLY CHECKED BY PIXELS: window-run-log.txt shows the executable opening a 480x320 window, six synthetic key events (xlib-driver.c, XSendEvent with a remapped spare keycode, the driver of the Ubuntu platform) changing the window contents (two distinct screenshots) and a ...
 - FONTS: the image has the DejaVu LGC fonts, Bitstream Vera, the misc and Type1 X fonts and no other font (no CJK font, no emoji font). The mixed Unicode string (Latin, euro sign, Greek, Cyrillic, CJK, Hebrew, Arabic, an emoji) gave disabled_features ['missing-glyph'] (CJK and the emoji have no ...
 - NO TEXT SHAPING AND NO BIDIRECTIONAL LAYOUT, by decision (accepted by the owner, see the verdict linux-ubuntu-24.04-x86_64-legacy and the fallback xlib-core-font-glyphs): not re-checked on this platform, the Xft drawing path is the same code.
-- SINGLE RUNS, NO SERIES: the probe lines give display_ms 13 (default input) and 60 (mixed string), peak_rss_kb 5328 and 5560, one run each; the 15 vectors ran in 4 parallel docker exec calls (2.2 to 2.6 s each, including docker start-up), display_ms 0 to 72, peak_rss_kb 5340 to 5644. No series, no ...
-- BUILD ENVIRONMENT WORKAROUNDS (recorded in the Dockerfile tools/trials/linux-manylinux1-x86_64/Dockerfile): the libc patch above; the yum repositories were already on http://archive.kernel.org/centos-vault/5.11/ (http only, the CentOS 5 TLS stack cannot do https) and the libselinux repository of ...
+- SINGLE RUNS, NO SERIES: the probe lines give display_ms 20 (default input) and 67 (mixed string), peak_rss_kb 5448 and 5540, one run each; the 15 vectors ran in 4 parallel docker exec calls (2.3 to 2.7 s each, including docker start-up), display_ms 0 to 48, peak_rss_kb 5308 to 5612. No series, no ...
+- BUILD ENVIRONMENT WORKAROUNDS (recorded in the Dockerfile tools/trials/linux-manylinux1-x86_64/Dockerfile): the yum repositories were already on http://archive.kernel.org/centos-vault/5.11/ (http only, the CentOS 5 TLS stack cannot do https) and the libselinux repository of the image had to be ...
 - THE BACKEND TESTS RAN FROM A SEPARATE BUILD: ctest 2 of 2 (selftest and the Catch2 2.13.10 tests loomora_tests, Catch2 initialised in the worktree; the tests CMake needs -DPython3_EXECUTABLE=/opt/python/cp38-cp38/bin/python3 because the system Python is 2.4) used a second CMake build directory ...
 - NOT DONE: the Linux Modern UI (GTK 3.10 is not available on CentOS 5, verdict linux-centos-5.11-x86_64-modern is not_tested), CentOS 5.0 to 5.10 (the record is the system actually run, 5.11; the first release, 5.0 of 2007-04-12, was not run), any other distribution, a 32-bit build, ARM, a native ...
 
