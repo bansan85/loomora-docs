@@ -1,6 +1,6 @@
 # ADR 0018: Continuous integration runs on GitHub-hosted runners only; what they cannot run stays a local run
 
-- **Status**: accepted (owner decision of 2026-11-15 on the runners; the points marked "not verified" are confirmed or refuted by the first run on GitHub, see Consequences)
+- **Status**: accepted (owner decision of 2026-11-15 on the runners; the first run settled part of the points marked "not verified", the others are listed in Consequences)
 - **Date**: 2026-11-15
 - **Spike / requirement**: S10 (T121, open: see below) / FR-030, T122, T129
 
@@ -8,7 +8,7 @@
 
 FR-030 asks for a continuous integration on GitHub with no manual step. The first wording of FR-030 and of tasks T121 to T131 planned two kinds of runners: GitHub-hosted runners for what they can run, and a self-hosted runner driving VirtualBox virtual machines and Docker containers for the rest. Both repositories (`github.com/bansan85/loomora` and `github.com/bansan85/loomora-docs`) are public, and GitHub itself says "self-hosted runners should almost never be used for public repositories", because "any user can open pull requests against the repository and compromise the environment" (<https://docs.github.com/en/actions/reference/security/secure-use>, read 2026-11-15). A self-hosted runner on the owner's machine would run the code of pull requests from forks there.
 
-This record gathers what the hosted runners provide, so that the jobs of Phase 9 are written for real images and not for assumed ones. Every statement below was read on the page cited, on **2026-11-15**, or by a read-only call of the GitHub API on the same day; the statements that no page confirms are marked **not verified**. Nothing was run on GitHub: the repositories had no branch pushed yet (`gh api repos/bansan85/loomora/branches` returned an empty list), so no workflow could run.
+This record gathers what the hosted runners provide, so that the jobs of Phase 9 are written for real images and not for assumed ones. Every statement below was read on the page cited, on **2026-11-15**, or by a read-only call of the GitHub API on the same day; the statements that no page confirms are marked **not verified**. When this record was first written nothing had been run on GitHub (the repositories had no branch pushed, `gh api repos/bansan85/loomora/branches` returned an empty list). The first run of `.github/workflows/ci.yml` was made later the same day; what it proves is in the section "First run" below, and the statements it settles are updated in place.
 
 ## Decision
 
@@ -51,9 +51,9 @@ Private repositories get half the CPU and memory of the Linux and Windows rows a
 
 | What | Where | Status |
 |---|---|---|
-| `verify.py quick` (backend, Xlib and gtkmm UIs, vectors on Xvfb, ctest, check_std, records) | `ubuntu-22.04`, `ubuntu-24.04`, `ubuntu-24.04-arm` (T122, written) | not run on GitHub yet |
-| Linux variants (GTK 3.10 floor, GTK 4, i686 Xlib, Xlib core font) | `ubuntu-24.04`, schedule and when their files change (T122, written; the i386 packages and the apt mirror for them are not verified) | not run on GitHub yet |
-| Validation of the records only | `ubuntu-24.04` (change with no code in it) | not run on GitHub yet |
+| `verify.py quick` (backend, Xlib and gtkmm UIs, vectors on Xvfb, ctest, check_std, records) | `ubuntu-22.04`, `ubuntu-24.04`, `ubuntu-24.04-arm` (T122, written) | passed on GitHub, run 43712716870 (see First run) |
+| Linux variants (GTK 3.10 floor, GTK 4, i686 Xlib, Xlib core font) | `ubuntu-24.04`, schedule and when their files change (T122; the i386 packages install from the hosted mirrors) | passed on GitHub, same run |
+| Validation of the records only | `ubuntu-24.04` (change with no code in it) | skipped by design in the first run (code changed); the shell logic was tried locally, no run yet |
 | MinGW-w64 cross build of the Windows Legacy UI, runs of the x64 and x86 executables | cross build on Linux (`g++-mingw-w64`, `-win32` thread model through `update-alternatives`, apt, not verified on the image), runs on `windows-2025` (WoW64 for x86; the x64 and x86 emulation on `windows-11-arm` is not verified) (T123, not written) | to do |
 | Windows 2000 to 10 ladder | local VirtualBox run | not CI |
 | Android: NDK r15c (download, verified checksum) and r30 (on the image), emulator API 16 x86 and API 24 | Linux x64 runner with KVM (T124, not written) | KVM boot not verified |
@@ -66,11 +66,21 @@ Private repositories get half the CPU and memory of the Linux and Windows rows a
 
 ## Checkout of the docs repository
 
-`actions/checkout` (latest release v7.0.1, 2026-07-20; <https://github.com/actions/checkout>, README read 2026-11-15) takes `submodules: false | true | recursive`. The submodule URL of `docs/implementation` is the relative `../loomora-docs`; git resolves a relative URL against the URL of the remote `origin`, which on a runner is `https://github.com/bansan85/loomora`, so it becomes `https://github.com/bansan85/loomora-docs`, the sibling repository, public so with no token. That is git's documented behaviour, but neither the checkout README nor any GitHub page says it for this action: **not verified until the first run**. Consequences kept in mind:
+`actions/checkout` (latest release v7.0.1, 2026-07-20; <https://github.com/actions/checkout>, README read 2026-11-15) takes `submodules: false | true | recursive`. The submodule URL of `docs/implementation` is the relative `../loomora-docs`; git resolves a relative URL against the URL of the remote `origin`, which on a runner is `https://github.com/bansan85/loomora`, so it becomes `https://github.com/bansan85/loomora-docs`, the sibling repository, public so with no token. That is git's documented behaviour; neither the checkout README nor any GitHub page says it for this action, so it was tried: **verified for a push run** by the first run (log line `Submodule 'docs/implementation' (https://github.com/bansan85/loomora-docs) registered for path 'docs/implementation'`, then `checked out '8565c9f...'`). A pull request from a fork is **not verified**. Consequences:
 
-- The commit that the submodule pointer names must exist in `loomora-docs` on GitHub and be reachable from one of its branches: push `loomora-docs` first, then `loomora`.
-- A pull request from a fork resolves the same way against the base repository (`../loomora-docs` of the base), not against the fork: not verified.
+- The commit that the submodule pointer names must exist in `loomora-docs` on GitHub and be reachable from one of its branches: push `loomora-docs` first, then `loomora`. The first attempt of the first run failed for exactly this reason (the docs commit had been pushed to the local sibling repository only); after it was pushed to GitHub, attempt 2 passed.
+- A pull request from a fork is expected to resolve the same way against the base repository (`../loomora-docs` of the base), not against the fork: not verified.
 - If `loomora-docs` ever becomes private, the checkout needs a token that can read it (a fine-grained token or a deploy key stored as a secret), which this decision forbids for now ("no secret").
+
+## First run
+
+Run <%s> (event `push`, branch `feat/ci1`, commit 9a7a86c, attempt 2, 2026-11-15): `changes`, `linux (ubuntu-22.04)`, `linux (ubuntu-24.04)`, `linux (ubuntu-24.04-arm)`, `linux variants` and `gate` succeeded; `docs` was skipped as designed (the push changed code). Read with `gh run view` and the jobs API.
+
+- `python3 tools/verify.py quick` passed 9 of 9 checks on each of the three images with no SKIP: ctest 2/2 (Catch2 included), 15/15 vectors for the Xlib UI and for the gtkmm UI under the private Xvfb display, `check_std`, `check_ui_logic`, records, `diff_verdicts`, the `run_vectors` self-test. So Xvfb, gtkmm 3 and Xlib work on `ubuntu-24.04-arm` too.
+- Images: `ubuntu22/20261111.360`, `ubuntu24/20261111.127` and `.370`, `ubuntu24-arm64/20261111.182`.
+- Durations: `ubuntu-22.04` 1 min 16 s, `ubuntu-24.04` 1 min 34 s, `ubuntu-24.04-arm` 1 min 32 s, of which `apt-get` 31 to 37 s and `verify.py quick` 37 to 50 s; `linux variants` 3 min 04 s (`apt-get` 51 s, 16 of 16 checks). The packages and the build are fast enough that no cache is added (Decision 5 stands).
+- The variants job installed `libx11-dev:i386`, `gcc-multilib` and `libgtkmm-4.0-dev` from the hosted mirrors after `dpkg --add-architecture i386`, and passed GTK 3.10 floor, GTK 4, i686 Xlib and Xlib core font (15/15 vectors each).
+- Not covered by this run: a pull request from a fork, a documentation-only change, KVM and the emulators, Docker containers, the Windows and macOS runners.
 
 ## Alternatives rejected
 
@@ -82,7 +92,7 @@ Private repositories get half the CPU and memory of the Linux and Windows rows a
 
 ## Consequences
 
-- S10 stays **open** in `validation/spikes.json`. Answered by reading the documentation and the image readmes: the runner labels and their sizes, the arm64 runners being free for public repositories, the contents of the Ubuntu 24.04, Windows 2025, Windows 11 ARM and macOS 26 images, the NDK r30 on the Ubuntu image, Docker on the Linux image, the KVM rule for Linux runners, the cache limits, the retirement of `ubuntu-22.04`. Not answered, to be confirmed by the first run after the owner pushes both repositories: the relative submodule checkout; the real duration of `verify.py quick` on each image and whether the Xlib and gtkmm UIs run under Xvfb on `ubuntu-24.04-arm`; the i386 packages on the hosted Ubuntu 24.04; KVM on the arm64 runner and the boots of the API 16 and API 24 emulators; manylinux2010 in Docker; the Windows 2025 and macOS jobs. Each is answered by a run, never by the documentation alone (T121).
-- FR-030 (spec) and the text of T121, T123 to T126 and T131 still describe a self-hosted runner: the owner decides how to reword them. This record is the later decision.
+- S10 stays **open** in `validation/spikes.json`. Answered by reading the documentation and the image readmes: the runner labels and their sizes, the arm64 runners being free for public repositories, the contents of the Ubuntu 24.04, Windows 2025, Windows 11 ARM and macOS 26 images, the NDK r30 on the Ubuntu image, Docker on the Linux image, the KVM rule for Linux runners, the cache limits, the retirement of `ubuntu-22.04`. Answered by the first run (see First run): the relative submodule checkout for a push run, the durations, Xvfb and both UIs on `ubuntu-24.04-arm`, the i386 packages on the hosted Ubuntu 24.04. Not answered yet: the checkout for a pull request from a fork; a documentation-only change through the `docs` job; KVM on the arm64 runner and the boots of the API 16 and API 24 emulators; manylinux2010 in Docker; the Windows 2025, Windows ARM and macOS jobs. Each is answered by a run, never by the documentation alone (T121).
+- FR-030 (spec) and the text of T121, T123 to T126 and T131 described a self-hosted runner; they were reworded on 2026-11-15 to match this record (the old wording is kept in the text).
 - The first workflow is `.github/workflows/ci.yml` (T122, T129). Its actions are pinned to `actions/checkout` v7.0.1 (`3d3c42e5aac5ba805825da76410c181273ba90b1`) and `actions/upload-artifact` v7.0.2 (`cf430e030ddbb5b0abf93d22962f4752f3646cd9`), both read from `gh api repos/<owner>/<repo>/git/ref/tags/<tag>` on 2026-11-15 (annotated tags would have needed one more dereference; both are plain tags pointing at the commit).
 - `tools/validate_records.py` accepts the spike id S10.
