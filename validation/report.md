@@ -10,11 +10,11 @@ Success criteria evaluated from the records at generation time (`python tools/re
 |---|---|---|
 | SC-002 | MET | 4 of 3 required families validated with the Legacy UI on a system 10 years old or more (Windows, Linux, Android, Web); the oldest working platform is identified with evidence for 4 of 6 families |
 | SC-003 | MET | validated with the Legacy UI on a system 15 years old or more: Windows (read the restrictions of that verdict: a virtual machine, one build) |
-| SC-004 | MET | 13 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
+| SC-004 | MET | 15 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
 | SC-010 | MET | 0 absent variant(s) without a recorded justification |
 | SC-005 | MET | 20 of 20 hypotheses recorded, 5 with a verdict, 15 not covered by this probe |
 | SC-009 | MET | go / no-go concluded for 2 of 2 systems |
-| SC-007 | NOT MET | 0 of 7 measured platform/variant rows reach 80% shared code; 7 below, each one explained in section 13 from the records (the explanation does not remove the gap) |
+| SC-007 | NOT MET | 0 of 8 measured platform/variant rows reach 80% shared code; 8 below, each one explained in section 13 from the records (the explanation does not remove the gap) |
 
 **SC-002 detail**
 
@@ -35,6 +35,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 - linux-i686 legacy: 27.0% (493 shared, 0 glue, 1,330 platform-specific lines)
 - linux-ubuntu-24.04-x86_64 legacy: 27.0% (493 shared, 0 glue, 1,330 platform-specific lines)
 - linux-ubuntu-24.04-x86_64 modern: 48.7% (493 shared, 0 glue, 519 platform-specific lines)
+- web-chrome-157-windows-11-x64 modern: 54.0% (493 shared, 0 glue, 420 platform-specific lines)
 - web-firefox-10-windows-2000-x86 legacy: 55.5% (493 shared, 0 glue, 396 platform-specific lines)
 - windows-11-x64 legacy: 37.5% (493 shared, 0 glue, 822 platform-specific lines)
 - windows-11-x64 modern: 44.1% (493 shared, 0 glue, 624 platform-specific lines)
@@ -86,17 +87,19 @@ No Windows XP system was run. Under the PoC scope rule (the Legacy UI is tried o
 
 | Platform | Family | System | Arch | Released | Age (years) | Environment | End of life | Decided floor |
 |---|---|---|---|---|---|---|---|---|
-| windows-2000-x86 | Windows | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service pack (RTM; no ... | x86 | 2000-02-17 | 26.7 | vm | yes | no |
+| windows-2000-x86 | Windows | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service pack (RTM; no ... | x86 | 2000-02-17 | 26.7 | vm | yes | yes |
 | windows-11-x64 | Windows | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974), French ... | x86_64 | 2021-10-05 | 5.1 | physical | no | no |
+| windows-arm64 | Windows | Windows 11 (ARM64) 11, 64-bit ARM (arm64); NOT RUN, no build number: no ARM64 machine or ... | arm64 | 2021-10-05 | 5.1 | physical | no | no |
 | linux-centos-5.11-x86_64 | Linux | CentOS 5.11 (Final), userland of the PyPA image ... | x86_64 | 2014-09-29 | 12.13 | vm | yes | yes |
 | linux-centos-6.10-x86_64 | Linux | CentOS 6.10 (Final), userland of the PyPA image ... | x86_64 | 2018-07-03 | 8.37 | vm | yes | no |
 | linux-i686 | Linux | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) kernel and ... | x86 | 2024-04-25 | 2.55 | vm | no | no |
 | linux-ubuntu-24.04-x86_64 | Linux | Ubuntu 24.04.5 LTS (Noble Numbat) | x86_64 | 2024-04-25 | 2.55 | vm | no | no |
-| android-2.3-arm | Android | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and armeabi-v7a; NOT RUN | arm | 2010-12-06 | 15.9 | emulator | yes | yes |
-| android-4.1.2-x86 | Android | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image eng.wdu.20191218.182616 | x86 | 2012-10-09 | 14.1 | emulator | yes | no |
+| android-2.3-arm | Android | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and armeabi-v7a; NOT RUN | arm | 2010-12-06 | 15.9 | emulator | yes | no |
+| android-4.1.2-x86 | Android | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image eng.wdu.20191218.182616 | x86 | 2012-10-09 | 14.1 | emulator | yes | yes |
 | android-5.0-arm64 | Android | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | arm64 | 2014-11-12 | 12.0 | emulator | yes | no |
 | android-7.0-x86_64 | Android | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 (ro.build.id NYC ... | x86_64 | 2016-08-22 | 10.2 | emulator | yes | yes |
 | web-firefox-10-windows-2000-x86 | Web | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758, release channel ... | js | 2012-01-31 | 14.8 | vm | yes | yes |
+| web-chrome-157-windows-11-x64 | Web | Google Chrome on Windows 11 Pro Chrome 157.0.8103.51 (official build, stable channel, 64-bit ... | wasm | 2026-11-07 | 0.0 | physical | no | no |
 
 Environment details are in the platform records. A `vm` is an emulated machine: its timings and memory are those of the virtual machine, not of real hardware.
 
@@ -105,9 +108,11 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | Platform | System | Variant | Verdict | Decision | Evidence | Reproduction | Notes |
 |---|---|---|---|---|---|---|---|
 | windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | legacy | OK with restrictions | keep | 41 file(s), 7 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 2 disabled feature(s) |
-| windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | modern | not attempted | - | - | - | justified: the Modern UI technology (WinUI 3) is not available on this system: WinUI 3 requires Windows 10 1809 or later (source winappsdk-support) |
+| windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | modern | not tested | - | - | - | not attempted, justified: Not attempted, because no Modern UI can exist for this system, not because of a failure. The Windows Modern UI is WinUI 3 on the Windows App SDK with TargetPlatformMinVersion 10.0.17763.0, that is Windows 10 version 1809 as the lowest system (validation/deliverables/windows-11-x64-modern.json ... (full text in section 12) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | legacy | OK with restrictions | keep | 37 file(s), 12 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 0 disabled feature(s) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | modern | OK with restrictions | keep | 19 file(s), 2 screenshot(s) | validation/procedures/windows.md | 9 restriction(s), 0 disabled feature(s) |
+| windows-arm64 | Windows 11 (ARM64) 11, 64-bit ARM (arm64); NOT RUN, no build number: no ... | legacy | not tested | - | - | - | not attempted, justified: Not attempted, by choice of scope and not by a failure. tools/build.py builds the Windows Legacy UI for x86 (Windows 2000 and later) and x64 (XP x64 and later) only, with no ARM64 build, and no ARM64 Windows system was available, so whether the x86 or x64 executable runs under the emulation of Windows 11 ARM64 was not tried and ... (full text in section 12) |
+| windows-arm64 | Windows 11 (ARM64) 11, 64-bit ARM (arm64); NOT RUN, no build number: no ... | modern | not tested | - | - | - | not attempted, justified: Built, never run, by choice of scope and not by a failure. The ARM64 build exists (loomora.dll built by MSVC for ARM64, WinUI 3 folders for net8 and net10, machine type 0xAA64 checked, see validation/deliverables/windows-arm64-modern.json), but no ARM64 Windows machine, virtual machine or image was available, so it was never ... (full text in section 12) |
 | linux-centos-5.11-x86_64 | CentOS 5.11 (Final), userland of the PyPA image ... | legacy | OK with restrictions | keep | 14 file(s) | validation/procedures/linux.md | 11 restriction(s), 2 disabled feature(s) |
 | linux-centos-5.11-x86_64 | CentOS 5.11 (Final), userland of the PyPA image ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The owner's request of 2026-11-15 asks only for the Linux Legacy UI on an older Linux userland. The Linux Modern UI needs gtkmm and GTK 3.10 or later (ui/modern/linux-gtk3), which are not part of CentOS 5 (it ships GTK 2.10; the packages were not queried in ... (full text in section 12) |
 | linux-centos-6.10-x86_64 | CentOS 6.10 (Final), userland of the PyPA image ... | legacy | OK with restrictions | keep | 10 file(s) | validation/procedures/linux.md | 10 restriction(s), 2 disabled feature(s) |
@@ -125,7 +130,9 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | legacy | not tested | - | - | - | not attempted, justified: Above the range of the Android Legacy UI (API 9 to 23, owner decision): this platform is served by the Modern UI (verdict android-7.0-x86_64-modern.json) and no Legacy deliverable record names it. For the record, on 2026-11-15 the Legacy APK (renamed to the package id fr.bansan.loomora.probe) was installed on this emulator to ... (full text in section 12) |
 | android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | modern | OK with restrictions | keep | 9 file(s), 2 screenshot(s) | validation/procedures/android.md | 10 restriction(s), 1 disabled feature(s) |
 | web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | legacy (js) | OK with restrictions | keep | 17 file(s), 2 screenshot(s) | validation/procedures/web.md | 10 restriction(s), 1 disabled feature(s) |
-| web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | modern | not tested | - | - | - | not attempted, justified: There is no Web Modern UI yet (ui/modern/web-ts is not written) and Firefox 10 is the Legacy floor browser of the JavaScript path, not a target of a modern TypeScript UI; the Modern Web UI would run on a current browser with the WebAssembly path. (full text in section 12) |
+| web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | modern | not tested | - | - | - | not attempted, justified: The Web Modern UI (ui/modern/web-ts) exists and is validated on Chrome 157 on Windows 11 (PoC rule: one current browser); it is not run on Firefox 10, the Legacy floor browser of the JavaScript path, which is not a target of a modern TypeScript UI (the Modern UI uses the WebAssembly path of a current browser). (full text in section 12) |
+| web-chrome-157-windows-11-x64 | Google Chrome on Windows 11 Pro Chrome 157.0.8103.51 (official build, stable channel ... | legacy | not tested | - | - | - | not attempted, justified: Not run on purpose (owner decision 2026-11-15, PoC rule): the Web Legacy page (ui/legacy/web) is validated on ONE lowest testable browser, Firefox 10 on Windows 2000 (validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json, JavaScript path), and success there stands for newer browsers; Chrome does not run on Windows ... (full text in section 12) |
+| web-chrome-157-windows-11-x64 | Google Chrome on Windows 11 Pro Chrome 157.0.8103.51 (official build, stable channel ... | modern (wasm) | OK with restrictions | keep | 11 file(s), 2 screenshot(s) | validation/procedures/web.md | 7 restriction(s), 0 disabled feature(s) |
 | (none) | macOS | both | not tested | - | - | - | no platform record: no trial |
 | (none) | iOS / iPadOS | both | not tested | - | - | - | no platform record: no trial |
 
@@ -147,7 +154,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | iOS / iPadOS | modern | not tested | - | - | - | - |
 | Web (wasm path) | legacy | not tested | - | - | - | - |
 | Web (js path) | legacy | web-firefox-10-windows-2000-x86 | 2012-01-31 | 14.8 | OK with restrictions | 17 file(s), 2 screenshot(s) |
-| Web (wasm path) | modern | not tested | - | - | - | - |
+| Web (wasm path) | modern | web-chrome-157-windows-11-x64 | 2026-11-07 | 0.0 | OK with restrictions | 11 file(s), 2 screenshot(s) |
 | Web (js path) | modern | not tested | - | - | - | - |
 
 Several ids in one cell are platform records of the same release date (for example the 32-bit build run on a 64-bit system of the same distribution): none is older than the other, and the verdict and evidence shown are those with the most evidence.
@@ -161,6 +168,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | windows-2000-x86 | legacy | loomora.exe: 696,127 bytes | 2 to 15 ms | 1,084 to 1,160 kB |
 | windows-11-x64 | legacy | loomora.exe: 703,383 bytes | 42 to 127 (median 50) ms | 11,548 to 14,420 kB |
 | windows-11-x64 | modern | loomora-winui-net10-x64.zip: 9,930,841 bytes | 365 to 2,053 ms | 112,696 to 112,952 kB |
+| windows-arm64 | modern | loomora-winui-net10-arm64.zip: 9,909,684 bytes | not measured: no verdict, no trial run recorded | not measured: no verdict, no trial run recorded |
 | linux-centos-5.11-x86_64 | legacy | loomora-xlib: 66,208 bytes | 20 to 67 ms | 5,448 to 5,540 kB |
 | linux-centos-6.10-x86_64 | legacy | loomora-xlib: 131,712 bytes | 20 to 38 ms | 6,340 to 6,404 kB |
 | linux-i686 | legacy | loomora-xlib: 73,348 bytes | 22 to 26 ms | 8,032 to 11,728 kB |
@@ -171,6 +179,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | android-5.0-arm64 | legacy | loomora.apk: 228,663 bytes | not measured: no verdict, no trial run recorded | not measured: no verdict, no trial run recorded |
 | android-7.0-x86_64 | modern | loomora.apk: 1,396,354 bytes | 243 to 463 ms | 68,616 to 69,060 kB |
 | web-firefox-10-windows-2000-x86 | legacy | dist/ (index.html, app.js, loomora.js): 110,292 bytes | 124 to 230 ms | not measured: the verdict has no peak_rss_kb value |
+| web-chrome-157-windows-11-x64 | modern | dist/ (index.html, main.js, native.js, loomora.js, loomora.wasm): 53,868 bytes | 74 to 237 ms | 886 to 906 kB |
 
 ## 7. Fallbacks and disabled features
 
@@ -220,6 +229,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | linux-ubuntu-24.04-x86_64 | legacy | glyph-substitution | core-font path, NOT taken by the x86_64 build of this platform: only a build whose CMake finds no libXft and fontconfig development files, or LOOMORA_XLIB_XFT=OFF or the run-time switch LOOMORA_XLIB_NO_XFT; a character the core font cannot draw is a '?' ... |
 | linux-ubuntu-24.04-x86_64 | legacy | text-shaping-and-bidi | not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it |
 | linux-ubuntu-24.04-x86_64 | modern | none recorded | - |
+| web-chrome-157-windows-11-x64 | modern | none recorded | - |
 | web-firefox-10-windows-2000-x86 | legacy | peak-memory | Firefox 10 has no performance.memory: peak_rss_kb is null in every record; the page does not list it in the probe's disabled_features, which are empty |
 | windows-11-x64 | legacy | none recorded | - |
 | windows-11-x64 | modern | none recorded | - |
@@ -231,7 +241,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 - **S1** (confirmed): Does a MinGW-w64 C++11 static library, linked into a MinGW-w64 Win32 executable, run on Windows 2000 SP4? Result: DECISION (project owner, 2026-11-13): S1 is confirmed on the strength of the Windows 2000 build 2195 (no service pack) trial below. The owner accepts that what runs without a service pack also runs with SP4, because service packs only add or fix exports and keep the ones the executable imports (all 112 imports exist in the RTM DLLs). This is an inference, NOT a measurement: SP4 itself, and its newer msvcrt.dll, were never run. Open, kept open on purpose: the question names Windows 2000 SP4 and the system tested has NO service pack (RTM, build 2195), so SP4 is still untested, and T066 asks for a Windows 2000 SP4 VM, which this VM is not; everything else the question asks (a static C++11 library linked into a Win32 executable, plus the backend self-test) ran on the RTM system; the lead decides the status. Decision: `adr/0002-win2000-getthreadid-shim.md`.
 - **S2** (open): Does modern Clang + osxcross + the 10.6 SDK run on 10.6; does Xcode 5.1.1 build and deploy to iOS 5? Result: open, no result recorded
 - **S3** (confirmed): With which toolchain can the backend, the JNI glue and the APK be built for API 9 on armeabi, armeabi-v7a, x86 and arm64-v8a, and how many of those builds can be run on the emulators available (none ... Result: Confirmed on 2026-11-15 for the rewritten question. HISTORY: status `refuted` on 2026-11-14 for the first wording (NDK r16b + ndk-build); the owner asked to rewrite the question and record `confirmed`, keeping the trace. a CMake toolchain file that drives NDK r15c Clang directly with the android-9 sysroot (android-21 for arm64-v8a) builds libloomora_jni.so and loomora_selftest for armeabi, armeabi-v7a, x86 and arm64-v8a (gnustl static, DT_NEEDED libc.so, plus libdl.so on x86 and arm64-v8a, link with --no-undefined against the API 9 libraries, armeabi needs -latomic); build-tools 36 d8 --min-api 9 and javac -source 8 + aapt + zipalign + apksigner v1 give one APK of the four ABIs (228,623 ... Decision: `adr/0016-android-legacy-ndk-r15c.md`.
-- **S5** (confirmed): Does the Web JavaScript path (no WebAssembly) run on a Windows-2000-compatible Firefox, and with which Emscripten? HISTORY: the first wording of this spike was "Does the JavaScript build run on IE 9 ... Result: Confirmed on 2026-11-15 for the rewritten question. HISTORY: status `open` until 2026-11-15 for the first wording (five browsers, none run), then rewritten and recorded `confirmed` once Firefox 10 ran the JavaScript path, keeping the earlier result below unchanged. FIREFOX 10 RUN (2026-11-15, validation/evidence/web-firefox/web-firefox-10-windows-2000-x86/, verdict validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json, procedure validation/procedures/web.md): Firefox 10.0 (build ID 20120129021758) on Windows 2000 build 2195 without service pack, in the VirtualBox VM 'Windows 2000' with 168 MB of RAM, loads the Web Legacy page over HTTP from the host ...
+- **S5** (confirmed): Does the Web JavaScript path (no WebAssembly) run on a Windows-2000-compatible Firefox, and with which Emscripten? HISTORY: the first wording of this spike was "Does the JavaScript build run on IE 9 ... Result: Confirmed on 2026-11-15 for the rewritten question. HISTORY: status `open` until 2026-11-15 for the first wording (five browsers, none run), then rewritten and recorded `confirmed` once Firefox 10 ran the JavaScript path, keeping the earlier result below unchanged. FIREFOX 10 RUN (2026-11-15, validation/evidence/web-firefox/web-firefox-10-windows-2000-x86/, verdict validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json, procedure validation/procedures/web.md): Firefox 10.0 (build ID 20120129021758) on Windows 2000 build 2195 without service pack, in the VirtualBox VM 'Windows 2000' with 168 MB of RAM, loads the Web Legacy page over HTTP from the host ... Decision: `adr/0017-web-javascript-path-fastcomp-1-39-20.md`.
 - **S6** (confirmed): Does the backend compile with strict C++11 under GCC and Clang and export only C symbols, with every exception caught at the C boundary? Result: Confirmed on Linux (WSL Ubuntu 24.04, libstdc++): tools/check_std.py passes with g++ 13.3.0 and clang++ 23.1.5. Checked for each: all 6 core/src/*.cpp compile with -std=c++11 -pedantic-errors -Wall -Wextra -Werror; loomora.h compiles as C89 (-std=c89 -pedantic-errors, gcc 13.3.0 / clang 23.1.5) and as C++98; a shared library built with -fvisibility=hidden exports exactly the 6 loomora_* C functions (nm -D --defined-only), with the C++ runtime linked dynamically and statically (-static-libstdc++ -static-libgcc); core/tests/boundary_check.cpp makes every allocation of every loomora_* call fail in turn (28 failures injected with GCC, 30 with Clang) and no exception escapes. Finding ...
 - **S7** (open): Can the 10.6 SDK and Xcode 5.1.1 be obtained legitimately? Result: open, no result recorded
 - **S8** (confirmed): Can WinUI 3 call a C++11 loomora.dll, and what is the lowest minSdk at which Jetpack Compose with the pinned AndroidX versions builds? HISTORY: the first wording asked "does Compose accept minSdk ... Result: Confirmed on 2026-11-15 for the rewritten question. HISTORY: recorded `refuted` on 2026-11-15 for the first wording (Compose accepts minSdk 21), then rewritten and recorded `confirmed` at the owner's request, keeping this trace. WinUI half, CONFIRMED: WinUI 3 (C#, Windows App SDK 2.6.5, unpackaged and framework-dependent, .NET SDK 10.0.404) calls the C++11 loomora.dll through LibraryImport (no C++/CLI, no C++/WinRT) on Windows 11 x64: loomora.dll is built by MSVC 14.52.37025 (cl.exe 19.52.37029, /MT, cl.exe's default /std:c++14 since MSVC has no /std:c++11, the sources stay C++11), exports exactly the six loomora_* functions and imports KERNEL32.dll only (x64 and ARM64 built; ARM64 not ...
@@ -286,8 +296,8 @@ The Linux GTK 3.10 floor of the Modern UI is a compile-time rule: the floor buil
 
 | Tier | Requirements document | Trials | Proposed change |
 |---|---|---|---|
-| A | complete packaged application (table of section 2.1) | android-2.3-arm legacy: not tested; android-2.3-arm modern: not tested; android-5.0-arm64 legacy: not tested; android-5.0-arm64 modern: not tested; android-7.0-x86_64 legacy: not tested; android-7.0-x86_64 modern: OK with restrictions; linux-centos-5.11-x86_64 legacy: OK with restrictions; linux-centos-5.11-x86_64 modern: not tested; linux-centos-6.10-x86_64 legacy: OK with restrictions; linux-centos-6.10-x86_64 modern: not tested; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions; windows-11-x64 modern: OK with restrictions. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
-| B | Windows x86 32-bit, Linux x86 32-bit, ARM 32-bit, RISC-V, PowerPC 64 LE | Windows x86 (windows-2000-x86): OK with restrictions; Linux i686 built and run as a 32-bit program on a 64-bit kernel (not a native 32-bit system), legacy OK with restrictions, modern not tested; ARM 32-bit, RISC-V, PowerPC: out of scope or not tested | Windows x86 is reachable by the Legacy UI down to Windows 2000; the tier no longer depends on a Rust toolchain, so it should be redefined by "a C++11 compiler and the platform libraries exist" |
+| A | complete packaged application (table of section 2.1) | android-2.3-arm legacy: not tested; android-2.3-arm modern: not tested; android-5.0-arm64 legacy: not tested; android-5.0-arm64 modern: not tested; android-7.0-x86_64 legacy: not tested; android-7.0-x86_64 modern: OK with restrictions; linux-centos-5.11-x86_64 legacy: OK with restrictions; linux-centos-5.11-x86_64 modern: not tested; linux-centos-6.10-x86_64 legacy: OK with restrictions; linux-centos-6.10-x86_64 modern: not tested; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions; windows-11-x64 modern: OK with restrictions; windows-arm64 legacy: not tested; windows-arm64 modern: not tested. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
+| B | Windows x86 32-bit, Linux x86 32-bit, ARM 32-bit, RISC-V, PowerPC 64 LE | Windows x86 (windows-2000-x86): OK with restrictions, not tested; Linux i686 built and run as a 32-bit program on a 64-bit kernel (not a native 32-bit system), legacy OK with restrictions, modern not tested; ARM 32-bit, RISC-V, PowerPC: out of scope or not tested | Windows x86 is reachable by the Legacy UI down to Windows 2000; the tier no longer depends on a Rust toolchain, so it should be redefined by "a C++11 compiler and the platform libraries exist" |
 | C | PowerPC big-endian, s390x, LoongArch64, FreeBSD: CPU engine, CLI, server | not tested; PowerPC and other architectures are out of scope (spec Clarifications) | no change proposed |
 
 ### Disabled features (section 2.3, section 2.1.2)
@@ -488,6 +498,22 @@ Evidence: 101 file(s), 63 screenshot(s). Reproduction: validation/procedures/lin
 - MEMORY: peak_rss_kb is the application's own VmHWM; the cross-check with os.wait4 ru_maxrss of the child (136 to 496 kB higher, includes pre-exec pages) shows the same order of magnitude but is not an independent measurement of the same quantity. Memory was not measured with a long greeting or over ...
 - The replayable procedure is validation/procedures/linux.md (field 'reproduction', written 2026-11-14 and replayed on the same machine that day); the commands used are also in the 'notes' field and the drivers (probe-series.py, gui-driver.py, glyphs-shoot.py, fake-uname.c) are in ...
 
+### web-chrome-157-windows-11-x64 legacy: not tested (not attempted)
+
+Justification recorded in the verdict: Not run on purpose (owner decision 2026-11-15, PoC rule): the Web Legacy page (ui/legacy/web) is validated on ONE lowest testable browser, Firefox 10 on Windows 2000 (validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json, JavaScript path), and success there stands for newer browsers; Chrome does not run on Windows 2000, and the WebAssembly path of the Legacy page is only smoke-tested (under node and in one headless Chrome run, spike S5), so it gets no verdict. The Modern page is the one validated on this platform (validation/verdicts/web-chrome-157-windows-11-x64-modern.json).
+
+### web-chrome-157-windows-11-x64 modern: OK with restrictions (decision: keep)
+
+Evidence: 11 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.md.
+
+- ONE BROWSER, ONE MACHINE, ONE DAY: Chrome 157.0.8103.51 (stable, installed by the owner) on the physical Windows 11 Pro 26H2 x64 laptop of validation/platforms/windows-11-x64.json, runs of 2026-11-15, one run set of the 15 vectors and one series of 10 default runs. Under the PoC rule (owner ...
+- HEADLESS, LOOPBACK: Chrome was run with --headless=new --disable-gpu, a new throw-away --user-data-dir per run (under the system temp folder, deleted afterwards; the owner's profile was never opened), no extension, component update or sync. The page was loaded over HTTP from 127.0.0.1 (a Python ...
+- THE PROBE RUNS WERE READ FROM A DUMPED DOM: each vector started a new chrome.exe with --dump-dom --virtual-time-budget=15000 and the record was read from <pre id="probe"> (title LOOMORA_PROBE_DONE). Under --virtual-time-budget the page clock (Date.now) is virtual, so display_ms (74 to 110 ms for ...
+- TYPING: 'Marie' was typed with Input.dispatchKeyEvent of the DevTools protocol (a key down with text and a key up per character, into the focused textarea whose content was selected): real key events for the page, but sent by a script, not a person, not a physical keyboard, no IME, no dead keys, no ...
+- THEMES: the light and the dark palettes were looked at (one screenshot each) and read from the computed styles with prefers-color-scheme emulated through the DevTools protocol (greeting on card 18.11:1 light, 14.80:1 dark; field text 16.75:1 and 16.43:1). In headless Chrome 157 only ...
+- peak_rss_kb is performance.memory.usedJSHeapSize in KiB (886 to 906) read by the page: the JavaScript heap in use at the end of the start, not the peak and not the memory of the browser processes (the Windows 11 native UI reports 112,696 to 112,952 KiB of the whole process: the figures are not ...
+- NOT RUN: a failed start (wasm blocked, a very old browser), a slow network, repeated loads in one profile (every run had a cold, empty profile and the browser cache was bypassed by Cache-Control: no-store), concurrent tabs, memory pressure, and the 15 vectors a second time. Process hygiene was ...
+
 ### web-firefox-10-windows-2000-x86 legacy: OK with restrictions (decision: keep)
 
 Evidence: 17 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.md.
@@ -505,7 +531,7 @@ Evidence: 17 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.m
 
 ### web-firefox-10-windows-2000-x86 modern: not tested (not attempted)
 
-Justification recorded in the verdict: There is no Web Modern UI yet (ui/modern/web-ts is not written) and Firefox 10 is the Legacy floor browser of the JavaScript path, not a target of a modern TypeScript UI; the Modern Web UI would run on a current browser with the WebAssembly path.
+Justification recorded in the verdict: The Web Modern UI (ui/modern/web-ts) exists and is validated on Chrome 157 on Windows 11 (PoC rule: one current browser); it is not run on Firefox 10, the Legacy floor browser of the JavaScript path, which is not a target of a modern TypeScript UI (the Modern UI uses the WebAssembly path of a current browser).
 
 ### windows-11-x64 legacy: OK with restrictions (decision: keep)
 
@@ -551,6 +577,18 @@ Evidence: 41 file(s), 7 screenshot(s). Reproduction: validation/procedures/windo
 - The replayable procedure is validation/procedures/windows.md, part B (field 'reproduction', written 2026-11-14 from the records and the scripts; the VM was NOT replayed that day); the commands are also in the 'notes' field and the driver script is part of the evidence.
 - Re-run after adr/0004-fallback-per-case.md (2026-11-13) with the same VM (RTM build 2195, no service pack): the executable of the evidence listed before this entry is sha256 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e (694005 bytes); the x86 executable now built is sha256 ...
 
+### windows-2000-x86 modern: not tested (not attempted)
+
+Justification recorded in the verdict: Not attempted, because no Modern UI can exist for this system, not because of a failure. The Windows Modern UI is WinUI 3 on the Windows App SDK with TargetPlatformMinVersion 10.0.17763.0, that is Windows 10 version 1809 as the lowest system (validation/deliverables/windows-11-x64-modern.json, validation/deliverables/windows-arm64-modern.json), and it is a 64-bit program for x64 and ARM64: it has no x86 build and cannot start on Windows 2000. Windows 2000 is served by the Windows Legacy UI (Win32, validation/verdicts/windows-2000-x86-legacy.json, spec SC-001). Under the PoC scope rule (spec Clarifications, session 2026-11-15) the Modern UI is run on one current system only (Windows 11 x64).
+
+### windows-arm64 legacy: not tested (not attempted)
+
+Justification recorded in the verdict: Not attempted, by choice of scope and not by a failure. tools/build.py builds the Windows Legacy UI for x86 (Windows 2000 and later) and x64 (XP x64 and later) only, with no ARM64 build, and no ARM64 Windows system was available, so whether the x86 or x64 executable runs under the emulation of Windows 11 ARM64 was not tried and nothing is claimed about it. The Legacy UI is for old systems: under the PoC scope rule (spec Clarifications, session 2026-11-15) it is judged on the lowest testable Windows (validation/verdicts/windows-2000-x86-legacy.json), and a current system such as Windows 11 ARM64 is served by the Modern UI.
+
+### windows-arm64 modern: not tested (not attempted)
+
+Justification recorded in the verdict: Built, never run, by choice of scope and not by a failure. The ARM64 build exists (loomora.dll built by MSVC for ARM64, WinUI 3 folders for net8 and net10, machine type 0xAA64 checked, see validation/deliverables/windows-arm64-modern.json), but no ARM64 Windows machine, virtual machine or image was available, so it was never started. The PoC scope rule (spec Clarifications, session 2026-11-15) asks for the Modern UI on one system and one 64-bit processor: Windows 11 x64 has its verdict (validation/verdicts/windows-11-x64-modern.json) and its success is taken for the other architectures; a failure on ARM64 would be a detail to fix later.
+
 ## 13. Shared code per platform and variant (FR-011, FR-012, SC-007)
 
 Shared code is the backend `core/` (the C++11 library and its C API), glue is the code between the C API and a UI language (`bridge/jni`, `bridge/wasm`: none exists yet), platform-specific code is the native UI of the platform and variant (`ui/<variant>/<platform>/`). Counted: non-empty, non-comment source lines, without tests, generated code, build and packaging files. Share = shared / (shared + glue + platform-specific). The numbers are the fields `shared_loc`, `glue_loc`, `ui_loc` and `sharing_ratio` of the deliverable records, written by `python tools/measure_sharing.py --write`; SC-007 asks for at least 80%.
@@ -566,6 +604,7 @@ Shared code is the backend `core/` (the C++11 library and its C API), glue is th
 | linux-i686 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
 | linux-ubuntu-24.04-x86_64 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
 | linux-ubuntu-24.04-x86_64 | modern | modern/linux-gtk3 | gtkmm-3.0 3.24.9 on gtk+-3.0 3.24.41 (C++11 UI; GTK 3.10 ... | 493 | 0 | 519 | 48.7% | BELOW 80% |
+| web-chrome-157-windows-11-x64 | modern | modern/web-ts | one HTML page (a textarea and an output element, CSS with ... | 493 | 0 | 420 | 54.0% | BELOW 80% |
 | web-firefox-10-windows-2000-x86 | legacy | legacy/web | one HTML page (a one-row text area and a div) and one ... | 493 | 0 | 396 | 55.5% | BELOW 80% |
 | windows-11-x64 | legacy | legacy/windows-win32 | Win32 API (user32, gdi32), EDIT + STATIC controls ... | 493 | 0 | 822 | 37.5% | BELOW 80% |
 | windows-11-x64 | modern | modern/windows-winui3 | WinUI 3, Windows App SDK 2.6.5 (packages ... | 493 | 0 | 624 | 44.1% | BELOW 80% |
@@ -574,7 +613,7 @@ Shared code is the backend `core/` (the C++11 library and its C API), glue is th
 
 Records that run the same UI sources have the same numbers, the code is counted once per record: `ui/legacy/android-views/`: android-2.3-arm, android-4.1.2-x86, android-5.0-arm64; `ui/legacy/linux-xlib/`: linux-centos-5.11-x86_64, linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64; `ui/legacy/windows-win32/`: windows-11-x64, windows-2000-x86; `ui/modern/windows-winui3/`: windows-11-x64, windows-arm64.
 
-Not measured: macOS, iOS / iPadOS have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-centos-5.11-x86_64 modern, linux-centos-6.10-x86_64 modern, linux-i686 modern, web-firefox-10-windows-2000-x86 modern, windows-2000-x86 modern) have no row.
+Not measured: macOS, iOS / iPadOS have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-centos-5.11-x86_64 modern, linux-centos-6.10-x86_64 modern, linux-i686 modern, web-chrome-157-windows-11-x64 legacy, web-firefox-10-windows-2000-x86 modern, windows-2000-x86 modern, windows-arm64 legacy) have no row.
 
 ### Platform-specific code and why it is platform-specific
 
@@ -595,6 +634,7 @@ Every file counted as platform-specific, with its line count from the stored lis
 | ui/modern/linux-gtk3/main_window.hpp | 46 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
 | ui/modern/linux-gtk3/probe.cpp | 154 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
 | ui/modern/linux-gtk3/probe.hpp | 26 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
+| ui/modern/web-ts/ | no file listing stored | - | - |
 | ui/legacy/web/ | no file listing stored | - | - |
 | ui/legacy/windows-win32/dynfeatures.cpp | 197 | named by fallback record(s) `dark-mode`, `message-font`, besides the native UI code | windows-11-x64, windows-2000-x86 |
 | ui/legacy/windows-win32/dynfeatures.h | 21 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
@@ -610,7 +650,7 @@ Every file counted as platform-specific, with its line count from the stored lis
 
 ### Exceptions: shares below 80% (SC-007)
 
-7 of 7 measured rows are below 80%. Each reason below is taken from the numbers, the file listing and the fallback records above; none is a claim about code that was not measured.
+8 of 8 measured rows are below 80%. Each reason below is taken from the numbers, the file listing and the fallback records above; none is a claim about code that was not measured.
 
 Common to every row: the shared part is the whole backend, 493 lines in 14 file(s) (largest: `core/src/probe.cpp` 161, `core/src/utf8.cpp` 66, `core/include/loomora.h` 58). The application of this project is the probe, a text field and the greeting (`Hello Loomora` reduced on purpose: section 11, spec assumptions, FR-001), so there is little shared logic to count, and every platform pays its own native UI on top.
 
@@ -631,6 +671,9 @@ Common to every row: the shared part is the whole backend, 493 lines in 14 file(
   - Platform-specific code: 6 files, 519 lines; the largest is `main_window.cpp` with 156 lines (30% of it).
   - Files that a fallback record names (`gtk_compat.hpp` 51, `main_window.cpp` 156): 207 lines, 40% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
   - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `gtk4-ui`.
+- **web-chrome-157-windows-11-x64 modern** (`ui/modern/web-ts/`): 54.0% shared. 493 shared lines, 420 platform-specific.
+  - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 420, 3.4 times that.
+  - Fallbacks listed by the deliverable record: none.
 - **web-firefox-10-windows-2000-x86 legacy** (`ui/legacy/web/`): 55.5% shared. 493 shared lines, 396 platform-specific.
   - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 396, 3.2 times that.
   - Fallbacks listed by the deliverable record: `web-js-instead-of-wasm`, `web-es3-glue`.
