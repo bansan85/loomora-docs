@@ -1,0 +1,8 @@
+exit code 0
+console buffer (4 rows, rows joined: the line is longer than the console width):
+{"schema":1,"platform_id":"windows-11-x64","ui_variant":"modern","input":"Coucou","message":"Bonjour Coucou","greeting_m
+atches":true,"core":"cpp","compiler":"msvc 195237029","displayed":true,"display_ms":844,"peak_rss_kb":113100,"eol_warnin
+g_shown":false,"disabled_features":[],"timestamp_utc":"2026-11-15T07:38:59Z"}
+
+probe line found in the console: True
+loomora-probe.json: {"schema":1,"platform_id":"windows-11-x64","ui_variant":"modern","input":"Coucou","message":"Bonjour Coucou","greeting_matches":true,"core":"cpp","compiler":"msvc 195237029","displayed":true,"display_ms":844,"peak_rss_kb":113100,"eol_warning_shown":false,"disabled_features":[],"timestamp_utc":"2026-11-15T07:38:59Z"}

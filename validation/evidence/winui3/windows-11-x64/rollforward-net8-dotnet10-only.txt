@@ -1,0 +1,39 @@
+published folder: net8-x64; runtimeconfig framework {'name': 'Microsoft.NETCore.App', 'version': '8.0.0'}, rollForward Major
+private .NET root H:\repos\loomora-winui\build\dotnet10-only holds only: Microsoft.NETCore.App 10.0.15, hostfxr 11.0.0
+--- 1. as published (runtimeconfig as it is): exit code 0 (0x00000000)
+{"schema":1,"platform_id":"windows-11-x64","ui_variant":"modern","input":"Coucou","message":"Bonjour Coucou","greeting_matches":true,"core":"cpp","compiler":"msvc 195237029","displayed":true,"display_ms":2659,"peak_rss_kb":113304,"eol_warning_shown":false,"disabled_features":[],"timestamp_utc":"2026-11-15T07:32:18Z"}
+loomora-probe.json: {"schema":1,"platform_id":"windows-11-x64","ui_variant":"modern","input":"Coucou","message":"Bonjour Coucou","greeting_matches":true,"core":"cpp","compiler":"msvc 195237029","displayed":true,"display_ms":2659,"peak_rss_kb":113304,"eol_warning_shown":false,"disabled_features":[],"timestamp_utc":"2026-11-15T07:32:18Z"}
+--- 2. runtimeconfig without rollForward (the default policy): exit code none (killed, process still alive with a dialog)
+dialog: Required: 'Microsoft.NETCore.App', version '8.0.0' (x64)
+
+Learn more:
+<A HREF="https://aka.ms/dotnet/app-launch-failed">https://aka.ms/dotnet/app-launch-failed</A>
+
+Download link:
+<A HREF="https://aka.ms/dotnet-core-applaunch?framework=Microsoft.NETCore.App&framework_version=8.0.0&arch=x64&rid=win-x64&os=win10&gui=true">https://aka.ms/dotnet-core-applaunch?framework=Microsoft.NETCore.App&&framework_version=8.0.0&&arch=x64&&rid=win-x64&&os=win10&&gui=true</A> | Download it now | &Fermer
+You must install or update .NET to run this application.
+
+App: C:\Users\legar\AppData\Local\Temp\loomora-winui-roll-fh2tz7mm\app\Loomora.WinUI.exe
+Architecture: x64
+Framework: 'Microsoft.NETCore.App', version '8.0.0' (x64)
+.NET location: H:\repos\loomora-winui\build\dotnet10-only
+
+The following frameworks were found:
+  10.0.15 at [H:\repos\loomora-winui\build\dotnet10-only\shared\Microsoft.NETCore.App]
+
+The following frameworks for other architectures were found:
+  x86
+    8.0.34 at [C:\Program Files (x86)\dotnet\shared\Microsoft.NETCore.App]
+    9.0.17 at [C:\Program Files (x86)\dotnet\shared\Microsoft.NETCore.App]
+    9.0.23 at [C:\Program Files (x86)\dotnet\shared\Microsoft.NETCore.App]
+    10.0.15 at [C:\Program Files (x86)\dotnet\shared\Microsoft.NETCore.App]
+    11.0.0 at [C:\Program Files (x86)\dotnet\shared\Microsoft.NETCore.App]
+
+Learn more:
+https://aka.ms/dotnet/app-launch-failed
+
+To install missing framework, download:
+https://aka.ms/dotnet-core-applaunch?framework=Microsoft.NETCore.App&framework_version=8.0.0&arch=x64&rid=win-x64&os=win10
+--- 3. runtimeconfig without rollForward + DOTNET_ROLL_FORWARD=LatestMajor: exit code 0 (0x00000000)
+{"schema":1,"platform_id":"windows-11-x64","ui_variant":"modern","input":"Coucou","message":"Bonjour Coucou","greeting_matches":true,"core":"cpp","compiler":"msvc 195237029","displayed":true,"display_ms":438,"peak_rss_kb":113164,"eol_warning_shown":false,"disabled_features":[],"timestamp_utc":"2026-11-15T07:32:21Z"}
+loomora-probe.json: {"schema":1,"platform_id":"windows-11-x64","ui_variant":"modern","input":"Coucou","message":"Bonjour Coucou","greeting_matches":true,"core":"cpp","compiler":"msvc 195237029","displayed":true,"display_ms":438,"peak_rss_kb":113164,"eol_warning_shown":false,"disabled_features":[],"timestamp_utc":"2026-11-15T07:32:21Z"}

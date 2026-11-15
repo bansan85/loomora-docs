@@ -4,8 +4,10 @@
     "description": "Branch prediction hint __builtin_expect through LOOMORA_LIKELY / LOOMORA_UNLIKELY (used in core/src/c_api.cpp); the fallback is the plain condition, with identical behaviour.",
     "macro": "LOOMORA_HAS_BUILTIN_EXPECT",
     "min_compiler": "gcc 3.0, clang 1.0 (any compiler defining __GNUC__ or __clang__)",
-    "platform_ids": [],
-    "reason": "Compilers without __builtin_expect (MSVC, unknown compilers) take the fallback. No platform of validation/platforms/ takes it: the four of them build with GCC (MinGW-w64 GCC 13 for Windows, GCC 13 for Linux, i686 included), which has __builtin_expect."
+    "platform_ids": [
+      "windows-11-x64"
+    ],
+    "reason": "Compilers without __builtin_expect (MSVC, unknown compilers) take the fallback. Taken by windows-11-x64 through its Windows Modern deliverable: loomora.dll is built by MSVC (cl.exe 19.52, Visual Studio 2026), which has no __builtin_expect, so LOOMORA_LIKELY and LOOMORA_UNLIKELY are the plain condition there (the Windows Legacy deliverable of the same platform is built by MinGW-w64 GCC and uses the hint). The other platforms of validation/platforms/ build with GCC (MinGW-w64 GCC 13 for Windows 2000, GCC 13 for Linux, i686 included, NDK Clang for Android), which has __builtin_expect."
   },
   {
     "id": "cxx17-nodiscard",
@@ -186,5 +188,13 @@
       "android-7.0-x86_64"
     ],
     "reason": "Android 7.0 (API 24) to 13 (API 33) have no system contrast level, so the check is false and the fallback is taken on every platform below API 34: android-7.0-x86_64 is the only Modern platform that was run, and its probe lines show \"uimode-contrast\" in disabled_features. The API 34+ path (UiModeManager.getContrast with a high contrast setting on) was never executed: no system of API 34 or later was run. This is the only API above level 24 used by the Modern UI (androidx libraries do their own checks inside)."
+  },
+  {
+    "id": "dotnet8-windows10",
+    "description": "The Windows Modern UI (WinUI 3, ui/modern/windows-winui3) is built a second time for net8.0-windows10.0.19041.0 from the same sources (TargetFrameworks of Loomora.WinUI.csproj), for Windows 10 1809 machines: .NET 8 is out of support, which the owner accepts for this case only. Every other Windows (Windows 11) takes the net10.0-windows10.0.19041.0 build. Same Windows App SDK (2.6.5, which accepts net8.0), same TargetPlatformMinVersion 10.0.17763.0, same loomora.dll. LOOMORA_WINUI_TARGET_NET8 is only the name of this build: no source line is conditional on it, the fallback is the target framework net8.0-windows10.0.19041.0 of Loomora.WinUI.csproj (TargetFrameworks) and the zip loomora-winui-net8-<arch>.zip of tools/build.py windows modern.",
+    "macro": "LOOMORA_WINUI_TARGET_NET8",
+    "min_compiler": ".NET SDK 8 or later (built here with .NET SDK 10.0.404); runs on the .NET Desktop Runtime 8, or a later major through RollForward Major",
+    "platform_ids": [],
+    "reason": "Windows 10 1809 is the floor of the Modern UI and the machines at that level are the ones that may lack a recent .NET Desktop Runtime. No platform record of validation/platforms/ is a Windows 10 system, so no platform takes this fallback yet and none can have a verdict for it: the net8 build was only built and run on Windows 11 x64 (15 of 15 vectors, validation/evidence/winui3/windows-11-x64/), which says nothing about Windows 10 1809."
   }
 ]

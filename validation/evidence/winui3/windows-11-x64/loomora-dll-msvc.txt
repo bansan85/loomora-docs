@@ -1,0 +1,33 @@
+cl.exe (x64 host, toolset 14.52.37025): Microsoft (R) C/C++ Optimizing Compiler Version 19.52.37029 for x64
+compile flags found in build\host-msvc\core\loomora_shared.dir\Release\loomora_shared.tlog\CL.command.1.tlog (no /std: option, so cl.exe uses its default /std:c++14):
+  /D /EHsc /Fd /Fo /GR /MT /O2 /Ob2 /TP /W3 /WX- /c /diagnostics:column /external:W3 /nologo
+
+=== x64: build\host-msvc\core\Release\loomora.dll (146432 bytes, sha256 ba3fd04ab3df26d10357e3d250b95a4c6478bfcf42dc1fd9b6a2a0e1901f48da)
+File Type: DLL
+            8664 machine (x64)
+                   DLL
+             160 DLL characteristics
+  Image has the following dependencies:
+    KERNEL32.dll
+  Section contains the following exports for loomora.dll
+          1    0 00001330 loomora_abi_version
+          2    1 00001340 loomora_build_compiler
+          3    2 00001350 loomora_eol_warning
+          4    3 00001360 loomora_greet
+          5    4 000016C0 loomora_is_eol
+          6    5 000016E0 loomora_probe_record
+
+=== ARM64: build\host-msvc-arm64\core\Release\loomora.dll (132096 bytes, sha256 a09540882ee4fb1dc3053245c8b56a0e88a8436326840685860383ee141e4d9e)
+File Type: DLL
+            AA64 machine (ARM64)
+                   DLL
+             160 DLL characteristics
+  Image has the following dependencies:
+    KERNEL32.dll
+  Section contains the following exports for loomora.dll
+          1    0 00001520 loomora_abi_version
+          2    1 00001530 loomora_build_compiler
+          3    2 00001540 loomora_eol_warning
+          4    3 00001550 loomora_greet
+          5    4 00001770 loomora_is_eol
+          6    5 000017A0 loomora_probe_record

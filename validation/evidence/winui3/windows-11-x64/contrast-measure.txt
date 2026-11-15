@@ -1,0 +1,7 @@
+Contrast of the greeting text against its background, measured on the pixels of the window captured
+by tools/trials/windows-11-x64/winui-shoot.py (most common colour of the lower half of the window, and the colour
+farthest from it in luminance; WCAG relative luminance ratio). Windows 11 x64, net10 build, 96 DPI, 2026-11-15.
+light theme (AppsUseLightTheme 1), default start: background #f3f3f3, text #1a1a1a, ratio 15.68:1 (window 546x353; image: screenshot-default.png)
+light theme, probe mode, input "Zoé € Ελ 日本": background #f3f3f3, text #1a1a1a, ratio 15.68:1 (window 546x353; image: screenshot-mixed-unicode.png)
+DARK theme (AppsUseLightTheme set to 0 for the run, restored afterwards), default start: background #202020, text #ffffff, ratio 16.29:1 (window 546x353; image: not stored (no third image))
+Not measured: the high contrast themes, the InfoBar (it only appears on an end-of-life system, which this one is not).

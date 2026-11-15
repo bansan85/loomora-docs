@@ -10,11 +10,11 @@ Success criteria evaluated from the records at generation time (`python tools/re
 |---|---|---|
 | SC-002 | NOT MET | 2 of 3 required families validated with the Legacy UI on a system 10 years old or more (Windows, Android); the oldest working platform is identified with evidence for 3 of 6 families |
 | SC-003 | MET | validated with the Legacy UI on a system 15 years old or more: Windows (read the restrictions of that verdict: a virtual machine, one build) |
-| SC-004 | MET | 9 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
+| SC-004 | MET | 10 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
 | SC-010 | MET | 0 absent variant(s) without a recorded justification |
 | SC-005 | MET | 20 of 20 hypotheses recorded, 5 with a verdict, 15 not covered by this probe |
 | SC-009 | INCOMPLETE | go / no-go concluded for 1 of 2 systems |
-| SC-007 | NOT MET | 0 of 5 measured platform/variant rows reach 80% shared code; 5 below, each one explained in section 13 from the records (the explanation does not remove the gap) |
+| SC-007 | NOT MET | 0 of 6 measured platform/variant rows reach 80% shared code; 6 below, each one explained in section 13 from the records (the explanation does not remove the gap) |
 
 **SC-002 detail**
 
@@ -36,11 +36,13 @@ Success criteria evaluated from the records at generation time (`python tools/re
 - linux-ubuntu-24.04-x86_64 legacy: 27.0% (493 shared, 0 glue, 1,330 platform-specific lines)
 - linux-ubuntu-24.04-x86_64 modern: 48.7% (493 shared, 0 glue, 519 platform-specific lines)
 - windows-11-x64 legacy: 37.5% (493 shared, 0 glue, 822 platform-specific lines)
+- windows-11-x64 modern: 44.1% (493 shared, 0 glue, 624 platform-specific lines)
 - windows-2000-x86 legacy: 37.5% (493 shared, 0 glue, 822 platform-specific lines)
 - android-2.3-arm legacy: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 - android-4.1.2-x86 legacy: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 - android-5.0-arm64 legacy: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 - android-7.0-x86_64 modern: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
+- windows-arm64 modern: not measured (the record has no shared_loc, glue_loc, ui_loc and sharing_ratio: run tools/measure_sharing.py --write)
 
 ## 2. Go / no-go: Windows 2000 and Windows XP (SC-009)
 
@@ -103,7 +105,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | legacy | OK with restrictions | keep | 41 file(s), 7 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 2 disabled feature(s) |
 | windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | modern | not attempted | - | - | - | justified: the Modern UI technology (WinUI 3) is not available on this system: WinUI 3 requires Windows 10 1809 or later (source winappsdk-support) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | legacy | OK with restrictions | keep | 37 file(s), 12 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 0 disabled feature(s) |
-| windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | modern | not attempted | - | - | - | justified: no WinUI 3 Modern UI has been built: spike S8 (WinUI 3 calling the C++11 backend) is open |
+| windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | modern | OK with restrictions | keep | 19 file(s), 2 screenshot(s) | validation/procedures/windows.md | 9 restriction(s), 0 disabled feature(s) |
 | linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | legacy | OK with restrictions | keep | 3 file(s) | validation/procedures/linux.md | 6 restriction(s), 3 disabled feature(s) |
 | linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The Linux Modern UI (gtkmm on GTK 3, ui/modern/linux-gtk3) was built and judged for the 64-bit platform only (validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json). For the 32-bit build the machine (validation/platforms/linux-i686.json, a 64-bit WSL2 ... (full text in section 12) |
 | linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | legacy | OK with restrictions | keep | 17 file(s), 2 screenshot(s) | validation/procedures/linux.md | 10 restriction(s), 3 disabled feature(s) |
@@ -127,7 +129,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | Family | Variant | Oldest platform that works | Released | Age (years) | Verdict | Evidence |
 |---|---|---|---|---|---|---|
 | Windows | legacy | windows-2000-x86 | 2000-02-17 | 26.7 | OK with restrictions | 41 file(s), 7 screenshot(s) |
-| Windows | modern | not tested | - | - | - | - |
+| Windows | modern | windows-11-x64 | 2021-10-05 | 5.1 | OK with restrictions | 19 file(s), 2 screenshot(s) |
 | macOS | legacy | not tested | - | - | - | - |
 | macOS | modern | not tested | - | - | - | - |
 | Linux | legacy | linux-i686, linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 17 file(s), 2 screenshot(s) |
@@ -151,6 +153,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 |---|---|---|---|---|
 | windows-2000-x86 | legacy | loomora.exe: 696,127 bytes | 2 to 15 ms | 1,084 to 1,160 kB |
 | windows-11-x64 | legacy | loomora.exe: 703,383 bytes | 42 to 127 (median 50) ms | 11,548 to 14,420 kB |
+| windows-11-x64 | modern | loomora-winui-net10-x64.zip: 9,930,841 bytes | 365 to 2,053 ms | 112,696 to 112,952 kB |
 | linux-i686 | legacy | loomora-xlib: 73,348 bytes | 22 to 26 ms | 8,032 to 11,728 kB |
 | linux-ubuntu-24.04-x86_64 | legacy | loomora-xlib: 80,216 bytes | 164 ms | 13,680 kB |
 | linux-ubuntu-24.04-x86_64 | modern | loomora-gtk3: 167,192 bytes | 90 to 152 (median 101.5) ms | 45,820 to 46,600 (median 46,208) kB |
@@ -165,8 +168,8 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 
 | Fallback | Macro | What it replaces | Platforms taking it (fallback record) | Deliverables listing it |
 |---|---|---|---|---|
-| builtin-expect | LOOMORA_HAS_BUILTIN_EXPECT | Branch prediction hint __builtin_expect through LOOMORA_LIKELY / LOOMORA_UNLIKELY (used in core/src/c_api.cpp); the fallback is the plain condition ... | no platform takes it | - |
-| cxx17-nodiscard | LOOMORA_HAS_CXX17_NODISCARD | [[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty ... | windows-2000-x86, windows-11-x64, linux-ubuntu-24.04-x86_64, linux-i686, android-4.1.2-x86, android-2.3-arm, android-5.0-arm64, android-7.0-x86_64 | android-2.3-arm legacy, android-4.1.2-x86 legacy, android-5.0-arm64 legacy, android-7.0-x86_64 modern, linux-i686 legacy, linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern, windows-11-x64 legacy, windows-2000-x86 legacy |
+| builtin-expect | LOOMORA_HAS_BUILTIN_EXPECT | Branch prediction hint __builtin_expect through LOOMORA_LIKELY / LOOMORA_UNLIKELY (used in core/src/c_api.cpp); the fallback is the plain condition ... | windows-11-x64 | windows-11-x64 modern |
+| cxx17-nodiscard | LOOMORA_HAS_CXX17_NODISCARD | [[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty ... | windows-2000-x86, windows-11-x64, linux-ubuntu-24.04-x86_64, linux-i686, android-4.1.2-x86, android-2.3-arm, android-5.0-arm64, android-7.0-x86_64 | android-2.3-arm legacy, android-4.1.2-x86 legacy, android-5.0-arm64 legacy, android-7.0-x86_64 modern, linux-i686 legacy, linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern, windows-11-x64 legacy, windows-11-x64 modern, windows-2000-x86 legacy |
 | dark-mode | LOOMORA_FEATURE_DARK_MODE | Dark theme of the Windows Legacy UI (ui/legacy/windows-win32/dynfeatures.cpp): when the user's "apps use light theme" setting ... | windows-2000-x86 | windows-2000-x86 legacy |
 | dpi-awareness | LOOMORA_FEATURE_DPI_AWARENESS | DPI awareness of the Windows Legacy UI: SetProcessDPIAware (user32) is looked up at run time and called before the window exists, the layout and the ... | windows-2000-x86 | windows-2000-x86 legacy |
 | high-contrast-query | LOOMORA_FEATURE_HIGH_CONTRAST_QUERY | High contrast query of the Windows Legacy UI: SystemParametersInfoW(SPI_GETHIGHCONTRAST), looked up at run time in user32; when a high contrast ... | no platform takes it | - |
@@ -185,6 +188,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | xlib-no-input-method | LOOMORA_XLIB_NO_XIM | Keyboard input of the Linux Legacy UI (ui/legacy/linux-xlib/main.cpp, InputMethod): Xutf8LookupString through an X input method (XOpenIM and ... | no platform takes it | - |
 | android-armeabi-libatomic | LOOMORA_ANDROID_LINK_LIBATOMIC | The armeabi (ARMv5TE) libraries are linked with -latomic (the CMake variable LOOMORA_ANDROID_LINK_LIBATOMIC set by ... | android-2.3-arm | android-2.3-arm legacy |
 | android-uimode-contrast | LOOMORA_FEATURE_UIMODE_CONTRAST | High contrast of the Android Modern UI (ui/modern/android-compose/.../Theme.kt): on Android 14 (API 34) and later the UI reads ... | android-7.0-x86_64 | android-7.0-x86_64 modern |
+| dotnet8-windows10 | LOOMORA_WINUI_TARGET_NET8 | The Windows Modern UI (WinUI 3, ui/modern/windows-winui3) is built a second time for net8.0-windows10.0.19041.0 from the same sources ... | no platform takes it | - |
 
 ### Disabled features (FR-025)
 
@@ -200,6 +204,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | linux-ubuntu-24.04-x86_64 | legacy | text-shaping-and-bidi | not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it |
 | linux-ubuntu-24.04-x86_64 | modern | none recorded | - |
 | windows-11-x64 | legacy | none recorded | - |
+| windows-11-x64 | modern | none recorded | - |
 | windows-2000-x86 | legacy | dpi-awareness | user32.dll of this system does not export SetProcessDPIAware; no DPI virtualisation exists before Windows Vista, the window is drawn at 96 DPI |
 | windows-2000-x86 | legacy | dark-mode | no AppsUseLightTheme value on this system: no dark theme setting for applications; system colours used |
 
@@ -211,7 +216,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 - **S5** (open): Does the JavaScript build run on IE 9 / Firefox 8 / Chrome 15 / Safari 5.1 / Opera 11.5; modern Emscripten or fastcomp 1.39.20? Result: open, no result recorded
 - **S6** (confirmed): Does the backend compile with strict C++11 under GCC and Clang and export only C symbols, with every exception caught at the C boundary? Result: Confirmed on Linux (WSL Ubuntu 24.04, libstdc++): tools/check_std.py passes with g++ 13.3.0 and clang++ 23.1.5. Checked for each: all 6 core/src/*.cpp compile with -std=c++11 -pedantic-errors -Wall -Wextra -Werror; loomora.h compiles as C89 (-std=c89 -pedantic-errors, gcc 13.3.0 / clang 23.1.5) and as C++98; a shared library built with -fvisibility=hidden exports exactly the 6 loomora_* C functions (nm -D --defined-only), with the C++ runtime linked dynamically and statically (-static-libstdc++ -static-libgcc); core/tests/boundary_check.cpp makes every allocation of every loomora_* call fail in turn (28 failures injected with GCC, 30 with Clang) and no exception escapes. Finding ...
 - **S7** (open): Can the 10.6 SDK and Xcode 5.1.1 be obtained legitimately? Result: open, no result recorded
-- **S8** (open): Can WinUI 3 call a C++11 loomora.dll, and does Compose accept minSdk 21? Result: open, no result recorded
+- **S8** (confirmed): Can WinUI 3 call a C++11 loomora.dll, and what is the lowest minSdk at which Jetpack Compose with the pinned AndroidX versions builds? HISTORY: the first wording asked "does Compose accept minSdk ... Result: Confirmed on 2026-11-15 for the rewritten question. HISTORY: recorded `refuted` on 2026-11-15 for the first wording (Compose accepts minSdk 21), then rewritten and recorded `confirmed` at the owner's request, keeping this trace. WinUI half, CONFIRMED: WinUI 3 (C#, Windows App SDK 2.6.5, unpackaged and framework-dependent, .NET SDK 10.0.404) calls the C++11 loomora.dll through LibraryImport (no C++/CLI, no C++/WinRT) on Windows 11 x64: loomora.dll is built by MSVC 14.52.37025 (cl.exe 19.52.37029, /MT, cl.exe's default /std:c++14 since MSVC has no /std:c++11, the sources stay C++11), exports exactly the six loomora_* functions and imports KERNEL32.dll only (x64 and ARM64 built; ARM64 not ...
 - **S9** (open): Do Windows 7 -> 11 accept the Windows 2000-targeted Win32 executable (all versions)? Result: open, no result recorded
 
 S4 was removed on 2026-11-14 (ADR 0007: Linux binaries are built on the machine that runs them).
@@ -250,7 +255,7 @@ Status: 15 not covered by this probe, 5 OK with restrictions.
 | Family and UI | Requirements document | Decided floor (spec) | Trials | Reading | Proposed change |
 |---|---|---|---|---|---|
 | Windows legacy | Windows XP SP3 minimum, MFC UI (sections 2.1 and 2.1.2) | Windows 2000, plain Win32 UI | windows-11-x64 legacy: OK with restrictions; windows-2000-x86 legacy: OK with restrictions | contradicted: windows-2000-x86 works (OK with restrictions) | lower the floor of the requirements document to Windows 2000 Professional, as decided (Windows 2000, plain Win32 UI); the verdict is OK with restrictions: read its restrictions (section 12) before G0 |
-| Windows modern | Windows 10+, WinUI 3 (section 2.1) | WinUI 3 needs Windows 10 1809 (research R6; source winappsdk-support) | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
+| Windows modern | Windows 10+, WinUI 3 (section 2.1) | WinUI 3 needs Windows 10 1809 (research R6; source winappsdk-support) | windows-11-x64 modern: OK with restrictions | not contradicted: only newer systems tried (oldest working: windows-11-x64) | reword the floor as decided (WinUI 3 needs Windows 10 1809 (research R6; source winappsdk-support)); older systems are not tried |
 | macOS legacy | macOS 11+ (section 2.1) | macOS 10.6 Snow Leopard | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
 | Linux legacy | Ubuntu 20.04+ / Debian 11+, AppImage and Flatpak (section 2.1) | any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007) | linux-i686 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions | not contradicted: only newer systems tried (oldest working: linux-i686, linux-ubuntu-24.04-x86_64) | reword the floor as decided (any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007)); older systems are not tried |
 | Android legacy | minSdk API 21 (Android 5.0) (section 2.1) | Android 2.3 (API 9) | android-4.1.2-x86 legacy: OK with restrictions | contradicted: android-4.1.2-x86 works (OK with restrictions) | lower the floor of the requirements document to Android (AOSP emulator image, Jelly Bean), as decided (Android 2.3 (API 9)); the verdict is OK with restrictions: read its restrictions (section 12) before G0 |
@@ -263,7 +268,7 @@ The Linux GTK 3.10 floor of the Modern UI is a compile-time rule: the floor buil
 
 | Tier | Requirements document | Trials | Proposed change |
 |---|---|---|---|
-| A | complete packaged application (table of section 2.1) | android-2.3-arm legacy: not tested; android-2.3-arm modern: not tested; android-5.0-arm64 legacy: not tested; android-5.0-arm64 modern: not tested; android-7.0-x86_64 legacy: not tested; android-7.0-x86_64 modern: OK with restrictions; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
+| A | complete packaged application (table of section 2.1) | android-2.3-arm legacy: not tested; android-2.3-arm modern: not tested; android-5.0-arm64 legacy: not tested; android-5.0-arm64 modern: not tested; android-7.0-x86_64 legacy: not tested; android-7.0-x86_64 modern: OK with restrictions; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions; windows-11-x64 modern: OK with restrictions. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
 | B | Windows x86 32-bit, Linux x86 32-bit, ARM 32-bit, RISC-V, PowerPC 64 LE | Windows x86 (windows-2000-x86): OK with restrictions; Linux i686 built and run as a 32-bit program on a 64-bit kernel (not a native 32-bit system), legacy OK with restrictions, modern not tested; ARM 32-bit, RISC-V, PowerPC: out of scope or not tested | Windows x86 is reachable by the Legacy UI down to Windows 2000; the tier no longer depends on a Rust toolchain, so it should be redefined by "a C++11 compiler and the platform libraries exist" |
 | C | PowerPC big-endian, s390x, LoongArch64, FreeBSD: CPU engine, CLI, server | not tested; PowerPC and other architectures are out of scope (spec Clarifications) | no change proposed |
 
@@ -436,6 +441,20 @@ Evidence: 37 file(s), 12 screenshot(s). Reproduction: validation/procedures/wind
 - The executables were started from a scratch copy in the Windows temp folder (one copy per run) so that loomora-probe.json files could not collide; they were built by 'wsl -d Ubuntu-24.04 -- python3 tools/build.py windows legacy' (up to date, sha256 below) and closed by a WM_CLOSE message, not by a ...
 - Re-run after adr/0004-fallback-per-case.md (2026-11-13), same host: the executables of the evidence listed before this entry are x64 sha256 2c6c3ed9b1cc20b546e43b703e239c44742220e6c4c414ee54135d3ad89f8866 (701774 bytes) and x86 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e; the ...
 
+### windows-11-x64 modern: OK with restrictions (decision: keep)
+
+Evidence: 19 file(s), 2 screenshot(s). Reproduction: validation/procedures/windows.md.
+
+- ONE MACHINE, ONE WINDOWS, X64 ONLY: run on the physical Windows 11 26H2 host of validation/platforms/windows-11-x64.json (Intel Core i5-8300H, 96 DPI, French) with the .NET runtimes 6, 8, 9, 10 and 11 and the Windows App Runtime 2.6.5 installed. Nothing was run on Windows 10 1809 or any Windows 10 ...
+- ARM64 WAS BUILT, NEVER RUN: loomora.dll (MSVC ARM64) and the WinUI app for win-arm64, net8 and net10, were built (machine type 0xAA64 checked for Loomora.WinUI.exe, loomora.dll and the bootstrapper DLL of each folder) but there is no ARM64 machine: ARM64 execution is not_tested. There is no ...
+- THE END-OF-LIFE INFOBAR WAS NEVER SEEN: Windows 11 is not end of life for the backend, eol_warning_shown is false in every run, so the InfoBar (Severity Warning, shown above the field, non-blocking) was never displayed and its look and contrast were not checked. Its code path ...
+- THEMES: the light and dark themes were looked at and their contrast measured on rendered pixels (15.68:1 and 16.29:1, contrast-measure.txt; only the light screenshots are stored, no third image). High contrast themes were NOT switched on: the colours are theme resources ...
+- TYPING: the run types 'Marie' with SendKeys (real keyboard events to the focused field, from a script; 177 ms to the greeting), not a person on a keyboard. The 1,000-character limit was exercised through the probe input only (the two vectors of more than 1,000 UTF-16 units are cut to 1,000 by the ...
+- DISPLAY TIME IS FROM THE PROCESS START: display_ms is the delay from the creation of the process to the first frame drawn after Activate, so it includes the start of the .NET runtime and of the Windows App Runtime: 2053 ms for the first run after a build (cold), 365 to 545 ms for the next nine on ...
+- FRAMEWORK-DEPENDENT: the 38 MB folder works only where the .NET Desktop Runtime (8 or 10) and the Windows App Runtime 2.6 of the same architecture are installed (procedures/windows.md C.1). The failure path without the Windows App Runtime (message box, status 1) was not exercised (the runtime ...
+- THE BUILD IS PINNED AND RECORDED, NOT AUDITED: .NET SDK 10.0.404 (global.json), Windows App SDK 2.6.5 (WinUI and Runtime components), Microsoft.Windows.SDK.NET.Ref 10.0.19041.57, BuildTools 10.0.26100.4654, BuildTools.MSIX 1.7.251221100, WebView2 1.0.3719.77, MSVC 14.52.37025 (cl.exe 19.52.37029) ...
+- ONE DAY: runs of 2026-11-15. Not covered: DPI above 100%, per-monitor DPI changes, accessibility tools, a store or MSIX installation (the app is unpackaged), a start with the zip unzipped to a path with non-ASCII characters, Windows Defender or SmartScreen behaviour on a downloaded zip.
+
 ### windows-2000-x86 legacy: OK with restrictions (decision: keep)
 
 Evidence: 41 file(s), 7 screenshot(s). Reproduction: validation/procedures/windows.md.
@@ -465,11 +484,13 @@ Shared code is the backend `core/` (the C++11 library and its C API), glue is th
 | linux-ubuntu-24.04-x86_64 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
 | linux-ubuntu-24.04-x86_64 | modern | modern/linux-gtk3 | gtkmm-3.0 3.24.9 on gtk+-3.0 3.24.41 (C++11 UI; GTK 3.10 ... | 493 | 0 | 519 | 48.7% | BELOW 80% |
 | windows-11-x64 | legacy | legacy/windows-win32 | Win32 API (user32, gdi32), EDIT + STATIC controls ... | 493 | 0 | 822 | 37.5% | BELOW 80% |
+| windows-11-x64 | modern | modern/windows-winui3 | WinUI 3, Windows App SDK 2.6.5 (packages ... | 493 | 0 | 624 | 44.1% | BELOW 80% |
 | windows-2000-x86 | legacy | legacy/windows-win32 | Win32 API (user32, gdi32), EDIT + STATIC controls ... | 493 | 0 | 822 | 37.5% | BELOW 80% |
+| windows-arm64 | modern | modern/windows-winui3 | WinUI 3, Windows App SDK 2.6.5 (packages ... | - | - | - | not measured | not measured |
 
-Records that run the same UI sources have the same numbers, the code is counted once per record: `ui/legacy/android-views/`: android-2.3-arm, android-4.1.2-x86, android-5.0-arm64; `ui/legacy/linux-xlib/`: linux-i686, linux-ubuntu-24.04-x86_64; `ui/legacy/windows-win32/`: windows-11-x64, windows-2000-x86.
+Records that run the same UI sources have the same numbers, the code is counted once per record: `ui/legacy/android-views/`: android-2.3-arm, android-4.1.2-x86, android-5.0-arm64; `ui/legacy/linux-xlib/`: linux-i686, linux-ubuntu-24.04-x86_64; `ui/legacy/windows-win32/`: windows-11-x64, windows-2000-x86; `ui/modern/windows-winui3/`: windows-11-x64, windows-arm64.
 
-Not measured: macOS, iOS / iPadOS, Web have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-i686 modern, windows-11-x64 modern, windows-2000-x86 modern) have no row.
+Not measured: macOS, iOS / iPadOS, Web have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-i686 modern, windows-2000-x86 modern) have no row.
 
 ### Platform-specific code and why it is platform-specific
 
@@ -500,10 +521,11 @@ Every file counted as platform-specific, with its line count from the stored lis
 | ui/legacy/windows-win32/resource.h | 7 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
 | ui/legacy/windows-win32/sysinfo.cpp | 99 | named by fallback record(s) `native-system-info`, `version-query`, besides the native UI code | windows-11-x64, windows-2000-x86 |
 | ui/legacy/windows-win32/sysinfo.h | 8 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
+| ui/modern/windows-winui3/ | no file listing stored | - | - |
 
 ### Exceptions: shares below 80% (SC-007)
 
-5 of 5 measured rows are below 80%. Each reason below is taken from the numbers, the file listing and the fallback records above; none is a claim about code that was not measured.
+6 of 6 measured rows are below 80%. Each reason below is taken from the numbers, the file listing and the fallback records above; none is a claim about code that was not measured.
 
 Common to every row: the shared part is the whole backend, 493 lines in 14 file(s) (largest: `core/src/probe.cpp` 161, `core/src/utf8.cpp` 66, `core/include/loomora.h` 58). The application of this project is the probe, a text field and the greeting (`Hello Loomora` reduced on purpose: section 11, spec assumptions, FR-001), so there is little shared logic to count, and every platform pays its own native UI on top.
 
@@ -530,6 +552,10 @@ Common to every row: the shared part is the whole backend, 493 lines in 14 file(
   - Files that a fallback record names (`dynfeatures.cpp` 197, `getthreadid_shim.cpp` 39, `probe.cpp` 208, `sysinfo.cpp` 99): 543 lines, 66% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
   - The same sources as windows-2000-x86: one code base, counted again in this record.
   - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `selftest-no-iostream`.
+- **windows-11-x64 modern** (`ui/modern/windows-winui3/`): 44.1% shared. 493 shared lines, 624 platform-specific.
+  - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 624, 5.1 times that.
+  - The same sources as windows-arm64: one code base, counted again in this record.
+  - Fallbacks listed by the deliverable record: `builtin-expect`, `cxx17-nodiscard`.
 - **windows-2000-x86 legacy** (`ui/legacy/windows-win32/`): 37.5% shared. 493 shared lines, 822 platform-specific.
   - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 822, 6.7 times that.
   - Platform-specific code: 10 files, 822 lines; the largest is `probe.cpp` with 208 lines (25% of it).

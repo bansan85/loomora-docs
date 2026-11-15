@@ -1,0 +1,25 @@
+{
+  "platform_id": "windows-11-x64",
+  "ui_variant": "modern",
+  "cpp_std": "c++11",
+  "compiler": "msvc-19.52.37029",
+  "target": "x64 (loomora.dll, MSVC toolset 14.52.37025, /MT static C runtime, cl.exe default /std:c++14 for the C++11 sources, the lowest it accepts; x64)",
+  "output": "native",
+  "ui_language": "c#",
+  "ui_toolkit": "WinUI 3, Windows App SDK 2.6.5 (packages Microsoft.WindowsAppSDK.WinUI and .Runtime, Base, Foundation and InteractiveExperiences with them, not the Microsoft.WindowsAppSDK metapackage), unpackaged and framework-dependent (WindowsPackageType None, WindowsAppSDKSelfContained false), net10.0-windows10.0.19041.0, TargetPlatformMinVersion 10.0.17763.0; loomora.dll called through LibraryImport (no C++/CLI, no C++/WinRT)",
+  "ui_compiler": ".NET SDK 10.0.404 (pinned by ui/modern/windows-winui3/global.json), Roslyn, LibraryImport source generator, Microsoft.Windows.SDK.NET.Ref 10.0.19041.57, Microsoft.Windows.SDK.BuildTools 10.0.26100.4654, Microsoft.Windows.SDK.BuildTools.MSIX 1.7.251221100, Microsoft.Web.WebView2 1.0.3719.77, runtime pack Microsoft.NETCore.App 10.0.15",
+  "artifact": {
+    "name": "loomora-winui-net10-x64.zip",
+    "size": 9930841
+  },
+  "disabled_features": [],
+  "fallbacks": [
+    "builtin-expect",
+    "cxx17-nodiscard"
+  ],
+  "notes": "python tools/build.py windows modern: cmake --preset host-msvc (Visual Studio 18 2026 generator; loomora.dll exports exactly the loomora_* functions of loomora.h and imports KERNEL32 only) then dotnet publish of ui/modern/windows-winui3 for net10.0-windows10.0.19041.0; the zip holds the published folder (34 files, 37803469 bytes unzipped) with loomora.dll next to Loomora.WinUI.exe; artifact sha256 08a2abd68bd186f0f19c2b7804cec1321b1889d720e7fe9880004be8303fe2bf; needs the .NET Desktop Runtime (.NET 10.0) and the Windows App Runtime 2.6 installed on the machine (validation/procedures/windows.md). Same build, other target: net8: loomora-winui-net8-x64.zip, 9925788 bytes, sha256 f8dbf3761221a90dfef8876199e54f0f39d92f008850270016d757eabcc19c34, published folder 34 files / 37792741 bytes. Artifacts copied to out/windows-modern/.",
+  "shared_loc": 493,
+  "glue_loc": 0,
+  "ui_loc": 624,
+  "sharing_ratio": 0.4414
+}
