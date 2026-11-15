@@ -13,7 +13,9 @@
     "size": 53868
   },
   "disabled_features": [],
-  "fallbacks": [],
+  "fallbacks": [
+    "cxx17-nodiscard"
+  ],
   "notes": "Deliverable of platform web-chrome-157-windows-11-x64 (validation/platforms/web-chrome-157-windows-11-x64.json), the wasm path of the page (it has no other). Built by python tools/build.py web modern; the files are in $HOME/loomora-build/web-modern/dist/ (never in the repository tree); sha256 index.html d9d9fe09a658cd2fc2a90b15132cbdb8a35445dcd4f62a566c79053ff6c9c41e, main.js 7d55e83ec68dd6bf376163b527378d74a2ed68430c946ff618fba557f39c5a51, native.js b994b00a1523d69a6f1e275576c81f222c49df80dfc7a97a2b1a08b5b45f99c5, loomora.js 628eeb928726e0013504a5f9919187f0c1a3cbdeb74939e311ed7bd15bde3446, loomora.wasm 429dca8d3a7526bac55945c4fa1e8019f38d95fcc7416cec5182e26a02ab7e84.",
   "shared_loc": 493,
   "glue_loc": 0,

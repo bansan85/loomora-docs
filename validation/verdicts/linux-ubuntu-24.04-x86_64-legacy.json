@@ -121,6 +121,18 @@
       "sha256": "70bb627e59560b65a053aee51c3116441f70e66a5b31983c63196e40451a2ffe",
       "kind": "driver",
       "description": "ASan + UBSan harness of the C++ Xlib UI (hard texts, 1,000-character limit, Xft and core font, with and without an input method). The run recorded in build-facts.txt used an adapted copy of this file for the Xft-linked build; that copy is not stored."
+    },
+    {
+      "path": "validation/evidence/linux-run-vectors/linux-ubuntu-24.04-x86_64/run-vectors-linux-ubuntu-24.04-x86_64-legacy-log.txt",
+      "sha256": "efb761853c2bc8a7ea8acf06d51917896e6784a719e68a0137e1af0f755590e6",
+      "kind": "run-vectors-log",
+      "description": "Log of python tools/run_vectors.py linux-ubuntu-24.04-x86_64 legacy on 2026-11-15 (PoC bookkeeping T094): 15 vectors run, 15 passed, 0 failed, 16 skipped, 2 truncated to 1000 chars."
+    },
+    {
+      "path": "validation/evidence/linux-run-vectors/linux-ubuntu-24.04-x86_64/run-vectors-linux-ubuntu-24.04-x86_64-legacy-probe-lines.tsv",
+      "sha256": "d93634b1209b90c9e554c4cb881cb5dfc7c6e107ba1b966435c4f7f1efb5cb34",
+      "kind": "probe-lines",
+      "description": "Probe lines of that run, one per vector."
     }
   ],
   "measurements": {

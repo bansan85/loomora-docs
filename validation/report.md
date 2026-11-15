@@ -54,7 +54,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 
 - **Verdict**: OK with restrictions (decision: keep), record `validation/verdicts/windows-2000-x86-legacy.json`.
 - **System tried**: Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service pack (RTM; no CSDVersion value in the ...; vm; VirtualBox 7.2.22 (r175245) virtual machine named 'Windows 2000' on the Windows 11 host of validation/platforms/windows-11-x64.json. Released 2000-02-17 (26.7 years old).
-- **Deliverable**: loomora.exe, 696,127 bytes, gcc-13-win32-mingw-w64; fallbacks taken: cxx17-nodiscard, dark-mode, dpi-awareness, win2000-getthreadid-shim, selftest-no-iostream, visual-styles, native-system-info.
+- **Deliverable**: loomora.exe, 696,127 bytes, gcc-13-win32-mingw-w64; fallbacks taken: cxx17-nodiscard, dark-mode, dpi-awareness, win2000-getthreadid-shim, selftest-no-iostream, visual-styles, native-system-info, win-api-level.
 - **imports** (verdict measurements): 112 imported functions from gdi32, kernel32, msvcrt, user32, every one exported by the DLLs of this system (0 missing); 117 of 117 functions of the x86 allowlist exported
 - **message check** (verdict measurements): message "Bonjour Coucou" in 10 of 10 '--probe' runs and "Bonjour Marie" in 10 of 10 '--probe-input Marie' runs, greeting_matches true; platform_id windows-2000-x86, eol_warning_shown true and disabled_features [dpi-awareness, dark-mode] in all 20 runs
 - **exit** (verdict measurements): 20 of 20 probe runs and the 15 + 25 run_vectors runs exited with status 0 and wrote a valid probe line (check_probe); 0 loomora.exe processes were alive after any of the 20 probe runs (WMI count in the guest, after each run); the window run closed with Alt+F4 left 0 processes
@@ -64,7 +64,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
   - The system is Windows 2000 build 2195 RTM with NO service pack, not Windows 2000 SP4: this verdict says nothing about SP4 (the plan, research R6, spike S1 and task T066 name SP4). The system DLLs read here are the RTM ones (kernel32.dll 5.0.2191.1, user32.dll 5.0.2180.1, msvcrt.dll 6.1.8637.0, dated 1999-12-07); SP4 replaces them with later builds, so the export tables confirmed here (tools/win2000_imports.json, confidence verified-on-vm) are those of RTM. Exports only grow from RTM to SP4, which makes a missing function on SP4 unlikely, but that was not checked.
 - **Verdict**: OK with restrictions (decision: keep), record `validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json`.
 - **System tried**: Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758, release channel, installed by the owner) on ...; vm; The VirtualBox 7.2.22 virtual machine 'Windows 2000' of validation/platforms/windows-2000-x86.json (1 vCPU, 168 MB RAM, NAT network, Guest Additions 6.1.18), restored on .... Released 2012-01-31 (14.8 years old).
-- **Deliverable**: dist/ (index.html, app.js, loomora.js), 110,292 bytes, emscripten-1.39.20-fastcomp (clang 6.0.1); fallbacks taken: web-js-instead-of-wasm, web-es3-glue.
+- **Deliverable**: dist/ (index.html, app.js, loomora.js), 110,292 bytes, emscripten-1.39.20-fastcomp (clang 6.0.1); fallbacks taken: web-js-instead-of-wasm, web-es3-glue, cxx17-nodiscard, web-memory-measure.
 - **vectors** (verdict measurements): Second series (verdict): 15 valid vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped as designed, 2 vectors truncated to 1,000 UTF-16 units as expected, control_characters included. First series: 14 passed, 1 failed on the line feed only.
 - **Disabled features**: peak-memory.
 - **Restrictions**: 10 recorded, all in section 12. The first one, in full:
@@ -119,7 +119,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | linux-centos-6.10-x86_64 | CentOS 6.10 (Final), userland of the PyPA image ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The PoC scope rule of 2026-11-15 asks only for the Linux Legacy UI on the lowest testable system. The Linux Modern UI needs gtkmm and GTK 3.10 or later (ui/modern/linux-gtk3), which are not part of CentOS 6 (it ships GTK 2; the packages were not queried in ... (full text in section 12) |
 | linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | legacy | OK with restrictions | keep | 3 file(s) | validation/procedures/linux.md | 6 restriction(s), 3 disabled feature(s) |
 | linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The Linux Modern UI (gtkmm on GTK 3, ui/modern/linux-gtk3) was built and judged for the 64-bit platform only (validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json). For the 32-bit build the machine (validation/platforms/linux-i686.json, a 64-bit WSL2 ... (full text in section 12) |
-| linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | legacy | OK with restrictions | keep | 17 file(s), 2 screenshot(s) | validation/procedures/linux.md | 10 restriction(s), 3 disabled feature(s) |
+| linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | legacy | OK with restrictions | keep | 19 file(s), 2 screenshot(s) | validation/procedures/linux.md | 10 restriction(s), 3 disabled feature(s) |
 | linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | modern | OK with restrictions | keep | 101 file(s), 63 screenshot(s) | validation/procedures/linux.md | 16 restriction(s), 0 disabled feature(s) |
 | android-2.3-arm | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and ... | legacy | not tested | - | - | - | not attempted, justified: Built, not run. The armeabi (ARMv5TE, -latomic) and armeabi-v7a libraries of the Android Legacy APK are compiled against the API 9 sysroot with NDK r15c and linked with --no-undefined against the API 9 libc (DT_NEEDED: libc.so only; 6 exported JNI functions each; validation/deliverables/android-2.3-arm-legacy.json), but nothing ... (full text in section 12) |
 | android-2.3-arm | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and ... | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because ... (full text in section 12) |
@@ -187,8 +187,8 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 
 | Fallback | Macro | What it replaces | Platforms taking it (fallback record) | Deliverables listing it |
 |---|---|---|---|---|
-| builtin-expect | LOOMORA_HAS_BUILTIN_EXPECT | Branch prediction hint __builtin_expect through LOOMORA_LIKELY / LOOMORA_UNLIKELY (used in core/src/c_api.cpp); the fallback is the plain condition ... | windows-11-x64 | windows-11-x64 modern |
-| cxx17-nodiscard | LOOMORA_HAS_CXX17_NODISCARD | [[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty ... | windows-2000-x86, windows-11-x64, linux-ubuntu-24.04-x86_64, linux-i686, android-4.1.2-x86, android-2.3-arm, android-5.0-arm64, android-7.0-x86_64, linux-centos-6.10-x86_64, linux-centos-5.11-x86_64 | android-2.3-arm legacy, android-4.1.2-x86 legacy, android-5.0-arm64 legacy, android-7.0-x86_64 modern, linux-centos-5.11-x86_64 legacy, linux-centos-6.10-x86_64 legacy, linux-i686 legacy, linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern, windows-11-x64 legacy, windows-11-x64 modern, windows-2000-x86 legacy |
+| builtin-expect | LOOMORA_HAS_BUILTIN_EXPECT | Branch prediction hint __builtin_expect through LOOMORA_LIKELY / LOOMORA_UNLIKELY (used in core/src/c_api.cpp); the fallback is the plain condition ... | windows-11-x64, windows-arm64 | windows-11-x64 modern, windows-arm64 modern |
+| cxx17-nodiscard | LOOMORA_HAS_CXX17_NODISCARD | [[nodiscard]] on the internal C++ functions is_eol, eol_warning, abi_version and build_compiler through LOOMORA_NODISCARD; the fallback is an empty ... | windows-2000-x86, windows-11-x64, linux-ubuntu-24.04-x86_64, linux-i686, android-4.1.2-x86, android-2.3-arm, android-5.0-arm64, android-7.0-x86_64, linux-centos-6.10-x86_64, linux-centos-5.11-x86_64, web-chrome-157-windows-11-x64, web-firefox-10-windows-2000-x86, windows-arm64 | android-2.3-arm legacy, android-4.1.2-x86 legacy, android-5.0-arm64 legacy, android-7.0-x86_64 modern, linux-centos-5.11-x86_64 legacy, linux-centos-6.10-x86_64 legacy, linux-i686 legacy, linux-ubuntu-24.04-x86_64 legacy, linux-ubuntu-24.04-x86_64 modern, web-chrome-157-windows-11-x64 modern, web-firefox-10-windows-2000-x86 legacy, windows-11-x64 legacy, windows-11-x64 modern, windows-2000-x86 legacy, windows-arm64 modern |
 | dark-mode | LOOMORA_FEATURE_DARK_MODE | Dark theme of the Windows Legacy UI (ui/legacy/windows-win32/dynfeatures.cpp): when the user's "apps use light theme" setting ... | windows-2000-x86 | windows-2000-x86 legacy |
 | dpi-awareness | LOOMORA_FEATURE_DPI_AWARENESS | DPI awareness of the Windows Legacy UI: SetProcessDPIAware (user32) is looked up at run time and called before the window exists, the layout and the ... | windows-2000-x86 | windows-2000-x86 legacy |
 | high-contrast-query | LOOMORA_FEATURE_HIGH_CONTRAST_QUERY | High contrast query of the Windows Legacy UI: SystemParametersInfoW(SPI_GETHIGHCONTRAST), looked up at run time in user32; when a high contrast ... | no platform takes it | - |
@@ -211,6 +211,11 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | linux-platform-id-redhat-release | LOOMORA_PLATFORM_ID_REDHAT_RELEASE | Platform id of the Linux Legacy UI (ui/legacy/linux-xlib/probe.cpp, PlatformId) and of tools/build.py (linux_platform_id) ... | linux-centos-6.10-x86_64, linux-centos-5.11-x86_64 | linux-centos-5.11-x86_64 legacy, linux-centos-6.10-x86_64 legacy |
 | web-js-instead-of-wasm | LOOMORA_WEB_JS_PATH | The Web Legacy page loads the JavaScript build of the backend (loomora.js, asm.js produced by Emscripten 1.39.20 fastcomp, memory image embedded) ... | web-firefox-10-windows-2000-x86 | web-firefox-10-windows-2000-x86 legacy |
 | web-es3-glue | LOOMORA_WEB_ES3 | The page script app.js and the JavaScript build are written and generated in ECMAScript 3 syntax (var and function only, no arrow function, let ... | web-firefox-10-windows-2000-x86 | web-firefox-10-windows-2000-x86 legacy |
+| win-api-level | LOOMORA_WINNT | Windows API level of the MinGW-w64 builds of the Windows Legacy UI and of its self-test: the toolchain files ... | windows-2000-x86, windows-11-x64 | windows-11-x64 legacy, windows-2000-x86 legacy |
+| android-arm64-api21-sysroot | LOOMORA_ANDROID_API | Platform level of the Android Legacy libraries (cmake/toolchains/android-ndk-r15c.cmake, CMake variable LOOMORA_ANDROID_API): every ABI is built ... | android-5.0-arm64 | android-5.0-arm64 legacy |
+| android-legacy-apk-toolchain | LOOMORA_ANDROID_APK_API9 | Packaging of the Android Legacy APK for API 9 (ui/legacy/android-views/build_apk.py): javac -source 8 -target 8, d8 --min-api 9 (dex format 035) ... | android-2.3-arm, android-4.1.2-x86, android-5.0-arm64 | android-2.3-arm legacy, android-4.1.2-x86 legacy, android-5.0-arm64 legacy |
+| web-memory-measure | LOOMORA_WEB_PERFORMANCE_MEMORY | Peak memory in the probe record of the web pages (ui/legacy/web/app.js and ui/modern/web-ts/src/main.ts, memoryKb): the non-standard ... | web-firefox-10-windows-2000-x86 | web-firefox-10-windows-2000-x86 legacy |
+| web-instantiate-arraybuffer | LOOMORA_WEB_INSTANTIATE_BYTES | Loading of the WebAssembly module in the Web Modern UI (ui/modern/web-ts/src/native.ts, instantiate): WebAssembly.instantiateStreaming(fetch(url)) ... | no platform takes it | - |
 
 ### Disabled features (FR-025)
 
@@ -464,7 +469,7 @@ Justification recorded in the verdict: Not attempted on this platform, by choice
 
 ### linux-ubuntu-24.04-x86_64 legacy: OK with restrictions (decision: keep)
 
-Evidence: 17 file(s), 2 screenshot(s). Reproduction: validation/procedures/linux.md.
+Evidence: 19 file(s), 2 screenshot(s). Reproduction: validation/procedures/linux.md.
 
 - SCOPE: one machine and one environment. The Linux Legacy UI was built and run only on Ubuntu 24.04.5 inside WSL2 with WSLg on a Windows 11 laptop (validation/platforms/linux-ubuntu-24.04-x86_64.json), against the XWayland server of WSLg, as x86_64 here (the i686 build is another platform record ...
 - NO TEXT SHAPING AND NO BIDIRECTIONAL LAYOUT, by decision (accepted by the owner, see the fallback record xlib-core-font-glyphs): Xft draws the code points one after the other in logical order, left to right. Arabic letters appear in their isolated forms and left to right, Hebrew and Arabic words ...
@@ -673,16 +678,16 @@ Common to every row: the shared part is the whole backend, 493 lines in 14 file(
   - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `gtk4-ui`.
 - **web-chrome-157-windows-11-x64 modern** (`ui/modern/web-ts/`): 54.0% shared. 493 shared lines, 420 platform-specific.
   - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 420, 3.4 times that.
-  - Fallbacks listed by the deliverable record: none.
+  - Fallbacks listed by the deliverable record: `cxx17-nodiscard`.
 - **web-firefox-10-windows-2000-x86 legacy** (`ui/legacy/web/`): 55.5% shared. 493 shared lines, 396 platform-specific.
   - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 396, 3.2 times that.
-  - Fallbacks listed by the deliverable record: `web-js-instead-of-wasm`, `web-es3-glue`.
+  - Fallbacks listed by the deliverable record: `web-js-instead-of-wasm`, `web-es3-glue`, `cxx17-nodiscard`, `web-memory-measure`.
 - **windows-11-x64 legacy** (`ui/legacy/windows-win32/`): 37.5% shared. 493 shared lines, 822 platform-specific.
   - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 822, 6.7 times that.
   - Platform-specific code: 10 files, 822 lines; the largest is `probe.cpp` with 208 lines (25% of it).
   - Files that a fallback record names (`dynfeatures.cpp` 197, `getthreadid_shim.cpp` 39, `probe.cpp` 208, `sysinfo.cpp` 99): 543 lines, 66% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
   - The same sources as windows-2000-x86: one code base, counted again in this record.
-  - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `selftest-no-iostream`.
+  - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `selftest-no-iostream`, `win-api-level`.
 - **windows-11-x64 modern** (`ui/modern/windows-winui3/`): 44.1% shared. 493 shared lines, 624 platform-specific.
   - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 624, 5.1 times that.
   - The same sources as windows-arm64: one code base, counted again in this record.
@@ -692,7 +697,7 @@ Common to every row: the shared part is the whole backend, 493 lines in 14 file(
   - Platform-specific code: 10 files, 822 lines; the largest is `probe.cpp` with 208 lines (25% of it).
   - Files that a fallback record names (`dynfeatures.cpp` 197, `getthreadid_shim.cpp` 39, `probe.cpp` 208, `sysinfo.cpp` 99): 543 lines, 66% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
   - The same sources as windows-11-x64: one code base, counted again in this record.
-  - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `dark-mode`, `dpi-awareness`, `win2000-getthreadid-shim`, `selftest-no-iostream`, `visual-styles`, `native-system-info`.
+  - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `dark-mode`, `dpi-awareness`, `win2000-getthreadid-shim`, `selftest-no-iostream`, `visual-styles`, `native-system-info`, `win-api-level`.
 
 Reading, not measured: the platform-specific part is a native window with its text display and input, which every platform needs whatever the application does, against a shared part that is only the probe logic. The records do not say what the share would be for a larger application, so the report does not claim that 80% would be reached: SC-007 is not met by this probe, and the gap is explained here, not closed.
 
