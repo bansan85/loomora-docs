@@ -1,0 +1,20 @@
+chrome.exe started, DevTools endpoint ready after 356 ms (profile C:\Users\legar\AppData\Local\Temp\loomora-chrome-typing-KPqakL)
+browser: Chrome/157.0.8103.51; user agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36
+ok   default greeting shown: "Bonjour Coucou" 820 ms after Page.navigate
+ok   field prefilled
+ok   status line empty once loaded
+ok   typed 'Marie' (real key events): field
+ok   typed 'Marie': greeting: "Bonjour Marie" read 1 ms after the last key event
+prefers-color-scheme dark: matches dark = true; page background rgb(16, 18, 22), card background rgb(26, 29, 35), greeting text rgb(238, 240, 244), field background rgb(16, 18, 22), field text rgb(238, 240, 244), color-scheme light dark; greeting on card contrast 14.80:1, field text on field background 16.43:1
+ok   dark scheme applied by the page
+prefers-color-scheme light: matches dark = false; page background rgb(244, 246, 251), card background rgb(255, 255, 255), greeting text rgb(20, 22, 26), field background rgb(244, 246, 251), field text rgb(20, 22, 26), color-scheme light dark; greeting on card contrast 18.11:1, field text on field background 16.75:1
+ok   light scheme applied by the page
+ok   clean exit: exit status 0, 0 chrome.exe left on this profile
+server requests:
+  GET /index.html -> 200 (3384 bytes)
+  GET /main.js -> 200 (6146 bytes)
+  GET /native.js -> 200 (6215 bytes)
+  GET /loomora.js -> 200 (14152 bytes)
+  GET /loomora.wasm -> 200 (23971 bytes)
+  GET /favicon.ico -> 404
+typing-check passed

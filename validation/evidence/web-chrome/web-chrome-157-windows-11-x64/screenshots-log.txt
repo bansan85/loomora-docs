@@ -1,0 +1,37 @@
+Screenshots of the Web Modern page in Chrome 157.0.8103.51 (headless=new) on Windows 11, 2026-11-15
+==================================================================================================
+
+Page: the dist folder of `python tools/build.py web modern` (index.html sha256 d9d9fe09a658cd2f...,
+main.js 7d55e83ec68dd6bf..., native.js b994b00a1523d69a..., loomora.js 628eeb928726e001...,
+loomora.wasm 429dca8d3a7526ba...), served by `python -m http.server 8765 --bind 127.0.0.1 --directory <dist>`
+(stopped by PID afterwards), opened WITHOUT probe mode: http://127.0.0.1:8765/index.html
+
+Command (one new throw-away --user-data-dir per run under the system temp folder, deleted afterwards):
+
+  chrome.exe --headless=new --disable-gpu --no-first-run --no-default-browser-check --disable-extensions
+             --window-size=800,420 --virtual-time-budget=15000 --user-data-dir=<temp>\<run>
+             --screenshot=<file> [theme flag] http://127.0.0.1:8765/index.html
+
+Kept (the two scenarios the owner authorised: the light theme with the greeting, and the dark theme):
+
+  screenshot-chrome157-light-default-greeting.png   800x420, no theme flag (Chrome's default is the light
+      scheme): card with the label "Text", the field "Coucou" and the greeting "Bonjour Coucou"; page
+      background #f4f6fb, card white, text #14161a (the light palette of index.html).
+      sha256 7797f4cb898c8f12fda9e6dc41f4b8dc827eab775434c142d5fc02dc81b6f94c
+  screenshot-chrome157-dark-force-dark-mode.png     800x420, with --force-dark-mode: the same page in its
+      dark palette (page #101216, card #1a1d23, text #eef0f4, the values of the prefers-color-scheme: dark
+      block of index.html, not an inverted rendering): "Bonjour Coucou" light on dark.
+      sha256 f42876a11405263732870cc1885dfeca824a1aa667dfa9b517b79f1f2c255367
+
+Observed while looking for a way to switch the scheme in headless Chrome (not kept):
+
+  --blink-settings=preferredColorScheme=1 (alone)                     screenshot byte-identical to the light one
+  --blink-settings=preferredColorScheme=1,forceDarkModeEnabled=false  byte-identical to the light one
+  --force-dark-mode --blink-settings=preferredColorScheme=1           byte-identical to the light one (only
+      the combination: --force-dark-mode alone gave the dark page; why the combination did not was not
+      investigated)
+  --force-dark-mode (alone)                                           the dark page (kept)
+
+So in this headless Chrome 157 only --force-dark-mode switched the scheme; the --blink-settings setting did
+nothing. typing-check-log.txt shows the other way, Emulation.setEmulatedMedia (prefers-color-scheme dark
+and light) through the DevTools protocol, with the computed colours and the contrast ratios.

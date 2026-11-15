@@ -1,0 +1,139 @@
+{
+  "platform_id": "web-chrome-157-windows-11-x64",
+  "ui_variant": "modern",
+  "web_path": "wasm",
+  "status": "ok_restricted",
+  "restrictions": [
+    "ONE BROWSER, ONE MACHINE, ONE DAY: Chrome 157.0.8103.51 (stable, installed by the owner) on the physical Windows 11 Pro 26H2 x64 laptop of validation/platforms/windows-11-x64.json, runs of 2026-11-15, one run set of the 15 vectors and one series of 10 default runs. Under the PoC rule (owner decision 2026-11-15) this one current browser stands for the Modern Web UI; no other Chrome version, Edge, Firefox or Safari, and no other operating system or machine (Chrome on Android, macOS or Linux) was run. Firefox and Safari (recent) are not required by the owner and were not tried.",
+    "HEADLESS, LOOPBACK: Chrome was run with --headless=new --disable-gpu, a new throw-away --user-data-dir per run (under the system temp folder, deleted afterwards; the owner's profile was never opened), no extension, component update or sync. The page was loaded over HTTP from 127.0.0.1 (a Python server of tools/run_vectors.py, loomora.wasm sent as application/wasm so that WebAssembly.instantiateStreaming was used), not from file://, not over HTTPS or the Internet, and no headed window was opened: GPU rendering, window chrome, focus behaviour of a visible tab and the ArrayBuffer fallback of native.ts (a server that does not send application/wasm) were not exercised.",
+    "THE PROBE RUNS WERE READ FROM A DUMPED DOM: each vector started a new chrome.exe with --dump-dom --virtual-time-budget=15000 and the record was read from <pre id=\"probe\"> (title LOOMORA_PROBE_DONE). Under --virtual-time-budget the page clock (Date.now) is virtual, so display_ms (74 to 110 ms for the 15 vectors, 77 to 237 ms for the 10 default runs) is the page's own figure on that clock and is not a wall-clock measurement; the wall clock of chrome.exe from its start to its exit is 0.9 to 1.2 s (a cold start with a new profile: process start, page load, WebAssembly compile, DOM dump and exit). Without virtual time (the DevTools run, typing-check-log.txt) the default greeting appeared 820 ms after Page.navigate in the stored run (an earlier run of the same script, not stored, showed 352 ms). All are far below the 3,000 ms of SC-001.",
+    "TYPING: 'Marie' was typed with Input.dispatchKeyEvent of the DevTools protocol (a key down with text and a key up per character, into the focused textarea whose content was selected): real key events for the page, but sent by a script, not a person, not a physical keyboard, no IME, no dead keys, no clipboard paste, no touch keyboard. The 1,000-character limit was exercised only through the probe input (the two vectors of more than 1,000 UTF-16 units were cut to 1,000), not by typing 1,001 characters or by pasting.",
+    "THEMES: the light and the dark palettes were looked at (one screenshot each) and read from the computed styles with prefers-color-scheme emulated through the DevTools protocol (greeting on card 18.11:1 light, 14.80:1 dark; field text 16.75:1 and 16.43:1). In headless Chrome 157 only --force-dark-mode switched the scheme on the command line; --blink-settings=preferredColorScheme=1 had no effect (see screenshots-log.txt). The Windows dark-theme setting of the machine was not changed, and forced colours (Windows high contrast), zoom, DPI above 100% and text scaling were not tried.",
+    "peak_rss_kb is performance.memory.usedJSHeapSize in KiB (886 to 906) read by the page: the JavaScript heap in use at the end of the start, not the peak and not the memory of the browser processes (the Windows 11 native UI reports 112,696 to 112,952 KiB of the whole process: the figures are not comparable). The end-of-life banner was never shown (the Web family is never end of life for the backend, eol_warning_shown false in every record), so its look and contrast in a browser were not checked.",
+    "NOT RUN: a failed start (wasm blocked, a very old browser), a slow network, repeated loads in one profile (every run had a cold, empty profile and the browser cache was bypassed by Cache-Control: no-store), concurrent tabs, memory pressure, and the 15 vectors a second time. Process hygiene was checked for every run: no chrome.exe whose command line names the run's profile folder was left after any run (0 in all 15 runs, 10 default runs and the DevTools run); only processes started by these runs were counted and terminated."
+  ],
+  "disabled_features": [],
+  "evidence": [
+    {
+      "path": "validation/evidence/web-chrome/web-chrome-157-windows-11-x64/run-vectors-web-chrome-157-windows-11-x64-modern-log.txt",
+      "sha256": "8120b6f280f09d2357f4475f5c3bd3682a843f47033656481215bcb3ccf96671",
+      "kind": "log",
+      "description": "Log of 'python tools/run_vectors.py web-chrome-157-windows-11-x64 modern --timeout 60 --evidence-dir ...' (SC-011, FR-027): the launcher line (Chrome 157.0.8103.51, headless=new, a new throw-away --user-data-dir per run, the page served on http://127.0.0.1:<port>/ with the sha256 prefixes of the five files), 15 valid vectors each in a new chrome.exe on index.html?probe=1&input=...&platform=web-chrome-157-windows-11-x64, the probe record read from <pre id=\"probe\"> of the dumped DOM (title LOOMORA_PROBE_DONE), check_probe.py checks and the vector's expected output: 15 passed, 0 failed, 2 vectors truncated to 1,000 UTF-16 units as expected, 16 error or API-only vectors skipped as designed, 24.4 s in total, no chrome.exe left in any run."
+    },
+    {
+      "path": "validation/evidence/web-chrome/web-chrome-157-windows-11-x64/run-vectors-web-chrome-157-windows-11-x64-modern-probe-lines.tsv",
+      "sha256": "31f463539a3106140a9a8ff0ff6ad6fea1a091c50d105e1dad40d75c15f06e90",
+      "kind": "probe-series",
+      "description": "The 15 probe records read from the page (vector id, a tab, the record): core cpp-wasm, platform_id web-chrome-157-windows-11-x64, ui_variant modern, displayed true, eol_warning_shown false, disabled_features empty, compiler 'clang 24.0.0git' (the Emscripten 7.0.0 compiler of the backend), peak_rss_kb 886 to 906 (performance.memory.usedJSHeapSize in KiB)."
+    },
+    {
+      "path": "validation/evidence/web-chrome/web-chrome-157-windows-11-x64/run-vectors-web-chrome-157-windows-11-x64-modern-server-requests.txt",
+      "sha256": "461de0635ceb9962707793cd21fcc375d60701503d4e0b952cb557429183359a",
+      "kind": "log",
+      "description": "Request log of the loopback server of the same series: every run fetches index.html, main.js, native.js, loomora.js and loomora.wasm (a request for loomora.wasm in each of the 15 runs: the WebAssembly path) and /favicon.ico (404, the page has none); user agent HeadlessChrome/157.0.0.0 (Chrome freezes the minor parts of its user agent)."
+    },
+    {
+      "path": "validation/evidence/web-chrome/web-chrome-157-windows-11-x64/typing-check-log.txt",
+      "sha256": "125719ef33154016f872801eead502ebda8e329c0b32d3c836c0894af059142f",
+      "kind": "log",
+      "description": "Log of tools/trials/web-chrome-157-windows-11-x64/typing-check.mjs (node, DevTools protocol, page served on 127.0.0.1, new throw-away profile): Browser.getVersion Chrome/157.0.8103.51; default greeting 'Bonjour Coucou' after navigation (820 ms from Page.navigate to the greeting in this run, wasm compiled with a new profile); 'Marie' typed with Input.dispatchKeyEvent (real key events: field 'Marie', greeting 'Bonjour Marie' already shown at the first read); prefers-color-scheme dark and light by Emulation.setEmulatedMedia: the page switches palette (page #101216 / card #1a1d23 / text #eef0f4 in dark, 14.80:1 greeting on card; #f4f6fb / #ffffff / #14161a in light, 18.11:1); Browser.close, exit status 0, 0 chrome.exe left."
+    },
+    {
+      "path": "validation/evidence/web-chrome/web-chrome-157-windows-11-x64/default-series-log.txt",
+      "sha256": "feb15584cf4495d8aec58f9eafd99193e6406c5bc9cecdcfb66c4ba097d5a533",
+      "kind": "probe-series",
+      "description": "Log of tools/trials/web-chrome-157-windows-11-x64/default-series.py: 10 probe runs of the default text 'Coucou', each in a new profile (cold start of the browser): message 'Bonjour Coucou' every time, display_ms 77 to 237 (median 90), chrome.exe start to exit 891 to 1,113 ms (median 981.5), no chrome.exe left."
+    },
+    {
+      "path": "validation/evidence/web-chrome/web-chrome-157-windows-11-x64/screenshot-chrome157-light-default-greeting.png",
+      "sha256": "7797f4cb898c8f12fda9e6dc41f4b8dc827eab775434c142d5fc02dc81b6f94c",
+      "kind": "screenshot",
+      "description": "Headless Chrome 157 --screenshot (800x420) of http://127.0.0.1:<port>/index.html without probe mode, light scheme: the card with the field 'Coucou' and the greeting 'Bonjour Coucou'. One screenshot for this new rendering scenario (the owner authorised one per new GUI scenario)."
+    },
+    {
+      "path": "validation/evidence/web-chrome/web-chrome-157-windows-11-x64/screenshot-chrome157-dark-force-dark-mode.png",
+      "sha256": "f42876a11405263732870cc1885dfeca824a1aa667dfa9b517b79f1f2c255367",
+      "kind": "screenshot",
+      "description": "The same page with --force-dark-mode (800x420): the dark palette of the page (a prefers-color-scheme: dark block, not an inverted rendering). One screenshot for the dark scenario, authorised by the owner for this trial only if it differs visibly, which it does."
+    },
+    {
+      "path": "validation/evidence/web-chrome/web-chrome-157-windows-11-x64/screenshots-log.txt",
+      "sha256": "b4de148d5683e1a4433a40d9854a69f1f229f655d892a0172ce26bc9e662dff8",
+      "kind": "log",
+      "description": "Commands and observations of the two screenshots, including the theme flags that did NOT switch the scheme in headless Chrome 157 (--blink-settings=preferredColorScheme=1, alone or combined with --force-dark-mode: byte-identical to the light screenshot)."
+    },
+    {
+      "path": "validation/evidence/web-chrome/web-chrome-157-windows-11-x64/chrome-install.txt",
+      "sha256": "4cba33056d551485498718fde300e03af0c8492c2c413009b6de8558f5da9c8f",
+      "kind": "log",
+      "description": "Chrome install of the host (file versions 157.0.8103.51 for chrome.exe and chrome.dll, valid Google LLC signature, file dates 2026-11-07 and 2026-11-08) read with Get-Item and Get-AuthenticodeSignature."
+    },
+    {
+      "path": "tools/trials/web-chrome-157-windows-11-x64/typing-check.mjs",
+      "sha256": "16aa0b58775d19f3abcfaaf3cefa5749bc0db08082efa61f628da1ac2fba4ae8",
+      "kind": "driver",
+      "description": "The trial driver of the typing check and the colour-scheme check (tooling, in the main repository). The launcher of the series is WebChromeHostLauncher in tools/run_vectors.py."
+    },
+    {
+      "path": "tools/trials/web-chrome-157-windows-11-x64/default-series.py",
+      "sha256": "fd054219458aac9e13870c943da8a9a540fdd3ce8981019b284b40cc2783c383",
+      "kind": "driver",
+      "description": "The driver of the default-text series (tooling, in the main repository): it uses WebChromeHostLauncher."
+    }
+  ],
+  "measurements": {
+    "trial_date": "2026-11-15 (host local time)",
+    "scope": "Chrome 157.0.8103.51 headless on the physical Windows 11 x64 host of platforms/windows-11-x64.json: says nothing about other browsers, versions or systems",
+    "browser": "Chrome/157.0.8103.51, user agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 (Chrome freezes the minor parts and reports Windows NT 10.0 on Windows 11), WebAssembly and instantiateStreaming present",
+    "page": "ui/modern/web-ts (index.html and the ES modules main.js and native.js, TypeScript 7.0.2) with loomora.js and loomora.wasm of Emscripten 7.0.0, built by python tools/build.py web modern on 2026-11-15 (two builds, identical sha256): index.html d9d9fe09a658cd2fc2a90b15132cbdb8a35445dcd4f62a566c79053ff6c9c41e (3,384 bytes), main.js 7d55e83ec68dd6bf376163b527378d74a2ed68430c946ff618fba557f39c5a51 (6,146), native.js b994b00a1523d69a6f1e275576c81f222c49df80dfc7a97a2b1a08b5b45f99c5 (6,215), loomora.js 628eeb928726e0013504a5f9919187f0c1a3cbdeb74939e311ed7bd15bde3446 (14,152), loomora.wasm 429dca8d3a7526bac55945c4fa1e8019f38d95fcc7416cec5182e26a02ab7e84 (23,971)",
+    "path_taken": "WebAssembly: 'core' is cpp-wasm in all 15 records; the request log has one loomora.wasm request per run",
+    "vectors": "15 valid vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped as designed, 2 vectors truncated to 1,000 UTF-16 units as expected; control_characters (a, tab, line feed, b, U+0001) passes here, unlike the Legacy page on Firefox 10, because the Modern page uses a <textarea>, which keeps the line feed",
+    "display_ms": {
+      "series_of_15_vectors": {
+        "n": 15,
+        "min": 74,
+        "median": 85,
+        "max": 110
+      },
+      "series_of_10_default_runs": {
+        "n": 10,
+        "min": 77,
+        "median": 90,
+        "max": 237
+      },
+      "definition": "Date.now() from the start of main.js to the greeting shown, on the virtual clock of --virtual-time-budget; SC-001 threshold 3,000 ms"
+    },
+    "default_greeting": "'Bonjour Coucou' in all 10 default runs and in the DevTools run (field prefilled 'Coucou')",
+    "chrome_start_to_exit_ms": {
+      "series_of_15_vectors": {
+        "n": 15,
+        "min": 912,
+        "median": 997,
+        "max": 1229
+      },
+      "series_of_10_default_runs": {
+        "n": 10,
+        "min": 891,
+        "median": 981.5,
+        "max": 1113
+      },
+      "definition": "wall clock from the start of chrome.exe (new profile, nothing cached) to its exit after the DOM dump; a cold start of the browser plus the page"
+    },
+    "page_start_to_greeting_wall_ms": "820 (DevTools run, stored; a first run, not stored, 352): Page.navigate to the greeting, real time, new profile",
+    "peak_rss_kb": {
+      "min": 886,
+      "max": 906,
+      "meaning": "performance.memory.usedJSHeapSize in KiB"
+    },
+    "processes": "0 chrome.exe left on the run's profile folder after each of the 15 runs, the 10 default runs and the DevTools run (Get-CimInstance Win32_Process on the command line, taskkill by PID if any); 0 chrome.exe on the host after every command (none of the owner's own was running)",
+    "typed_input": "Input.dispatchKeyEvent 'Marie': field 'Marie', greeting 'Bonjour Marie'",
+    "themes": {
+      "light": "page #f4f6fb, card #ffffff, text #14161a, greeting on card 18.11:1",
+      "dark": "page #101216, card #1a1d23, text #eef0f4, greeting on card 14.80:1",
+      "how": "Emulation.setEmulatedMedia prefers-color-scheme (typing-check-log.txt) and --force-dark-mode (screenshot)"
+    }
+  },
+  "reproduction": "validation/procedures/web.md",
+  "decision": "keep",
+  "notes": "Web Modern page (ui/modern/web-ts/) on the WebAssembly path in Chrome 157 on Windows 11, 2026-11-15, task T063 (owner decision of 2026-11-15, PoC rule: the Modern UI is validated on ONE system and ONE current browser; Firefox and Safari recent are not required). The Legacy page has no verdict here (validation/verdicts/web-chrome-157-windows-11-x64-legacy.json is not_tested: Web Legacy is validated on Firefox 10 on Windows 2000)."
+}

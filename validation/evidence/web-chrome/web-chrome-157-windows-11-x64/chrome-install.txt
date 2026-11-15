@@ -1,0 +1,9 @@
+Chrome install of the host, read on 2026-11-15 (no file was changed, no profile opened)
+
+chrome.exe: FileVersion 157.0.8103.51, ProductName Google Chrome, CompanyName Google LLC
+chrome.dll: ProductVersion 157.0.8103.51
+chrome.exe signature: Valid, CN=Google LLC, O=Google LLC, L=Mountain View, S=California, C=US, SERIALNUMBER=3582691, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
+chrome.exe  4191896 bytes  LastWriteTime 2026-11-08T00:23:02 +01:00
+157.0.8103.51\chrome.dll  311393432 bytes  LastWriteTime 2026-11-08T00:23:10 +01:00
+157.0.8103.51\157.0.8103.51.manifest  226 bytes  LastWriteTime 2026-11-07T18:57:34 +01:00
+version folders next to chrome.exe: 157.0.8103.51
