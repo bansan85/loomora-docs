@@ -12,7 +12,7 @@
       "adr/0001-backend-cpp11-c-api.md",
       "validation/spikes.json"
     ],
-    "note": "Not tested as worded: Rust was dropped by the project owner (spec Clarifications of 2026-11-12, ADR 0001), so no Rust toolchain was ever tried on any target. The same question for the C++11 backend that replaced it is answered elsewhere, and only in part: spike S1 (a MinGW-w64 C++11 static library runs on Windows 2000 build 2195 without a service pack; SP4 itself was not run) and spike S6 (strict C++11 and C-only exports checked with g++ 13.3.0 and clang++ 23.1.5 on Linux). Not tried at all: Windows XP, Android API 21, Linux ARM and PowerPC, macOS 11, iOS 15."
+    "note": "Not applicable: Rust was dropped (ADR 0001); the C++11 toolchain is covered by V6/V9/V10 and the spikes (owner, 2026-11-15). Detail as recorded: Not tested as worded: Rust was dropped by the project owner (spec Clarifications of 2026-11-12, ADR 0001), so no Rust toolchain was ever tried on any target. The same question for the C++11 backend that replaced it is answered elsewhere, and only in part: spike S1 (a MinGW-w64 C++11 static library runs on Windows 2000 build 2195 without a service pack; SP4 itself was not run) and spike S6 (strict C++11 and C-only exports checked with g++ 13.3.0 and clang++ 23.1.5 on Linux). Not tried at all: Windows XP, Android API 21, Linux ARM and PowerPC, macOS 11, iOS 15."
   },
   {
     "id": "V2",
@@ -24,7 +24,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: the application only builds a greeting, no path is computed. Nothing was measured against the section 5.3 target."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: the application only builds a greeting, no path is computed. Nothing was measured against the section 5.3 target."
   },
   {
     "id": "V3",
@@ -36,7 +36,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: no 512 MB budget case exists. The only memory figure is the peak working set of the greeting window (1,084 KB on Windows 2000, see the verdict), which says nothing about the path computation."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: no 512 MB budget case exists. The only memory figure is the peak working set of the greeting window (1,084 KB on Windows 2000, see the verdict), which says nothing about the path computation."
   },
   {
     "id": "V4",
@@ -48,7 +48,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: no .loomora file is written or read, and no big-endian system was available. The greeting returns identical text on every platform tested (SC-011 vectors), which is a different property."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: no .loomora file is written or read, and no big-endian system was available. The greeting returns identical text on every platform tested (SC-011 vectors), which is a different property."
   },
   {
     "id": "V5",
@@ -60,7 +60,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: there is no GPU engine. FR-015 only requires that the application works without graphics acceleration, which it does on the platforms tested."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: there is no GPU engine. FR-015 only requires that the application works without graphics acceleration, which it does on the platforms tested."
   },
   {
     "id": "V6",
@@ -95,15 +95,18 @@
     "old_targets": "Jetpack Compose or Views",
     "criterion": "Smooth 5,000-segment path on 1 GB; themes; RTL",
     "fallback": "Views; simplified rendering",
-    "covered_by_probe": false,
-    "platform_ids": [],
-    "status": "not_covered",
+    "covered_by_probe": true,
+    "platform_ids": [
+      "android-4.1.2-x86",
+      "android-7.0-x86_64"
+    ],
+    "status": "ok_restricted",
     "records": [
       "validation/spikes.json",
       "validation/verdicts/android-4.1.2-x86-legacy.json",
       "validation/verdicts/android-7.0-x86_64-modern.json"
     ],
-    "note": "Not covered by this probe as worded: a UI of Android API 21 under load was not measured. Android UIs do exist now: the Legacy UI (Java views, built for API 9, run on an API 16 emulator) and the Modern UI (Kotlin and Jetpack Compose, minSdk 24, run on an API 24 emulator); they only show a greeting, so no 5,000-segment path, no theme or RTL case was tried. The floor moved: spike S8 measured that the pinned Compose and AndroidX libraries need minSdk 23 and the owner set the Modern floor to 24, with the Legacy UI covering API 9 to 23."
+    "note": "Partly covered. Two Android UIs were run, each on one emulator: the Legacy UI (Java views, built for API 9) on an Android 4.1.2 (API 16) x86 emulator, 15 of 15 reference vectors passed (verdict android-4.1.2-x86-legacy, OK with restrictions), and the Modern UI (Kotlin and Jetpack Compose, minSdk 24) on an Android 7.0 (API 24) x86_64 emulator, 15 of 15 (verdict android-7.0-x86_64-modern, OK with restrictions). They only show a greeting. Themes: the Modern UI follows the system dark setting, but the dark theme and high contrast were not checked on a screen; the Legacy UI uses the system colours; RTL text was checked character for character, with one mixed Unicode screenshot on the Modern UI only. Not covered: the load measurement (a smooth 5,000-segment path on 1 GB; the feature is not implemented yet in the probe, owner 2026-11-15), the themes and the RTL layout on a screen, and API 21 itself (android-5.0-arm64 is not tested). The floor moved: spike S8 measured that the pinned Compose and AndroidX libraries need minSdk 23 and the owner set the Modern floor to 24, with the Legacy UI covering API 9 to 23."
   },
   {
     "id": "V8",
@@ -115,7 +118,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: no iOS build or trial exists (spikes S2 and S7 open)."
+    "note": "Not covered: no iOS build, pending Apple hardware (owner, 2026-11-15). Detail as recorded: Not covered by this probe: no iOS build or trial exists (spikes S2 and S7 open)."
   },
   {
     "id": "V9",
@@ -164,7 +167,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: the application stores nothing (spec Assumptions)."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: the application stores nothing (spec Assumptions)."
   },
   {
     "id": "V12",
@@ -176,7 +179,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: no network access exists; FR-013 only requires that none is opened."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: no network access exists; FR-013 only requires that none is opened."
   },
   {
     "id": "V13",
@@ -188,7 +191,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: no Bluetooth code exists."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: no Bluetooth code exists."
   },
   {
     "id": "V14",
@@ -200,7 +203,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: no speech synthesis or recognition exists."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: no speech synthesis or recognition exists."
   },
   {
     "id": "V15",
@@ -231,7 +234,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: no printing and no PDF."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: no printing and no PDF."
   },
   {
     "id": "V17",
@@ -239,11 +242,18 @@
     "old_targets": "Recent and old browsers, iOS Safari",
     "criterion": "Working Wasm engine (threads, SIMD); acceptable performance; OPFS storage; memory limits respected",
     "fallback": "Single-threaded Wasm; offloaded computation",
-    "covered_by_probe": false,
-    "platform_ids": [],
-    "status": "not_covered",
-    "records": [],
-    "note": "Not covered by this probe: no web build or trial exists (spike S5 open)."
+    "covered_by_probe": true,
+    "platform_ids": [
+      "web-chrome-157-windows-11-x64",
+      "web-firefox-10-windows-2000-x86"
+    ],
+    "status": "ok_restricted",
+    "records": [
+      "validation/spikes.json",
+      "validation/verdicts/web-chrome-157-windows-11-x64-modern.json",
+      "validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json"
+    ],
+    "note": "Partly covered. WebAssembly path: the Modern UI (ui/modern/web-ts, Emscripten 7.0.0, loomora.wasm) was run on Chrome 157 on Windows 11 x64, headless (verdict web-chrome-157-windows-11-x64-modern, OK with restrictions). JavaScript path: the Legacy page (ES3, loomora.js from Emscripten 1.39.20 fastcomp) was run on Firefox 10.0 on Windows 2000, 15 of 15 vectors in the second series (verdict web-firefox-10-windows-2000-x86-legacy, OK with restrictions; peak memory not measured, Firefox 10 has no performance.memory). Not covered: threads and SIMD in WebAssembly, OPFS storage, PWA installation and offline use, memory limits and performance under load (not implemented yet in the probe, owner 2026-11-15), the WebAssembly path on any other browser, iOS Safari, and the other old browsers of spike S5 (Chrome 15, Safari 5.1, Opera 11.5 untested)."
   },
   {
     "id": "V18",
@@ -255,7 +265,7 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: no 3D, no mesh."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: no 3D, no mesh."
   },
   {
     "id": "V19",
@@ -286,6 +296,6 @@
     "platform_ids": [],
     "status": "not_covered",
     "records": [],
-    "note": "Not covered by this probe: no package, installer, signature or store submission was made. The Windows deliverable is a plain executable and the Linux ones are plain executables built on the target (ADR 0007)."
+    "note": "Not covered because the feature is not implemented yet in the probe; to be validated when the feature is built (owner, 2026-11-15). Detail as recorded: Not covered by this probe: no package, installer, signature or store submission was made. The Windows deliverable is a plain executable and the Linux ones are plain executables built on the target (ADR 0007)."
   }
 ]
