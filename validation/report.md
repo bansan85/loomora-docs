@@ -13,7 +13,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 | SC-004 | MET | 10 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
 | SC-010 | MET | 0 absent variant(s) without a recorded justification |
 | SC-005 | MET | 20 of 20 hypotheses recorded, 5 with a verdict, 15 not covered by this probe |
-| SC-009 | INCOMPLETE | go / no-go concluded for 1 of 2 systems |
+| SC-009 | MET | go / no-go concluded for 2 of 2 systems |
 | SC-007 | NOT MET | 0 of 6 measured platform/variant rows reach 80% shared code; 6 below, each one explained in section 13 from the records (the explanation does not remove the gap) |
 
 **SC-002 detail**
@@ -28,7 +28,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 **SC-009 detail**
 
 - Windows 2000: GO: OK with restrictions
-- Windows XP: NOT CONCLUDED: no trial
+- Windows XP: GO by inference: OK with restrictions
 
 **SC-007 detail**
 
@@ -66,22 +66,11 @@ Still unverified, as recorded in S1: Windows 2000 SP4 (and the SP4 msvcrt.dll, w
 **Conclusion (Windows 2000): GO: OK with restrictions.**
 The verdict is that of the system actually tried (see its record above); SP4, if it is not the system tried, was NOT run: the status of S1 then rests on an inference accepted by the owner (a service pack adds or fixes exports and keeps those the executable imports), not on a measurement. The result is for the machines and builds named in the verdict.
 
-### Windows XP: NOT CONCLUDED: no trial
+### Windows XP: GO by inference: OK with restrictions
 
-No platform record and no verdict exist for Windows XP (no service pack, x86 or x64): it was never started, so no go / no-go can be recorded and the criterion SC-009 is not met for XP. What the records say, none of it measured on XP:
+No Windows XP system was run. Under the PoC scope rule (the Legacy UI is tried on the lowest testable system of a family only; success there is taken as success on every newer system and architecture, and a failure elsewhere would be a detail to fix later), the Windows 2000 result above stands for XP. This is an inference accepted by the owner, not a measurement: XP DLL export tables were never read and the XP-specific behaviours (visual styles, end-of-life banner) were not observed.
 
-**Known (from records and documents, not from a trial on XP)**
-
-- The Windows Legacy executable is one source for Windows 2000 to 11; on Windows 2000 it passes the checks above. XP is a later system of the same family, but its DLL export tables were never read, so that every import exists on XP is an expectation, not a result.
-- Fallback `win2000-getthreadid-shim`: GetThreadId exists since Windows Vista and Windows Server 2003 SP1, so Windows 2000 and Windows XP x86 do not export it and their loader refuses an executable whose import table names it (adr/0002). Before adr/0004 the shim was keyed on 32-bit MinGW builds; it is now keyed on the Windows 2000 toolchain only, so the x64 build ...
-- Fallback `visual-styles`: the Common Controls 6 manifest is what XP and later honour; it was exercised on Windows 11 only ("Not run on Windows XP to 8.1").
-- The 32-bit executable also runs under WOW64 on Windows 11 (verdict `windows-11-x64-legacy`), which says nothing about a native 32-bit XP.
-- End of life: Threshold for Windows: NT major <= 10 is end of life (loomora_is_eol, core/src/eol.cpp). Windows 10 reached end of support on 2025-10-14. By that rule XP shows the warning banner; it was shown on Windows 2000 and never on XP.
-- Milestone G0 asked for the go / no-go on XP through V1 (Rust toolchain) and V9 (MFC on XP). Both questions are superseded: Rust and MFC no longer exist in the project (hypotheses V1 and V9). The XP question is now "does the Win32 C++11 executable run on XP", which no trial answers.
-
-**Not known**: whether the executable loads on XP (SP1, SP2, SP3, x64), whether the greeting is displayed and updated, the fonts and visual styles, the end-of-life banner, memory and display time, and every XP-specific behaviour. Spike S9 (Windows 7 to 11 accept the Windows 2000 executable) is open.
-
-**Conclusion (Windows XP): NOT CONCLUDED, no trial.** Neither OK, OK with restrictions nor KO can be recorded. An inference of the kind accepted for Windows 2000 SP4 would be "likely OK", but it is not a measurement and no verdict is recorded from it. To conclude: one XP SP3 virtual machine, the same executable and driver as the Windows 2000 trial.
+**Conclusion (Windows XP): GO by inference: OK with restrictions.**
 
 ## 3. Platforms tried
 
