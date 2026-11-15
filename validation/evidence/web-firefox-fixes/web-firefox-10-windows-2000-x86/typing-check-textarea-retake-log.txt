@@ -1,0 +1,4 @@
+launcher: Firefox 10.0 in VirtualBox VM 'Windows 2000' (168 MB RAM), guest user 'name', folder C:\Documents and Settings\name\loomora-web, server http://10.0.2.2:52572/ serving \\wsl.localhost\Ubuntu-24.04\home\legar\loomora-build\web-legacy-fixes\web-legacy\dist (index.html sha256 a1ac52ab3286cd7d, app.js sha256 2122b38e84d78c44, loomora.js sha256 dda4c387549e78cd); 0 firefox.exe process(es) terminated before the series
+one screenshot written to C:\Users\legar\AppData\Local\Temp\claude\92a3ba6dc454fa2d\6dea8c7b-bfbe-4e7f-b03c-130c9be37b07\scratchpad\retake
+Alt+F4 after typing: firefox.exe processes still alive after 20 s: 0
+final count: 0

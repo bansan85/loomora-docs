@@ -5,12 +5,15 @@
   "status": "ok_restricted",
   "restrictions": [
     "One browser, one machine, one configuration: Firefox 10.0 (build 20120129021758) on Windows 2000 build 2195 without service pack, in a VirtualBox VM with 168 MB of RAM, a new profile and the preferences of validation/procedures/web.md. Under the PoC rule this stands for newer browsers; no other browser, version or operating system was run for the JavaScript path (Firefox 4 to 9, Chrome 15, Safari 5.1 and Opera 11.5 of spike S5 are untested), and Internet Explorer up to 9 is dropped by the owner (no typed arrays; spike S5).",
-    "14 of the 15 reference vectors pass; control_characters ('a', tab, line feed, 'b'...) is greeted without its line feed: an HTML <input type=\"text\"> removes line feeds from its value in every browser (a current Chrome 157 does the same, checked on 2026-11-15), so a line feed cannot be entered in the field. The text without the line feed is greeted correctly ('Bonjour a<tab>bc<U+0001>', greeting_matches true). This is a property of the single-line field, not of Firefox 10 or of the JavaScript path; the node harness (page-harness.js) does not show it because its DOM stub does not sanitise the value. Whether the vector must be skipped for the Web launcher (as the NUL is for Windows) or the field must become a textarea is for the owner to decide.",
-    "The page was loaded over HTTP from the host through the VirtualBox NAT (http://10.0.2.2:<port>/), not from file:// and not from the Internet; the probe record was read from the page through an XMLHttpRequest POST (post=1, added to ui/legacy/web/app.js for browsers without a console or DOM dump), not from the title or the console. Each vector started a new firefox.exe, with the Firefox program files already in the guest's memory cache; display_ms (page start to greeting, 124 to 143 ms) and the 704 to 843 ms from the start of firefox.exe to the posted record are those of this VM, not of a cold start on real hardware.",
-    "Typing was exercised through the virtual keyboard of VirtualBox (keyboardputscancode), not by a person; the greeting was read from a screenshot.",
+    "History of the field: in the first series of 2026-11-15 (page with an <input type=\"text\">) 14 of the 15 vectors passed and control_characters failed on its line feed, which a single-line field removes from its value in every browser (a current Chrome 157 does the same). By the owner's decision the field is now a one-row <textarea> (wrap off, maxlength 1000), and the second series passes all 15 vectors, control_characters included ('a', tab, line feed, 'b', U+0001 greeted unchanged). The first series is kept as it was (its evidence is listed as 'first series'); the node harness stub now normalises a textarea value (CRLF to LF) as a browser does.",
+    "The page was loaded over HTTP from the host through the VirtualBox NAT (http://10.0.2.2:<port>/), not from file:// and not from the Internet; the probe record was read from the page through an XMLHttpRequest POST (post=1, added to ui/legacy/web/app.js for browsers without a console or DOM dump), not from the title or the console. Each vector started a new firefox.exe, with the Firefox program files already in the guest's memory cache; display_ms (page start to greeting, 124 to 143 ms in the first series, 127 to 230 ms in the second) and the 704 to 843 ms (first series) and 520 to 1415 ms (second series) from the start of firefox.exe to the posted record are those of this VM, not of a cold start on real hardware.",
+    "Typing was exercised through the virtual keyboard of VirtualBox (keyboardputscancode), not by a person; the greeting was read from a screenshot. Tab into an <input> selects its text but Tab into a textarea does not, and on the French AZERTY layout of the guest the letter A is the key at scancode 0x10 (0x1E is Q): the first run of tools/trials/web-firefox-10-windows-2000-x86/typing-check-textarea.py sent Ctrl+0x1E, so 'Marie' was typed in front of 'Coucou' ('MarieCoucou', 'Bonjour MarieCoucou', screenshot discarded, log kept as typing-check-textarea-log.txt). The driver now sends Ctrl+0x10 and the retake shows the field 'Marie' and the greeting 'Bonjour Marie' (screenshot).",
     "peak_rss_kb is null in every record: Firefox 10 has no performance.memory, so the memory was not measured (the probe schema allows null).",
     "Not run: the WebAssembly path on this browser (Firefox 10 has no WebAssembly, so the page always takes the JavaScript path here), the 4,096-character texts typed (they were given through the URL and cut to 1,000 UTF-16 units by the page), the 1,000-character limit by keyboard, IME, clipboard, a high contrast scheme, a dark theme (prefers-color-scheme is not supported by Firefox 10), zoom and DPI above 96, slow-script warnings (none appeared: the page start takes about 0.1 s).",
-    "The VM was found PAUSED by the host power management (VBoxManage 'VM is paused due to host power management', paused since 2026-11-15T10:06Z, resume refused); a 'controlvm savestate' attempt made the VM process abort (state 'aborted'), so, as the owner's instruction allows for an unusable VM, the snapshot 'Claude Firefox 10' was restored ('snapshot restorecurrent') and the VM started again (gui). The guest state before the abort was lost; nothing in it was needed. No snapshot was taken, deleted or renamed."
+    "The VM was found PAUSED by the host power management (VBoxManage 'VM is paused due to host power management', paused since 2026-11-15T10:06Z, resume refused); a 'controlvm savestate' attempt made the VM process abort (state 'aborted'), so, as the owner's instruction allows for an unusable VM, the snapshot 'Claude Firefox 10' was restored ('snapshot restorecurrent') and the VM started again (gui). The guest state before the abort was lost; nothing in it was needed. No snapshot was taken, deleted or renamed.",
+    "End-of-life notice (owner decision 2026-11-15): the page now shows the notice on Windows 2000 (user agent 'Windows NT 5.0') and eol_warning_shown is true in all 15 records of the second series; the rule is the backend's (Windows below NT 11.0 is end of life) and the page only reads the system version from the user agent. It cannot tell Windows 10 from 11 and knows no version for macOS, Linux or Android, so there it never shows the notice (platform record, eol_note). The notice was seen on the screen of Firefox 10 in the one screenshot taken of the textarea check (see the notes).",
+    "Scope of this verdict (owner decision 2026-11-15): Chrome does not run on Windows 2000, so Firefox 10.0 alone stands for the Web Legacy ladder under the PoC rule and no Chrome or WebAssembly verdict is recorded. The WebAssembly path is exercised only by the node harness (run_vectors.py web-node-wasm, 15 of 15) and by one headless Chrome check (task T085), which are not verdicts.",
+    "Launch reliability of the second series: in this 168 MB guest a start of firefox.exe is lost about once in fifteen (the page is never requested: no line in the server log). Three attempts at the series each lost one start (right_to_left_arabic, ascii and emoji_zwj_sequence: 'no probe record posted in 120 s', 14 of 15) and were not stored; the launcher (tools/run_vectors.py, WEB_START_WAIT) now ends the processes and starts firefox.exe once more when the page was not requested after 30 s, and says so in the log: the stored series lost one start (accented) and passed after the second. VirtualBox also refused 'Maximum number of concurrent guest sessions (32)' once, because every `guestcontrol start` leaves a session open; `VBoxManage guestcontrol <vm> closesession --all` (no snapshot, no state change) cleared it."
   ],
   "disabled_features": [
     "peak-memory (Firefox 10 has no performance.memory: peak_rss_kb is null in every record; the page does not list it in the probe's disabled_features, which are empty)"
@@ -20,31 +23,31 @@
       "path": "validation/evidence/web-firefox/web-firefox-10-windows-2000-x86/run-vectors-web-firefox-10-windows-2000-x86-legacy-log.txt",
       "sha256": "4bac8a8f2738e2b8ad081a35350b827d220cfe57064bc9f2e65f77679aed62d4",
       "kind": "log",
-      "description": "Log of 'python tools/run_vectors.py web-firefox-10-windows-2000-x86 legacy --timeout 120 --evidence-dir ...' (SC-011, FR-027): 15 valid vectors, each in a new firefox.exe started in the guest on http://10.0.2.2:<port>/index.html?probe=1&input=...&platform=web-firefox-10-windows-2000-x86&post=1&run=N (a long text through a redirect), the probe record posted back by the page, check_probe.py checks, Alt+F4, firefox.exe process count. 14 passed, 1 failed (control_characters: the line feed of the text is removed by the HTML text field, same in Chrome), 2 vectors truncated to 1,000 UTF-16 units as expected, 16 error or API-only vectors skipped as designed; no firefox.exe process left in any run."
+      "description": "FIRST series. Log of 'python tools/run_vectors.py web-firefox-10-windows-2000-x86 legacy --timeout 120 --evidence-dir ...' (SC-011, FR-027): 15 valid vectors, each in a new firefox.exe started in the guest on http://10.0.2.2:<port>/index.html?probe=1&input=...&platform=web-firefox-10-windows-2000-x86&post=1&run=N (a long text through a redirect), the probe record posted back by the page, check_probe.py checks, Alt+F4, firefox.exe process count. 14 passed, 1 failed (control_characters: the line feed of the text is removed by the HTML text field, same in Chrome), 2 vectors truncated to 1,000 UTF-16 units as expected, 16 error or API-only vectors skipped as designed; no firefox.exe process left in any run."
     },
     {
       "path": "validation/evidence/web-firefox/web-firefox-10-windows-2000-x86/run-vectors-web-firefox-10-windows-2000-x86-legacy-probe-lines.tsv",
       "sha256": "c4b6e1a4d753cf4dd1d65fd22efe88da0a14488f4ad12b0e0d6c26dbab57792e",
       "kind": "probe-series",
-      "description": "The 15 probe records posted by the page (vector id, a tab, the record): core cpp-js, platform_id web-firefox-10-windows-2000-x86, ui_variant legacy, displayed true, peak_rss_kb null, eol_warning_shown false, disabled_features empty."
+      "description": "FIRST series. The 15 probe records posted by the page (vector id, a tab, the record): core cpp-js, platform_id web-firefox-10-windows-2000-x86, ui_variant legacy, displayed true, peak_rss_kb null, eol_warning_shown false, disabled_features empty."
     },
     {
       "path": "validation/evidence/web-firefox/web-firefox-10-windows-2000-x86/run-vectors-web-firefox-10-windows-2000-x86-legacy-server-requests.txt",
       "sha256": "116a1439dd707fd4c4a526e93c89410fa8d704db53a1e5ded99cabff9e85bf71",
       "kind": "log",
-      "description": "Request log of the HTTP server of the same series: every run fetches index.html, app.js and loomora.js (never loomora.wasm or loomora-wasm.js: the JavaScript path), then POSTs /probe; user agent 'Mozilla/5.0 (Windows NT 5.0; rv:10.0) Gecko/20100101 Firefox/10.0'."
+      "description": "FIRST series. Request log of the HTTP server of the same series: every run fetches index.html, app.js and loomora.js (never loomora.wasm or loomora-wasm.js: the JavaScript path), then POSTs /probe; user agent 'Mozilla/5.0 (Windows NT 5.0; rv:10.0) Gecko/20100101 Firefox/10.0'."
     },
     {
       "path": "validation/evidence/web-firefox/web-firefox-10-windows-2000-x86/typing-check-log.txt",
       "sha256": "29336f112ee9294d46dbe1b485d148eb0b82086827b4907ffb3d9bb0ca11ce7e",
       "kind": "log",
-      "description": "Log of tools/trials/web-firefox-10-windows-2000-x86/typing-check.py: a probe run with input=Marie (record: message 'Bonjour Marie', greeting_matches true), then the page without probe mode, 'Marie' typed from keyboard scancodes (Tab, Ctrl+A, M, a, r, i, e on the French AZERTY layout of the guest), Alt+F4, 0 firefox.exe left."
+      "description": "FIRST series. Log of tools/trials/web-firefox-10-windows-2000-x86/typing-check.py: a probe run with input=Marie (record: message 'Bonjour Marie', greeting_matches true), then the page without probe mode, 'Marie' typed from keyboard scancodes (Tab, Ctrl+A, M, a, r, i, e on the French AZERTY layout of the guest), Alt+F4, 0 firefox.exe left."
     },
     {
       "path": "validation/evidence/web-firefox/web-firefox-10-windows-2000-x86/typing-check-server-requests.txt",
       "sha256": "a03cdb4ddbddaf305772e2ebf404ea6b13373c795d861c802ca7c19f3c962083",
       "kind": "log",
-      "description": "Request log of that run: the probe URL with input=Marie and its POST, then index.html, app.js and loomora.js of the page without parameters."
+      "description": "FIRST series. Request log of that run: the probe URL with input=Marie and its POST, then index.html, app.js and loomora.js of the page without parameters."
     },
     {
       "path": "validation/evidence/web-firefox/web-firefox-10-windows-2000-x86/screenshot-firefox10-typed-marie.png",
@@ -63,36 +66,104 @@
       "sha256": "345080d195869923f0be98558c539879ed035f5febf34056b4b220e4a3391604",
       "kind": "driver",
       "description": "The trial driver of the typing check (tooling, in the main repository). The launcher of the series is WebFirefoxVmLauncher in tools/run_vectors.py (guest helper tools/guest/ffprocs.c)."
+    },
+    {
+      "path": "validation/evidence/web-firefox-fixes/web-firefox-10-windows-2000-x86/run-vectors-web-firefox-10-windows-2000-x86-legacy-log.txt",
+      "sha256": "5d07da079037fd0ca711f38410d767b327165b9ebc3edf80df47f562740ccd0d",
+      "kind": "log",
+      "description": "SECOND series (page with a <textarea> and the end-of-life notice, 2026-11-15): log of 'python tools/run_vectors.py web-firefox-10-windows-2000-x86 legacy --timeout 120 --evidence-dir ...': 15 valid vectors, 15 passed, 0 failed, 16 skipped, 2 truncated to 1,000 UTF-16 units; control_characters (line feed) passes; accented needed a second start of firefox.exe (lost at the first start, the log says so)."
+    },
+    {
+      "path": "validation/evidence/web-firefox-fixes/web-firefox-10-windows-2000-x86/run-vectors-web-firefox-10-windows-2000-x86-legacy-probe-lines.tsv",
+      "sha256": "a7d918146c8fd29a47d09daa717433fb5462929f3a856c5444fea132d4e7540f",
+      "kind": "probe-series",
+      "description": "SECOND series: the 15 probe records posted by the page: core cpp-js, platform_id web-firefox-10-windows-2000-x86, displayed true, greeting_matches true, peak_rss_kb null, eol_warning_shown TRUE in all 15, disabled_features empty; the control_characters record has input 'a<tab>b<line feed>c<U+0001>'."
+    },
+    {
+      "path": "validation/evidence/web-firefox-fixes/web-firefox-10-windows-2000-x86/run-vectors-web-firefox-10-windows-2000-x86-legacy-server-requests.txt",
+      "sha256": "3b9627ffd0640c8e6489bffc0a0cef4c54114ebc9d37afabf7d3a8d2fd6479b4",
+      "kind": "log",
+      "description": "SECOND series: request log of the HTTP server: 15 loads of index.html, app.js and loomora.js (never loomora-wasm.js or loomora.wasm), 15 POSTs of /probe, user agent 'Mozilla/5.0 (Windows NT 5.0; rv:10.0) Gecko/20100101 Firefox/10.0' (the string the page reads for the end-of-life rule)."
+    },
+    {
+      "path": "validation/evidence/web-firefox-fixes/web-firefox-10-windows-2000-x86/typing-check-textarea-log.txt",
+      "sha256": "5e3e624c759d00a9d401d13792fb7114aebe809a11fae281e39130be899acd3c",
+      "kind": "log",
+      "description": "FIRST run of the textarea check (with the driver sending Ctrl+0x1E, which is Ctrl+Q on AZERTY: 'Marie' typed in front of 'Coucou'; its screenshot was discarded). Log of tools/trials/web-firefox-10-windows-2000-x86/typing-check-textarea.py: the page without probe mode, Tab, Ctrl+A (Ctrl+Q on the AZERTY layout), 'Marie' typed from scancodes, ONE screenshot taken (not committed, see the notes), Alt+F4, 0 firefox.exe left."
+    },
+    {
+      "path": "validation/evidence/web-firefox-fixes/web-firefox-10-windows-2000-x86/typing-check-textarea-server-requests.txt",
+      "sha256": "7865292aa9056c9cbb0fa1bf1875a7c1db9a06c07c202c0485107e7635a97185",
+      "kind": "log",
+      "description": "Request log of that check: index.html, app.js and loomora.js of the page without parameters."
+    },
+    {
+      "path": "tools/trials/web-firefox-10-windows-2000-x86/typing-check-textarea.py",
+      "sha256": "bdb81bc63507dfd7620d2788a59505113455d4e1b67cfff41f341960a0421c69",
+      "kind": "driver",
+      "description": "The driver of the textarea check (tooling, in the main repository, branch feat/web-legacy-fixes); like typing-check.py it uses WebFirefoxVmLauncher of tools/run_vectors.py. Version of the retake (Ctrl+A is Ctrl + scancode 0x10 on AZERTY)."
+    },
+    {
+      "path": "validation/evidence/web-firefox-fixes/web-firefox-10-windows-2000-x86/typing-check-textarea-retake-log.txt",
+      "sha256": "16815023d63fc2a1a2144fc0e992fbab6a547f2928c8fd0c6982def603ae76b1",
+      "kind": "log",
+      "description": "Log of the retake of tools/trials/web-firefox-10-windows-2000-x86/typing-check-textarea.py with Ctrl+0x10 (Ctrl+A on AZERTY): the page without probe mode, Tab, Ctrl+A, 'Marie', ONE screenshot, Alt+F4, 0 firefox.exe left."
+    },
+    {
+      "path": "validation/evidence/web-firefox-fixes/web-firefox-10-windows-2000-x86/typing-check-textarea-retake-server-requests.txt",
+      "sha256": "412aaeb44dd325b95b4c02f9baff4a5fe6cddc3f600036d5b6fa29e3a489c582",
+      "kind": "log",
+      "description": "Request log of the retake: index.html, app.js and loomora.js of the page without parameters."
+    },
+    {
+      "path": "validation/evidence/web-firefox-fixes/web-firefox-10-windows-2000-x86/screenshot-firefox10-textarea-eol-notice.png",
+      "sha256": "866741e15510be41ad0bdd5d36fd3ae354b41d4edca9b4fb183a771b1c2d81a1",
+      "kind": "screenshot",
+      "description": "Firefox 10.0 on Windows 2000 (VirtualBox screenshot, 958x994): the page at http://10.0.2.2:<port>/index.html after 'Marie' was typed with the virtual keyboard into the one-row textarea: field 'Marie', greeting 'Bonjour Marie', and the end-of-life notice box ('Warning: this operating system is no longer maintained by its vendor ...'). One screenshot for this new rendering scenario, authorised by the owner."
     }
   ],
   "measurements": {
-    "trial_date": "2026-11-15 (host local time)",
+    "trial_date": "2026-11-15 (host local time), two series: the first with the <input> page (14 of 15), the second with the <textarea> page (15 of 15)",
     "browser": "Firefox 10.0, build ID 20120129021758, user agent Mozilla/5.0 (Windows NT 5.0; rv:10.0) Gecko/20100101 Firefox/10.0, no WebAssembly, typed arrays present",
-    "page": "ui/legacy/web/app.js and index.html (app.js parses as ECMAScript 3 per acorn, es-level.js), loomora.js 91,529 bytes (Emscripten 1.39.20 fastcomp, ECMAScript 3 per acorn), built by python tools/build.py web legacy on 2026-11-15; sha256 of the files the server sent: index.html 0b3db6e247a640bc01984d80ba123a6cb5244f483738f3fd914975bbd7b51b57, app.js 05c91d1a5c3252ca649db774e41ad9ba13160805ab200b9edacc99a236a686e8, loomora.js dda4c387549e78cd7ba7b9cf2c7099da753a51c9d662ceba73537a2acb944edb",
-    "path_taken": "JavaScript: 'core' is cpp-js in all 15 records; the request log shows index.html, app.js and loomora.js for every run and no request for loomora-wasm.js or loomora.wasm (the 15 loads of the series and the 2 of the typing check)",
-    "vectors": "15 valid vectors run, 14 passed, 1 failed on the line feed only (see the restrictions), 16 error or API-only vectors skipped as designed, 2 vectors truncated to 1,000 UTF-16 units as expected",
+    "page": "ui/legacy/web/app.js and index.html (app.js parses as ECMAScript 3 per acorn, es-level.js), loomora.js 91,529 bytes (Emscripten 1.39.20 fastcomp, ECMAScript 3 per acorn), built by python tools/build.py web legacy on 2026-11-15. First series: index.html 0b3db6e247a640bc01984d80ba123a6cb5244f483738f3fd914975bbd7b51b57, app.js 05c91d1a5c3252ca649db774e41ad9ba13160805ab200b9edacc99a236a686e8, loomora.js dda4c387549e78cd7ba7b9cf2c7099da753a51c9d662ceba73537a2acb944edb. Second series (textarea, end-of-life notice): index.html a1ac52ab3286cd7d642084578e02db8b9d6a2d4ef65366b98ce30e4cd65e579c, app.js 2122b38e84d78c4461616198af5c92cde21ea58964bb276637c8a61076567589, loomora.js dda4c387549e78cd7ba7b9cf2c7099da753a51c9d662ceba73537a2acb944edb (unchanged)",
+    "path_taken": "JavaScript: 'core' is cpp-js in all 30 records of the two series; both request logs show index.html, app.js and loomora.js for every run and no request for loomora-wasm.js or loomora.wasm",
+    "vectors": "Second series (verdict): 15 valid vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped as designed, 2 vectors truncated to 1,000 UTF-16 units as expected, control_characters included. First series: 14 passed, 1 failed on the line feed only.",
     "display_ms": {
-      "series_of_15": {
+      "series_of_15_first": {
         "n": 15,
         "min": 124,
         "median": 129,
         "max": 143
       },
+      "series_of_15_second": {
+        "n": 15,
+        "min": 127,
+        "median": 138,
+        "max": 230
+      },
       "definition": "time from the start of app.js to the greeting shown (new Date(), probe record field display_ms); SC-001 threshold 3,000 ms"
     },
     "browser_start_to_record_ms": {
-      "series_of_14_passed_runs": {
+      "first_series_14_passed_runs": {
         "n": 14,
         "min": 704,
         "median": 733.5,
         "max": 843
       },
+      "second_series_15_runs": {
+        "n": 15,
+        "min": 520,
+        "median": 607,
+        "max": 1415,
+        "note": "the 1415 ms run is the one that needed a second start of firefox.exe: the time counts from that second start"
+      },
       "definition": "from the return of the launch of firefox.exe in the guest to the arrival of the POST on the host (includes the NAT and the HTTP transfers); the log prints it for the 14 runs that passed, not for the failed one"
     },
-    "processes": "0 firefox.exe processes left after Alt+F4 in each of the 15 runs and in the typing check (ffprocs.exe, tool help library of kernel32, WMI did not work in this guest)",
-    "typed_input": "virtual keyboard scancodes: field 'Marie', greeting 'Bonjour Marie' (screenshot); probe run with input=Marie: message 'Bonjour Marie', greeting_matches true"
+    "processes": "0 firefox.exe processes left after Alt+F4 in each of the 15 runs of both series and in both typing checks (ffprocs.exe, tool help library of kernel32)",
+    "typed_input": "first series: virtual keyboard scancodes, field 'Marie', greeting 'Bonjour Marie' (screenshot); second series, textarea: first run 'MarieCoucou' (wrong Ctrl+A scancode, discarded), retake with Ctrl+0x10: field 'Marie', greeting 'Bonjour Marie' and the end-of-life notice (screenshot)",
+    "end_of_life": "eol_warning_shown true in the 15 records of the second series; the text of loomora_eol_warning is shown on the page (screenshot-firefox10-textarea-eol-notice.png); the system version comes from the user agent 'Windows NT 5.0'"
   },
   "reproduction": "validation/procedures/web.md",
   "decision": "keep",
-  "notes": "Web Legacy page (ui/legacy/web/) on the JavaScript path in Firefox 10.0 on Windows 2000, 2026-11-15, spike S5 and task T093 (owner decision of 2026-11-15: one lowest testable browser). The WebAssembly path has no verdict here (Firefox 10 has no WebAssembly); the verdict of the modern variant is not_tested."
+  "notes": "Web Legacy page (ui/legacy/web/) on the JavaScript path in Firefox 10.0 on Windows 2000, 2026-11-15, spike S5 and task T093. Owner decisions of 2026-11-15: (1) the input is a <textarea> (rows 1, maxlength 1000) so that the line feed of control_characters can be entered: the second series passes 15 of 15; (2) no Chrome or WebAssembly verdict: Chrome does not run on Windows 2000, so Firefox 10.0 alone stands for the Web Legacy ladder under the PoC rule (the WebAssembly path is exercised only by the node harness, 15 of 15, and one headless Chrome check, not verdicts); (3) the page shows the end-of-life notice from the system version read in the user agent (platform record eol_note). The verdict stays ok_restricted: one browser, one VM, virtual keyboard, no memory figure. One screenshot was taken for the new rendering (textarea and notice): evidence/web-firefox-fixes/web-firefox-10-windows-2000-x86/screenshot-firefox10-textarea-eol-notice.png, 958x994, sha256 866741e15510be41ad0bdd5d36fd3ae354b41d4edca9b4fb183a771b1c2d81a1, committed with the owner's authorisation (a first screenshot, 'MarieCoucou' because of a wrong Ctrl+A scancode, was discarded and replaced). The verdict of the modern variant is not_tested."
 }

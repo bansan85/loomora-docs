@@ -10,11 +10,11 @@ Success criteria evaluated from the records at generation time (`python tools/re
 |---|---|---|
 | SC-002 | MET | 4 of 3 required families validated with the Legacy UI on a system 10 years old or more (Windows, Linux, Android, Web); the oldest working platform is identified with evidence for 4 of 6 families |
 | SC-003 | MET | validated with the Legacy UI on a system 15 years old or more: Windows (read the restrictions of that verdict: a virtual machine, one build) |
-| SC-004 | MET | 14 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
+| SC-004 | MET | 13 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
 | SC-010 | MET | 0 absent variant(s) without a recorded justification |
 | SC-005 | MET | 20 of 20 hypotheses recorded, 5 with a verdict, 15 not covered by this probe |
 | SC-009 | MET | go / no-go concluded for 2 of 2 systems |
-| SC-007 | NOT MET | 0 of 8 measured platform/variant rows reach 80% shared code; 8 below, each one explained in section 13 from the records (the explanation does not remove the gap) |
+| SC-007 | NOT MET | 0 of 7 measured platform/variant rows reach 80% shared code; 7 below, each one explained in section 13 from the records (the explanation does not remove the gap) |
 
 **SC-002 detail**
 
@@ -23,7 +23,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 - Linux: linux-centos-5.11-x86_64, 2014-09-29, 12.13 years old, OK with restrictions, evidence: 14 file(s)
 - Android: android-4.1.2-x86, 2012-10-09, 14.1 years old, OK with restrictions, evidence: 9 file(s), 2 screenshot(s)
 - iOS / iPadOS: not tested
-- Web: web-firefox-10-windows-2000-x86, 2012-01-31, 14.8 years old, OK with restrictions, evidence: 8 file(s), 1 screenshot(s)
+- Web: web-firefox-10-windows-2000-x86, 2012-01-31, 14.8 years old, OK with restrictions, evidence: 17 file(s), 2 screenshot(s)
 
 **SC-009 detail**
 
@@ -35,8 +35,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 - linux-i686 legacy: 27.0% (493 shared, 0 glue, 1,330 platform-specific lines)
 - linux-ubuntu-24.04-x86_64 legacy: 27.0% (493 shared, 0 glue, 1,330 platform-specific lines)
 - linux-ubuntu-24.04-x86_64 modern: 48.7% (493 shared, 0 glue, 519 platform-specific lines)
-- web-chrome-157-windows-11-x64 modern: 54.0% (493 shared, 0 glue, 420 platform-specific lines)
-- web-firefox-10-windows-2000-x86 legacy: 56.0% (493 shared, 0 glue, 387 platform-specific lines)
+- web-firefox-10-windows-2000-x86 legacy: 55.5% (493 shared, 0 glue, 396 platform-specific lines)
 - windows-11-x64 legacy: 37.5% (493 shared, 0 glue, 822 platform-specific lines)
 - windows-11-x64 modern: 44.1% (493 shared, 0 glue, 624 platform-specific lines)
 - windows-2000-x86 legacy: 37.5% (493 shared, 0 glue, 822 platform-specific lines)
@@ -64,10 +63,10 @@ Success criteria evaluated from the records at generation time (`python tools/re
   - The system is Windows 2000 build 2195 RTM with NO service pack, not Windows 2000 SP4: this verdict says nothing about SP4 (the plan, research R6, spike S1 and task T066 name SP4). The system DLLs read here are the RTM ones (kernel32.dll 5.0.2191.1, user32.dll 5.0.2180.1, msvcrt.dll 6.1.8637.0, dated 1999-12-07); SP4 replaces them with later builds, so the export tables confirmed here (tools/win2000_imports.json, confidence verified-on-vm) are those of RTM. Exports only grow from RTM to SP4, which makes a missing function on SP4 unlikely, but that was not checked.
 - **Verdict**: OK with restrictions (decision: keep), record `validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json`.
 - **System tried**: Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758, release channel, installed by the owner) on ...; vm; The VirtualBox 7.2.22 virtual machine 'Windows 2000' of validation/platforms/windows-2000-x86.json (1 vCPU, 168 MB RAM, NAT network, Guest Additions 6.1.18), restored on .... Released 2012-01-31 (14.8 years old).
-- **Deliverable**: dist/ (index.html, app.js, loomora.js), 109,227 bytes, emscripten-1.39.20-fastcomp (clang 6.0.1); fallbacks taken: web-js-instead-of-wasm, web-es3-glue.
-- **vectors** (verdict measurements): 15 valid vectors run, 14 passed, 1 failed on the line feed only (see the restrictions), 16 error or API-only vectors skipped as designed, 2 vectors truncated to 1,000 UTF-16 units as expected
+- **Deliverable**: dist/ (index.html, app.js, loomora.js), 110,292 bytes, emscripten-1.39.20-fastcomp (clang 6.0.1); fallbacks taken: web-js-instead-of-wasm, web-es3-glue.
+- **vectors** (verdict measurements): Second series (verdict): 15 valid vectors run, 15 passed, 0 failed, 16 error or API-only vectors skipped as designed, 2 vectors truncated to 1,000 UTF-16 units as expected, control_characters included. First series: 14 passed, 1 failed on the line feed only.
 - **Disabled features**: peak-memory.
-- **Restrictions**: 7 recorded, all in section 12. The first one, in full:
+- **Restrictions**: 10 recorded, all in section 12. The first one, in full:
   - One browser, one machine, one configuration: Firefox 10.0 (build 20120129021758) on Windows 2000 build 2195 without service pack, in a VirtualBox VM with 168 MB of RAM, a new profile and the preferences of validation/procedures/web.md. Under the PoC rule this stands for newer browsers; no other browser, version or operating system was run for the JavaScript path (Firefox 4 to 9, Chrome 15, Safari 5.1 and Opera 11.5 of spike S5 are untested), and Internet Explorer up to 9 is dropped by the owner (no typed arrays; spike S5).
 
 **Spike S1 (a MinGW-w64 C++11 static library on Windows 2000 SP4): confirmed.** DECISION (project owner, 2026-11-13): S1 is confirmed on the strength of the Windows 2000 build 2195 (no service pack) trial below. The owner accepts that what runs without a service pack also runs with SP4, because service packs only add or fix exports and keep the ones the executable imports (all 112 imports exist in the RTM DLLs). This is an inference, NOT a measurement: SP4 itself, and its newer msvcrt.dll, were never run. Open, kept open on purpose: the question names Windows 2000 SP4 and the system tested has NO service pack (RTM, build 2195), so SP4 is still untested, and T066 asks for a Windows 2000 SP4 VM, which this VM is not; everything else the question asks (a static C++11 library linked into a Win32 executable, plus the backend self-test) ran on the RTM system; the lead decides the status.
@@ -97,8 +96,7 @@ No Windows XP system was run. Under the PoC scope rule (the Legacy UI is tried o
 | android-4.1.2-x86 | Android | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image eng.wdu.20191218.182616 | x86 | 2012-10-09 | 14.1 | emulator | yes | no |
 | android-5.0-arm64 | Android | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | arm64 | 2014-11-12 | 12.0 | emulator | yes | no |
 | android-7.0-x86_64 | Android | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 (ro.build.id NYC ... | x86_64 | 2016-08-22 | 10.2 | emulator | yes | yes |
-| web-firefox-10-windows-2000-x86 | Web | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758, release channel ... | js | 2012-01-31 | 14.8 | vm | no | yes |
-| web-chrome-157-windows-11-x64 | Web | Google Chrome on Windows 11 Pro Chrome 157.0.8103.51 (official build, stable channel, 64-bit ... | wasm | 2026-11-07 | 0.0 | physical | no | no |
+| web-firefox-10-windows-2000-x86 | Web | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758, release channel ... | js | 2012-01-31 | 14.8 | vm | yes | yes |
 
 Environment details are in the platform records. A `vm` is an emulated machine: its timings and memory are those of the virtual machine, not of real hardware.
 
@@ -126,10 +124,8 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | android-5.0-arm64 | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because ... (full text in section 12) |
 | android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | legacy | not tested | - | - | - | not attempted, justified: Above the range of the Android Legacy UI (API 9 to 23, owner decision): this platform is served by the Modern UI (verdict android-7.0-x86_64-modern.json) and no Legacy deliverable record names it. For the record, on 2026-11-15 the Legacy APK (renamed to the package id fr.bansan.loomora.probe) was installed on this emulator to ... (full text in section 12) |
 | android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | modern | OK with restrictions | keep | 9 file(s), 2 screenshot(s) | validation/procedures/android.md | 10 restriction(s), 1 disabled feature(s) |
-| web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | legacy (js) | OK with restrictions | keep | 8 file(s), 1 screenshot(s) | validation/procedures/web.md | 7 restriction(s), 1 disabled feature(s) |
+| web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | legacy (js) | OK with restrictions | keep | 17 file(s), 2 screenshot(s) | validation/procedures/web.md | 10 restriction(s), 1 disabled feature(s) |
 | web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | modern | not tested | - | - | - | not attempted, justified: There is no Web Modern UI yet (ui/modern/web-ts is not written) and Firefox 10 is the Legacy floor browser of the JavaScript path, not a target of a modern TypeScript UI; the Modern Web UI would run on a current browser with the WebAssembly path. (full text in section 12) |
-| web-chrome-157-windows-11-x64 | Google Chrome on Windows 11 Pro Chrome 157.0.8103.51 (official build, stable channel ... | legacy | not tested | - | - | - | not attempted, justified: Not run on purpose (owner decision 2026-11-15, PoC rule): the Web Legacy page (ui/legacy/web) is validated on ONE lowest testable browser, Firefox 10 on Windows 2000 (validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json, JavaScript path), and success there stands for newer browsers; Chrome does not run on Windows ... (full text in section 12) |
-| web-chrome-157-windows-11-x64 | Google Chrome on Windows 11 Pro Chrome 157.0.8103.51 (official build, stable channel ... | modern (wasm) | OK with restrictions | keep | 11 file(s), 2 screenshot(s) | validation/procedures/web.md | 7 restriction(s), 0 disabled feature(s) |
 | (none) | macOS | both | not tested | - | - | - | no platform record: no trial |
 | (none) | iOS / iPadOS | both | not tested | - | - | - | no platform record: no trial |
 
@@ -150,8 +146,8 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | iOS / iPadOS | legacy | not tested | - | - | - | - |
 | iOS / iPadOS | modern | not tested | - | - | - | - |
 | Web (wasm path) | legacy | not tested | - | - | - | - |
-| Web (js path) | legacy | web-firefox-10-windows-2000-x86 | 2012-01-31 | 14.8 | OK with restrictions | 8 file(s), 1 screenshot(s) |
-| Web (wasm path) | modern | web-chrome-157-windows-11-x64 | 2026-11-07 | 0.0 | OK with restrictions | 11 file(s), 2 screenshot(s) |
+| Web (js path) | legacy | web-firefox-10-windows-2000-x86 | 2012-01-31 | 14.8 | OK with restrictions | 17 file(s), 2 screenshot(s) |
+| Web (wasm path) | modern | not tested | - | - | - | - |
 | Web (js path) | modern | not tested | - | - | - | - |
 
 Several ids in one cell are platform records of the same release date (for example the 32-bit build run on a 64-bit system of the same distribution): none is older than the other, and the verdict and evidence shown are those with the most evidence.
@@ -174,8 +170,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | android-4.1.2-x86 | legacy | loomora.apk: 228,663 bytes | not measured: the verdict has no display_ms value | not measured: the verdict has no peak_rss_kb value |
 | android-5.0-arm64 | legacy | loomora.apk: 228,663 bytes | not measured: no verdict, no trial run recorded | not measured: no verdict, no trial run recorded |
 | android-7.0-x86_64 | modern | loomora.apk: 1,396,354 bytes | 243 to 463 ms | 68,616 to 69,060 kB |
-| web-firefox-10-windows-2000-x86 | legacy | dist/ (index.html, app.js, loomora.js): 109,227 bytes | 124 to 143 ms | not measured: the verdict has no peak_rss_kb value |
-| web-chrome-157-windows-11-x64 | modern | dist/ (index.html, main.js, native.js, loomora.js, loomora.wasm): 53,868 bytes | 74 to 237 ms | 886 to 906 kB |
+| web-firefox-10-windows-2000-x86 | legacy | dist/ (index.html, app.js, loomora.js): 110,292 bytes | 124 to 230 ms | not measured: the verdict has no peak_rss_kb value |
 
 ## 7. Fallbacks and disabled features
 
@@ -225,7 +220,6 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | linux-ubuntu-24.04-x86_64 | legacy | glyph-substitution | core-font path, NOT taken by the x86_64 build of this platform: only a build whose CMake finds no libXft and fontconfig development files, or LOOMORA_XLIB_XFT=OFF or the run-time switch LOOMORA_XLIB_NO_XFT; a character the core font cannot draw is a '?' ... |
 | linux-ubuntu-24.04-x86_64 | legacy | text-shaping-and-bidi | not implemented, by decision: logical order, left to right, isolated Arabic forms, ZWJ sequences drawn as components; no probe marker exists for it |
 | linux-ubuntu-24.04-x86_64 | modern | none recorded | - |
-| web-chrome-157-windows-11-x64 | modern | none recorded | - |
 | web-firefox-10-windows-2000-x86 | legacy | peak-memory | Firefox 10 has no performance.memory: peak_rss_kb is null in every record; the page does not list it in the probe's disabled_features, which are empty |
 | windows-11-x64 | legacy | none recorded | - |
 | windows-11-x64 | modern | none recorded | - |
@@ -494,33 +488,20 @@ Evidence: 101 file(s), 63 screenshot(s). Reproduction: validation/procedures/lin
 - MEMORY: peak_rss_kb is the application's own VmHWM; the cross-check with os.wait4 ru_maxrss of the child (136 to 496 kB higher, includes pre-exec pages) shows the same order of magnitude but is not an independent measurement of the same quantity. Memory was not measured with a long greeting or over ...
 - The replayable procedure is validation/procedures/linux.md (field 'reproduction', written 2026-11-14 and replayed on the same machine that day); the commands used are also in the 'notes' field and the drivers (probe-series.py, gui-driver.py, glyphs-shoot.py, fake-uname.c) are in ...
 
-### web-chrome-157-windows-11-x64 legacy: not tested (not attempted)
-
-Justification recorded in the verdict: Not run on purpose (owner decision 2026-11-15, PoC rule): the Web Legacy page (ui/legacy/web) is validated on ONE lowest testable browser, Firefox 10 on Windows 2000 (validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json, JavaScript path), and success there stands for newer browsers; Chrome does not run on Windows 2000, and the WebAssembly path of the Legacy page is only smoke-tested (under node and in one headless Chrome run, spike S5), so it gets no verdict. The Modern page is the one validated on this platform (validation/verdicts/web-chrome-157-windows-11-x64-modern.json).
-
-### web-chrome-157-windows-11-x64 modern: OK with restrictions (decision: keep)
-
-Evidence: 11 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.md.
-
-- ONE BROWSER, ONE MACHINE, ONE DAY: Chrome 157.0.8103.51 (stable, installed by the owner) on the physical Windows 11 Pro 26H2 x64 laptop of validation/platforms/windows-11-x64.json, runs of 2026-11-15, one run set of the 15 vectors and one series of 10 default runs. Under the PoC rule (owner ...
-- HEADLESS, LOOPBACK: Chrome was run with --headless=new --disable-gpu, a new throw-away --user-data-dir per run (under the system temp folder, deleted afterwards; the owner's profile was never opened), no extension, component update or sync. The page was loaded over HTTP from 127.0.0.1 (a Python ...
-- THE PROBE RUNS WERE READ FROM A DUMPED DOM: each vector started a new chrome.exe with --dump-dom --virtual-time-budget=15000 and the record was read from <pre id="probe"> (title LOOMORA_PROBE_DONE). Under --virtual-time-budget the page clock (Date.now) is virtual, so display_ms (74 to 110 ms for ...
-- TYPING: 'Marie' was typed with Input.dispatchKeyEvent of the DevTools protocol (a key down with text and a key up per character, into the focused textarea whose content was selected): real key events for the page, but sent by a script, not a person, not a physical keyboard, no IME, no dead keys, no ...
-- THEMES: the light and the dark palettes were looked at (one screenshot each) and read from the computed styles with prefers-color-scheme emulated through the DevTools protocol (greeting on card 18.11:1 light, 14.80:1 dark; field text 16.75:1 and 16.43:1). In headless Chrome 157 only ...
-- peak_rss_kb is performance.memory.usedJSHeapSize in KiB (886 to 906) read by the page: the JavaScript heap in use at the end of the start, not the peak and not the memory of the browser processes (the Windows 11 native UI reports 112,696 to 112,952 KiB of the whole process: the figures are not ...
-- NOT RUN: a failed start (wasm blocked, a very old browser), a slow network, repeated loads in one profile (every run had a cold, empty profile and the browser cache was bypassed by Cache-Control: no-store), concurrent tabs, memory pressure, and the 15 vectors a second time. Process hygiene was ...
-
 ### web-firefox-10-windows-2000-x86 legacy: OK with restrictions (decision: keep)
 
-Evidence: 8 file(s), 1 screenshot(s). Reproduction: validation/procedures/web.md.
+Evidence: 17 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.md.
 
 - One browser, one machine, one configuration: Firefox 10.0 (build 20120129021758) on Windows 2000 build 2195 without service pack, in a VirtualBox VM with 168 MB of RAM, a new profile and the preferences of validation/procedures/web.md. Under the PoC rule this stands for newer browsers; no other ...
-- 14 of the 15 reference vectors pass; control_characters ('a', tab, line feed, 'b'...) is greeted without its line feed: an HTML <input type="text"> removes line feeds from its value in every browser (a current Chrome 157 does the same, checked on 2026-11-15), so a line feed cannot be entered in the ...
+- History of the field: in the first series of 2026-11-15 (page with an <input type="text">) 14 of the 15 vectors passed and control_characters failed on its line feed, which a single-line field removes from its value in every browser (a current Chrome 157 does the same). By the owner's decision the ...
 - The page was loaded over HTTP from the host through the VirtualBox NAT (http://10.0.2.2:<port>/), not from file:// and not from the Internet; the probe record was read from the page through an XMLHttpRequest POST (post=1, added to ui/legacy/web/app.js for browsers without a console or DOM dump) ...
-- Typing was exercised through the virtual keyboard of VirtualBox (keyboardputscancode), not by a person; the greeting was read from a screenshot.
+- Typing was exercised through the virtual keyboard of VirtualBox (keyboardputscancode), not by a person; the greeting was read from a screenshot. Tab into an <input> selects its text but Tab into a textarea does not, and on the French AZERTY layout of the guest the letter A is the key at scancode ...
 - peak_rss_kb is null in every record: Firefox 10 has no performance.memory, so the memory was not measured (the probe schema allows null).
 - Not run: the WebAssembly path on this browser (Firefox 10 has no WebAssembly, so the page always takes the JavaScript path here), the 4,096-character texts typed (they were given through the URL and cut to 1,000 UTF-16 units by the page), the 1,000-character limit by keyboard, IME, clipboard, a ...
 - The VM was found PAUSED by the host power management (VBoxManage 'VM is paused due to host power management', paused since 2026-11-15T10:06Z, resume refused); a 'controlvm savestate' attempt made the VM process abort (state 'aborted'), so, as the owner's instruction allows for an unusable VM, the ...
+- End-of-life notice (owner decision 2026-11-15): the page now shows the notice on Windows 2000 (user agent 'Windows NT 5.0') and eol_warning_shown is true in all 15 records of the second series; the rule is the backend's (Windows below NT 11.0 is end of life) and the page only reads the system ...
+- Scope of this verdict (owner decision 2026-11-15): Chrome does not run on Windows 2000, so Firefox 10.0 alone stands for the Web Legacy ladder under the PoC rule and no Chrome or WebAssembly verdict is recorded. The WebAssembly path is exercised only by the node harness (run_vectors.py ...
+- Launch reliability of the second series: in this 168 MB guest a start of firefox.exe is lost about once in fifteen (the page is never requested: no line in the server log). Three attempts at the series each lost one start (right_to_left_arabic, ascii and emoji_zwj_sequence: 'no probe record posted ...
 
 ### web-firefox-10-windows-2000-x86 modern: not tested (not attempted)
 
@@ -585,8 +566,7 @@ Shared code is the backend `core/` (the C++11 library and its C API), glue is th
 | linux-i686 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
 | linux-ubuntu-24.04-x86_64 | legacy | legacy/linux-xlib | Xlib (libX11, no toolkit); text drawn with libXft and ... | 493 | 0 | 1,330 | 27.0% | BELOW 80% |
 | linux-ubuntu-24.04-x86_64 | modern | modern/linux-gtk3 | gtkmm-3.0 3.24.9 on gtk+-3.0 3.24.41 (C++11 UI; GTK 3.10 ... | 493 | 0 | 519 | 48.7% | BELOW 80% |
-| web-chrome-157-windows-11-x64 | modern | modern/web-ts | one HTML page (a textarea and an output element, CSS with ... | 493 | 0 | 420 | 54.0% | BELOW 80% |
-| web-firefox-10-windows-2000-x86 | legacy | legacy/web | one HTML page (a text field and a div) and one script, DOM ... | 493 | 0 | 387 | 56.0% | BELOW 80% |
+| web-firefox-10-windows-2000-x86 | legacy | legacy/web | one HTML page (a one-row text area and a div) and one ... | 493 | 0 | 396 | 55.5% | BELOW 80% |
 | windows-11-x64 | legacy | legacy/windows-win32 | Win32 API (user32, gdi32), EDIT + STATIC controls ... | 493 | 0 | 822 | 37.5% | BELOW 80% |
 | windows-11-x64 | modern | modern/windows-winui3 | WinUI 3, Windows App SDK 2.6.5 (packages ... | 493 | 0 | 624 | 44.1% | BELOW 80% |
 | windows-2000-x86 | legacy | legacy/windows-win32 | Win32 API (user32, gdi32), EDIT + STATIC controls ... | 493 | 0 | 822 | 37.5% | BELOW 80% |
@@ -594,7 +574,7 @@ Shared code is the backend `core/` (the C++11 library and its C API), glue is th
 
 Records that run the same UI sources have the same numbers, the code is counted once per record: `ui/legacy/android-views/`: android-2.3-arm, android-4.1.2-x86, android-5.0-arm64; `ui/legacy/linux-xlib/`: linux-centos-5.11-x86_64, linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64; `ui/legacy/windows-win32/`: windows-11-x64, windows-2000-x86; `ui/modern/windows-winui3/`: windows-11-x64, windows-arm64.
 
-Not measured: macOS, iOS / iPadOS have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-centos-5.11-x86_64 modern, linux-centos-6.10-x86_64 modern, linux-i686 modern, web-chrome-157-windows-11-x64 legacy, web-firefox-10-windows-2000-x86 modern, windows-2000-x86 modern) have no row.
+Not measured: macOS, iOS / iPadOS have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-centos-5.11-x86_64 modern, linux-centos-6.10-x86_64 modern, linux-i686 modern, web-firefox-10-windows-2000-x86 modern, windows-2000-x86 modern) have no row.
 
 ### Platform-specific code and why it is platform-specific
 
@@ -615,7 +595,6 @@ Every file counted as platform-specific, with its line count from the stored lis
 | ui/modern/linux-gtk3/main_window.hpp | 46 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
 | ui/modern/linux-gtk3/probe.cpp | 154 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
 | ui/modern/linux-gtk3/probe.hpp | 26 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | linux-ubuntu-24.04-x86_64 |
-| ui/modern/web-ts/ | no file listing stored | - | - |
 | ui/legacy/web/ | no file listing stored | - | - |
 | ui/legacy/windows-win32/dynfeatures.cpp | 197 | named by fallback record(s) `dark-mode`, `message-font`, besides the native UI code | windows-11-x64, windows-2000-x86 |
 | ui/legacy/windows-win32/dynfeatures.h | 21 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
@@ -631,7 +610,7 @@ Every file counted as platform-specific, with its line count from the stored lis
 
 ### Exceptions: shares below 80% (SC-007)
 
-8 of 8 measured rows are below 80%. Each reason below is taken from the numbers, the file listing and the fallback records above; none is a claim about code that was not measured.
+7 of 7 measured rows are below 80%. Each reason below is taken from the numbers, the file listing and the fallback records above; none is a claim about code that was not measured.
 
 Common to every row: the shared part is the whole backend, 493 lines in 14 file(s) (largest: `core/src/probe.cpp` 161, `core/src/utf8.cpp` 66, `core/include/loomora.h` 58). The application of this project is the probe, a text field and the greeting (`Hello Loomora` reduced on purpose: section 11, spec assumptions, FR-001), so there is little shared logic to count, and every platform pays its own native UI on top.
 
@@ -652,11 +631,8 @@ Common to every row: the shared part is the whole backend, 493 lines in 14 file(
   - Platform-specific code: 6 files, 519 lines; the largest is `main_window.cpp` with 156 lines (30% of it).
   - Files that a fallback record names (`gtk_compat.hpp` 51, `main_window.cpp` 156): 207 lines, 40% of the platform-specific code; these files hold the code of fallbacks (FR-012, the old or optional platform cases) and also ordinary UI code, so this is not the cost of the fallbacks alone.
   - Fallbacks listed by the deliverable record: `cxx17-nodiscard`, `gtk4-ui`.
-- **web-chrome-157-windows-11-x64 modern** (`ui/modern/web-ts/`): 54.0% shared. 493 shared lines, 420 platform-specific.
-  - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 420, 3.4 times that.
-  - Fallbacks listed by the deliverable record: none.
-- **web-firefox-10-windows-2000-x86 legacy** (`ui/legacy/web/`): 56.0% shared. 493 shared lines, 387 platform-specific.
-  - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 387, 3.1 times that.
+- **web-firefox-10-windows-2000-x86 legacy** (`ui/legacy/web/`): 55.5% shared. 493 shared lines, 396 platform-specific.
+  - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 396, 3.2 times that.
   - Fallbacks listed by the deliverable record: `web-js-instead-of-wasm`, `web-es3-glue`.
 - **windows-11-x64 legacy** (`ui/legacy/windows-win32/`): 37.5% shared. 493 shared lines, 822 platform-specific.
   - Arithmetic: for 80% the platform-specific code could not exceed a quarter of the shared code, 123 lines; it is 822, 6.7 times that.
