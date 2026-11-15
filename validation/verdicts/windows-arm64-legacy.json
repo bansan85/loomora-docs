@@ -1,0 +1,6 @@
+{
+  "platform_id": "windows-arm64",
+  "ui_variant": "legacy",
+  "status": "not_tested",
+  "reason": "Not attempted, by choice of scope and not by a failure. tools/build.py builds the Windows Legacy UI for x86 (Windows 2000 and later) and x64 (XP x64 and later) only, with no ARM64 build, and no ARM64 Windows system was available, so whether the x86 or x64 executable runs under the emulation of Windows 11 ARM64 was not tried and nothing is claimed about it. The Legacy UI is for old systems: under the PoC scope rule (spec Clarifications, session 2026-11-15) it is judged on the lowest testable Windows (validation/verdicts/windows-2000-x86-legacy.json), and a current system such as Windows 11 ARM64 is served by the Modern UI."
+}

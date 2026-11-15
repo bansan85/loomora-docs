@@ -1,0 +1,17 @@
+{
+  "id": "windows-arm64",
+  "family": "windows",
+  "os_name": "Windows 11 (ARM64)",
+  "os_version": "11, 64-bit ARM (arm64); NOT RUN, no build number: no ARM64 machine or image was available",
+  "arch": "arm64",
+  "release_date": "2021-10-05",
+  "age_years": 5.1,
+  "is_floor": false,
+  "in_scope": true,
+  "environment": "physical",
+  "environment_detail": "NOT RUN. The record stands for the ARM64 build of the Windows Modern UI (WinUI 3, loomora.dll built by MSVC for ARM64, net8 and net10 folders, machine type 0xAA64 checked), described in validation/deliverables/windows-arm64-modern.json. No ARM64 Windows machine, virtual machine or image was available, so nothing was started. Under the PoC scope rule (spec Clarifications, session 2026-11-15) the Modern UI is run on one system and one 64-bit processor, Windows 11 x64 (validation/platforms/windows-11-x64.json); ARM64 stays not_tested and is not a failure. Both verdicts are not_tested.",
+  "eol": false,
+  "eol_source": "validation/sources.json eol-windows-11: Windows 11 is in support, and the backend (loomora_is_eol) does not treat NT 10.0 build 22000 or later as end of life.",
+  "release_date_source": "General availability of Windows 11 (build 22000, 2021-10-05), the same date as validation/platforms/windows-11-x64.json, taken from the author's knowledge, not from a page re-read for this record; age_years = days from 2021-10-05 to 2026-11-15 divided by 365.25, rounded to 0.1.",
+  "floor_note": "Not a floor. Windows 11 ARM64 is a current system: the Modern UI is the one that applies to it, and the Windows floor is Windows 2000 (validation/platforms/windows-2000-x86.json)."
+}

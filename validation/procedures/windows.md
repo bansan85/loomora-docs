@@ -13,7 +13,7 @@ Every command is the one that was run, taken from `tools/`, the ADRs, the platfo
 ## Status of this document
 
 - Written on 2026-11-14 from the records and the scripts. Part A was replayed on the same host on that day: the build, the host quick check, the probe runs, `tools/run_vectors.py` for both executables, the import check, the self-tests and the Windows 11 trial driver, with the results quoted below. Part B (the VM) was **not** replayed on 2026-11-14: the VM was powered off and this procedure never starts it. Its expected results are those stored in the verdict and the evidence.
-- The Modern UI (WinUI 3) was built and run on 2026-11-15 on the Windows 11 x64 host only (part C). It has no Windows 10 1809 verdict (no machine) and no ARM64 verdict (built, never run; no ARM64 platform record), so the validator still reports the missing verdicts as warnings.
+- The Modern UI (WinUI 3) was built and run on 2026-11-15 on the Windows 11 x64 host only (part C). It has no Windows 10 1809 verdict (no machine, not required by the PoC scope rule) and no ARM64 run (built, never run: platform `windows-arm64` with `not_tested` Modern and Legacy verdicts).
 - Windows 2000 was run on build 2195 **without service pack**. The decided floor (SP4), Windows XP, Vista, 7, 8.1, 10, ARM64 and real hardware were not run: nothing here says anything about them.
 - The ordinary build and run need only the main repository. The records (`validation/`) are in the docs submodule: `git -c protocol.file.allow=always submodule update --init`.
 
@@ -361,7 +361,7 @@ WinUI 3 (C#, `LibraryImport`, no C++/CLI and no C++/WinRT) calls the C++11 `loom
 
 ### C.9 What the verdict claims, and what this procedure does not cover
 
-Covered: the x64 build of the net10 and net8 folders on this Windows 11 host (15 of 15 vectors each, 10 probe runs of net10, the typing run, two screenshots, light and dark contrast, the roll-forward measurements). Not covered: Windows 10 1809 or any Windows 10 (no machine: no verdict, the net8 fallback is declared in `validation/fallbacks.json` with no platform), ARM64 execution (built only, no verdict: there is no platform record for an ARM64 machine), the end-of-life InfoBar (this system is not end of life, so `eol_warning_shown` is false in every run and the InfoBar was never seen on screen), high contrast, DPI above 100%, the 1,000-character limit by keystrokes, other machines.
+Covered: the x64 build of the net10 and net8 folders on this Windows 11 host (15 of 15 vectors each, 10 probe runs of net10, the typing run, two screenshots, light and dark contrast, the roll-forward measurements). Not covered: Windows 10 1809 or any Windows 10 (no machine: no verdict, the net8 fallback is declared in `validation/fallbacks.json` with no platform), ARM64 execution (built only: platform `windows-arm64`, verdict `not_tested`), the end-of-life InfoBar (this system is not end of life, so `eol_warning_shown` is false in every run and the InfoBar was never seen on screen), high contrast, DPI above 100%, the 1,000-character limit by keystrokes, other machines.
 
 ### C.10 What to record, and where
 

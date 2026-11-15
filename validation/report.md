@@ -10,7 +10,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 |---|---|---|
 | SC-002 | MET | 4 of 3 required families validated with the Legacy UI on a system 10 years old or more (Windows, Linux, Android, Web); the oldest working platform is identified with evidence for 4 of 6 families |
 | SC-003 | MET | validated with the Legacy UI on a system 15 years old or more: Windows (read the restrictions of that verdict: a virtual machine, one build) |
-| SC-004 | MET | 13 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
+| SC-004 | MET | 14 attempted platform/variant pair(s); 0 gap(s) in verdict, evidence or reproduction |
 | SC-010 | MET | 0 absent variant(s) without a recorded justification |
 | SC-005 | MET | 20 of 20 hypotheses recorded, 5 with a verdict, 15 not covered by this probe |
 | SC-009 | MET | go / no-go concluded for 2 of 2 systems |
@@ -86,14 +86,15 @@ No Windows XP system was run. Under the PoC scope rule (the Legacy UI is tried o
 
 | Platform | Family | System | Arch | Released | Age (years) | Environment | End of life | Decided floor |
 |---|---|---|---|---|---|---|---|---|
-| windows-2000-x86 | Windows | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service pack (RTM; no ... | x86 | 2000-02-17 | 26.7 | vm | yes | no |
+| windows-2000-x86 | Windows | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service pack (RTM; no ... | x86 | 2000-02-17 | 26.7 | vm | yes | yes |
 | windows-11-x64 | Windows | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974), French ... | x86_64 | 2021-10-05 | 5.1 | physical | no | no |
+| windows-arm64 | Windows | Windows 11 (ARM64) 11, 64-bit ARM (arm64); NOT RUN, no build number: no ARM64 machine or ... | arm64 | 2021-10-05 | 5.1 | physical | no | no |
 | linux-centos-5.11-x86_64 | Linux | CentOS 5.11 (Final), userland of the PyPA image ... | x86_64 | 2014-09-29 | 12.13 | vm | yes | yes |
 | linux-centos-6.10-x86_64 | Linux | CentOS 6.10 (Final), userland of the PyPA image ... | x86_64 | 2018-07-03 | 8.37 | vm | yes | no |
 | linux-i686 | Linux | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) kernel and ... | x86 | 2024-04-25 | 2.55 | vm | no | no |
 | linux-ubuntu-24.04-x86_64 | Linux | Ubuntu 24.04.5 LTS (Noble Numbat) | x86_64 | 2024-04-25 | 2.55 | vm | no | no |
-| android-2.3-arm | Android | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and armeabi-v7a; NOT RUN | arm | 2010-12-06 | 15.9 | emulator | yes | yes |
-| android-4.1.2-x86 | Android | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image eng.wdu.20191218.182616 | x86 | 2012-10-09 | 14.1 | emulator | yes | no |
+| android-2.3-arm | Android | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and armeabi-v7a; NOT RUN | arm | 2010-12-06 | 15.9 | emulator | yes | no |
+| android-4.1.2-x86 | Android | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image eng.wdu.20191218.182616 | x86 | 2012-10-09 | 14.1 | emulator | yes | yes |
 | android-5.0-arm64 | Android | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | arm64 | 2014-11-12 | 12.0 | emulator | yes | no |
 | android-7.0-x86_64 | Android | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 (ro.build.id NYC ... | x86_64 | 2016-08-22 | 10.2 | emulator | yes | yes |
 | web-firefox-10-windows-2000-x86 | Web | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758, release channel ... | js | 2012-01-31 | 14.8 | vm | no | yes |
@@ -105,9 +106,11 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | Platform | System | Variant | Verdict | Decision | Evidence | Reproduction | Notes |
 |---|---|---|---|---|---|---|---|
 | windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | legacy | OK with restrictions | keep | 41 file(s), 7 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 2 disabled feature(s) |
-| windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | modern | not attempted | - | - | - | justified: the Modern UI technology (WinUI 3) is not available on this system: WinUI 3 requires Windows 10 1809 or later (source winappsdk-support) |
+| windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | modern | not tested | - | - | - | not attempted, justified: Not attempted, because no Modern UI can exist for this system, not because of a failure. The Windows Modern UI is WinUI 3 on the Windows App SDK with TargetPlatformMinVersion 10.0.17763.0, that is Windows 10 version 1809 as the lowest system (validation/deliverables/windows-11-x64-modern.json ... (full text in section 12) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | legacy | OK with restrictions | keep | 37 file(s), 12 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 0 disabled feature(s) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | modern | OK with restrictions | keep | 19 file(s), 2 screenshot(s) | validation/procedures/windows.md | 9 restriction(s), 0 disabled feature(s) |
+| windows-arm64 | Windows 11 (ARM64) 11, 64-bit ARM (arm64); NOT RUN, no build number: no ... | legacy | not tested | - | - | - | not attempted, justified: Not attempted, by choice of scope and not by a failure. tools/build.py builds the Windows Legacy UI for x86 (Windows 2000 and later) and x64 (XP x64 and later) only, with no ARM64 build, and no ARM64 Windows system was available, so whether the x86 or x64 executable runs under the emulation of Windows 11 ARM64 was not tried and ... (full text in section 12) |
+| windows-arm64 | Windows 11 (ARM64) 11, 64-bit ARM (arm64); NOT RUN, no build number: no ... | modern | not tested | - | - | - | not attempted, justified: Built, never run, by choice of scope and not by a failure. The ARM64 build exists (loomora.dll built by MSVC for ARM64, WinUI 3 folders for net8 and net10, machine type 0xAA64 checked, see validation/deliverables/windows-arm64-modern.json), but no ARM64 Windows machine, virtual machine or image was available, so it was never ... (full text in section 12) |
 | linux-centos-5.11-x86_64 | CentOS 5.11 (Final), userland of the PyPA image ... | legacy | OK with restrictions | keep | 14 file(s) | validation/procedures/linux.md | 11 restriction(s), 2 disabled feature(s) |
 | linux-centos-5.11-x86_64 | CentOS 5.11 (Final), userland of the PyPA image ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The owner's request of 2026-11-15 asks only for the Linux Legacy UI on an older Linux userland. The Linux Modern UI needs gtkmm and GTK 3.10 or later (ui/modern/linux-gtk3), which are not part of CentOS 5 (it ships GTK 2.10; the packages were not queried in ... (full text in section 12) |
 | linux-centos-6.10-x86_64 | CentOS 6.10 (Final), userland of the PyPA image ... | legacy | OK with restrictions | keep | 10 file(s) | validation/procedures/linux.md | 10 restriction(s), 2 disabled feature(s) |
@@ -161,6 +164,7 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | windows-2000-x86 | legacy | loomora.exe: 696,127 bytes | 2 to 15 ms | 1,084 to 1,160 kB |
 | windows-11-x64 | legacy | loomora.exe: 703,383 bytes | 42 to 127 (median 50) ms | 11,548 to 14,420 kB |
 | windows-11-x64 | modern | loomora-winui-net10-x64.zip: 9,930,841 bytes | 365 to 2,053 ms | 112,696 to 112,952 kB |
+| windows-arm64 | modern | loomora-winui-net10-arm64.zip: 9,909,684 bytes | not measured: no verdict, no trial run recorded | not measured: no verdict, no trial run recorded |
 | linux-centos-5.11-x86_64 | legacy | loomora-xlib: 66,208 bytes | 20 to 67 ms | 5,448 to 5,540 kB |
 | linux-centos-6.10-x86_64 | legacy | loomora-xlib: 131,712 bytes | 20 to 38 ms | 6,340 to 6,404 kB |
 | linux-i686 | legacy | loomora-xlib: 73,348 bytes | 22 to 26 ms | 8,032 to 11,728 kB |
@@ -286,8 +290,8 @@ The Linux GTK 3.10 floor of the Modern UI is a compile-time rule: the floor buil
 
 | Tier | Requirements document | Trials | Proposed change |
 |---|---|---|---|
-| A | complete packaged application (table of section 2.1) | android-2.3-arm legacy: not tested; android-2.3-arm modern: not tested; android-5.0-arm64 legacy: not tested; android-5.0-arm64 modern: not tested; android-7.0-x86_64 legacy: not tested; android-7.0-x86_64 modern: OK with restrictions; linux-centos-5.11-x86_64 legacy: OK with restrictions; linux-centos-5.11-x86_64 modern: not tested; linux-centos-6.10-x86_64 legacy: OK with restrictions; linux-centos-6.10-x86_64 modern: not tested; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions; windows-11-x64 modern: OK with restrictions. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
-| B | Windows x86 32-bit, Linux x86 32-bit, ARM 32-bit, RISC-V, PowerPC 64 LE | Windows x86 (windows-2000-x86): OK with restrictions; Linux i686 built and run as a 32-bit program on a 64-bit kernel (not a native 32-bit system), legacy OK with restrictions, modern not tested; ARM 32-bit, RISC-V, PowerPC: out of scope or not tested | Windows x86 is reachable by the Legacy UI down to Windows 2000; the tier no longer depends on a Rust toolchain, so it should be redefined by "a C++11 compiler and the platform libraries exist" |
+| A | complete packaged application (table of section 2.1) | android-2.3-arm legacy: not tested; android-2.3-arm modern: not tested; android-5.0-arm64 legacy: not tested; android-5.0-arm64 modern: not tested; android-7.0-x86_64 legacy: not tested; android-7.0-x86_64 modern: OK with restrictions; linux-centos-5.11-x86_64 legacy: OK with restrictions; linux-centos-5.11-x86_64 modern: not tested; linux-centos-6.10-x86_64 legacy: OK with restrictions; linux-centos-6.10-x86_64 modern: not tested; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 modern: OK with restrictions; windows-11-x64 legacy: OK with restrictions; windows-11-x64 modern: OK with restrictions; windows-arm64 legacy: not tested; windows-arm64 modern: not tested. All plain executables: no package, store, Flatpak or AppImage (hypothesis V20 not covered); the other platforms of the table: not tested | tier A is not confirmed for any platform as a packaged application |
+| B | Windows x86 32-bit, Linux x86 32-bit, ARM 32-bit, RISC-V, PowerPC 64 LE | Windows x86 (windows-2000-x86): OK with restrictions, not tested; Linux i686 built and run as a 32-bit program on a 64-bit kernel (not a native 32-bit system), legacy OK with restrictions, modern not tested; ARM 32-bit, RISC-V, PowerPC: out of scope or not tested | Windows x86 is reachable by the Legacy UI down to Windows 2000; the tier no longer depends on a Rust toolchain, so it should be redefined by "a C++11 compiler and the platform libraries exist" |
 | C | PowerPC big-endian, s390x, LoongArch64, FreeBSD: CPU engine, CLI, server | not tested; PowerPC and other architectures are out of scope (spec Clarifications) | no change proposed |
 
 ### Disabled features (section 2.3, section 2.1.2)
@@ -548,6 +552,18 @@ Evidence: 41 file(s), 7 screenshot(s). Reproduction: validation/procedures/windo
 - The replayable procedure is validation/procedures/windows.md, part B (field 'reproduction', written 2026-11-14 from the records and the scripts; the VM was NOT replayed that day); the commands are also in the 'notes' field and the driver script is part of the evidence.
 - Re-run after adr/0004-fallback-per-case.md (2026-11-13) with the same VM (RTM build 2195, no service pack): the executable of the evidence listed before this entry is sha256 16e7859665c330a601f2d2afe15c8e955f64747c3533886a96de3a08f237494e (694005 bytes); the x86 executable now built is sha256 ...
 
+### windows-2000-x86 modern: not tested (not attempted)
+
+Justification recorded in the verdict: Not attempted, because no Modern UI can exist for this system, not because of a failure. The Windows Modern UI is WinUI 3 on the Windows App SDK with TargetPlatformMinVersion 10.0.17763.0, that is Windows 10 version 1809 as the lowest system (validation/deliverables/windows-11-x64-modern.json, validation/deliverables/windows-arm64-modern.json), and it is a 64-bit program for x64 and ARM64: it has no x86 build and cannot start on Windows 2000. Windows 2000 is served by the Windows Legacy UI (Win32, validation/verdicts/windows-2000-x86-legacy.json, spec SC-001). Under the PoC scope rule (spec Clarifications, session 2026-11-15) the Modern UI is run on one current system only (Windows 11 x64).
+
+### windows-arm64 legacy: not tested (not attempted)
+
+Justification recorded in the verdict: Not attempted, by choice of scope and not by a failure. tools/build.py builds the Windows Legacy UI for x86 (Windows 2000 and later) and x64 (XP x64 and later) only, with no ARM64 build, and no ARM64 Windows system was available, so whether the x86 or x64 executable runs under the emulation of Windows 11 ARM64 was not tried and nothing is claimed about it. The Legacy UI is for old systems: under the PoC scope rule (spec Clarifications, session 2026-11-15) it is judged on the lowest testable Windows (validation/verdicts/windows-2000-x86-legacy.json), and a current system such as Windows 11 ARM64 is served by the Modern UI.
+
+### windows-arm64 modern: not tested (not attempted)
+
+Justification recorded in the verdict: Built, never run, by choice of scope and not by a failure. The ARM64 build exists (loomora.dll built by MSVC for ARM64, WinUI 3 folders for net8 and net10, machine type 0xAA64 checked, see validation/deliverables/windows-arm64-modern.json), but no ARM64 Windows machine, virtual machine or image was available, so it was never started. The PoC scope rule (spec Clarifications, session 2026-11-15) asks for the Modern UI on one system and one 64-bit processor: Windows 11 x64 has its verdict (validation/verdicts/windows-11-x64-modern.json) and its success is taken for the other architectures; a failure on ARM64 would be a detail to fix later.
+
 ## 13. Shared code per platform and variant (FR-011, FR-012, SC-007)
 
 Shared code is the backend `core/` (the C++11 library and its C API), glue is the code between the C API and a UI language (`bridge/jni`, `bridge/wasm`: none exists yet), platform-specific code is the native UI of the platform and variant (`ui/<variant>/<platform>/`). Counted: non-empty, non-comment source lines, without tests, generated code, build and packaging files. Share = shared / (shared + glue + platform-specific). The numbers are the fields `shared_loc`, `glue_loc`, `ui_loc` and `sharing_ratio` of the deliverable records, written by `python tools/measure_sharing.py --write`; SC-007 asks for at least 80%.
@@ -571,7 +587,7 @@ Shared code is the backend `core/` (the C++11 library and its C API), glue is th
 
 Records that run the same UI sources have the same numbers, the code is counted once per record: `ui/legacy/android-views/`: android-2.3-arm, android-4.1.2-x86, android-5.0-arm64; `ui/legacy/linux-xlib/`: linux-centos-5.11-x86_64, linux-centos-6.10-x86_64, linux-i686, linux-ubuntu-24.04-x86_64; `ui/legacy/windows-win32/`: windows-11-x64, windows-2000-x86; `ui/modern/windows-winui3/`: windows-11-x64, windows-arm64.
 
-Not measured: macOS, iOS / iPadOS have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-centos-5.11-x86_64 modern, linux-centos-6.10-x86_64 modern, linux-i686 modern, web-firefox-10-windows-2000-x86 modern, windows-2000-x86 modern) have no row.
+Not measured: macOS, iOS / iPadOS have no platform record and no UI code; the variants without a deliverable record (android-2.3-arm modern, android-4.1.2-x86 modern, android-5.0-arm64 modern, android-7.0-x86_64 legacy, linux-centos-5.11-x86_64 modern, linux-centos-6.10-x86_64 modern, linux-i686 modern, web-firefox-10-windows-2000-x86 modern, windows-2000-x86 modern, windows-arm64 legacy) have no row.
 
 ### Platform-specific code and why it is platform-specific
 

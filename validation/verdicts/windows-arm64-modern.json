@@ -1,0 +1,6 @@
+{
+  "platform_id": "windows-arm64",
+  "ui_variant": "modern",
+  "status": "not_tested",
+  "reason": "Built, never run, by choice of scope and not by a failure. The ARM64 build exists (loomora.dll built by MSVC for ARM64, WinUI 3 folders for net8 and net10, machine type 0xAA64 checked, see validation/deliverables/windows-arm64-modern.json), but no ARM64 Windows machine, virtual machine or image was available, so it was never started. The PoC scope rule (spec Clarifications, session 2026-11-15) asks for the Modern UI on one system and one 64-bit processor: Windows 11 x64 has its verdict (validation/verdicts/windows-11-x64-modern.json) and its success is taken for the other architectures; a failure on ARM64 would be a detail to fix later."
+}
