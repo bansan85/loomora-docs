@@ -23,7 +23,7 @@ Success criteria evaluated from the records at generation time (`python tools/re
 - Linux: linux-centos-5.11-x86_64, 2014-09-29, 12.13 years old, OK with restrictions, evidence: 14 file(s)
 - Android: android-4.1.2-x86, 2012-10-09, 14.1 years old, OK with restrictions, evidence: 9 file(s), 2 screenshot(s)
 - iOS / iPadOS: not tested
-- Web: web-firefox-10-windows-2000-x86, 2012-01-31, 14.8 years old, OK with restrictions, evidence: 14 file(s), 1 screenshot(s)
+- Web: web-firefox-10-windows-2000-x86, 2012-01-31, 14.8 years old, OK with restrictions, evidence: 17 file(s), 2 screenshot(s)
 
 **SC-009 detail**
 
@@ -124,7 +124,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | android-5.0-arm64 | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because ... (full text in section 12) |
 | android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | legacy | not tested | - | - | - | not attempted, justified: Above the range of the Android Legacy UI (API 9 to 23, owner decision): this platform is served by the Modern UI (verdict android-7.0-x86_64-modern.json) and no Legacy deliverable record names it. For the record, on 2026-11-15 the Legacy APK (renamed to the package id fr.bansan.loomora.probe) was installed on this emulator to ... (full text in section 12) |
 | android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | modern | OK with restrictions | keep | 9 file(s), 2 screenshot(s) | validation/procedures/android.md | 10 restriction(s), 1 disabled feature(s) |
-| web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | legacy (js) | OK with restrictions | keep | 14 file(s), 1 screenshot(s) | validation/procedures/web.md | 10 restriction(s), 1 disabled feature(s) |
+| web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | legacy (js) | OK with restrictions | keep | 17 file(s), 2 screenshot(s) | validation/procedures/web.md | 10 restriction(s), 1 disabled feature(s) |
 | web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | modern | not tested | - | - | - | not attempted, justified: There is no Web Modern UI yet (ui/modern/web-ts is not written) and Firefox 10 is the Legacy floor browser of the JavaScript path, not a target of a modern TypeScript UI; the Modern Web UI would run on a current browser with the WebAssembly path. (full text in section 12) |
 | (none) | macOS | both | not tested | - | - | - | no platform record: no trial |
 | (none) | iOS / iPadOS | both | not tested | - | - | - | no platform record: no trial |
@@ -146,7 +146,7 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | iOS / iPadOS | legacy | not tested | - | - | - | - |
 | iOS / iPadOS | modern | not tested | - | - | - | - |
 | Web (wasm path) | legacy | not tested | - | - | - | - |
-| Web (js path) | legacy | web-firefox-10-windows-2000-x86 | 2012-01-31 | 14.8 | OK with restrictions | 14 file(s), 1 screenshot(s) |
+| Web (js path) | legacy | web-firefox-10-windows-2000-x86 | 2012-01-31 | 14.8 | OK with restrictions | 17 file(s), 2 screenshot(s) |
 | Web (wasm path) | modern | not tested | - | - | - | - |
 | Web (js path) | modern | not tested | - | - | - | - |
 
@@ -490,12 +490,12 @@ Evidence: 101 file(s), 63 screenshot(s). Reproduction: validation/procedures/lin
 
 ### web-firefox-10-windows-2000-x86 legacy: OK with restrictions (decision: keep)
 
-Evidence: 14 file(s), 1 screenshot(s). Reproduction: validation/procedures/web.md.
+Evidence: 17 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.md.
 
 - One browser, one machine, one configuration: Firefox 10.0 (build 20120129021758) on Windows 2000 build 2195 without service pack, in a VirtualBox VM with 168 MB of RAM, a new profile and the preferences of validation/procedures/web.md. Under the PoC rule this stands for newer browsers; no other ...
 - History of the field: in the first series of 2026-11-15 (page with an <input type="text">) 14 of the 15 vectors passed and control_characters failed on its line feed, which a single-line field removes from its value in every browser (a current Chrome 157 does the same). By the owner's decision the ...
 - The page was loaded over HTTP from the host through the VirtualBox NAT (http://10.0.2.2:<port>/), not from file:// and not from the Internet; the probe record was read from the page through an XMLHttpRequest POST (post=1, added to ui/legacy/web/app.js for browsers without a console or DOM dump) ...
-- Typing was exercised through the virtual keyboard of VirtualBox (keyboardputscancode), not by a person; the greeting was read from a screenshot. In the first series 'Marie' replaced the text of the <input> (Tab into an input selects its text); in the textarea check of the second series ...
+- Typing was exercised through the virtual keyboard of VirtualBox (keyboardputscancode), not by a person; the greeting was read from a screenshot. Tab into an <input> selects its text but Tab into a textarea does not, and on the French AZERTY layout of the guest the letter A is the key at scancode ...
 - peak_rss_kb is null in every record: Firefox 10 has no performance.memory, so the memory was not measured (the probe schema allows null).
 - Not run: the WebAssembly path on this browser (Firefox 10 has no WebAssembly, so the page always takes the JavaScript path here), the 4,096-character texts typed (they were given through the URL and cut to 1,000 UTF-16 units by the page), the 1,000-character limit by keyboard, IME, clipboard, a ...
 - The VM was found PAUSED by the host power management (VBoxManage 'VM is paused due to host power management', paused since 2026-11-15T10:06Z, resume refused); a 'controlvm savestate' attempt made the VM process abort (state 'aborted'), so, as the owner's instruction allows for an unusable VM, the ...
