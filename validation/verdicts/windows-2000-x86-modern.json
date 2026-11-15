@@ -1,0 +1,6 @@
+{
+  "platform_id": "windows-2000-x86",
+  "ui_variant": "modern",
+  "status": "not_tested",
+  "reason": "Not attempted, because no Modern UI can exist for this system, not because of a failure. The Windows Modern UI is WinUI 3 on the Windows App SDK with TargetPlatformMinVersion 10.0.17763.0, that is Windows 10 version 1809 as the lowest system (validation/deliverables/windows-11-x64-modern.json, validation/deliverables/windows-arm64-modern.json), and it is a 64-bit program for x64 and ARM64: it has no x86 build and cannot start on Windows 2000. Windows 2000 is served by the Windows Legacy UI (Win32, validation/verdicts/windows-2000-x86-legacy.json, spec SC-001). Under the PoC scope rule (spec Clarifications, session 2026-11-15) the Modern UI is run on one current system only (Windows 11 x64)."
+}
