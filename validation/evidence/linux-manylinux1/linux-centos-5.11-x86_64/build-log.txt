@@ -1,0 +1,37 @@
+-- The C compiler identification is GNU 4.8.2
+-- The CXX compiler identification is GNU 4.8.2
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /opt/rh/devtoolset-2/root/usr/bin/gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/rh/devtoolset-2/root/usr/bin/g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test LOOMORA_HAVE_X11
+-- Performing Test LOOMORA_HAVE_X11 - Success
+-- Performing Test LOOMORA_HAVE_XFT
+-- Performing Test LOOMORA_HAVE_XFT - Success
+-- Linux Legacy UI: text drawn with Xft (xft 2.1.10, fontconfig 2.4.1)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /root/loomora-build/linux-legacy-x86_64
+[  8%] Building CXX object core/CMakeFiles/loomora.dir/src/c_api.cpp.o
+[ 16%] Building CXX object core/CMakeFiles/loomora.dir/src/eol.cpp.o
+[ 25%] Building CXX object core/CMakeFiles/loomora.dir/src/greet.cpp.o
+[ 33%] Building CXX object core/CMakeFiles/loomora.dir/src/probe.cpp.o
+[ 41%] Building CXX object core/CMakeFiles/loomora.dir/src/utf8.cpp.o
+[ 50%] Building CXX object core/CMakeFiles/loomora.dir/src/version.cpp.o
+[ 58%] Linking CXX static library libloomora.a
+[ 58%] Built target loomora
+[ 66%] Building CXX object ui/legacy/linux-xlib/CMakeFiles/loomora_xlib.dir/main.cpp.o
+[ 75%] Building CXX object ui/legacy/linux-xlib/CMakeFiles/loomora_xlib.dir/keys.cpp.o
+[ 83%] Building CXX object ui/legacy/linux-xlib/CMakeFiles/loomora_xlib.dir/probe.cpp.o
+[ 91%] Building CXX object ui/legacy/linux-xlib/CMakeFiles/loomora_xlib.dir/xftfonts.cpp.o
+[100%] Linking CXX executable ../../../loomora-xlib
+[100%] Built target loomora_xlib
+NOTE: linux legacy builds natively on this machine (gcc 4.8.2): the executable is meant to run here, a Linux binary is always built on the machine that runs it (ADR 0007).
+artifact: out/linux-legacy/x86_64/loomora-xlib (66208 bytes)
+deliverable record: docs/implementation/validation/deliverables/linux-centos-5.11-x86_64-legacy.json

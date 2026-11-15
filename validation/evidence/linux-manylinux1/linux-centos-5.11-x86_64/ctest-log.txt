@@ -1,0 +1,14 @@
+Consolidate compiler generated dependencies of target loomora_tests
+[ 52%] Built target loomora_selftest
+[ 71%] Built target loomora_xlib
+[100%] Built target loomora_tests
+Internal ctest changing into directory: /root/loomora-build/core-gcc
+Test project /root/loomora-build/core-gcc
+    Start 1: selftest
+1/2 Test #1: selftest .........................   Passed    0.00 sec
+    Start 2: loomora_tests
+2/2 Test #2: loomora_tests ....................   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.01 sec
