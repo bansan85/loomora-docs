@@ -61,3 +61,4 @@ The complete rules are in `CLAUDE.md` at the root of the repository. Building an
 | 0016 | Android Legacy: NDK r15c, CMake toolchain file and scripted APK build for API 9 |
 | 0017 | Web: WebAssembly path with the current Emscripten, JavaScript path with Emscripten 1.39.20 fastcomp, Internet Explorer up to 9 dropped |
 | 0018 | continuous integration on GitHub-hosted runners only; what they cannot run is a local run |
+| 0019 | Apple trials in macOS virtual machines: QEMU/KVM in WSL2 on the owner's PC, prepared and not yet run |
