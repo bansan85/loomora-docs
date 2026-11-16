@@ -292,6 +292,17 @@ To RUN a published folder on a machine (unpackaged, framework-dependent: the fol
 
 The host of the trial had the .NET runtimes 6.0.36, 8.0.34, 9.0.23, 10.0.15 and 11.0.0 and the Windows App Runtime packages `Microsoft.WindowsAppRuntime.2` 2.4.0, 2.5.1, 2.6.4 and 2.6.5 (x64; 2.6.5 also x86) installed before the trial.
 
+### C.1bis Host state of 2026-11-16 (rebuild attempt, runtime not yet installed)
+
+Written on 2026-11-16 on the same Windows 11 x64 host, when the Modern UI build was tried again. The build was NOT completed on that day; this section records what was found and what is needed. Nothing in it changes the verdict of C.9.
+
+- Build tools present: Visual Studio 2026 Community with MSVC 14.52 and 14.44, CMake 4.4.0, .NET SDK 10.0.404 (`global.json`), Desktop Runtimes 8.0.34 and 10.0.15, the .NET 8 and 10 packs, Windows SDK 10.0.26100. `tools/build.py windows modern` reaches the restore of the Windows App SDK packages.
+- The NuGet cache lacks the 2.6.5 packages; the restore downloads them from nuget.org (reachable on that day).
+- The Windows App Runtime that winget offers is `Microsoft.WindowsAppRuntime.2`, latest 2.5.1 (versions listed by `winget show --id Microsoft.WindowsAppRuntime.2 --versions`: 2.5.1, 2.4.0, 2.3.1, 2.2.0, 2.0.1). Winget has no 2.6 entry.
+- Pinning the SDK to 2.5 was tried and reverted (no commit): NuGet has no stable `Microsoft.WindowsAppSDK.WinUI` 2.5.x (only 2.6.4 and 2.6.5; `Microsoft.WindowsAppSDK.Runtime` has 2.4.0 and 2.5.1). The restore then fell back to WinUI 2.6.4 and failed on NU1603. Do not pin 2.5 again without a new source for a matching WinUI package.
+- The 2.6.5 runtime is installed from Microsoft's installer, the link of the Windows App SDK downloads page and of the deployment guide (`deploy-unpackaged-apps`): `https://aka.ms/windowsappsdk/2.6/2.6.5/windowsappruntimeinstall-x64.exe`. Silent switch: `--quiet`; `--force` also stops running Windows App SDK processes and updates the packages. Run it as administrator, then check with `Get-AppxPackage -Name "*WindowsAppRuntime*"`.
+- A self-contained publish (`WindowsAppSDKSelfContained` set to `true`) would carry the runtime in the folder instead; it was not applied. The `Microsoft.WindowsAppSDK` metapackage does not do it (it adds the AI, ML, Search and Widgets components, see the comment of the project file).
+
 ### C.2 Build
 
 ```
