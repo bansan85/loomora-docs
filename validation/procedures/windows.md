@@ -303,6 +303,8 @@ Written on 2026-11-16 on the same Windows 11 x64 host, when the Modern UI build 
 - The 2.6.5 runtime is installed from Microsoft's installer, the link of the Windows App SDK downloads page and of the deployment guide (`deploy-unpackaged-apps`): `https://aka.ms/windowsappsdk/2.6/2.6.5/windowsappruntimeinstall-x64.exe`. Silent switch: `--quiet`; `--force` also stops running Windows App SDK processes and updates the packages. Run it as administrator, then check with `Get-AppxPackage -Name "*WindowsAppRuntime*"`.
 - A self-contained publish (`WindowsAppSDKSelfContained` set to `true`) would carry the runtime in the folder instead; it was not applied. The `Microsoft.WindowsAppSDK` metapackage does not do it (it adds the AI, ML, Search and Widgets components, see the comment of the project file).
 
+Re-run on 2026-11-16, after the runtime 2.6.5 was installed on the host (the Windows App Runtime 2.6.5 x64 and x86 are present, as in the trial): `python tools/build.py windows modern` builds the x64 and ARM64 folders (net8 and net10, 34 files each); `tools/run_vectors.py windows-11-x64 modern --exe build/windows-modern/net10-x64/Loomora.WinUI.exe` passes 15 of 15 vectors; `tools/verify.py quick` passes 8 checks, `std` skipped (no g++ on the Windows host). The regenerated deliverable records lose the code-sharing fields (`shared_loc`, `glue_loc`, `ui_loc`, `sharing_ratio`); they were not kept, to be fixed in `tools/build.py`. The verdict of C.9 is not changed by this re-run, no new evidence was stored.
+
 ### C.2 Build
 
 ```
