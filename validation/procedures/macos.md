@@ -73,7 +73,19 @@ python tools/macvm.py create tahoe
 python tools/macvm.py start tahoe --install
 ```
 
-At the OpenCore picker choose the Base System, erase the disk as APFS in Disk Utility, install (it may sit on the Country Selection screen for a while, per the OSX-KVM README), enable Remote Login, then `stop`, `snapshot tahoe clean`, and delete `install.img` and `BaseSystem.dmg`. Xcode 27 needs Apple silicon: do not install it here. Not verified: that Tahoe boots with this OSX-KVM revision; the speed of the iOS simulator without a GPU.
+Run these commands in a Linux shell of the distribution (`cd /mnt/c/t/loomora`, `export LOOMORA_VM_DIR=/mnt/wsl/macvm/vm`), not from the Windows host: the relay of `macvm.py` forwards only `LOOMORA_HOST_DRIVE` (so `LOOMORA_VM_DIR` would not arrive) and QEMU, started in the background, may be killed when the relaying `wsl.exe` ends. The distribution is chosen on the Windows side by `LOOMORA_WSL_DISTRO` (default `Ubuntu-24.04`) and by `-Distro` of `macvm-vhdx.ps1`. In a command such as `wsl -d <distro> -- bash -c '...'` the `$VAR` of the string are expanded on the Windows side: put the commands in a `.sh` file instead.
+
+Installation, as the owner did it (steps as given by the owner on 2026-11-16, not replayed by an agent):
+
+1. `echo 1 | sudo tee /sys/module/kvm/parameters/ignore_msrs` (it goes back to `N` at each `wsl --shutdown`), then `python3 tools/macvm.py start tahoe --install`; a WSLg window opens.
+2. At the OpenCore picker choose the Base System (the installer).
+3. Disk Utility: select the big partition (the 80 GB QEMU disk), **Erase** it (APFS, the default), then quit Disk Utility.
+4. **Reinstall macOS Tahoe**, choose the erased disk. The installer downloads the rest of the system from Apple (it may sit on the Country Selection screen for a while, per the OSX-KVM README). Keep the window open to the end and check the free space of the VHDX first (M.8).
+5. Finish Setup Assistant, enable Remote Login, install Xcode 26.x from the owner's Apple ID, shut the guest down, then `python3 tools/macvm.py stop tahoe`, `python3 tools/macvm.py snapshot tahoe clean`, and delete `install.img` and `BaseSystem.dmg`.
+
+Xcode 27 needs Apple silicon: do not install it here. Not verified: that Tahoe boots with this OSX-KVM revision; the speed of the iOS simulator without a GPU.
+
+**Tahoe cannot build the Legacy UIs.** Current Xcode deploys to iOS 12 at the lowest (research.md, iOS section) and no longer builds the 32-bit slices, so the iOS 5 to 7 slices (`armv7`, `armv7s`) and the macOS 10.6 floor of the Legacy UIs need Xcode 5.1.1 in the `mavericks` VM (M.4); the `tahoe` VM is only for the Modern UIs. The exact minimum deployment target of Xcode 26 was not checked.
 
 ## M.6 Run a build and the vectors (when a VM exists) — not written
 
@@ -91,5 +103,14 @@ Host: Windows 11 Pro, Intel Core i5-8300H (4 cores, AVX2, VT-x), WSL2 with Ubunt
 - The installation was started in a QEMU window (WSLg), with an 80 GB sparse qcow2 disk. The guest wrote about 27 GB. The QEMU window closed at about 05:35 on 2026-11-16 (`Broken pipe` on the WSLg display); the cause of the stop and whether the installer had reached Disk Utility are not identified in the records.
 - Problems met on the way, all fixed in the tools: `fetch-macOS-v2.py` writes to the current folder whatever `--outdir` says and needs a terminal for its verification (run through `script`); after the format, the VHDX stayed attached but unmounted until `wsl --shutdown` and a new `wsl --mount`.
 - The VM disk was erased on 2026-11-16. The owner then planned to delete the VM folder (`C:\loomora-vm`) on this PC. Nothing here is a verdict: the macOS trials are still not run.
+
+### M.8b Second attempt, host preparation and download (2026-11-16, in progress)
+
+Host: the same PC with `Ubuntu-26.04` (kernel 6.18.58.1-microsoft-standard-WSL2, QEMU 10.2.1). The VHDX is `C:\t\loomora-vm\macvm.vhdx` (80 GB, ext4, mounted as `/mnt/wsl/macvm`, 71 GB free after the download); `C:` had 217.7 GB free.
+
+- `macvm.py check`: all PASS except `ignore_msrs` (back to `N` after the `wsl --shutdown`), which only matters at the start of the VM.
+- `fetch tahoe --yes-download` worked: `BaseSystem.dmg` is 917 MiB (960,530,321 bytes, the same as the first attempt), so the recovery image is about 1 GB, not the 20 to 30 GB that `macvm.py plan` estimated. `macvm-verify-dmg.py`: 92 chunks, signature and every hash verified. `install.img` is 2.5 GiB.
+- `create tahoe`: `disk.qcow2` (80 GB virtual, sparse) and `OVMF_VARS.fd` created.
+- The installation had not been run yet when this was written. Nothing here is a verdict.
 
 Lessons for the next attempt, on any PC: check the free space on the drive that holds the VHDX before the installation (the guest writes more than the 40 GB disk it sees), keep the window open to the end, and read `qemu.log` after each stop.
