@@ -132,8 +132,17 @@ Steps (D is `LOOMORA_VMW_DIR`, here `C:\t\loomora-macosvm`; `set LOOMORA_VMW_DIR
 2. `python tools/macvmw.py unpack` verifies the sha256 and extracts to `D\unlocker` (nothing is run).
 3. Close VMware, open an **elevated** PowerShell, `python tools/macvmw.py unlock`. Then, still elevated, `python tools/macvmw.py check` prints the patch status of `check.exe`. To undo: `relock`.
 4. Recovery image (about 1 GB, owner's order): in WSL, `LOOMORA_VM_DIR=/mnt/c/t/loomora-macosvm/dl python3 tools/macvm.py fetch tahoe --yes-download`, which leaves `D\dl\tahoe\install.img` (checked against its chunklist by the tool).
-5. `python tools/macvmw.py vmx tahoe --install D\dl\tahoe\install.img` creates `D\vms\tahoe\` with an 80 GB growable disk (`vmware-vdiskmanager`), `install.vmdk` (a flat descriptor that exposes `install.img` as a disk) and `tahoe.vmx` (EFI, `smc.version = "0"`, SATA, e1000e, 8 GB, 4 vCPU). `--guest-os darwin24-64` if VMware shows the guest as "other" with the default `darwin25-64`.
+5. `python tools/macvmw.py vmx tahoe --install D\dl\tahoe\install.img` creates `D\vms\tahoe\` with an 80 GB growable disk (`vmware-vdiskmanager`), `install-flat.img` (a hard link to `install.img`, no extra space on the same volume) and `install.vmdk` (a flat descriptor with a relative extent name; an absolute path made VMware refuse the disk: "file name syntax is incorrect") and `tahoe.vmx` (EFI, `smc.version = "0"`, SATA, e1000e, 8 GB, 4 vCPU). `--guest-os darwin24-64` if VMware shows the guest as "other" with the default `darwin25-64`.
 6. Open `tahoe.vmx` in VMware, start it. Whether VMware's EFI boots the recovery disk is **not verified**. If it boots: Disk Utility, erase the 80 GB disk as APFS, quit Disk Utility, Reinstall macOS Tahoe on it (same steps as M.5; the installer downloads the rest from Apple). Then Remote Login, Xcode 26.x from the owner's Apple ID, power off, take a VMware snapshot named `clean`. In the guest: `Install VMware Tools` (the Unlocker's `darwin.iso`).
 7. Reaching the guest from the host: VMware NAT, no port forward configured by the tool; use the guest's IP (`ifconfig` in the guest) with `ssh`.
 
 Records: if this runs, every platform record and verdict must say "VMware Workstation 26H1u1 with Unlocker 4.2.8 on a PC, not Apple hardware" (ADR 0019 item 6), and the failures are recorded here like M.8.
+
+### M.9b First run (2026-11-16): the VM is rejected at power-on
+
+Host: Windows 11, VMware Workstation Pro 26.0.1 (build 25688693), Unlocker 4.2.8 applied (`check.exe`: `Patched (1)` on the four files). `HypervisorPresent` is `True`, so VMware runs on the Windows Hypervisor Platform (`WinHvPlatform.dll` loaded, "Hyper-V detected by CPUID").
+
+- VMware accepts `guestOS = "darwin25-64"` (macOS 26): "Powering on guestOS 'darwin25-64'", `darwin.iso` selected as the Tools image.
+- `vmrun start` then fails with `Exception 0xc0000005 (access violation)` in `vmware-vmx.exe` (`unrecoverable error: (vmx)`), a few lines after the log prints "Host VT-x Capabilities" with every field at 0 (VMCS revision ID 0, no EPT, no unrestricted guest): the VT-x capability MSRs are not exposed in this mode.
+- Control: a 256 MB `otherlinux-64` VM without disk powers on normally on the same host (`poweredOn`), so VMware itself works in WHP mode; the crash is specific to the macOS guest.
+- Not proven: that the hypervisor is the cause. It is the only difference found; the test that would settle it is to start the VM with the Windows hypervisor off (`bcdedit /set hypervisorlaunchtype off`, reboot, which stops WSL2 and Docker; `auto` and a reboot restore it). Not done yet: it is the owner's call.
