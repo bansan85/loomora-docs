@@ -82,3 +82,14 @@ Tasks T047 to T052 and T078 to T079 add the `macos-*` and `ios-*` targets to `to
 ## M.7 Not covered
 
 Real Apple hardware, Apple silicon, iOS devices, macOS 10.7, 10.13 and 11+ ladder entries (the PoC scope rule asks only for the lowest testable Legacy system and one Modern system), iOS 5 to 12.
+
+## M.8 Record of the first attempt (2026-11-15 and 2026-11-16, not successful)
+
+Host: Windows 11 Pro, Intel Core i5-8300H (4 cores, AVX2, VT-x), WSL2 with Ubuntu 24.04 (kernel 6.18), QEMU 8.2.2, `/dev/kvm` read/write, `kvm ignore_msrs=Y`. VM folder on a 60 GB VHDX on a Windows drive (`tools/macvm-vhdx.ps1`).
+
+- Recovery image of macOS Tahoe (OSX-KVM `fetch-macOS-v2.py`, identifier 140-93589): 960,530,321 bytes, verified against its chunklist (signature and the 92 chunk hashes, checked with `tools/macvm-verify-dmg.py`), converted to `install.img` (2.67 GB) with `dmg2img`. The image itself is not stored in the repository: it belongs to Apple.
+- The installation was started in a QEMU window (WSLg), with an 80 GB sparse qcow2 disk. The guest wrote about 27 GB. The QEMU window closed at about 05:35 on 2026-11-16 (`Broken pipe` on the WSLg display); the cause of the stop and whether the installer had reached Disk Utility are not identified in the records.
+- Problems met on the way, all fixed in the tools: `fetch-macOS-v2.py` writes to the current folder whatever `--outdir` says and needs a terminal for its verification (run through `script`); after the format, the VHDX stayed attached but unmounted until `wsl --shutdown` and a new `wsl --mount`.
+- The VM disk was erased on 2026-11-16. The owner then planned to delete the VM folder (`C:\loomora-vm`) on this PC. Nothing here is a verdict: the macOS trials are still not run.
+
+Lessons for the next attempt, on any PC: check the free space on the drive that holds the VHDX before the installation (the guest writes more than the 40 GB disk it sees), keep the window open to the end, and read `qemu.log` after each stop.
