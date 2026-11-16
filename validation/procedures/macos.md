@@ -115,3 +115,25 @@ Host: the same PC with `Ubuntu-26.04` (kernel 6.18.58.1-microsoft-standard-WSL2,
 - Next attempt: `macvm.py start` now refuses when `ignore_msrs` is not `Y` or the VM folder has less than 15 GB free (`--force` overrides), writes the command, the host state and QEMU's exit status to `qemu.log` and the guest errors to `qemu-debug.log`; `macvm.py status tahoe` and `macvm.py screenshot tahoe` (QEMU `info status`, a screen dump that says whether every pixel is black) tell a frozen guest from a frozen window; `--headless` avoids the WSLg window (VNC on `127.0.0.1:5901`). None of this was run against a real guest yet.
 
 Lessons for the next attempt, on any PC: check the free space on the drive that holds the VHDX before the installation (the guest writes more than the 40 GB disk it sees), keep the window open to the end, and read `qemu.log` after each stop.
+
+## M.9 Fallback: VMware Workstation Pro with the Unlocker — written 2026-11-16, not run
+
+Why: the QEMU/KVM route of M.5 and M.8 failed twice (black screen, no cause found). ADR 0019 keeps VMware Workstation with the macOS Unlocker as the fallback; the owner chose it on 2026-11-16. Driven by `tools/macvmw.py` on the Windows host. **Nothing below the installation of VMware was run by an agent.**
+
+Facts read on 2026-11-16 (sources: Broadcom pages, `DrDonk/unlocker` README and releases API):
+
+- VMware Workstation Pro is free for all uses since March 2025, no key. Release **26H1u1** (3 September 2026, build 25688693, shown as 26.0.1 on disk). The download needs a Broadcom account (portal login, owner only). Workstation does not officially list macOS guests (Fusion does), hence the Unlocker.
+- **Unlocker v4.2.8** (published 2026-05-14, `unlocker428.zip`, 24,748,614 bytes, sha256 `7ec212696981a95f7bbf9b04b7d33e644a8a808c88a39db897b16487be456af4`, matched by the owner's download). It patches `vmware-vmx` and `vmwarebase.dll`, ships the macOS VMware Tools (`iso/darwin.iso`), supports Workstation Pro 16/17/25/26 on Windows and Linux, **cannot add new macOS versions or AMD support**, and is "considered complete" by its author (alternative named by the author: OC4VM, which does not patch VMware; not evaluated here). A VMware update overwrites the patches: run `unlock` again. The README inside the zip is older than the one on the repository (it names Workstation 16/17 only).
+- Not verified: that macOS **Tahoe** can be selected or booted (the Unlocker says it cannot add new macOS versions); that macOS boots when a hypervisor is active on the host. This PC has one (`HypervisorPresent` is `True`: WSL2 / Hyper-V), so VMware runs in Windows Hypervisor Platform mode, which Broadcom says can be slower and does not support nested VMs, RTM/HLE or PKU; whether the patched `vmware-vmx` boots macOS in that mode is unknown. If it does not, the options are to turn the Windows hypervisor features off for the session (this stops WSL2) or to test OC4VM.
+
+Steps (D is `LOOMORA_VMW_DIR`, here `C:\t\loomora-macosvm`; `set LOOMORA_VMW_DIR=C:\t\loomora-macosvm` in the shell):
+
+1. Owner, once: install VMware Workstation Pro (silent form documented by Broadcom: `VMware-Workstation-Full-<version>.exe /s /v"/qn EULAS_AGREED=1"`, not used here), download `unlocker428.zip` into D. `python tools/macvmw.py check` must show every PASS (the hypervisor and admin lines are information).
+2. `python tools/macvmw.py unpack` verifies the sha256 and extracts to `D\unlocker` (nothing is run).
+3. Close VMware, open an **elevated** PowerShell, `python tools/macvmw.py unlock`. Then, still elevated, `python tools/macvmw.py check` prints the patch status of `check.exe`. To undo: `relock`.
+4. Recovery image (about 1 GB, owner's order): in WSL, `LOOMORA_VM_DIR=/mnt/c/t/loomora-macosvm/dl python3 tools/macvm.py fetch tahoe --yes-download`, which leaves `D\dl\tahoe\install.img` (checked against its chunklist by the tool).
+5. `python tools/macvmw.py vmx tahoe --install D\dl\tahoe\install.img` creates `D\vms\tahoe\` with an 80 GB growable disk (`vmware-vdiskmanager`), `install.vmdk` (a flat descriptor that exposes `install.img` as a disk) and `tahoe.vmx` (EFI, `smc.version = "0"`, SATA, e1000e, 8 GB, 4 vCPU). `--guest-os darwin24-64` if VMware shows the guest as "other" with the default `darwin25-64`.
+6. Open `tahoe.vmx` in VMware, start it. Whether VMware's EFI boots the recovery disk is **not verified**. If it boots: Disk Utility, erase the 80 GB disk as APFS, quit Disk Utility, Reinstall macOS Tahoe on it (same steps as M.5; the installer downloads the rest from Apple). Then Remote Login, Xcode 26.x from the owner's Apple ID, power off, take a VMware snapshot named `clean`. In the guest: `Install VMware Tools` (the Unlocker's `darwin.iso`).
+7. Reaching the guest from the host: VMware NAT, no port forward configured by the tool; use the guest's IP (`ifconfig` in the guest) with `ssh`.
+
+Records: if this runs, every platform record and verdict must say "VMware Workstation 26H1u1 with Unlocker 4.2.8 on a PC, not Apple hardware" (ADR 0019 item 6), and the failures are recorded here like M.8.
