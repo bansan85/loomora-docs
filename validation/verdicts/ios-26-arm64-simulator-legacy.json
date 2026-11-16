@@ -1,0 +1,6 @@
+{
+  "platform_id": "ios-26-arm64-simulator",
+  "ui_variant": "legacy",
+  "status": "not_tested",
+  "reason": "Compile-only by decision, and not compiled yet. The Legacy iOS UI (Objective-C, UIKit, no ARC, written with the iOS 5 APIs) is built by the ios-legacy job (T126, tools/build.py ios legacy) for arm64 at an iOS 12 deployment target, an override of the project's iOS 5.0 (fallback ios-legacy-deployment-override), and the result would read compiled for arm64 at iOS 12, iOS 5 not_tested. That job has not run, so even the compile is unproven. The Legacy UI is never run in the simulator as a verdict; iOS 5, the armv7 and armv7s slices and every run wait for a real old Mac with Xcode 5.1.1 (spike S2, T067)."
+}

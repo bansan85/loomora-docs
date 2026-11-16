@@ -1,0 +1,6 @@
+{
+  "platform_id": "macos-26-arm64",
+  "ui_variant": "legacy",
+  "status": "not_tested",
+  "reason": "Compile-only by decision, and not compiled yet. The Legacy macOS UI (Objective-C, AppKit, no ARC) is built by the macos-legacy job (T126, tools/build.py macos legacy) for x86_64 only at -mmacosx-version-min=10.6, linked with the libc++ dylib of the system (fallbacks macos-legacy-x86_64-only and macos-legacy-libcxx-dylib), and the result would read compiled, not run on 10.6. That job has not run, so even the compile is unproven here (spike S11 compiled and linked a small program that way on this runner, not this UI). The Legacy UI is for old systems: it is not run on macOS 26 as a verdict (an INFO step may start it under Rosetta 2, which proves nothing about 10.6); macOS 10.6, a 32-bit slice and the 10.6 SDK wait for a real old Mac (spike S2, T067)."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "ios-26-arm64-simulator",
+  "family": "ios",
+  "os_name": "iOS 26 simulator (iPhone)",
+  "os_version": "26, arm64 simulator of Xcode on the macos-26 runner; the minor version is NOT KNOWN before the first run (ADR 0018 lists the runtimes 26.2, 26.4 and 26.5 of the image, tools/ci/ios_simulator.py boots a runtime of major 26): the probe line of the UIs will say ios-26.<minor>-arm64-simulator, and this record (file name, id, the verdicts, platform_ids of fallbacks.json) must then be renamed to that id",
+  "arch": "arm64",
+  "release_date": "2025-09-15",
+  "age_years": 1.2,
+  "is_floor": false,
+  "in_scope": true,
+  "environment": "emulator",
+  "environment_detail": "A simulator (xcrun simctl) of an iOS 26 runtime on the GitHub-hosted runner macos-26 (an Apple silicon virtual machine, ADR 0018): not a device and not the iOS floor. NOTHING WAS COMPILED OR RUN FOR THIS RECORD: the Apple CI job (T126, .github/workflows/apple.yml) has not run, and tools/build.py macos / ios targets and the Apple UIs were written without a Mac. The record stands for what the ios-modern-simulator job is meant to do (build the Modern UI for the simulator, install it and read its probe line from the console) and for the compile-only rows: the Modern UI for devices at its floor iOS 15 (iphoneos SDK, unsigned, never run) and the Legacy UI compiled for arm64 at iOS 12 (an override of the project's iOS 5.0, see fallback ios-legacy-deployment-override), whose simulator build is the same one. Spec Clarifications, fifth session: iOS floors are compiled, never run.",
+  "eol": false,
+  "eol_source": "validation/sources.json eol-apple-security: Apple patches iOS 18, 26 and 27 (entries of 2026-11-09 read on 2026-11-12); the backend (loomora_is_eol) treats iOS 17 and below as end of life, so 26 is not.",
+  "release_date_source": "General availability of iOS 26 (2025-09-15), taken from the author's knowledge, not from a page re-read for this record; age_years = days from 2025-09-15 to 2026-11-16 divided by 365.25, rounded to 0.1.",
+  "floor_note": "Not the floor of the iOS family (iOS 5, spec Clarifications, floors; the Modern floor is iOS 15). It is the only iOS system that can be run under the fifth-session rule (the iOS 26 simulator of the macos-26 runner); iOS 5 waits for a real machine and Xcode 5.1.1 (spike S2, T067)."
+}

@@ -284,5 +284,59 @@
     "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the run-time choice): decided at run time by typeof WebAssembly.instantiateStreaming and by the outcome of the call, any browser with WebAssembly; instantiateStreaming exists since Chrome 61 and Firefox 58 (author's knowledge, not re-read for this record)",
     "platform_ids": [],
     "reason": "The decision is taken at run time on each load, not per platform. No platform of validation/platforms/ is known to take it: web-chrome-157-windows-11-x64 has the function (Chrome 61 and later, author's knowledge, not re-read for this record), and no browser without it was run on the Modern UI; the console message of the fallback is not recorded in any evidence. The path was not exercised."
+  },
+  {
+    "id": "ios-legacy-top-layout-guide",
+    "description": "Top inset of the iOS Legacy UI (ui/legacy/ios-uikit/ViewController.m, -topInset, used by viewDidLayoutSubviews): from iOS 7 the root view of a view controller extends under the status bar and UIViewController has the layout guide topLayoutGuide (iOS 7.0), whose length is the space to leave free. The code asks [self respondsToSelector:@selector(topLayoutGuide)] at run time and uses that length. The fallback is the inset 0 on a system that does not answer the selector (iOS 5 and 6), where the code assumes the root view starts below the status bar. The deprecation warning of topLayoutGuide in recent SDKs is silenced by a clang pragma around the call.",
+    "macro": "LOOMORA_LOOKUP_TOPLAYOUTGUIDE",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the run-time lookup): looked up at run time (respondsToSelector:), any Objective-C compiler and SDK that declares topLayoutGuide (iOS 7.0 and later); topLayoutGuide itself exists since iOS 7.0",
+    "platform_ids": [],
+    "reason": "The iOS floor of the project is iOS 5, which has no layout guide: one binary must serve iOS 5 and 6 (inset 0) and iOS 7 and later (the guide), so a run-time check is used and the modern path stays the default everywhere else. No platform of validation/platforms/ takes the fallback: ios-26-arm64-simulator answers the selector and takes the iOS 7 path. The iOS 5 and 6 path was never run (no iOS 5 or 6 system, the Legacy iOS UI is only compiled, at iOS 12, see ios-legacy-deployment-override). That the root view starts below the status bar on iOS 5 and 6 is the assumption of the code, not verified. The Modern iOS UI (SwiftUI, iOS 15) has no such check."
+  },
+  {
+    "id": "ios-legacy-deployment-override",
+    "description": "Deployment target and architectures of the Legacy iOS build made on the macos-26 runner. The Xcode 5.1.1 project ui/legacy/ios-uikit/Loomora.xcodeproj declares IPHONEOS_DEPLOYMENT_TARGET 5.0 and ARCHS armv7 armv7s arm64 (simulator: i386 x86_64). Xcode 26 builds nothing below iOS 12 and has no 32-bit slice, so tools/build.py (python tools/build.py ios legacy, run by the Apple CI job) passes IPHONEOS_DEPLOYMENT_TARGET=12.0, ARCHS=arm64 and CODE_SIGNING_ALLOWED=NO on the xcodebuild command line, and builds libloomora.a (C++11) for the same SDK at iOS 12.0. The project file is NOT changed (build.py checks that it still says 5.0), so the build with Xcode 5.1.1 keeps its iOS 5 floor and its three slices; the MinimumOSVersion of Info.plist is ${IPHONEOS_DEPLOYMENT_TARGET}, so it follows whichever value is in force. The result is recorded as compiled for arm64 at iOS 12, iOS 5 not_tested.",
+    "macro": "IPHONEOS_DEPLOYMENT_TARGET",
+    "min_compiler": "not a compiler feature: the Xcode build setting IPHONEOS_DEPLOYMENT_TARGET (and ARCHS) overridden on the command line, a compile-time switch for a target-wide limit; Xcode 26 (Apple clang 21), whose lowest deployment target is iOS 12.0 (taken from the comments of tools/build.py, not checked by a run); Xcode 5.1.1 takes the project as it is (iOS 5.0)",
+    "platform_ids": [
+      "ios-26-arm64-simulator"
+    ],
+    "reason": "Never apply the most restrictive fallback to everyone: the override exists only in the build made with Xcode 26, because that toolchain cannot target iOS 5 or a 32-bit slice; the project and the sources keep the iOS 5 level (the APIs are those of iOS 5, the layout guide is looked up at run time). Taken by ios-26-arm64-simulator through its Legacy deliverable (the same build is made for the iphoneos and the iphonesimulator SDK). Nothing was compiled or run yet: the Apple CI job (T126) has not run, so the override itself is untested. The armv7 and armv7s slices and the iOS 5 deployment target wait for a real old Mac with Xcode 5.1.1 (spike S2, T067). The arm64 simulator exists since iOS 14: the toolchain may record 14.0 instead of 12.0 for the simulator slice (an expectation of tools/build.py, not verified, no Mac was available), which build.py accepts for the simulator SDK only."
+  },
+  {
+    "id": "macos-legacy-libcxx-dylib",
+    "description": "C++ runtime of the Legacy macOS build (python tools/build.py macos legacy, ui/legacy/macos-appkit): the backend libloomora.a is C++11 and is built against the libc++ of Apple Clang, and the Xcode 26 toolchain on the macos-26 runner ships no static libc++ (spike S11, run https://github.com/bansan85/loomora/actions/runs/43883060298), so the executable declares the floor 10.6 (LC_VERSION_MIN_MACOSX 10.6) but links the libc++ DYLIB of the system, /usr/lib/libc++.1.dylib (tools/build.py LIBCXX_DYLIB, which names it on the link line and checks it in otool -L). The alternative, a libc++ shipped with the application or a static one, is not built.",
+    "macro": "LOOMORA_APPLE_LIBCXX_DYLIB",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the link choice, LIBCXX_DYLIB of tools/build.py): Xcode 26 Clang (Apple clang 21.0.0) with the macOS 26 SDK, -mmacosx-version-min=10.6, x86_64; any Clang that links libc++ dynamically",
+    "platform_ids": [
+      "macos-26-arm64"
+    ],
+    "reason": "macOS 10.6 has no libc++ of its own to my knowledge (libc++ shipped with the system from OS X 10.7, not checked in Apple documentation, as in the result of S11): whether a real 10.6 provides /usr/lib/libc++.1.dylib is NOT verified, so the executable may not start there. It is declared because the build takes this path on purpose; the Legacy macOS row claims only compiled for x86_64 at 10.6, never run on 10.6 (spec Clarifications, fifth session). Taken by macos-26-arm64 through its Legacy deliverable, the only Legacy macOS build; the Modern macOS UI (deployment target macOS 11, which has libc++) does not take it, and no platform record stands for macOS 10.6. The iOS Legacy build links the system libc++ dylib the same way (tools/build.py names it in the needs of ios legacy); no alternative exists there and whether iOS 5 has it is not verified, so no iOS platform takes it. Not tested: a static libc++, osxcross or the 10.6 SDK, a real 10.6 (spike S2, T067). The Apple CI job has not run: nothing is compiled by this repository yet."
+  },
+  {
+    "id": "macos-legacy-x86_64-only",
+    "description": "Architectures of the Legacy macOS build (tools/build.py MACOS_LEGACY_ARCHS): one x86_64 slice. The macOS 10.6 floor ran on 32-bit (i386) and 64-bit Intel Macs, but the macOS 26 SDK of the macos-26 runner has no i386 slice, so the Legacy macOS UI is compiled for x86_64 only (-arch x86_64 -mmacosx-version-min=10.6). The i386 slice waits for a real old Mac (spike S2, T067).",
+    "macro": "LOOMORA_MACOS_LEGACY_ARCHS",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the build choice, MACOS_LEGACY_ARCHS of tools/build.py): Xcode 26 Clang with the macOS 26 SDK, which cannot produce i386; an Xcode or osxcross with an SDK that has the i386 slice would build it",
+    "platform_ids": [
+      "macos-26-arm64"
+    ],
+    "reason": "A limit of the toolchain of the CI runner, applied only to that build (never to the Modern macOS UI, Universal 2 x86_64 and arm64, nor to a build made on an old Mac): a 32-bit-only Mac of the 10.6 era cannot run the slice that is built. Taken by macos-26-arm64 through its Legacy deliverable. The Apple CI job has not run: the x86_64 slice was never produced by this repository, and only the spike S11 program was linked for x86_64 with -mmacosx-version-min=10.6."
+  },
+  {
+    "id": "macos-version-query",
+    "description": "macOS version read by the Legacy macOS UI (ui/legacy/macos-appkit/Probe.m, LMSystemVersion) for the platform id (macos-<major>-<arch>, or macos-<major>.<minor>-<arch> below macOS 11) and for the end-of-life test (loomora_is_eol): sysctlbyname(\"kern.osproductversion\"), looked up by name at run time (macOS 10.13.4 and later) so that there is no link-time dependency. The fallback, taken when the call fails (macOS 10.6 to 10.13.3) or gives an unreadable answer, is the key ProductVersion of /System/Library/CoreServices/SystemVersion.plist, which can say 10.16 instead of the real version to a program linked with an SDK older than macOS 11; a version 10.16 is read as 11.0 in both cases (no real macOS 10.16 exists), and when neither source answers the platform id is macos-unknown-<arch>. Gestalt (deprecated) and NSProcessInfo operatingSystemVersion (10.10 and later) are not used.",
+    "macro": "LOOMORA_LOOKUP_KERN_OSPRODUCTVERSION",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the run-time lookup): looked up at run time, any compiler; kern.osproductversion exists since macOS 10.13.4, SystemVersion.plist since Mac OS X 10.0",
+    "platform_ids": [],
+    "reason": "The floor is macOS 10.6, which has no kern.osproductversion: one binary must serve 10.6 and later, so the lookup is a run-time check and the sysctl stays the first choice everywhere it exists. No platform of validation/platforms/ takes the fallback: macos-26-arm64 answers the sysctl. Neither path has run on a Mac (the code comment says so: the Apple CI job has not run), and the plist path was not exercised on 10.6 to 10.13.3, which no platform record stands for. The Modern macOS UI (macOS 11 and later) reads ProcessInfo.operatingSystemVersion and needs no fallback."
+  },
+  {
+    "id": "apple-legacy-resident-size",
+    "description": "Resident size of the process in the probe line of the Legacy macOS and iOS UIs (ui/legacy/macos-appkit/Probe.m ResidentSizeKb, ui/legacy/ios-uikit/Probe.m ResidentKb), read with task_info. macOS: TASK_BASIC_INFO_64 first (it exists on 10.6), then MACH_TASK_BASIC_INFO (10.8 and later), the latter only compiled in when the SDK defines the constant (#ifdef MACH_TASK_BASIC_INFO); each call is checked (return code, count, a resident size above zero). iOS: MACH_TASK_BASIC_INFO first (the same #ifdef), then the older TASK_BASIC_INFO when the call fails, which the code expects on iOS 5. The fallback when no source answers is rss_kb = -1 in loomora_probe_record, which the record shows as null.",
+    "macro": "LOOMORA_FEATURE_TASK_INFO_RESIDENT",
+    "min_compiler": "not a compiler feature: the choice between task_info flavors is made at run time by the return code, plus an #ifdef on the SDK constant MACH_TASK_BASIC_INFO; any Apple Clang and SDK",
+    "platform_ids": [],
+    "reason": "The measure is best effort (ui-contract.md): the Legacy UIs must start on systems older than the flavor MACH_TASK_BASIC_INFO. No platform of validation/platforms/ is known to take the fallback: which flavor answers on macOS 26 and in the iOS 26 simulator is only known after the first run of the Apple CI job (T126), which has not run, and no platform record stands for macOS 10.6 to 10.7 or iOS 5. The older flavor path was never exercised. The Modern UIs (macOS 11, iOS 15) read MACH_TASK_BASIC_INFO only and need no fallback."
   }
 ]
