@@ -8,6 +8,7 @@ Replayable procedure for the Android Legacy UI (Java views, JNI glue, C++11 back
 | `android-2.3-arm` | legacy | `validation/verdicts/android-2.3-arm-legacy.json` | `armeabi` and `armeabi-v7a` built only, `not_tested` |
 | `android-5.0-arm64` | legacy | `validation/verdicts/android-5.0-arm64-legacy.json` | `arm64-v8a` built only, `not_tested` |
 | `android-7.0-x86_64` | modern | `validation/verdicts/android-7.0-x86_64-modern.json` | built for API 24, RUN on the API 24 x86_64 emulator (part G) |
+| `android-7.0-x86_64` | legacy | `validation/verdicts/android-7.0-x86_64-legacy.json` | `not_tested` (above the Legacy range, API 9 to 23); the rebuilt Legacy APK was only run there for the package rename, with `--ui-abi x86` (end of part C) |
 | `android-2.3-arm`, `android-4.1.2-x86`, `android-5.0-arm64` | modern | `validation/verdicts/<id>-modern.json` | below the Modern floor (API 24), `not_tested` |
 
 ## Status of this document

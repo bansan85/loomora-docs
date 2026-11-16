@@ -1,11 +1,11 @@
-# Procedure: Web (Legacy page, JavaScript path)
+# Procedure: Web (Legacy page on Firefox 10, Modern page on Chrome)
 
-Replayable procedure for the platform that was really run in this project (FR-016, SC-004, SC-008):
+Replayable procedure for the platforms that were really run in this project (FR-016, SC-004, SC-008). The Legacy page (JavaScript path) is run on Firefox 10 in the Windows 2000 VM; the Modern page (WebAssembly path) is run on Chrome on the Windows 11 host (last part of this file):
 
 | Platform record | Variant | Path | Verdict | Where it is run |
 |---|---|---|---|---|
 | `web-firefox-10-windows-2000-x86` | legacy | `js` | `validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json` (`ok_restricted`, 15 of 15 vectors in the second series) | Firefox 10.0 in the VirtualBox VM "Windows 2000" |
-| `web-firefox-10-windows-2000-x86` | modern | `js` | `validation/verdicts/web-firefox-10-windows-2000-x86-modern.json` (`not_tested`) | not written yet |
+| `web-firefox-10-windows-2000-x86` | modern | `js` | `validation/verdicts/web-firefox-10-windows-2000-x86-modern.json` (`not_tested`) | not run: the Modern page targets a current browser, see the verdict reason |
 | `web-chrome-157-windows-11-x64` | modern | `wasm` | `validation/verdicts/web-chrome-157-windows-11-x64-modern.json` | Chrome 157.0.8103.51, headless, on the Windows 11 x64 host (last section below) |
 | `web-chrome-157-windows-11-x64` | legacy | `wasm` | `validation/verdicts/web-chrome-157-windows-11-x64-legacy.json` (`not_tested`) | not run on purpose: Web Legacy is validated on Firefox 10 |
 
@@ -13,7 +13,7 @@ Every command is the one that was run, taken from `tools/` and the records.
 
 ## Status of this document
 
-- Written and run on 2026-11-15, then re-run the same day (second series) after three changes: the field of the page is a `<textarea>`, the page shows the end-of-life notice, and the launcher starts `firefox.exe` once more when a start is lost. The WebAssembly path was built and run under node and in a current headless Chrome (task T085, spike S5), but has **no verdict and no platform record** in this project: by the owner's decision of 2026-11-15 Chrome does not run on Windows 2000, so Firefox 10.0 alone stands for the Web Legacy ladder under the PoC rule (success on the lowest testable browser stands for newer ones), and the WebAssembly path is exercised only by the node harness and that headless check, which are not verdicts.
+- Written and run on 2026-11-15, then re-run the same day (second series) after three changes: the field of the page is a `<textarea>`, the page shows the end-of-life notice, and the launcher starts `firefox.exe` once more when a start is lost. The WebAssembly path was built and run under node and in a current headless Chrome (task T085, spike S5); that Chrome run became the Modern verdict of the same day (platform `web-chrome-157-windows-11-x64`, last part of this file). By the owner's decision of 2026-11-15 Chrome does not run on Windows 2000, so Firefox 10.0 alone stands for the Web Legacy ladder under the PoC rule (success on the lowest testable browser stands for newer ones); the Legacy page on Chrome is `not_tested` on purpose.
 - The browser is Firefox 10.0 (build ID 20120129021758) on Windows 2000 build 2195 without service pack. Internet Explorer up to 9 is dropped by the owner (no typed arrays). No other browser or operating system was run for the JavaScript path.
 - Safari (Legacy page, JavaScript path) is considered covered by inference from Firefox 10 Legacy (PoC scope rule, owner decision 2026-11-15). It was never run: there is no Safari platform record and no Safari verdict, and nothing here says it works.
 
@@ -86,7 +86,7 @@ Run on 2026-11-15 (task T063). PoC rule (owner decision): the Modern UI is valid
 ## Prerequisites
 
 - Chrome (stable) in `C:\Program Files\Google\Chrome\Application\` (or `LOOMORA_CHROME` = a `chrome.exe`); 157.0.8103.51 on 2026-11-15. The launcher takes the version from the version folder next to `chrome.exe` (`chrome.exe --version` prints nothing on Windows) and refuses to run when its major differs from the one in the platform id.
-- WSL Ubuntu-24.04 with the current emsdk (`~/emsdk`, Emscripten 7.0.0), node and npm (TypeScript 7.0.2 comes from `package-lock.json`).
+- WSL Ubuntu-24.04 with the current emsdk (`~/emsdk`, Emscripten 7.0.0), node v26.13.1 and npm (TypeScript 7.0.2 comes from `package-lock.json`; versions of the deliverable record `validation/deliverables/web-chrome-157-windows-11-x64-modern.json`).
 - Nothing touches the owner's Chrome profile: every run uses a new `--user-data-dir` in a folder of the system temp folder, deleted by the launcher. The launcher never closes chrome.exe by name: it only counts and terminates (`taskkill /PID`) the processes whose command line names the run's own profile folder.
 
 ## Build

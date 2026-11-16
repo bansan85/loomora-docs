@@ -1,18 +1,21 @@
 # Procedure: Linux (Modern UI with gtkmm, Legacy UI with Xlib)
 
-Replayable procedure for the platform that was really run in this project (FR-016, SC-004, SC-008):
+Replayable procedure for the platforms that were really run in this project (FR-016, SC-004, SC-008). L.1 to L.9 cover the Ubuntu 24.04 rows and the i686 build; L.10 and L.11 cover the two older userlands run in Docker containers:
 
 | Platform record | Variant | UI | Verdict |
 |---|---|---|---|
 | `linux-ubuntu-24.04-x86_64` | modern | C++11 with gtkmm-3.0 on GTK 3 (`ui/modern/linux-gtk3`, executable `loomora-gtk3`) | `validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json` |
 | `linux-ubuntu-24.04-x86_64` | legacy | C++11 with Xlib, text with Xft and fontconfig (`ui/legacy/linux-xlib`, executable `loomora-xlib`) | `validation/verdicts/linux-ubuntu-24.04-x86_64-legacy.json` |
+| `linux-i686` | legacy | the same Xlib UI built as a 32-bit executable (`--arch i686`) and run through the 32-bit multiarch libraries of the same machine (status section below) | `validation/verdicts/linux-i686-legacy.json` |
+| `linux-centos-6.10-x86_64` | legacy | the same Xlib UI, built and run in a manylinux2010 container (L.10) | `validation/verdicts/linux-centos-6.10-x86_64-legacy.json` |
+| `linux-centos-5.11-x86_64` | legacy | the same Xlib UI, built and run in a manylinux1 container (L.11) | `validation/verdicts/linux-centos-5.11-x86_64-legacy.json` |
 
 Every command is the one that was run, taken from `tools/`, ADR 0006 and 0007, the platform records and the verdicts.
 
 ## Status of this document
 
 - Written on 2026-11-14 and replayed the same day on the machine below: the builds, `tools/verify.py quick`, `tools/run_vectors.py` for both UIs, the probe runs (including the mixed Unicode string), the Xlib window run with `xlib-driver.c`, and the gtkmm window driver and probe series (`startup default` scenarios). The results quoted are those of that replay; the stored evidence is named where it is the reference.
-- **One machine only**: Ubuntu 24.04.5 in WSL2 with WSLg on a Windows 11 host. No bare-metal install, no other distribution, no old distribution, no other X server or desktop, no kernel older than 6.18, no native 32-bit system, no real keyboard (the window runs inject synthetic key events). The verdicts say so as restrictions and this procedure says nothing more.
+- **One machine only**: every run is on the Windows 11 host, in WSL2 with WSLg (L.1 to L.9, Ubuntu 24.04.5) or in Docker Desktop containers (L.10 and L.11: the userland of CentOS 6.10 and CentOS 5.11, on the kernel of the host). No bare-metal install, no other distribution than those three, no other X server or desktop, no kernel older than 6.18, no native 32-bit system, no real keyboard (the window runs inject synthetic key events). The verdicts say so as restrictions and this procedure says nothing more.
 - Per ADR 0007 a Linux binary is **built on the machine that runs it**; there is no glibc or libstdc++ ceiling to check and no cross build. The Linux floor is therefore not determined by this procedure.
 - The i686 build (`--arch i686`, platform record `linux-i686`) is built and run through the 32-bit multiarch libraries of the same machine; its Legacy verdict is `validation/verdicts/linux-i686-legacy.json` (written 2026-11-14 from a real run: build with `python3 tools/build.py linux legacy --arch i686`, then L.5, L.6 and L.7 on that executable, with `--exe` for the vectors; the probe line reports the host platform id) and its Modern variant is `not_tested` with a reason in `validation/verdicts/linux-i686-modern.json`.
 - Not covered by anything here: Ubuntu 22.04 and the other targets of T059 (no record), GTK older than 3.24, a real GTK 3.10 system (the 3.10 floor is compiled with `LOOMORA_GTK_FLOOR=ON` but no gtkmm 3.10 system was available), the end-of-life banner on a real old kernel (it is simulated, see L.7).
@@ -204,7 +207,7 @@ Both verdicts are `ok_restricted`, decision `keep`. Modern: gtkmm build 44cba2ef
 
 ## L.10 Linux Legacy UI on the lowest testable system: manylinux2010 in Docker (platform `linux-centos-6.10-x86_64`)
 
-Written and replayed on 2026-11-15 (PoC scope rule: the lowest testable Linux system; success there counts for newer ones). Verdict `validation/verdicts/linux-centos-6.10-x86_64-legacy.json` (`ok_restricted`), platform record `validation/platforms/linux-centos-6.10-x86_64.json`, evidence `validation/evidence/linux-manylinux2010/linux-centos-6.10-x86_64/`. Commands run from Git Bash or PowerShell on the Windows host (Docker Desktop; `docker` is not available in WSL); from Git Bash set `MSYS_NO_PATHCONV=1` so that `/opt/...` paths are not rewritten.
+Written and replayed on 2026-11-15 (PoC scope rule: the lowest testable Linux system; success there counts for newer ones). Verdict `validation/verdicts/linux-centos-6.10-x86_64-legacy.json` (`ok_restricted`), platform record `validation/platforms/linux-centos-6.10-x86_64.json`, evidence `validation/evidence/linux-manylinux2010/linux-centos-6.10-x86_64/`. Commands run from Git Bash or PowerShell on the Windows host (Docker Desktop 29.8.0 with the WSL2 backend, as the platform records say; `docker` is not available in WSL); from Git Bash set `MSYS_NO_PATHCONV=1` so that `/opt/...` paths are not rewritten.
 
 What the system is: a container of the PyPA image `quay.io/pypa/manylinux2010_x86_64` (CentOS 6.10, glibc 2.12, devtoolset-8 gcc 8.3.1, cmake 3.23.3). It shares the kernel of Docker Desktop (the WSL2 kernel), so only the userland is the old system's. The platform id comes from `/etc/redhat-release` (the image has no `/etc/os-release`, fallback `linux-platform-id-redhat-release`).
 
