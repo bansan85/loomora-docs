@@ -1,0 +1,6 @@
+{
+  "platform_id": "macos-26-arm64",
+  "ui_variant": "modern",
+  "status": "not_tested",
+  "reason": "Not run yet: nothing was compiled or started. The Modern macOS UI (SwiftUI, Universal 2, deployment target macOS 11) is meant to be built and run on macOS 26 (--probe, the 15 reference vectors through tools/run_vectors.py) by the macos-modern job of .github/workflows/apple.yml (T126), but that job has not run: tools/build.py macos modern and the UI were written without a Mac. The verdict stays not_tested until a run produces probe lines to store as evidence; a failure would then be ko, not this. The floor build (macOS 11) is only compiled in that job and never run (spec Clarifications, fifth session), so no claim is made about macOS 11 to 25."
+}

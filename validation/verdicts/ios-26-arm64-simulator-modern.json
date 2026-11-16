@@ -1,0 +1,6 @@
+{
+  "platform_id": "ios-26-arm64-simulator",
+  "ui_variant": "modern",
+  "status": "not_tested",
+  "reason": "Not run yet: nothing was compiled or started. The Modern iOS UI (SwiftUI, deployment target iOS 15) is meant to be built for the simulator, installed in an iOS 26 simulator with xcrun simctl and its probe line read from the console by the ios-modern-simulator job of .github/workflows/apple.yml (T126), but that job has not run: tools/build.py ios modern, tools/ci/ios_simulator.py and the UI were written without a Mac. The verdict stays not_tested until a run produces probe lines to store as evidence. The device build at the floor iOS 15 (ios-modern-device job) is only compiled, unsigned, and never run (spec Clarifications, fifth session)."
+}
