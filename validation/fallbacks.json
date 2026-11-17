@@ -338,5 +338,34 @@
     "min_compiler": "not a compiler feature: the choice between task_info flavors is made at run time by the return code, plus an #ifdef on the SDK constant MACH_TASK_BASIC_INFO; any Apple Clang and SDK",
     "platform_ids": [],
     "reason": "The measure is best effort (ui-contract.md): the Legacy UIs must start on systems older than the flavor MACH_TASK_BASIC_INFO. No platform of validation/platforms/ is known to take the fallback: which flavor answers on macOS 26 and in the iOS 26 simulator is only known after the first run of the Apple CI job (T126), which has not run, and no platform record stands for macOS 10.6 to 10.7 or iOS 5. The older flavor path was never exercised. The Modern UIs (macOS 11, iOS 15) read MACH_TASK_BASIC_INFO only and need no fallback."
+  },
+  {
+    "id": "win2000-setfilepointer",
+    "description": "File offsets above 4 GiB on Windows 2000 through SetFilePointer with the high-order word (SetFilePointerEx and ReplaceFile do not exist there).",
+    "macro": "LOOMORA_FMT_WIN2000_SEEK",
+    "min_compiler": "MinGW-w64 GCC 13 with _WIN32_WINNT=0x0500",
+    "platform_ids": [
+      "windows-2000-x86"
+    ],
+    "reason": "Windows 2000 has no SetFilePointerEx; the file layer of the format module (core/src/format/io/file_win32.cpp) seeks with SetFilePointer and the high word. Spike S-F3 pending."
+  },
+  {
+    "id": "android-api9-lseek64",
+    "description": "64-bit file offsets on Android API 9 to 20 through lseek64/pread64 (off_t is 32 bits there).",
+    "macro": "LOOMORA_FMT_LSEEK64",
+    "min_compiler": "NDK r15c Clang with __ANDROID_API__ < 21",
+    "platform_ids": [
+      "android-2.3-arm",
+      "android-4.1.2-x86"
+    ],
+    "reason": "Bionic before API 21 has a 32-bit off_t; the POSIX file layer of the format module (core/src/format/io/file_posix.cpp) uses lseek64 for files above 2 GiB. Android 5.0 and later use the plain 64-bit calls."
+  },
+  {
+    "id": "fmt-no-large-files",
+    "description": "Files above 2 GiB are rejected with LOOMORA_ERR_TOO_LARGE_FOR_PLATFORM on a platform whose file layer cannot address them.",
+    "macro": "LOOMORA_FMT_NO_LARGE_FILES",
+    "min_compiler": "any",
+    "platform_ids": [],
+    "reason": "Switch kept off on every platform until a spike shows one that cannot address files above 2 GiB; no platform takes it now (spikes S-F1, S-F3)."
   }
 ]
