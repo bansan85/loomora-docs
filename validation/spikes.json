@@ -71,5 +71,26 @@
     "status": "confirmed",
     "result": "ANSWERED BY A REAL RUN, 2026-11-16, push of branch feat/apple-spike (commit 6653424): https://github.com/bansan85/loomora/actions/runs/43883060298 (job green; macos-26 arm64, Xcode 26.6, clang 21.0.0, macOS 26.7.2, SDK 26.5). (1) Compile (probe.m, probe_cpp.cpp with -std=c++11 -stdlib=libc++) and link SUCCEED for x86_64 with -mmacosx-version-min=10.6. (2) otool -l shows LC_VERSION_MIN_MACOSX version 10.6, sdk 26.5, on the executable and on both objects (not LC_BUILD_VERSION). (3) libc++ is linked DYNAMICALLY: otool -L lists /usr/lib/libc++.1.dylib (current version 2100.43.0) next to libSystem, Foundation, AppKit, CoreFoundation and libobjc. Consequence: the executable declares 10.6 but depends on a libc++ dylib of macOS 26; whether a real 10.6 provides /usr/lib/libc++.1.dylib is NOT verified here (to my knowledge libc++ shipped with the system from OS X 10.7, to be checked in Apple's documentation before it is cited). (4) -Wpartial-availability -Werror=partial-availability: the control compile with only 10.6 APIs exits 0; the deliberate calls (NSJSONSerialization 10.7, -[NSWindow toggleFullScreen:] 10.7, NSByteCountFormatter 10.8) make the compile fail with 3 errors, reported under -Wunguarded-availability (the flag Clang names in the diagnostic). DECISION FOR T077/T089: the Legacy macOS row can claim 'compiled for x86_64 at 10.6, API availability checked at compile time, not run' and nothing about running on 10.6; the row is not dropped. Not tested: running the executable (the runner is arm64, Rosetta 2 would run it on macOS 26, which proves nothing about 10.6), a static libc++ link, a real 10.6.",
     "adr": "adr/0018-ci-github-hosted-runners.md"
+  },
+  {
+    "id": "S-F1",
+    "question": "Do the vendored zlib 1.3.x subset (C) and the RapidJSON headers build and give a correct deflate/inflate and JSON double round trip with GCC and Clang -std=c++11 -pedantic-errors, MinGW-w64 for Windows 2000 i686, NDK r15c and Emscripten 1.39.20 fastcomp, so that the .loomora writer can rely on them on every floor?",
+    "status": "open",
+    "result": "",
+    "adr": "adr/0022-vendored-zlib-rapidjson.md"
+  },
+  {
+    "id": "S-F2",
+    "question": "Does the .loomora writer produce byte-identical files on Linux i686, Linux x86_64, Windows x86_64 and Windows 2000 i686 (x87 extended precision against SSE2), and on a big-endian system when one is available (QEMU user mode counts as a trial)?",
+    "status": "open",
+    "result": "",
+    "adr": "adr/0021-project-file-container.md"
+  },
+  {
+    "id": "S-F3",
+    "question": "On the Windows 2000 VM (NTFS and FAT32 if available) and on Windows 11, do the file calls of the format layer work: replace a file held open for reading with MoveFileExW(MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) under FILE_SHARE_DELETE, seek past 4 GiB with the SetFilePointer high word, and create a file from a UTF-8 path with non-BMP characters?",
+    "status": "open",
+    "result": "",
+    "adr": "adr/0021-project-file-container.md"
   }
 ]
