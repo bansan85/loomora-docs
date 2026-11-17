@@ -1,6 +1,6 @@
 # ADR 0023: Opaque handles in the C API; additive API, ABI version unchanged
 
-- **Status**: proposed
+- **Status**: accepted (2026-11-17)
 - **Date**: 2026-11-17
 - **Spike / requirement**: none / FR-017, FR-019 (spec 001), FR-026 (spec 002)
 
@@ -16,6 +16,15 @@ The project owner decided on 2026-11-17 that `LOOMORA_ABI_VERSION` stays 1 for t
 - **Data conventions**: size query (`cap = 0` returns the length needed, then a second call), range reads into caller arrays for bulk data, metadata items as UTF-8 JSON documents whose schema is the contract, a validation report as a handle with accessors rather than a text blob, a progress and cancel callback. A handle is used from one thread at a time; read-only project handles may be shared for reads.
 - **Additive API**: the new functions live in `core/include/loomora_project.h`, included by `loomora.h`. No existing function, constant or structure changes, so `LOOMORA_ABI_VERSION` is **not edited and stays 1**. A caller that needs the project API checks `loomora_format_version`, and links only against a library that has it. The export lists (`loomora.exp`, `loomora.map`, the JNI and Emscripten lists) are extended with the new functions; `tools/check_std.py` keeps checking that only `loomora_*` C symbols are exported.
 - If a later change breaks an existing function, the ABI version is raised then, by its own decision.
+
+## Verification (2026-11-17)
+
+No spike was needed. What was run on the opaque-handle API:
+
+- **SC-010, the project modes of the UIs** (`tools/verify.py` step `ui project`; `tools/run_vectors.py --validate-project` and `--roundtrip-project` against `loomora validate --quiet`, byte for byte and by exit status): 37 of 37 runs on each of the Windows Legacy UI x64 (the default host build, clang), the Linux Legacy UI (Xlib) and the Linux Modern UI (gtkmm on GTK 3), 6 reference files and 9 valid corpus files validated and round-tripped, one invalid file, one missing path, 3 usage rows. Not run: the Windows 2000 VM, Android, Web, macOS and iOS, the WinUI 3 UI (not built by the quick verification), the i686 Linux UI. The bridges of those UIs (JNI, `LibraryImport`, Emscripten exports, Apple) were written but not run, so the claim that every bridge language can hold an opaque pointer (research R13) is verified for the three UIs above only.
+- **SC-004**: 12.6 million fuzz inputs through the reader entry point of `core/fuzz/fuzz_project.cpp` (validate, open and read every item of an archive in memory) under ASan, UBSan and leak detection: no crash, leak or undefined behaviour; whether that entry point goes through the C handle functions or the C++ layer behind them was not checked for this record.
+- **T101 review** of `core/src/c_api_project*.cpp` and `core/src/format/`: the exception boundary of every C API function was read and found correct; the thread-safety rule of this record (a handle used from one thread at a time, read-only handles shareable) is what the finding about the shared counter of the temporary file name (fixed) rests on; the review also lists six deferred items (`validation/bug-reports/format-review-2026-11-17.md`).
+- `LOOMORA_ABI_VERSION` was not edited and stays 1.
 
 ## Rejected alternatives
 
@@ -34,9 +43,16 @@ The project owner decided on 2026-11-17 that `LOOMORA_ABI_VERSION` stays 1 for t
 
 ## Sources
 
-Documents read to write this draft (no external source was fetched):
+Documents read for the draft (2026-11-17, no external source was fetched):
 
 - `adr/0001-backend-cpp11-c-api.md` (Decision, Consequences)
-- `specs/002-loomora-file-format/contracts/c-api-project.md`: introduction, conventions, error codes, library and start of the reading functions (first 60 lines; the rest not read for this draft)
+- `specs/002-loomora-file-format/contracts/c-api-project.md`: introduction, conventions, error codes, library and start of the reading functions (first 60 lines; the rest was not read for the draft and was not re-read for the acceptance)
 - `specs/002-loomora-file-format/research.md`: R13
 - `specs/002-loomora-file-format/plan.md`: Constitution Check, Complexity Tracking
+
+Documents read for the acceptance (2026-11-17):
+
+- `validation/bug-reports/format-review-2026-11-17.md` (T101 review)
+- `core/tests/fuzz_run_sc004.md` of the main repository (SC-004)
+- the logs of the last `tools/verify.py quick` runs (`ui-project-*` of the Windows and Linux hosts) and the project-mode section of `tools/run_vectors.py`
+- No external document is cited by this record.

@@ -2,7 +2,7 @@
 
 (The file name keeps the word "vendored" of the first draft, which copied the sources into the repository; spikes and links refer to it. The decision is now two pinned git submodules, not copies.)
 
-- **Status**: proposed
+- **Status**: accepted (2026-11-17; the Android NDK, Emscripten and Windows 2000 VM runs of spike S-F1 were not made, see Results of the spikes)
 - **Date**: 2026-11-17
 - **Spike / requirement**: S-F1, S-F2 / FR-003, FR-004 (spec 002)
 
@@ -15,7 +15,21 @@ The `.loomora` format needs deflate and inflate (FR-003), and a JSON parser and 
 - **zlib**, included as the **git submodule** `third_party/zlib` (upstream `https://github.com/madler/zlib.git`), **pinned to the tag v1.3.1** (commit 51b7f2a), not copied into the repository. The project builds only the zlib sources it needs (`adler32`, `crc32`, `deflate`, `inflate`, `inffast`, `inftrees`, `trees`, `zutil`) through `cmake/loomora_zlib.cmake`, as a separate C target `loomora_zlib` (so it is outside the C++11 target rule), linked into `loomora` and `loomora_shared`; the other zlib sources (gzip, minigzip, contrib, examples) are never compiled. A zlib upgrade is a change of the pinned commit in a visible commit. The writer calls `deflateInit2` with fixed parameters and writes through a fixed-size output buffer so chunking cannot change the stream. CRC-32 also comes from zlib.
 - **RapidJSON** (MIT, headers only), included as the **git submodule** `third_party/rapidjson` (upstream `https://github.com/Tencent/rapidjson.git`), **pinned to the commit 297637bc0a0f00dc504dbc1a47ebdaa577f8ae19**, not copied into the repository; its `include` directory is used as a SYSTEM directory so the warning flags of the backend do not apply to it. Parsing uses `kParseFullPrecisionFlag` (correctly rounded decimal to double) and `kParseIterativeFlag` (no recursion), a depth limit of 64 and no NaN or Infinity. Small entries are parsed into a DOM; `nails.json` and other large arrays are read with the SAX reader. Writing uses the compact `Writer`, keys in the fixed order of the contract. Its own integer routines (Grisu2 for output) make the text independent of the C library and the locale.
 - **Submodules, not copies**: both libraries are fetched with `git submodule update --init third_party/zlib third_party/rapidjson` (with Catch2, `third_party/catch2`); the exact bytes are those of the pinned upstream commit, so there is no local change to track and no copy to keep in step. The rationale is unchanged: one pinned source, deterministic output, no system library.
-- **Fallback, per platform only**: a toolchain that cannot build the zlib C sources writes stored-only archives on that target (declared in `validation/fallbacks.json`), never everywhere. **Pending spike S-F1** (zlib and RapidJSON build and round trip on GCC and Clang `-std=c++11 -pedantic-errors`, MinGW-w64 for Windows 2000 i686, NDK r15c, Emscripten 1.39.20 fastcomp): the per-platform results and any fallback are written here when the spike ends. **Pending spike S-F2** for the identity of the double text on i686.
+- **Fallback, per platform only**: a toolchain that cannot build the zlib C sources writes stored-only archives on that target (declared in `validation/fallbacks.json`), never everywhere. No platform takes it: spike S-F1 found no toolchain that failed (see Results of the spikes), so the fallback stays declared in the decision and unused. The identity of the double text on i686 was checked by spike S-F2 (ADR 0021): it holds, once the test fixtures are on SSE2.
+
+## Results of the spikes
+
+**S-F1 (confirmed for the toolchains that were run, 2026-11-17).** `core/tests/spike_fmt_deps.cpp` (target `loomora_spike_fmt_deps`) deflates and inflates a 1 MiB buffer (levels 6 and 1) through the pinned zlib 1.3.1 and writes and parses 2000 doubles through RapidJSON with `kParseFullPrecisionFlag | kParseIterativeFlag` (every double compared bit for bit, the written text compared). It prints `S-F1: ok` and the same three hash lines with Windows 11 x64 clang (Visual Studio 18 LLVM) + Ninja, with g++ 15.2 `-std=c++11 -pedantic-errors -Wall -Wextra -O2` on Ubuntu 26.04 (WSL), and with MinGW-w64 GCC 13-win32 and `mingw-w64-win2000-i686.cmake` (cross-built in WSL, run as a 32-bit process on Windows 11, not on a Windows 2000 system):
+
+```
+zlib 1.3.1 level 6: in=1048576 deflated=151981 crc32=0f7970e9 sha256(deflated)=0f01cbcd35f279f6da31a279aec6240e527db69bae5d0faf4fa1f90dee69355f
+zlib 1.3.1 level 1: in=1048576 deflated=207271 crc32=0f7970e9 sha256(deflated)=2d7f429daec9d478b1346e469df04ceb771efdd1010ff5976f4470e921ff3f44
+rapidjson: 2000 doubles, 45684 bytes, sha256(json)=9dff655478f4534e34de87a66054c3715d3419bc5ff9f5b4dee1fee1244d8d72
+```
+
+So zlib and RapidJSON need no fallback on these toolchains, and a toolchain that prints these three lines produces the same deflate bytes and the same JSON text. The six reference files written through them are byte-identical on all the targets of ADR 0021 (S-F2). **Not run (`not_tested`)**: the program on the Windows 2000 VM, with the NDK r15c toolchain and with Emscripten fastcomp 1.39.20 and wasm (the NDK and emscripten are not installed on the machine); its MinGW-w64 x86_64 build was `blocked_by_antivirus`. The status `confirmed` in `validation/spikes.json` covers what was run and says so; those toolchains remain to be measured. The raw lines are in `validation/evidence/adr-0021/windows-11-x64/s-f1-fmt-deps-output.txt`.
+
+**Other results tied to this record.** `libloomora` with these two libraries survived 12.6 million fuzz inputs under ASan and UBSan (SC-004) and opens a 41 MB project with 10,000,000 steps in about 1 s (SC-005); the references are byte-identical across the targets run (ADR 0021, `validation/evidence/adr-0021/`).
 
 ## Rejected alternatives
 
@@ -33,13 +47,20 @@ The `.loomora` format needs deflate and inflate (FR-003), and a JSON parser and 
 - Two third-party sources are pinned as git submodules (zlib v1.3.1, RapidJSON 297637bc), each with its own licence in its tree; a clone needs `git submodule update --init` for them, and they are not compiled under `-pedantic-errors`.
 - A later zlib upgrade (a new pinned commit) changes the compressed bytes: the reference hashes (self-test constants, `validation/evidence/adr-0021/`) change with it, in a visible commit. Stored entries are unaffected.
 - This is the deviation "two third-party libraries" (named "two vendored libraries" in the Complexity Tracking of spec 002); the simpler routes (own code, or system libraries) cost more code and risk, or lose byte identity.
-- The build and run results on the lowest toolchains are not known yet (spike S-F1).
+- The build and run results on the Android NDK r15c and Emscripten toolchains, and on the Windows 2000 VM, are not known (spike S-F1 did not run them: `not_tested`).
 
 ## Sources
 
-Documents read to write this draft (no external source was fetched):
+Documents read for the draft (2026-11-17, no external source was fetched):
 
 - `specs/002-loomora-file-format/research.md`: R2 to R6 (R3 and R4 in particular), R15
 - `specs/002-loomora-file-format/plan.md`: Technical Context, Complexity Tracking, delivery phase 0
 - `specs/002-loomora-file-format/tasks.md`: T002, T003, T009
-- To read before acceptance (listed by `research.md`, not read yet): the zlib manual and FAQ, the RapidJSON documentation (parse flags, `dtoa`), the licences of both libraries.
+
+Documents read for the acceptance (2026-11-17):
+
+- `core/tests/cross_arch_results.json` and `cross_arch_results.md` of the main repository (branch `feat/loomora-format`): per target built / ran / hashes, fallbacks needed, import checks, `blocked_by_antivirus`, `not_tested`
+- `core/tests/spike_results_sf.md`: S-F1 and S-F3 results, including the raw output of the Windows 11 run (the probe source `tools/guest/fileio_probe.c` itself was not re-read for this record)
+- `core/tests/fuzz_run_sc004.md` (SC-004 fuzz run) and `core/tests/perf_sc005.md` (SC-005 numbers)
+- the raw reference files of each target (`$HOME/loomora-build/xtarget-refs/<target>/` in WSL), re-hashed on 2026-11-17 and compared with `python tools/check_loomora.py --compare`
+- **Not read** (listed by `research.md`, no external document was fetched or read for this record; the results above rest on measurements, not on these texts): the zlib manual and FAQ, the RapidJSON documentation (parse flags, `dtoa`), the licences of both libraries. A claim in this record that comes from one of them is the claim of `research.md`, not checked here.
