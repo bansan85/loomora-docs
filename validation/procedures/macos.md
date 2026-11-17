@@ -172,3 +172,65 @@ Installation (owner, 2026-11-17):
 - Not verified yet: that the installation completes, that the guest boots to the desktop, and that Xcode 5.1.1 is installed. This procedure is not a validation record: no verdict is written from it.
 
 Records: any platform record from this VM must say "VirtualBox 7.2.22 with Mac OS X 10.9.5 on a PC, not Apple hardware" (ADR 0019, item 6), and the date fix is part of the record.
+
+## M.11 Apple Legacy, consolidated record (2026-11-17) — compiled, NOT RUN
+
+Decision (owner, 2026-11-17): the macOS Legacy floor is **10.7 Lion**, not 10.6. Reason: C++11 needs libc++, and the clang of Xcode 4.6.3 refuses `-stdlib=libc++` below 10.7 (`invalid deployment target for -stdlib=libc++ (requires OS X 10.7 or later)`). The iOS Legacy floor stays **iOS 5.0**. Sources read on 2026-11-17: the Qt commit that moved its macOS floor to Lion for libc++ (`qtbase` commit `3d0a60aa`, on gitlab.linphone.org) and the MacPorts wiki page `LibcxxOnOlderSystems` (libc++ on 10.6 only through a separately built libc++). Neither gives the exact clang message, which was observed in the VM.
+
+### The virtual machine (host: Windows 11, VirtualBox 7.2.22)
+
+- Hyper-V, VirtualMachinePlatform, VBS, memory integrity, Fast Startup and the hypervisor launch at boot are off (`create-osx-mavericks.ps1 -Mode Disable`; saved settings in `E:\data\vm\osxmavericks\hyperv-state.json`). Consequence accepted by the owner: WSL is at version 1 and Docker Desktop does not run while VirtualBox is used. `-Mode Enable` puts everything back.
+- VM `OSXMavericks` (`E:\data\vm\OSXMavericks\`): Mac OS X 10.9.5, EFI 64, ICH9, PS/2 keyboard, USB tablet (later PS/2 mouse for the Tahoe VM), 4096 MB, 2 vCPU, VMSVGA 128 MB, 40 GB dynamic disk. Mac identity `MacBookPro11,3` with the SMC keys of the tool.
+- The installer `OSXMavericks10.9.5.iso` (6 500 020 736 bytes) is **not** ISO 9660: it is a raw GPT disk (`EFI PART`). It is converted to `OSXMavericks-installer.vdi` and booted as a disk.
+- Installation: the installer refused with "can't be verified" because the VM clock was in 2026 and the installer certificate has expired. Fix: Utilities > Terminal, `date 1015120013`, then continue.
+- SSH into the guest (for the builds): NAT forward host 127.0.0.1:2222 to guest 22 (`VBoxManage controlvm OSXMavericks natpf1`), Remote Login on. The 10.9 sshd (OpenSSH 6.2) needs `KexAlgorithms diffie-hellman-group14-sha1`, `Ciphers aes128-ctr`, `MACs hmac-sha1`, `HostKeyAlgorithms +ssh-rsa`, `PubkeyAcceptedAlgorithms +ssh-rsa`, and an RSA key (ed25519 is not known to OpenSSH 6.2). The host alias `loomora-mavericks` is in the user's SSH config. Snapshot `before-ssh-xcode` taken before the SSH set-up. Passwords are not written in any file.
+- Sources copied to the guest: `core/` and `ui/legacy/` from the branch (`git archive`), into `~/loomora`.
+
+### Xcode and SDKs in the guest
+
+| Xcode | Compiler | SDKs | Use |
+|---|---|---|---|
+| 4.6.3 (`Xcode_4.6.3.dmg`, 1 633 MB), in `/Applications/Xcode.app` | Apple LLVM 4.2 (LLVM 3.2), build 4H1503 | MacOSX10.7, MacOSX10.8, iPhoneOS6.1, plus MacOSX10.6.sdk copied from 4.3.3 | Tried for C++11: refused (see below) |
+| 4.3.3 (`Xcode_4.3.3_for_Lion.dmg`, 1 884 MB), mounted, not installed | Apple clang 3.1 (LLVM 3.1) | MacOSX10.6.sdk, MacOSX10.7.sdk | Source of the SDKs, and a C++0X test |
+| 4.2 (`installxcode_421_lion.dmg`, 1 724 MB) | pkg installer, not opened | not checked | Not used |
+| **5.1.1** (`Xcode_5.1.1.dmg`, 2 156 MB), in `/Applications/Xcode-5.1.1.app` | Apple LLVM 5.1 (LLVM 3.4) | MacOSX10.7 (copied from 4.3.3), MacOSX10.8, MacOSX10.9, iPhoneOS7.1 | Used for macOS 10.7 and iOS 5.0 |
+
+The licence is accepted with `defaults write /Library/Preferences/com.apple.dt.Xcode IDEXcodeVersionForAgreedToGMLicense <version>` (for 4.6.3 and 5.1.1). Xcode 4.6.3 lists the 10.6 SDK once it is copied from 4.3.3 (`xcodebuild -showsdks`). Xcode 5.1.1 does not contain the 10.6 SDK. Compatible Xcode versions per floor:
+
+- macOS 10.7 floor: Xcode 5.1.1 (C++11 and libc++ compile; SDK 10.7 copied in).
+- macOS 10.6 floor: not reached. Xcode 4.6.3 refuses libc++ below 10.7; 4.3.3 was not tested with libc++.
+- iOS 5.0 floor: Xcode 5.1.1 with the iPhoneOS7.1 SDK (deployment target 5.0; armv7 and armv7s; arm64 is set to 7.0 by Xcode, which is normal). Xcode 4.6.3 has the iPhoneOS6.1 SDK, which also allows 5.0, but without arm64 and with an older C++ compiler.
+
+### C++11 tests (what each compiler accepts on `core/src`)
+
+| Compiler | Target | Result |
+|---|---|---|
+| Xcode 4.6.3, `-stdlib=libc++` | 10.6 | Refused by the driver: `requires OS X 10.7 or later` |
+| Xcode 4.6.3, `-stdlib=libstdc++` | 10.6 | Fails: no `<cstdint>`, no `std::u32string`, no inheriting constructors |
+| Xcode 4.6.3, `-stdlib=libc++` | 10.7 | Fails: `inheriting constructors are not supported` (`errors.hpp`) |
+| Xcode 4.3.3 (clang 3.1), `-std=c++0x` and `-std=c++11` | 10.7 | Fails: `utf8.cpp:22`, braced initialisation `Lead{...}` inside a conditional expression |
+| **Xcode 5.1.1, `-std=c++11 -stdlib=libc++`** | **10.7** | **6 objects, 0 error** |
+| **Xcode 5.1.1, `-std=c++11 -stdlib=libc++`** | **iOS 5.0, armv7 and armv7s** | **6 objects each, 0 error** |
+| **Xcode 5.1.1, `-std=c++11 -stdlib=libc++`** | **iOS 5.0, arm64** | **6 objects, 0 error** (this slice is minimum iOS 7.0) |
+
+The C++0X approach suggested by a forum post (Xcode 4.2, "C++0X" with libc++) was not reproduced: the 4.x compilers tested fail on the code of `core/`. Xcode 4.2 was not opened (it is an installer package). The working C++11 compiler here is Xcode 5.1.1.
+
+### Results
+
+- **macOS Legacy, 10.7** (`~/build/macos-legacy-10.7-x5`): backend `libloomora.a` (C++11, libc++, x86_64) and the AppKit UI (`ui/legacy/macos-appkit`, Objective-C without ARC, manual retain/release) compiled and linked with `-lc++ -framework Cocoa -framework Foundation`. `LC_VERSION_MIN_MACOSX` = 10.7, sdk 10.7. **Not run**: the guest is 10.9.5, and running a graphical app needs a session.
+- **iOS Legacy, 5.0** (`~/build/ios5-app/Loomora.app`): `libloomora.a` fat (armv7, armv7s, arm64) built from `core/` with `-miphoneos-version-min=5.0`; `xcodebuild` of `ui/legacy/ios-uikit/Loomora.xcodeproj` with Xcode 5.1.1, `-sdk iphoneos7.1`, `LOOMORA_LIB_DIR` pointing to that library: **BUILD SUCCEEDED**. `LC_VERSION_MIN_IPHONEOS` = 5.0 for armv7 and armv7s, 7.0 for arm64. Links `/usr/lib/libc++.1.dylib`. **Not run**: an iOS 5 device is needed, and whether iOS 5 ships libc++ is not verified.
+- Incidents, for the record: a stuck `xcrun lipo` (Xcode 4.6.3 shim) blocked for 11 minutes; the fat library was rebuilt with the Xcode 5.1.1 `lipo`. The archiver of Xcode 4.6.3 cannot archive arm64 objects: use the archiver of the Xcode that compiled them.
+
+### The CI workflow (`.github/workflows/apple.yml`)
+
+- YAML parses (PyYAML). The scripts named by the jobs exist (`tools/build.py`, `tools/ci/apple-setup.sh`, `tools/ci/ios_simulator.py`, `tools/run_vectors.py`).
+- The `macos-legacy` job, `tools/build.py macos legacy` and `tools/report.py` used 10.6 as the floor: changed to **10.7** on branch `feat/apple-legacy-10-7` (commit `ecee802` in the main repository), with the matching comments and step names.
+- Not checked: whether Xcode 26 accepts `-mmacosx-version-min=10.7` with libc++ on `macos-26`. The job has not run (no push yet). If Xcode 26 refuses it, the job fails at BUILD, which is the expected first-run failure.
+- iOS 5 is not in CI: the hosted `macos-26` runner has no Xcode 5.1.1. The iOS Legacy job builds arm64 at iOS 12 with Xcode 26 (the project's own deployment target is overridden). The iOS 5.0 result above is local only.
+- The workflow header still says "written without a Mac, never run"; the push that would run it awaits the owner's approval.
+
+### Still open
+
+- A run of the macOS 10.7 and iOS 5.0 binaries on real hardware (or on Mavericks for the macOS one).
+- The C++11 libc++ question on an iOS 5 device.
+- The macOS 10.6 floor: no compiler found here accepts libc++ below 10.7 without a separately built libc++.
