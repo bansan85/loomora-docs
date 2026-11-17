@@ -1,0 +1,80 @@
+{
+  "adr": "adr/0021-project-file-container.md",
+  "spec": "002-loomora-file-format",
+  "date": "2026-11-17",
+  "what": "SHA-256 of the six reference files written by loomora_refgen (basic, empty, escape40, multi, multi-light, one). Reference = the six hashes of the golden constants of core/tests/format_selftest.cpp, held once in the files stored under validation/evidence/adr-0021/windows-11-x64/. Files byte-identical to the reference are not stored again (ADR 0014); only their hash is recorded here.",
+  "platform_id": "linux-i686",
+  "platform_note": "The i686 build (cmake/toolchains/linux-gcc-i686.cmake, g++ 15.2.0 -m32) ran as a 32-bit process on the 64-bit kernel of the WSL2 distribution Ubuntu-26.04, not in the Ubuntu 24.04 distribution that validation/platforms/linux-i686.json describes; same installation, same 64-bit kernel, not a native 32-bit system.",
+  "runs": [
+    {
+      "target": "linux-i686-gcc, with the SSE2 switch (final state)",
+      "toolchain": "cmake/toolchains/linux-gcc-i686.cmake with LOOMORA_TEST_FP_FLAGS = -msse2 -mfpmath=sse (applied to the test programs only by loomora_test_fp(); libloomora stays on x87)",
+      "ran": "loomora_refgen and loomora_format_selftest (ctest 3 of 3, Catch2 loomora_tests included)",
+      "files": {
+        "basic.loomora": {
+          "sha256": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+          "size": 17217,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "empty.loomora": {
+          "sha256": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+          "size": 750,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "escape40.loomora": {
+          "sha256": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+          "size": 6936,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi.loomora": {
+          "sha256": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+          "size": 21258,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi-light.loomora": {
+          "sha256": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+          "size": 17744,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "one.loomora": {
+          "sha256": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5",
+          "size": 5003,
+          "identical_to_reference": true,
+          "stored_as": null
+        }
+      },
+      "note": "Not stored: byte-identical to the files of windows-11-x64/. Fallback taken: x87-double-fixtures (validation/fallbacks.json)."
+    },
+    {
+      "target": "linux-i686-gcc, WITHOUT the SSE2 switch (the proof that the fallback is needed)",
+      "toolchain": "same toolchain, test fixtures on the x87 unit; the two files come from the directory xtarget-refs/fp-fstore of the run, named for the -ffloat-store attempt (cross_arch_results.json: -ffloat-store alone was not enough), and their hashes are those recorded for the first run without a switch",
+      "ran": "loomora_refgen; on the first run without any switch loomora_format_selftest FAILED (multi and multi-light differ) and loomora_tests had 2 failures (write_double(0.1 + 0.2) gives 0.3; nails of layout 2)",
+      "files_that_differ": {
+        "multi.loomora": {
+          "sha256": "b1f56507a80d99fef862f0f889b253881ffd69079b3f87977b45ff8913a86333",
+          "size": 21261,
+          "stored_as": "x87-float-store-multi.loomora",
+          "identical_to_reference": false
+        },
+        "multi-light.loomora": {
+          "sha256": "10f8dfc2fc23f0105f91dc365862e3642e0e5907666891e36071e5b6bf8808dd",
+          "size": 17748,
+          "stored_as": "x87-float-store-multi-light.loomora",
+          "identical_to_reference": false
+        }
+      },
+      "files_identical_to_reference": [
+        "basic.loomora",
+        "empty.loomora",
+        "escape40.loomora",
+        "one.loomora"
+      ],
+      "note": "The two stored files are the x87 output kept in fp-fstore; their SHA-256 equal those recorded for the first run without a switch in cross_arch_results.json (multi b1f56507..., multi-light 10f8dfc2...). Both files still pass python tools/check_loomora.py (valid files with different nail coordinates). The same fixtures on SSE2 give the reference bytes."
+    }
+  ]
+}

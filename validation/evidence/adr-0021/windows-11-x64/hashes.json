@@ -1,0 +1,99 @@
+{
+  "adr": "adr/0021-project-file-container.md",
+  "spec": "002-loomora-file-format",
+  "date": "2026-11-17",
+  "what": "SHA-256 of the six reference files written by loomora_refgen (basic, empty, escape40, multi, multi-light, one). Reference = the six hashes of the golden constants of core/tests/format_selftest.cpp, held once in the files stored under validation/evidence/adr-0021/windows-11-x64/. Files byte-identical to the reference are not stored again (ADR 0014); only their hash is recorded here.",
+  "platform_id": "windows-11-x64",
+  "host_note": "Windows 11 build 26300.9974 x64. The format work ran on a host with an Intel Core i7-11800H (16 logical CPUs), not on the MSI GL63 8RD i5-8300H laptop that validation/platforms/windows-11-x64.json describes; the Windows build number is the same.",
+  "runs": [
+    {
+      "target": "windows-x86_64-mingw",
+      "toolchain": "cmake/toolchains/mingw-w64-win-x86_64.cmake, cross-compiled in WSL (Ubuntu 26.04)",
+      "compiler": "x86_64-w64-mingw32-g++ 13-win32 (GCC 13.2.0, mingw-w64, msvcrt, static)",
+      "ran": "loomora_refgen.exe only, natively on Windows 11 x64",
+      "format_selftest": "blocked_by_antivirus (loomora_format_selftest.exe, loomora_selftest.exe and loomora_spike_fmt_deps.exe could not be run; the same sources pass on Linux x86_64 and in the clang build; see the verdict notes)",
+      "files": {
+        "basic.loomora": {
+          "sha256": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+          "size": 17217,
+          "identical_to_reference": true,
+          "stored_as": "basic.loomora"
+        },
+        "empty.loomora": {
+          "sha256": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+          "size": 750,
+          "identical_to_reference": true,
+          "stored_as": "empty.loomora"
+        },
+        "escape40.loomora": {
+          "sha256": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+          "size": 6936,
+          "identical_to_reference": true,
+          "stored_as": "escape40.loomora"
+        },
+        "multi.loomora": {
+          "sha256": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+          "size": 21258,
+          "identical_to_reference": true,
+          "stored_as": "multi.loomora"
+        },
+        "multi-light.loomora": {
+          "sha256": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+          "size": 17744,
+          "identical_to_reference": true,
+          "stored_as": "multi-light.loomora"
+        },
+        "one.loomora": {
+          "sha256": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5",
+          "size": 5003,
+          "identical_to_reference": true,
+          "stored_as": "one.loomora"
+        }
+      },
+      "note": "These are the six files stored in this folder (re-hashed on 2026-11-17 and compared with the golden hashes; python tools/check_loomora.py --compare against the Linux x86_64 files reports same for the six; python tools/check_loomora.py --canonical accepts the six)."
+    },
+    {
+      "target": "windows-11-x64-clang",
+      "toolchain": "host build, clang 22.1.3 (Visual Studio 18 LLVM) with Ninja, tools/verify.py quick",
+      "compiler": "clang 22.1.3, MSVC STL",
+      "ran": "loomora_refgen.exe and loomora_format_selftest (ctest 3 of 3) natively on Windows 11 x64",
+      "files": {
+        "basic.loomora": {
+          "sha256": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "empty.loomora": {
+          "sha256": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "escape40.loomora": {
+          "sha256": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi.loomora": {
+          "sha256": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi-light.loomora": {
+          "sha256": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "one.loomora": {
+          "sha256": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5",
+          "identical_to_reference": true,
+          "stored_as": null
+        }
+      },
+      "note": "Hashes taken from core/tests/cross_arch_results.json of the main repository; the raw files of this run were not kept, hence no size. Identical to the golden hashes."
+    }
+  ],
+  "other_stored_files": {
+    "s-f1-fmt-deps-output.txt": "the three lines printed by loomora_spike_fmt_deps (S-F1: zlib 1.3.1 levels 6 and 1, RapidJSON 2000 doubles), copied from core/tests/spike_results_sf.md of the main repository; identical on Windows 11 clang, WSL g++ 15.2 and MinGW-w64 win2000 i686 (apart from sizeof(long))",
+    "s-f3-fileio-probe-output.txt": "raw output of tools/guest/fileio_probe.c (S-F3) on Windows 11 NTFS, copied from core/tests/spike_results_sf.md of the main repository (the probe itself is in tools/guest/ of the main repository, sha256 of the source 71a40f26f7150c1cd6d6806b32c1eadc8add468300c76c7385b84bba10820ccc)"
+  }
+}

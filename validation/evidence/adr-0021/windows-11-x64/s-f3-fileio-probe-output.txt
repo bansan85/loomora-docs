@@ -1,0 +1,18 @@
+S-F3 system (RtlGetVersion): Windows 10.0 build 26300
+S-F3 filesystem: NTFS (max component 255)
+S-F3 a no reader open (baseline) | MoveFileExW(...): replaced (Windows error 0); target holds the new content: yes
+S-F3 a reader share=none | MoveFileExW(...): FAILED, Windows error 5; reader reads old: yes; target unchanged: yes
+S-F3 a reader share=READ|WRITE|DELETE | MoveFileExW(...): FAILED, Windows error 5; reader reads old: yes; target unchanged: yes
+S-F3 a reader share=READ|WRITE|DELETE | rename-old-away, move-new-in, delete-old: replaced; reader still reads the complete old file: yes; target holds the new content: yes
+S-F3 a reader share=READ|WRITE|DELETE | ReplaceFileW: replaced; reader still reads the complete old file: yes; target holds the new content: yes
+S-F3 a reader share=READ|WRITE|DELETE | SetFileInformationByHandle(FileRenameInfoEx, POSIX semantics): replaced; reader still reads the complete old file: yes; target holds the new content: yes
+S-F3 a reader share=READ|WRITE (no DELETE) | MoveFileExW(...): FAILED, Windows error 5; reader reads old: yes; target unchanged: yes
+S-F3 b offset 0x140000000 via SetFilePointer high word: write and read back ok
+S-F3 b offset 0x1ffffffff via SetFilePointer high word: write and read back ok
+S-F3 b offset 0x180000000 via SetFilePointer high word: write and read back ok
+S-F3 b GetFileSize: high=2 low=0x3
+S-F3 c MultiByteToWideChar(CP_UTF8, 0): 16 UTF-16 units, surrogate pairs correct: yes
+S-F3 c MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS): supported (Windows error 0)
+S-F3 c a malformed byte with flags 0: 4 units, second unit U+FFFD (Windows error 0): the product validates UTF-8 itself
+S-F3 c file created through the converted path; its name read back from the directory is identical: yes
+S-F3 done
