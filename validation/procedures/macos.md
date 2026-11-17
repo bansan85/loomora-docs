@@ -149,3 +149,26 @@ Host: Windows 11, VMware Workstation Pro 26.0.1 (build 25688693), Unlocker 4.2.8
 
 **Outcome (2026-11-16, owner's decision).** The owner refuses to turn the Windows hypervisor off (WSL2 and Docker are needed), so the VMware route stops here: no macOS VM runs on this PC, by QEMU/KVM (M.8) or by VMware (M.9b). Remaining ways, not tried: OC4VM (no patched VMware; whether it works on a WHP host is unknown); the hosted `macos-26` runner for the Modern UIs (T126); Apple hardware or a Mac in the cloud for the Legacy UIs (Xcode 5.1.1, macOS 10.6), which no hosted runner covers. The Legacy Apple trials stay `not_tested` until one of them is available.
 
+
+## M.10 VirtualBox route: `mavericks` (OS X 10.9.5) on a Windows host — in progress, written 2026-11-17
+
+Why: the owner chose VirtualBox 7.2.22 for the 10.9.5 installer (the VMware route M.9b is stopped). On 2026-11-17 the owner accepted that **Hyper-V is turned off** for VirtualBox to run, which stops WSL2 and Docker Desktop while it is off. This reverses the owner's refusal recorded in M.9b. The steps are scripted in `tools/macvm-virtualbox.ps1` (branch `feat/macos-vm-virtualbox`, not merged), run from an elevated PowerShell on the Windows host:
+
+- `-Mode Disable`: saves the current settings once to `E:\data\vm\osxmavericks\hyperv-state.json`, then turns off `Microsoft-Hyper-V-All`, `VirtualMachinePlatform`, VBS, memory integrity, Fast Startup and the hypervisor launch at boot. A full restart is needed (Restart, not Shut down). WSL distributions are not changed.
+- `-Mode Enable`: puts the saved settings back, including WSL versions. A full restart is needed.
+- `-Mode Create`: creates the VM in `E:\data\vm\osxmavericks` (`OSXMavericks`, Mac OS X 10.9 Mavericks 64-bit, EFI 64, ICH9, 4 GB RAM, 2 vCPU, 40 GB dynamic VDI, VMSVGA 128 MB, Mac identification keys) and starts it only if the Windows hypervisor is off and the VM is not already running.
+
+Facts found on the host (2026-11-17):
+
+- The installer file `OSXMavericks10.9.5.iso` (6,500,020,736 bytes) is **not** an ISO 9660 image: it has no `CD001` signature and starts with an `EFI PART` GPT header. VirtualBox refuses it as a DVD (`VERR_NOT_SUPPORTED`). `Create` converts it to `OSXMavericks-installer.vdi` (about 6.2 GB) and boots from disk. The original file is kept.
+- After `Disable` and a full restart, `HypervisorPresent` was still `True` the first time: the Hyper-V features were enabled and VBS was on. The state was `False` after the second run of `Disable` and a restart.
+- Hyper-V must be off: `Create` refuses to start the VM while `HypervisorPresent` is `True`.
+- A first `Create` attempt failed on the ISO and its partial VM was removed by the script (the `unregistervm --delete` path). The `Windows 2000` VM was not touched.
+- WSL2 needs the hypervisor: `wsl --set-version ... 2` did not return while the hypervisor was off, and the command was stopped. The distributions read as version 2 in the registry afterwards; `wsl -l -v` read version 1 after the restart. The version and the default are to be checked before WSL is used again.
+
+Installation (owner, 2026-11-17):
+
+- The installer shows "This copy of the Install OS X Mavericks application can't be verified". Cause: the installer's signing certificate has expired and the VM clock is in 2026. Fix, in the installer's **Utilities > Terminal**: `date 1015120013` (15 October 2013, 12:00), then quit Terminal and continue. The owner reports that this lets the installation go on.
+- Not verified yet: that the installation completes, that the guest boots to the desktop, and that Xcode 5.1.1 is installed. This procedure is not a validation record: no verdict is written from it.
+
+Records: any platform record from this VM must say "VirtualBox 7.2.22 with Mac OS X 10.9.5 on a PC, not Apple hardware" (ADR 0019, item 6), and the date fix is part of the record.
