@@ -237,6 +237,60 @@
       "sha256": "10470aa00c7f62f56380d32f9376e9605c675f0610af28fec4f088abff5dc6ff",
       "kind": "gui-run",
       "description": "Fonts of the EDIT and STATIC controls (WM_GETFONT + GetObject), texts and exit status of that window run: Segoe UI -12."
+    },
+    {
+      "path": "validation/evidence/adr-0021/windows-11-x64/hashes.json",
+      "sha256": "0bb72c59f8f21440b4e05924a6dcb1cb4589b6e8a7b2186fed0ba6915772bfeb",
+      "kind": "check-data",
+      "description": "[spec 002, ADR 0021] SHA-256 of the six reference files per target (Windows MinGW x86_64, Windows clang x64) and where each other platform's identical files are recorded; written once for all platforms (the files of the other platforms are not stored again, ADR 0014)."
+    },
+    {
+      "path": "validation/evidence/adr-0021/windows-11-x64/basic.loomora",
+      "sha256": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+      "kind": "check-data",
+      "description": "[spec 002, ADR 0021] Reference file 'basic' written by loomora_refgen.exe (MinGW-w64 x86_64) on Windows 11; byte-identical on every target that ran loomora_refgen (the single stored copy)."
+    },
+    {
+      "path": "validation/evidence/adr-0021/windows-11-x64/empty.loomora",
+      "sha256": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+      "kind": "check-data",
+      "description": "[spec 002, ADR 0021] Reference file 'empty' written by loomora_refgen.exe (MinGW-w64 x86_64) on Windows 11; byte-identical on every target that ran loomora_refgen (the single stored copy)."
+    },
+    {
+      "path": "validation/evidence/adr-0021/windows-11-x64/escape40.loomora",
+      "sha256": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+      "kind": "check-data",
+      "description": "[spec 002, ADR 0021] Reference file 'escape40' written by loomora_refgen.exe (MinGW-w64 x86_64) on Windows 11; byte-identical on every target that ran loomora_refgen (the single stored copy)."
+    },
+    {
+      "path": "validation/evidence/adr-0021/windows-11-x64/multi.loomora",
+      "sha256": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+      "kind": "check-data",
+      "description": "[spec 002, ADR 0021] Reference file 'multi' written by loomora_refgen.exe (MinGW-w64 x86_64) on Windows 11; byte-identical on every target that ran loomora_refgen (the single stored copy)."
+    },
+    {
+      "path": "validation/evidence/adr-0021/windows-11-x64/multi-light.loomora",
+      "sha256": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+      "kind": "check-data",
+      "description": "[spec 002, ADR 0021] Reference file 'multi-light' written by loomora_refgen.exe (MinGW-w64 x86_64) on Windows 11; byte-identical on every target that ran loomora_refgen (the single stored copy)."
+    },
+    {
+      "path": "validation/evidence/adr-0021/windows-11-x64/one.loomora",
+      "sha256": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5",
+      "kind": "check-data",
+      "description": "[spec 002, ADR 0021] Reference file 'one' written by loomora_refgen.exe (MinGW-w64 x86_64) on Windows 11; byte-identical on every target that ran loomora_refgen (the single stored copy)."
+    },
+    {
+      "path": "validation/evidence/adr-0021/windows-11-x64/s-f1-fmt-deps-output.txt",
+      "sha256": "3499f7e025d2494011de2805b5af5725c351685079cbc124cdcebeef5ce07cab",
+      "kind": "check-log",
+      "description": "[spec 002, S-F1] The three lines of loomora_spike_fmt_deps (zlib 1.3.1 deflate levels 6 and 1, RapidJSON 2000 doubles): identical on Windows 11 clang, Linux g++ 15.2 and MinGW-w64 win2000 i686."
+    },
+    {
+      "path": "validation/evidence/adr-0021/windows-11-x64/s-f3-fileio-probe-output.txt",
+      "sha256": "0b9c29fcc69d73275efbe7f1c9262b6e3ffcc3a276389367c5f3e04bbc7b94f7",
+      "kind": "check-log",
+      "description": "[spec 002, S-F3] Raw output of tools/guest/fileio_probe.c on Windows 11 NTFS: MoveFileExW replace over an open reader fails with error 5, the other replace methods work, SetFilePointer high word past 4 GiB, UTF-8 paths."
     }
   ],
   "measurements": {
@@ -350,5 +404,5 @@
   "sources": [
     "eol-windows-11"
   ],
-  "notes": "Windows 11 trial of the Windows Legacy UI, on the physical host described in validation/platforms/windows-11-x64.json, 2026-11-12. It covers only the Windows 11 part of T088 and the Windows 11 evidence of T094; it says nothing about the Legacy floor (Windows 2000) and does not determine the oldest working Windows (FR-005). Commands (repository root, Windows host): 'wsl -d Ubuntu-24.04 --cd <repo> -- python3 tools/build.py windows legacy' (up to date), 'python tools/trials/windows-11-x64/trial-driver.py' (40 probe runs, two window runs, host measurements), then 'python tools/run_vectors.py windows-11-x64 legacy --arch x64 --evidence-dir validation/evidence/<change>/windows-11-x64/' and the same with '--arch x86'. The x86 executable ran under WOW64 and reports the id of the operating system architecture (windows-11-x64); the Windows launcher of tools/run_vectors.py copies the exe to a scratch folder per run, starts it through CreateProcess with an argument list (UTF-16 command line built by Python), waits for the exit and reads loomora-probe.json; its 1,000-character expectation counts UTF-16 units (a character outside the BMP counts as two and is never cut), which no current vector exercises (checked once with a temporary vectors file outside the repository: 999 'a' + emoji gives 999 units kept, 998 'a' + emoji gives 1000). The text files of this evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256. ADR 0004 (2026-11-13): the earlier evidence was produced with executables x64 2c6c3ed9...f8866 and x86 16e78596...7494e; the rebuilt ones (x64 14176610...49a, x86 67a695c8...5a0) were re-verified, see the last restriction; the new look captures are in validation/evidence/adr-0004/windows-11-x64/, the re-run vector logs are not stored."
+  "notes": "Windows 11 trial of the Windows Legacy UI, on the physical host described in validation/platforms/windows-11-x64.json, 2026-11-12. It covers only the Windows 11 part of T088 and the Windows 11 evidence of T094; it says nothing about the Legacy floor (Windows 2000) and does not determine the oldest working Windows (FR-005). Commands (repository root, Windows host): 'wsl -d Ubuntu-24.04 --cd <repo> -- python3 tools/build.py windows legacy' (up to date), 'python tools/trials/windows-11-x64/trial-driver.py' (40 probe runs, two window runs, host measurements), then 'python tools/run_vectors.py windows-11-x64 legacy --arch x64 --evidence-dir validation/evidence/<change>/windows-11-x64/' and the same with '--arch x86'. The x86 executable ran under WOW64 and reports the id of the operating system architecture (windows-11-x64); the Windows launcher of tools/run_vectors.py copies the exe to a scratch folder per run, starts it through CreateProcess with an argument list (UTF-16 command line built by Python), waits for the exit and reads loomora-probe.json; its 1,000-character expectation counts UTF-16 units (a character outside the BMP counts as two and is never cut), which no current vector exercises (checked once with a temporary vectors file outside the repository: 999 'a' + emoji gives 999 units kept, 998 'a' + emoji gives 1000). The text files of this evidence folder must keep their LF line endings (validation/evidence/.gitattributes marks them -text) because the verdict holds their sha256. ADR 0004 (2026-11-13): the earlier evidence was produced with executables x64 2c6c3ed9...f8866 and x86 16e78596...7494e; the rebuilt ones (x64 14176610...49a, x86 67a695c8...5a0) were re-verified, see the last restriction; the new look captures are in validation/evidence/adr-0004/windows-11-x64/, the re-run vector logs are not stored. SPEC 002, THE .loomora PROJECT FILE (2026-11-17; backend, tools and the project modes of the Legacy UI, not the look of the UI). HOST NOTE: the spec 002 runs were made on a host with an Intel Core i7-11800H (16 logical CPUs), not on the MSI GL63 8RD of validation/platforms/windows-11-x64.json (the Windows build, 26300.9974, is the same). FORMAT RESULT: with the host build (clang 22.1.3, Visual Studio 18 LLVM, Ninja) loomora_format_selftest passes, ctest 3 of 3, and tools/verify.py quick gives 11 passed, 1 failed, 2 skipped; the failure is the 'records' step, expected before this docs branch is used (fallbacks.json then lacked the new switches and the spikes S-F1 to S-F3), the skips are run_vectors windows modern (not built) and std (needs g++). loomora_refgen writes six reference files (basic, empty, escape40, multi, multi-light, one) whose SHA-256 are identical on every target that ran it (validation/evidence/adr-0021/windows-11-x64/hashes.json lists them; the six files are stored once in that folder; python tools/check_loomora.py --compare reports same for the six). MINGW-W64 x86_64 BUILD (the toolchain of this record's Legacy deliverable): loomora_refgen.exe ran and wrote the stored files; loomora_format_selftest.exe, loomora_selftest.exe and loomora_spike_fmt_deps.exe could NOT be run, BLOCKED BY ANTIVIRUS (Git Bash 'Permission denied' (126); PowerShell 'file not found' because the file had been removed after the launch attempt; Start-Process access denied; WSL interop 'Invalid argument'); one rename probe was made before the no-evasion rule reached the run and was blocked the same way, no other attempt and no workaround, so this target's self-test is NOT verified by a run here (the same sources pass in the clang build and on Linux). Its import tables pass the Windows XP x64 allowlist for the four programs (70 to 89 imports, 14 to 16 on 'verify' entries) once the condition variable shim removed four Vista-only imports (fallback win2000-condvar-shim). SPIKES, all on this Windows 11 NTFS only: S-F1 ok with clang (zlib and RapidJSON output identical to Linux g++ and to the MinGW win2000 build); S-F3 (a) MoveFileExW(MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) over a file that a reader holds open fails with ERROR_ACCESS_DENIED (5) even with FILE_SHARE_DELETE, contrary to the assumption of research R10, while rename-aside, ReplaceFileW and the POSIX-semantics rename work and leave the reader on the old file (fallback win-replace-open-file; the product tries MoveFileExW, then the POSIX rename, then the rename-aside sequence); (b) SetFilePointer with the high word reaches 5 GiB on a sparse NTFS file (the 0xFFFFFFFF low word needs SetLastError before and GetLastError after), and the file-layer tests also passed with LOOMORA_FMT_WIN2000_SEEK=1; (c) UTF-8 paths with non-BMP characters convert to the right surrogate pairs and the file name read back is identical (the product validates UTF-8 itself, flags 0). Raw output stored. SC-005 (core/tests/perf_sc005.md of the main repository, Release build with clang 23 of the same host): 5,000 nails and 100,000 steps (321 KB) validate in 0.009 to 0.010 s and open in 0.009 to 0.010 s (reading all steps and nails 0.005 s, peak working set 12 MB) against the required 1 s; 500,000 nails and 10,000,000 steps (41 MB) validate in 1.0 to 1.3 s (one run 2.6 s), open in 1.0 to 1.1 s (one run 2.7 s), read in 0.5 s (0.5 to 1.1 s), peak 426 MB, opened with 0 errors and 2 warnings and not refused (5 repetitions, the slow runs isolated as host noise). SC-010 (tools/verify.py step 'ui project': tools/run_vectors.py --validate-project and --roundtrip-project against `loomora validate --quiet`, byte for byte and by exit status): the Windows Legacy UI x64 of the DEFAULT HOST BUILD (ui/legacy/windows-win32/loomora.exe built by clang, 1,061,888 bytes, sha256 3bd628c1d2cff3ae392401cb1c9974f317e8429719ebaad7e9a8b942231b6281; NOT the MinGW-w64 executable of this record's deliverable) matched in 37 of 37 runs (the 6 loomora_refgen files and the 9 valid-* corpus files validated and round-tripped, one invalid file, one missing path, 3 usage rows); run from a scratch copy, the log is in the build directory and is not stored. T101: the review of core/src/format was verified on this host with a baseline tools/verify.py quick only (see validation/verdicts/linux-ubuntu-24.04-x86_64-legacy.json for its summary). NOT DONE and not claimed on this platform: the MinGW x86_64 self-tests (blocked), the project modes on the MinGW executable, the SC-010 modes on the Windows 2000 VM, a fuzz run, any FAT32 volume, any other Windows version."
 }
