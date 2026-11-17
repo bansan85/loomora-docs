@@ -161,7 +161,7 @@ Why: the owner chose VirtualBox 7.2.22 for the 10.9.5 installer (the VMware rout
 Facts found on the host (2026-11-17):
 
 - The installer file `OSXMavericks10.9.5.iso` (6,500,020,736 bytes) is **not** an ISO 9660 image: it has no `CD001` signature and starts with an `EFI PART` GPT header. VirtualBox refuses it as a DVD (`VERR_NOT_SUPPORTED`). `Create` converts it to `OSXMavericks-installer.vdi` (about 6.2 GB) and boots from disk. The original file is kept.
-- After `Disable` and a full restart, `HypervisorPresent` was still `True` the first time: the Hyper-V features were enabled and VBS was on. The state was `False` after the second run of `Disable` and a restart.
+- After `Disable` and a full restart, `HypervisorPresent` was still `True` the first time: the Hyper-V features were enabled and VBS was on. After a second full restart it was `False`.
 - Hyper-V must be off: `Create` refuses to start the VM while `HypervisorPresent` is `True`.
 - A first `Create` attempt failed on the ISO and its partial VM was removed by the script (the `unregistervm --delete` path). The `Windows 2000` VM was not touched.
 - WSL2 needs the hypervisor: `wsl --set-version ... 2` did not return while the hypervisor was off, and the command was stopped. The distributions read as version 2 in the registry afterwards; `wsl -l -v` read version 1 after the restart. The version and the default are to be checked before WSL is used again.
