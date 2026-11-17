@@ -1,0 +1,55 @@
+{
+  "adr": "adr/0021-project-file-container.md",
+  "spec": "002-loomora-file-format",
+  "date": "2026-11-17",
+  "what": "SHA-256 of the six reference files written by loomora_refgen (basic, empty, escape40, multi, multi-light, one). Reference = the six hashes of the golden constants of core/tests/format_selftest.cpp, held once in the files stored under validation/evidence/adr-0021/windows-11-x64/. Files byte-identical to the reference are not stored again (ADR 0014); only their hash is recorded here.",
+  "platform_id": "android-4.1.2-x86",
+  "platform_note": "BUILT FOR API 9, RUN ON API 16 ONLY, on one emulator (Android emulator 37.2.13.0, AVD API16 = system image android-16 default x86, Android 4.1.2, 1,024 MB, WHPX, headless, on the Windows 11 host of the spec 002 work). Nothing below API 16 was run: this proves bytes and logic on x86 under Android 4.1.2, not Android 2.3 to 4.0 and not any ARM ABI. The sizes are those of the reference files: the run recorded the six SHA-256 (core/tests/android_results.json / web_results.json of the main repository), not the sizes, and an equal SHA-256 means equal bytes.",
+  "runs": [
+    {
+      "target": "android-api9-x86",
+      "toolchain": "cmake/toolchains/android-ndk-r15c.cmake, NDK r15c (15.2.4203891, Clang 5.0.300080), ABI x86, android-9 sysroot, gnustl static, not PIE (LOOMORA_ANDROID_PIE off)",
+      "ran": "loomora_selftest (all passed), loomora_format_selftest (ok), loomora_spike_fmt_deps (S-F1: ok, the three lines equal to the hosts') and loomora_refgen, as test programs pushed with adb, on API 16",
+      "fallback_taken": "android-api9-lseek64: LOOMORA_FMT_LSEEK64 on (__ANDROID_API__ 9 < 21), so the pread64 / pwrite64 SYSTEM CALLS (API < 12) and fstat() (API < 21) were the code that ran. Not run: a file above 2 GiB (the 5 GiB tests are host only).",
+      "files": {
+        "basic.loomora": {
+          "sha256": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+          "size": 17217,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "empty.loomora": {
+          "sha256": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+          "size": 750,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "escape40.loomora": {
+          "sha256": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+          "size": 6936,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi.loomora": {
+          "sha256": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+          "size": 21258,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi-light.loomora": {
+          "sha256": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+          "size": 17744,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "one.loomora": {
+          "sha256": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5",
+          "size": 5003,
+          "identical_to_reference": true,
+          "stored_as": null
+        }
+      },
+      "note": "Not stored: byte-identical to the files of windows-11-x64/. No determinism difference and no switch: Clang for x86 uses SSE2, so LOOMORA_TEST_FP_FLAGS (the x87 fallback of the i686 GCC targets) is not needed."
+    }
+  ]
+}

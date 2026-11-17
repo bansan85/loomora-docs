@@ -1,0 +1,145 @@
+{
+  "adr": "adr/0021-project-file-container.md",
+  "spec": "002-loomora-file-format",
+  "date": "2026-11-17",
+  "what": "SHA-256 of the six reference files written by loomora_refgen (basic, empty, escape40, multi, multi-light, one). Reference = the six hashes of the golden constants of core/tests/format_selftest.cpp, held once in the files stored under validation/evidence/adr-0021/windows-11-x64/. Files byte-identical to the reference are not stored again (ADR 0014); only their hash is recorded here.",
+  "platform_id": "android-7.0-x86_64",
+  "platform_note": "Run on the Android 7.0 (API 24) x86_64 emulator (Android emulator 37.2.13.0, AVD API24 = system image android-24 default x86_64, 1,536 MB, WHPX, headless). The third run below is on ANOTHER system, Android 15 (API 35, AVD API35 = system image android-35 default x86_64, plain AOSP, 2,048 MB), for which no platform record exists (tools/run_vectors.py derives the id android-15-x86_64): it is kept in this file as a separate run, not as a platform, and is NOT a run on Android 7.0. The first run is a 32-bit x86 process on the x86_64 image (the id a probe line gives it is android-7.0-x86, which has no record either). The sizes are those of the reference files: the run recorded the six SHA-256 (core/tests/android_results.json / web_results.json of the main repository), not the sizes, and an equal SHA-256 means equal bytes.",
+  "runs": [
+    {
+      "target": "android-api16-x86-pie on API 24",
+      "toolchain": "cmake/toolchains/android-ndk-r15c.cmake, NDK r15c, ABI x86, android-16 sysroot, LOOMORA_ANDROID_PIE on (Android 5.0 and later refuse a non-PIE executable)",
+      "ran": "loomora_selftest (all passed), loomora_format_selftest (ok), loomora_spike_fmt_deps (S-F1: ok, sizeof(void*)=4) and loomora_refgen, as a 32-bit process on API 24",
+      "fallback_taken": "android-api9-lseek64: LOOMORA_FMT_LSEEK64 on (API 16 < 21): pread64 / pwrite64 of the libc (API 12 to 20 path) and fstat(); not the syscall path of API < 12",
+      "files": {
+        "basic.loomora": {
+          "sha256": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+          "size": 17217,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "empty.loomora": {
+          "sha256": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+          "size": 750,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "escape40.loomora": {
+          "sha256": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+          "size": 6936,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi.loomora": {
+          "sha256": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+          "size": 21258,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi-light.loomora": {
+          "sha256": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+          "size": 17744,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "one.loomora": {
+          "sha256": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5",
+          "size": 5003,
+          "identical_to_reference": true,
+          "stored_as": null
+        }
+      },
+      "note": "Not stored: byte-identical to the files of windows-11-x64/."
+    },
+    {
+      "target": "android-api21-x86_64-pie on API 24",
+      "toolchain": "cmake/toolchains/android-ndk-r15c.cmake, NDK r15c, ABI x86_64, android-21 sysroot, LOOMORA_ANDROID_PIE on",
+      "ran": "loomora_selftest (all passed), loomora_format_selftest (ok), loomora_spike_fmt_deps (S-F1: ok, sizeof(void*)=8) and loomora_refgen, on API 24",
+      "fallback_taken": "none: LOOMORA_FMT_LSEEK64 is off for API >= 21 (the plain 64-bit calls)",
+      "files": {
+        "basic.loomora": {
+          "sha256": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+          "size": 17217,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "empty.loomora": {
+          "sha256": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+          "size": 750,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "escape40.loomora": {
+          "sha256": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+          "size": 6936,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi.loomora": {
+          "sha256": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+          "size": 21258,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi-light.loomora": {
+          "sha256": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+          "size": 17744,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "one.loomora": {
+          "sha256": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5",
+          "size": 5003,
+          "identical_to_reference": true,
+          "stored_as": null
+        }
+      },
+      "note": "Not stored: byte-identical to the files of windows-11-x64/."
+    },
+    {
+      "target": "android-api21-x86_64-pie on API 35 (Android 15), NOT Android 7.0",
+      "toolchain": "the same x86_64 binaries as the previous run",
+      "ran": "loomora_selftest (all passed), loomora_format_selftest (ok), loomora_spike_fmt_deps (S-F1: ok, sizeof(void*)=8) and loomora_refgen, on AVD API35",
+      "fallback_taken": "none",
+      "files": {
+        "basic.loomora": {
+          "sha256": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+          "size": 17217,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "empty.loomora": {
+          "sha256": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+          "size": 750,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "escape40.loomora": {
+          "sha256": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+          "size": 6936,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi.loomora": {
+          "sha256": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+          "size": 21258,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi-light.loomora": {
+          "sha256": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+          "size": 17744,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "one.loomora": {
+          "sha256": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5",
+          "size": 5003,
+          "identical_to_reference": true,
+          "stored_as": null
+        }
+      },
+      "note": "Not stored: byte-identical to the files of windows-11-x64/. A system with no platform record: see platform_note."
+    }
+  ]
+}
