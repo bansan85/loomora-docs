@@ -2,7 +2,7 @@
 
 (The file name keeps the word "vendored" of the first draft, which copied the sources into the repository; spikes and links refer to it. The decision is now two pinned git submodules, not copies.)
 
-- **Status**: accepted (2026-11-17; the Android NDK, Emscripten and Windows 2000 VM runs of spike S-F1 were not made, see Results of the spikes)
+- **Status**: accepted (2026-11-17; the Android NDK and Emscripten runs of spike S-F1 were made later, 2026-11-17, and recorded 2026-11-18; the Windows 2000 VM run, the ARM ABIs and any browser run were not made, see Results of the spikes)
 - **Date**: 2026-11-17
 - **Spike / requirement**: S-F1, S-F2 / FR-003, FR-004 (spec 002)
 
@@ -19,7 +19,7 @@ The `.loomora` format needs deflate and inflate (FR-003), and a JSON parser and 
 
 ## Results of the spikes
 
-**S-F1 (confirmed for the toolchains that were run, 2026-11-17).** `core/tests/spike_fmt_deps.cpp` (target `loomora_spike_fmt_deps`) deflates and inflates a 1 MiB buffer (levels 6 and 1) through the pinned zlib 1.3.1 and writes and parses 2000 doubles through RapidJSON with `kParseFullPrecisionFlag | kParseIterativeFlag` (every double compared bit for bit, the written text compared). It prints `S-F1: ok` and the same three hash lines with Windows 11 x64 clang (Visual Studio 18 LLVM) + Ninja, with g++ 15.2 `-std=c++11 -pedantic-errors -Wall -Wextra -O2` on Ubuntu 26.04 (WSL), and with MinGW-w64 GCC 13-win32 and `mingw-w64-win2000-i686.cmake` (cross-built in WSL, run as a 32-bit process on Windows 11, not on a Windows 2000 system):
+**S-F1 (confirmed for every toolchain the question names, 2026-11-17, completed with the Android and Web runs recorded 2026-11-18).** `core/tests/spike_fmt_deps.cpp` (target `loomora_spike_fmt_deps`) deflates and inflates a 1 MiB buffer (levels 6 and 1) through the pinned zlib 1.3.1 and writes and parses 2000 doubles through RapidJSON with `kParseFullPrecisionFlag | kParseIterativeFlag` (every double compared bit for bit, the written text compared). It prints `S-F1: ok` and the same three hash lines with Windows 11 x64 clang (Visual Studio 18 LLVM) + Ninja, with g++ 15.2 `-std=c++11 -pedantic-errors -Wall -Wextra -O2` on Ubuntu 26.04 (WSL), and with MinGW-w64 GCC 13-win32 and `mingw-w64-win2000-i686.cmake` (cross-built in WSL, run as a 32-bit process on Windows 11, not on a Windows 2000 system), and, in the later runs below, with the Android NDK r15c and Emscripten:
 
 ```
 zlib 1.3.1 level 6: in=1048576 deflated=151981 crc32=0f7970e9 sha256(deflated)=0f01cbcd35f279f6da31a279aec6240e527db69bae5d0faf4fa1f90dee69355f
@@ -27,7 +27,16 @@ zlib 1.3.1 level 1: in=1048576 deflated=207271 crc32=0f7970e9 sha256(deflated)=2
 rapidjson: 2000 doubles, 45684 bytes, sha256(json)=9dff655478f4534e34de87a66054c3715d3419bc5ff9f5b4dee1fee1244d8d72
 ```
 
-So zlib and RapidJSON need no fallback on these toolchains, and a toolchain that prints these three lines produces the same deflate bytes and the same JSON text. The six reference files written through them are byte-identical on all the targets of ADR 0021 (S-F2). **Not run (`not_tested`)**: the program on the Windows 2000 VM, with the NDK r15c toolchain and with Emscripten fastcomp 1.39.20 and wasm (the NDK and emscripten are not installed on the machine); its MinGW-w64 x86_64 build was `blocked_by_antivirus`. The status `confirmed` in `validation/spikes.json` covers what was run and says so; those toolchains remain to be measured. The raw lines are in `validation/evidence/adr-0021/windows-11-x64/s-f1-fmt-deps-output.txt`.
+So zlib and RapidJSON need no fallback on these toolchains, and a toolchain that prints these three lines produces the same deflate bytes and the same JSON text. The six reference files written through them are byte-identical on all the targets of ADR 0021 (S-F2).
+
+**Android and Web runs (2026-11-17, recorded 2026-11-18).** The program printed `S-F1: ok` and, as the result files state, the three lines of `spike_results_sf.md` with:
+
+- **NDK r15c** (15.2.4203891, Clang 5.0.300080, gnustl, `android-ndk-r15c.cmake`): x86 built for API 9 and run on an Android 4.1.2 (API 16) x86 emulator; x86 (API 16 sysroot, PIE) run as a 32-bit process on Android 7.0 (`sizeof(void*)=4`); x86_64 (API 21 sysroot, PIE) run on Android 7.0 and on Android 15 (`sizeof(void*)=8`, a system with no platform record). The armeabi, armeabi-v7a and arm64-v8a builds link and were ELF-checked, never run.
+- **Emscripten** under node: 1.39.20 fastcomp (`emscripten-js-fastcomp.cmake`, asm.js, node 14.18.2), 7.0.0 WebAssembly (`emscripten-wasm.cmake`, node 24) and 7.0.0 wasm2js (`emscripten-js.cmake`, node 24), `sizeof(void*)=4 sizeof(long)=4`. Linking the program needed its own export list (`bridge/wasm/exports-main.txt`, only `_main`) because it links only zlib and `wasm-ld` rejected the `loomora_*` list of the toolchain: a build detail of the test program, not of the libraries.
+
+The raw output of these runs was not stored (ADR 0014: the same three lines as above). No fallback of this ADR is taken on any of them. The NDK r15c zip is not covered by a published checksum (none was found); its measured SHA-256 is in `validation/spikes.json`.
+
+**Not run (`not_tested`)**: the program on the Windows 2000 VM (not started); the ARM ABIs of the NDK (no ARM system); Android 2.3 to 4.0 and the API levels not listed; the Emscripten builds in any browser (node only); Emscripten 1.29.12 plain arrays (dropped by ADR 0017); its MinGW-w64 x86_64 build was `blocked_by_antivirus`. The status `confirmed` in `validation/spikes.json` means that every toolchain named by the question (GCC, Clang, MinGW-w64 for Windows 2000 i686, NDK r15c, Emscripten 1.39.20 fastcomp) built and ran the program at least once and gave the same output; it does not mean that it ran on every floor system. The raw lines of the first three toolchains are in `validation/evidence/adr-0021/windows-11-x64/s-f1-fmt-deps-output.txt`.
 
 **Other results tied to this record.** `libloomora` with these two libraries survived 12.6 million fuzz inputs under ASan and UBSan (SC-004) and opens a 41 MB project with 10,000,000 steps in about 1 s (SC-005); the references are byte-identical across the targets run (ADR 0021, `validation/evidence/adr-0021/`).
 
@@ -47,7 +56,7 @@ So zlib and RapidJSON need no fallback on these toolchains, and a toolchain that
 - Two third-party sources are pinned as git submodules (zlib v1.3.1, RapidJSON 297637bc), each with its own licence in its tree; a clone needs `git submodule update --init` for them, and they are not compiled under `-pedantic-errors`.
 - A later zlib upgrade (a new pinned commit) changes the compressed bytes: the reference hashes (self-test constants, `validation/evidence/adr-0021/`) change with it, in a visible commit. Stored entries are unaffected.
 - This is the deviation "two third-party libraries" (named "two vendored libraries" in the Complexity Tracking of spec 002); the simpler routes (own code, or system libraries) cost more code and risk, or lose byte identity.
-- The build and run results on the Android NDK r15c and Emscripten toolchains, and on the Windows 2000 VM, are not known (spike S-F1 did not run them: `not_tested`).
+- The build and run results on the Android NDK r15c (x86 and x86_64 emulators) and Emscripten (node) toolchains are known (S-F1 above); on the Windows 2000 VM, the ARM ABIs and in browsers they are not (`not_tested`).
 
 ## Sources
 
@@ -61,6 +70,7 @@ Documents read for the acceptance (2026-11-17):
 
 - `core/tests/cross_arch_results.json` and `cross_arch_results.md` of the main repository (branch `feat/loomora-format`): per target built / ran / hashes, fallbacks needed, import checks, `blocked_by_antivirus`, `not_tested`
 - `core/tests/spike_results_sf.md`: S-F1 and S-F3 results, including the raw output of the Windows 11 run (the probe source `tools/guest/fileio_probe.c` itself was not re-read for this record)
+- `core/tests/android_results.md` and `android_results.json`, `core/tests/web_results.md` and `web_results.json` (added 2026-11-18, branches `feat/fmt-android` and `feat/fmt-web` of the main repository): the S-F1 outcome per Android and Web target; the raw output of those runs was not available as a file and the three lines are quoted from the result files, not re-read from a run
 - `core/tests/fuzz_run_sc004.md` (SC-004 fuzz run) and `core/tests/perf_sc005.md` (SC-005 numbers)
 - the raw reference files of each target (`$HOME/loomora-build/xtarget-refs/<target>/` in WSL), re-hashed on 2026-11-17 and compared with `python tools/check_loomora.py --compare`
 - **Not read** (listed by `research.md`, no external document was fetched or read for this record; the results above rest on measurements, not on these texts): the zlib manual and FAQ, the RapidJSON documentation (parse flags, `dtoa`), the licences of both libraries. A claim in this record that comes from one of them is the claim of `research.md`, not checked here.
