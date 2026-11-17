@@ -63,3 +63,6 @@ The complete rules are in `CLAUDE.md` at the root of the repository. Building an
 | 0018 | continuous integration on GitHub-hosted runners only; what they cannot run is a local run |
 | 0019 | Apple trials in macOS virtual machines: QEMU/KVM in WSL2 on the owner's PC, prepared and not yet run |
 | 0020 | Apple cross toolchain per target: Xcode 26 on the hosted runner, osxcross and Xcode 5.1.1 only for real hardware |
+| 0021 | `.loomora` project file: ZIP container, deterministic writer, entry layout and identifiers (proposed) |
+| 0022 | zlib and RapidJSON vendored in the repository (proposed) |
+| 0023 | opaque handles extend rule 3 of ADR 0001; additive project API, `LOOMORA_ABI_VERSION` stays 1 (proposed) |
