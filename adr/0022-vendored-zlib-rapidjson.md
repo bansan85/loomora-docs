@@ -1,4 +1,6 @@
-# ADR 0022: zlib and RapidJSON vendored in the repository
+# ADR 0022: zlib and RapidJSON as pinned git submodules
+
+(The file name keeps the word "vendored" of the first draft, which copied the sources into the repository; spikes and links refer to it. The decision is now two pinned git submodules, not copies.)
 
 - **Status**: proposed
 - **Date**: 2026-11-17
@@ -6,13 +8,13 @@
 
 ## Context
 
-The `.loomora` format needs deflate and inflate (FR-003), and a JSON parser and writer whose text for a double depends only on the double (FR-004, SC-001, SC-002). The platforms print floating-point numbers differently: `msvcrt` on Windows 2000, glibc, bionic, Emscripten. zlib's deflate is portable C and gives the same bytes for the same input and parameters on every architecture and byte order **for one zlib version**; the system zlib differs by platform and version, and some distributions patch it. The product build must not need a submodule or a system package that an old floor lacks.
+The `.loomora` format needs deflate and inflate (FR-003), and a JSON parser and writer whose text for a double depends only on the double (FR-004, SC-001, SC-002). The platforms print floating-point numbers differently: `msvcrt` on Windows 2000, glibc, bionic, Emscripten. zlib's deflate is portable C and gives the same bytes for the same input and parameters on every architecture and byte order **for one zlib version**; the system zlib differs by platform and version, and some distributions patch it. The product build must not need a system package that an old floor lacks: both libraries come from the repository itself, pinned to one exact upstream version.
 
 ## Decision
 
-- **zlib 1.3.x**, the files needed for `deflate`, `inflate` and `crc32` only, in `third_party/zlib/`, with its licence and a `VENDORED.md` (version, source hash, files kept, local changes: none). It is a separate C target `loomora_zlib` (so it is outside the C++11 target rule), linked into `loomora` and `loomora_shared`. The writer calls `deflateInit2` with fixed parameters and writes through a fixed-size output buffer so chunking cannot change the stream. CRC-32 also comes from zlib.
-- **RapidJSON** (MIT, headers only) in `third_party/rapidjson/`, with the same kind of `VENDORED.md`, included as a SYSTEM directory so the warning flags of the backend do not apply to it. Parsing uses `kParseFullPrecisionFlag` (correctly rounded decimal to double) and `kParseIterativeFlag` (no recursion), a depth limit of 64 and no NaN or Infinity. Small entries are parsed into a DOM; `nails.json` and other large arrays are read with the SAX reader. Writing uses the compact `Writer`, keys in the fixed order of the contract. Its own integer routines (Grisu2 for output) make the text independent of the C library and the locale.
-- **Vendored under `third_party/`**, not as a submodule, so building the product never needs one.
+- **zlib**, included as the **git submodule** `third_party/zlib` (upstream `https://github.com/madler/zlib.git`), **pinned to the tag v1.3.1** (commit 51b7f2a), not copied into the repository. The project builds only the zlib sources it needs (`adler32`, `crc32`, `deflate`, `inflate`, `inffast`, `inftrees`, `trees`, `zutil`) through `cmake/loomora_zlib.cmake`, as a separate C target `loomora_zlib` (so it is outside the C++11 target rule), linked into `loomora` and `loomora_shared`; the other zlib sources (gzip, minigzip, contrib, examples) are never compiled. A zlib upgrade is a change of the pinned commit in a visible commit. The writer calls `deflateInit2` with fixed parameters and writes through a fixed-size output buffer so chunking cannot change the stream. CRC-32 also comes from zlib.
+- **RapidJSON** (MIT, headers only), included as the **git submodule** `third_party/rapidjson` (upstream `https://github.com/Tencent/rapidjson.git`), **pinned to the commit 297637bc0a0f00dc504dbc1a47ebdaa577f8ae19**, not copied into the repository; its `include` directory is used as a SYSTEM directory so the warning flags of the backend do not apply to it. Parsing uses `kParseFullPrecisionFlag` (correctly rounded decimal to double) and `kParseIterativeFlag` (no recursion), a depth limit of 64 and no NaN or Infinity. Small entries are parsed into a DOM; `nails.json` and other large arrays are read with the SAX reader. Writing uses the compact `Writer`, keys in the fixed order of the contract. Its own integer routines (Grisu2 for output) make the text independent of the C library and the locale.
+- **Submodules, not copies**: both libraries are fetched with `git submodule update --init third_party/zlib third_party/rapidjson` (with Catch2, `third_party/catch2`); the exact bytes are those of the pinned upstream commit, so there is no local change to track and no copy to keep in step. The rationale is unchanged: one pinned source, deterministic output, no system library.
 - **Fallback, per platform only**: a toolchain that cannot build the zlib C sources writes stored-only archives on that target (declared in `validation/fallbacks.json`), never everywhere. **Pending spike S-F1** (zlib and RapidJSON build and round trip on GCC and Clang `-std=c++11 -pedantic-errors`, MinGW-w64 for Windows 2000 i686, NDK r15c, Emscripten 1.39.20 fastcomp): the per-platform results and any fallback are written here when the spike ends. **Pending spike S-F2** for the identity of the double text on i686.
 
 ## Rejected alternatives
@@ -28,9 +30,9 @@ The `.loomora` format needs deflate and inflate (FR-003), and a JSON parser and 
 
 ## Consequences
 
-- Two third-party sources are maintained in the repository, each with its licence and `VENDORED.md`; they are not compiled under `-pedantic-errors`.
-- A later zlib upgrade changes the compressed bytes: the reference hashes (self-test constants, `validation/evidence/adr-0021/`) change with it, in a visible commit. Stored entries are unaffected.
-- This is the deviation "two vendored libraries" of the Complexity Tracking of spec 002; the simpler routes (own code, or system libraries) cost more code and risk, or lose byte identity.
+- Two third-party sources are pinned as git submodules (zlib v1.3.1, RapidJSON 297637bc), each with its own licence in its tree; a clone needs `git submodule update --init` for them, and they are not compiled under `-pedantic-errors`.
+- A later zlib upgrade (a new pinned commit) changes the compressed bytes: the reference hashes (self-test constants, `validation/evidence/adr-0021/`) change with it, in a visible commit. Stored entries are unaffected.
+- This is the deviation "two third-party libraries" (named "two vendored libraries" in the Complexity Tracking of spec 002); the simpler routes (own code, or system libraries) cost more code and risk, or lose byte identity.
 - The build and run results on the lowest toolchains are not known yet (spike S-F1).
 
 ## Sources

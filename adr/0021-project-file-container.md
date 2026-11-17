@@ -34,7 +34,7 @@ Two points are decided now and gated by spikes: the byte identity on i686 (x87 e
 ## Consequences
 
 - A project of any size is validated by streaming (SHA-256 and CRC-32 per entry); memory is bounded by one range or one small item.
-- The reference hashes of the writer depend on the vendored zlib version (ADR 0022); a zlib upgrade changes them in a visible commit.
+- The reference hashes of the writer depend on the pinned zlib version, v1.3.1 as a git submodule (ADR 0022); a zlib upgrade changes them in a visible commit.
 - The requirements document, section 9.1, is rewritten from the contract (task of spec 002, main repository).
 - To verify: S-F2 (identity across architectures, big-endian only when a system is available, recorded as a trial) and S-F3 (Windows 2000, NTFS and FAT32 if available). Until then the Windows 2000 and Android fallbacks above are planned, not measured. Evidence goes under `validation/evidence/adr-0021/<platform-id>/`, once.
 

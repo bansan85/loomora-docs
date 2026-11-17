@@ -74,7 +74,7 @@
   },
   {
     "id": "S-F1",
-    "question": "Do the vendored zlib 1.3.x subset (C) and the RapidJSON headers build and give a correct deflate/inflate and JSON double round trip with GCC and Clang -std=c++11 -pedantic-errors, MinGW-w64 for Windows 2000 i686, NDK r15c and Emscripten 1.39.20 fastcomp, so that the .loomora writer can rely on them on every floor?",
+    "question": "Do the pinned zlib v1.3.1 sources (git submodule, only the needed files built through cmake/loomora_zlib.cmake, C) and the RapidJSON headers (git submodule) build and give a correct deflate/inflate and JSON double round trip with GCC and Clang -std=c++11 -pedantic-errors, MinGW-w64 for Windows 2000 i686, NDK r15c and Emscripten 1.39.20 fastcomp, so that the .loomora writer can rely on them on every floor?",
     "status": "open",
     "result": "",
     "adr": "adr/0022-vendored-zlib-rapidjson.md"
