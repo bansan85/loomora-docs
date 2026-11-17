@@ -367,5 +367,15 @@
     "min_compiler": "any",
     "platform_ids": [],
     "reason": "Switch kept off on every platform until a spike shows one that cannot address files above 2 GiB; no platform takes it now (spikes S-F1, S-F3)."
+  },
+  {
+    "id": "win-replace-open-file",
+    "description": "Atomic replace of a project file that a reader holds open: MoveFileExW first, then a rename with POSIX semantics, then a rename-aside sequence (old file renamed, new one moved in, old one deleted).",
+    "macro": "LOOMORA_LOOKUP_SETFILEINFORMATIONBYHANDLE",
+    "min_compiler": "not a compiler feature and not a C++ macro (the name identifies the run-time lookup): looked up at run time with GetProcAddress, any compiler; FileRenameInfoEx with POSIX semantics exists since Windows 10 1809",
+    "platform_ids": [
+      "windows-11-x64"
+    ],
+    "reason": "Spike S-F3 (a): on Windows 11 NTFS, MoveFileExW(MOVEFILE_REPLACE_EXISTING) over a file a reader holds open fails with ERROR_ACCESS_DENIED even when the reader opened it with FILE_SHARE_DELETE, so file_win32.cpp tries the POSIX rename, then the rename-aside sequence (ReplaceFile is not used). Behaviour on Windows 2000 is unknown until S-F3 is run there."
   }
 ]
