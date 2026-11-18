@@ -1,0 +1,129 @@
+{
+  "spec": "002-loomora-file-format",
+  "tasks": ["T009 (old-toolchain part, Web)", "T060", "T093"],
+  "date": "2026-11-17",
+  "machine": "Windows 11 x64 host, WSL Ubuntu 26.04 (build and node runs), Chrome 157.0.8103.39 on the Windows host (T093)",
+  "reference_files": ["basic", "empty", "escape40", "multi", "multi-light", "one"],
+  "golden_sha256": {
+    "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+    "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+    "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+    "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+    "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+    "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+  },
+  "raw_files_kept_in": "$HOME/loomora-build/xtarget-refs/<preset>/ (WSL), not in the repository",
+  "builds": [
+    {
+      "id": "web-wasm",
+      "preset": "web-wasm",
+      "toolchain": "cmake/toolchains/emscripten-wasm.cmake",
+      "compiler": "Emscripten 7.0.0 (777e6e5d), clang 24, WebAssembly",
+      "built": true,
+      "ran": true,
+      "node": "emsdk node 24.19.0 for ctest; system node 24.22.3 for refgen and the spike",
+      "module": {"loomora.js": 72147, "loomora.wasm": 696734},
+      "ctest": "2/2 (selftest, format_selftest)",
+      "refgen_sha256": {
+        "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+        "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+        "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+        "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+        "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+        "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+      },
+      "identical_to_golden": true,
+      "spike_sf1": "S-F1: ok, the three lines equal spike_results_sf.md (sizeof(void*)=4, sizeof(long)=4)",
+      "fallbacks_needed": []
+    },
+    {
+      "id": "web-js",
+      "preset": "web-js",
+      "toolchain": "cmake/toolchains/emscripten-js.cmake (-sWASM=0 -sLEGACY_VM_SUPPORT=1)",
+      "compiler": "Emscripten 7.0.0, wasm2js (ECMAScript 2021 glue, WASM=0 is deprecated: warning only)",
+      "built": true,
+      "ran": true,
+      "node": "system node 24.22.3",
+      "module": {"loomora.js": 1598550, "loomora.wasm": null},
+      "ctest": "2/2 (selftest, format_selftest)",
+      "refgen_sha256": {
+        "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+        "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+        "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+        "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+        "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+        "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+      },
+      "identical_to_golden": true,
+      "spike_sf1": "S-F1: ok, the three lines equal spike_results_sf.md",
+      "fallbacks_needed": []
+    },
+    {
+      "id": "web-js-fastcomp",
+      "preset": "web-js-fastcomp",
+      "toolchain": "cmake/toolchains/emscripten-js-fastcomp.cmake (-sWASM=0 -sLEGACY_VM_SUPPORT=1 --memory-init-file 0)",
+      "compiler": "Emscripten 1.39.20 fastcomp (45d43807), clang 6.0.1, asm.js; installed for this task: ~/emsdk-fastcomp = emsdk tag 3.1.29 + `emsdk install 1.39.20-fastcomp` (ADR 0017)",
+      "built": true,
+      "ran": true,
+      "node": "node 14.18.2 (the one of the fastcomp emsdk)",
+      "module": {"loomora.js": 1787058, "loomora.wasm": null},
+      "ctest": "2/2 (selftest, format_selftest)",
+      "refgen_sha256": {
+        "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+        "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+        "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+        "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+        "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+        "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+      },
+      "identical_to_golden": true,
+      "spike_sf1": "S-F1: ok, the three lines equal spike_results_sf.md",
+      "fallbacks_needed": [],
+      "notes": "Emscripten 1.39.20 runs under Python 3.14 with SyntaxWarning lines only. loomora.js parses as ECMAScript 3 (acorn 7.3.1 of the fastcomp emsdk, tools/build.py web legacy)."
+    }
+  ],
+  "t093_web_ui_project_modes": {
+    "pages_built": {
+      "legacy": "python3 tools/build.py web legacy (wasm + fastcomp modules built and ctest-ed, app.js and loomora.js parse as ecmaVersion 3)",
+      "modern": "python3 tools/build.py web modern (npm ci, TypeScript 7.0.2 compiles ui/modern/web-ts without error)"
+    },
+    "reference_cli": "loomora validate --quiet of the g++ build of this worktree (tools/verify.py quick --only build), compared line and exit status by tools/run_vectors.py --validate-project / --roundtrip-project",
+    "runs": [
+      {"launcher": "web-node-wasm legacy (page-harness.js, DOM stub, node)", "runs": 242, "passed": 242, "files": "6 references, the whole generated corpus (114 files incl. valid-*, warning-*, invalid-*, hostile-*), one missing path, 3 usage rows"},
+      {"launcher": "web-node-js legacy (WebAssembly, BigInt and Promise deleted from the context: the fastcomp loomora.js)", "runs": 242, "passed": 242, "files": "same"},
+      {"launcher": "web-node-wasm modern (ES modules through vm.SourceTextModule)", "runs": 242, "passed": 242, "files": "same"},
+      {"launcher": "web-chrome-157-windows-11-x64 modern (real Chrome 157, headless=new, dist served over HTTP, fetch)", "runs": 51, "passed": 51, "files": "6 references, 18 corpus files (valid, warning, invalid, bomb, encrypted), 3 usage rows; CLI through a wsl wrapper"}
+    ],
+    "defects_found_in_the_t093_code": [],
+    "not_run_in_a_browser": "the Legacy page (ES3 app.js with XMLHttpRequest) was run only through the DOM stub of node, not in a browser (no Firefox 10 VM run here)"
+  },
+  "code_fixes": [
+    {
+      "id": "refgen-web",
+      "files": ["core/tests/CMakeLists.txt"],
+      "what": "loomora_refgen is built for the Web presets (run by node with -sNODERAWFS=1 -sENVIRONMENT=node and the exported main of bridge/wasm/exports-selftest.txt); no change in libloomora"
+    },
+    {
+      "id": "spike-web",
+      "files": ["core/tests/CMakeLists.txt", "bridge/wasm/exports-main.txt"],
+      "what": "loomora_spike_fmt_deps links only zlib: it gets its own export list (only _main) instead of the toolchain's loomora_* list, which wasm-ld rejects"
+    },
+    {
+      "id": "web-project-launchers",
+      "files": ["tools/trials/web-node/page-harness.js", "tools/run_vectors.py"],
+      "what": "tooling: --files (XMLHttpRequest / fetch serve the bundled .loomora), setAttribute in the DOM stub, project mode result; run_project() of WebNodeLauncher and WebChromeHostLauncher, WebProbeServer.files_dir"
+    }
+  ],
+  "determinism_bugs": [],
+  "findings": [
+    "No determinism difference: the six files have the same SHA-256 on the three Web builds as on every other target, without any Web-specific switch.",
+    "The Web builds need no fallback; fallbacks.json is unchanged (not edited here)."
+  ],
+  "not_tested": [
+    {"item": "Legacy page in a real old browser (Firefox 10 on the Windows 2000 VM) for the project modes", "reason": "no VM run in this task; only node (DOM stub) runs for the Legacy page"},
+    {"item": "loomora.js of web-js-fastcomp in a browser", "reason": "run by node 14 only (as a browser-less engine); no browser run in this task"},
+    {"item": "Firefox, Safari, Edge, Chrome on Android for the Modern page", "reason": "only Chrome 157 on the Windows host was available and used"},
+    {"item": "Emscripten 1.29.12 plain-array build (Internet Explorer 6 to 9)", "reason": "dropped by ADR 0017"}
+  ],
+  "verify_quick": {"wsl": "14 passed, 1 failed (records, expected: docs branch unmerged)", "windows_clang": "11 passed, 1 failed (records, expected), 2 skipped (windows modern not built, std needs g++)"}
+}

@@ -1,0 +1,280 @@
+{
+  "spec": "002-loomora-file-format",
+  "tasks": [
+    "T059",
+    "T060",
+    "T009 (old toolchains)",
+    "T064"
+  ],
+  "date": "2026-11-17",
+  "reference_files": [
+    "basic",
+    "empty",
+    "escape40",
+    "multi",
+    "multi-light",
+    "one"
+  ],
+  "golden_sha256": {
+    "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+    "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+    "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+    "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+    "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+    "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+  },
+  "raw_files_kept_in": "$HOME/loomora-build/xtarget-refs/<target>/ (WSL), not in the repository",
+  "targets": [
+    {
+      "id": "linux-x86_64-gcc",
+      "toolchain": "host g++ (cmake -G Ninja Release)",
+      "compiler": "g++ 15.2.0 (Ubuntu 26.04, glibc 2.43)",
+      "built": true,
+      "ran": true,
+      "where": "WSL Ubuntu-26.04, native",
+      "format_selftest_pass": true,
+      "refgen_sha256": {
+        "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+        "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+        "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+        "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+        "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+        "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+      },
+      "identical_to_linux_x86_64": true,
+      "fallbacks_needed": [],
+      "imports_check": "n/a (ELF)",
+      "not_tested_reason": null,
+      "ctest": "3/3 (selftest, format_selftest, loomora_tests)"
+    },
+    {
+      "id": "linux-i686-gcc",
+      "toolchain": "cmake/toolchains/linux-gcc-i686.cmake (-m32)",
+      "compiler": "g++ 15.2.0 -m32",
+      "built": true,
+      "ran": true,
+      "where": "WSL Ubuntu-26.04, native (32-bit process on the 64-bit kernel)",
+      "format_selftest_pass": true,
+      "refgen_sha256": {
+        "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+        "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+        "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+        "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+        "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+        "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+      },
+      "identical_to_linux_x86_64": true,
+      "fallbacks_needed": [
+        {
+          "id": "x87-double-fixtures",
+          "platform_id_to_declare": "linux-legacy-i686",
+          "macro": "LOOMORA_TEST_FP_FLAGS (-msse2 -mfpmath=sse; set by the toolchain file, applied by loomora_test_fp() in core/tests/CMakeLists.txt to the test programs only)",
+          "reason": "32-bit x86 GCC computes doubles on the x87 unit with 80-bit intermediates; the test fixtures (cos, sin, round3, 0.1+0.2) then give other nails and the bytes of multi and multi-light differ from x86-64. libloomora itself is unaffected: with only the fixtures on SSE2 the library, built for x87, gives identical bytes. -ffloat-store alone was not enough. The test programs then need an SSE2 CPU."
+        }
+      ],
+      "imports_check": "n/a (ELF)",
+      "not_tested_reason": null,
+      "ctest": "3/3 (loomora_tests Catch2 built and passed for i686)",
+      "first_run_without_switch": {
+        "format_selftest": "FAILED (multi and multi-light differ)",
+        "loomora_tests": "2 failures (write_double(0.1+0.2) gives 0.3; nails of layout 2)",
+        "multi_sha256": "b1f56507a80d99fef862f0f889b253881ffd69079b3f87977b45ff8913a86333",
+        "multi_light_sha256": "10f8dfc2fc23f0105f91dc365862e3642e0e5907666891e36071e5b6bf8808dd",
+        "same_as_x86_64": [
+          "basic",
+          "empty",
+          "escape40",
+          "one"
+        ]
+      }
+    },
+    {
+      "id": "windows-x86_64-mingw",
+      "toolchain": "cmake/toolchains/mingw-w64-win-x86_64.cmake (cross from WSL)",
+      "compiler": "x86_64-w64-mingw32-g++ 13-win32 (GCC 13.2.0, mingw-w64, msvcrt, static)",
+      "built": true,
+      "ran": true,
+      "where": "Windows 11 x64 host (loomora_refgen.exe only)",
+      "format_selftest_pass": null,
+      "refgen_sha256": {
+        "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+        "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+        "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+        "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+        "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+        "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+      },
+      "identical_to_linux_x86_64": true,
+      "fallbacks_needed": [],
+      "imports_check": "pass on the XP x64 / Server 2003 x64 allowlist for the 4 programs (70-89 imports, 14-16 on 'verify' entries); the 4 Vista condition variable imports of libgcc were removed with the shim",
+      "not_tested_reason": "loomora_format_selftest.exe, loomora_selftest.exe, loomora_spike_fmt_deps.exe: blocked_by_antivirus, not run on this target (the same sources pass on linux-x86_64 and on the Windows clang x64 build)",
+      "blocked_by_antivirus": [
+        {
+          "file": "loomora_format_selftest.exe",
+          "target": "windows-x86_64-mingw",
+          "where": "Windows 11 host (Git Bash, PowerShell Start-Process; one run through WSL interop)",
+          "error": "Git Bash: Permission denied (126); PowerShell: file not found after the launch attempt (the file had been removed); Start-Process: Acces refuse (access denied); WSL interop: Invalid argument",
+          "status": "blocked_by_antivirus",
+          "note": "the file disappears when launched, loomora_refgen.exe of the same build runs. One rename probe (xt_fmt_check.exe) was made before the no-evasion rule was given and was blocked the same way; no other attempt"
+        },
+        {
+          "file": "loomora_selftest.exe",
+          "target": "windows-x86_64-mingw",
+          "where": "Windows 11 host (Git Bash, PowerShell Start-Process; one run through WSL interop)",
+          "error": "Git Bash: Permission denied (126); PowerShell: file not found after the launch attempt (the file had been removed); Start-Process: Acces refuse (access denied); WSL interop: Invalid argument",
+          "status": "blocked_by_antivirus",
+          "note": "the file disappears when launched, loomora_refgen.exe of the same build runs. One rename probe (xt_fmt_check.exe) was made before the no-evasion rule was given and was blocked the same way; no other attempt"
+        },
+        {
+          "file": "loomora_spike_fmt_deps.exe",
+          "target": "windows-x86_64-mingw",
+          "where": "Windows 11 host (Git Bash, PowerShell Start-Process; one run through WSL interop)",
+          "error": "Git Bash: Permission denied (126); PowerShell: file not found after the launch attempt (the file had been removed); Start-Process: Acces refuse (access denied); WSL interop: Invalid argument",
+          "status": "blocked_by_antivirus",
+          "note": "the file disappears when launched, loomora_refgen.exe of the same build runs. One rename probe (xt_fmt_check.exe) was made before the no-evasion rule was given and was blocked the same way; no other attempt"
+        }
+      ],
+      "refgen_run": "loomora_refgen.exe wrote the 6 files, SHA-256 identical to Linux x86_64"
+    },
+    {
+      "id": "windows-2000-x86-mingw",
+      "toolchain": "cmake/toolchains/mingw-w64-win2000-i686.cmake (_WIN32_WINNT=0x0500, LOOMORA_TARGET_WIN2000, msvcrt, static)",
+      "compiler": "i686-w64-mingw32-g++ 13-win32 (GCC 13.2.0, mingw-w64)",
+      "built": true,
+      "ran": true,
+      "where": "Windows 11 x64 host, 32-bit processes (NOT a Windows 2000 system)",
+      "format_selftest_pass": true,
+      "refgen_sha256": {
+        "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+        "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+        "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+        "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+        "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+        "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+      },
+      "identical_to_linux_x86_64": true,
+      "fallbacks_needed": [
+        {
+          "id": "x87-double-fixtures",
+          "platform_id_to_declare": "windows-2000-x86",
+          "macro": "LOOMORA_TEST_FP_FLAGS (-msse2 -mfpmath=sse; set by the toolchain file, applied by loomora_test_fp() in core/tests/CMakeLists.txt to the test programs only)",
+          "reason": "32-bit x86 GCC computes doubles on the x87 unit with 80-bit intermediates; the test fixtures (cos, sin, round3, 0.1+0.2) then give other nails and the bytes of multi and multi-light differ from x86-64. libloomora itself is unaffected: with only the fixtures on SSE2 the library, built for x87, gives identical bytes. -ffloat-store alone was not enough. The test programs then need an SSE2 CPU."
+        }
+      ],
+      "imports_check": "pass on the Windows 2000 SP4 allowlist for the 4 programs (66-85 imports; 3 to 5 on 'verify' entries: msvcrt.dll!__p___initenv, __p___mb_cur_max, __p__iob, _lock, _unlock, to confirm with check_imports.py --verify-dlls on the Windows 2000 VM); GetThreadId and the 4 condition variable functions are not imported (shim)",
+      "not_tested_reason": "the run on a Windows 2000 system is not_tested: no VM was used; the Windows 11 run proves the bytes and the logic, not the loader or the msvcrt exports of Windows 2000",
+      "loomora_selftest": "all passed",
+      "spike_S_F1": "ok, the three hash lines identical to spike_results_sf.md",
+      "first_run_without_switch": {
+        "format_selftest": "FAILED (multi and multi-light differ)",
+        "multi_sha256": "b1f56507a80d99fef862f0f889b253881ffd69079b3f87977b45ff8913a86333"
+      }
+    },
+    {
+      "id": "windows-11-x64-clang",
+      "toolchain": "host clang 22.1.3 (Visual Studio 18 LLVM) + Ninja, tools/verify.py quick",
+      "compiler": "clang 22.1.3, MSVC STL",
+      "built": true,
+      "ran": true,
+      "where": "Windows 11 x64 native",
+      "format_selftest_pass": true,
+      "refgen_sha256": {
+        "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+        "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+        "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+        "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+        "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+        "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+      },
+      "identical_to_linux_x86_64": true,
+      "fallbacks_needed": [],
+      "imports_check": "n/a",
+      "not_tested_reason": null,
+      "ctest": "3/3",
+      "verify_quick": "11 passed, 1 failed, 2 skipped (skipped: run_vectors windows modern not built, std needs g++); the failure is records (validate_records: fallbacks.json undeclared LOOMORA_FMT_LSEEK64, LOOMORA_FMT_NO_LARGE_FILES, LOOMORA_FMT_WIN2000_SEEK, LOOMORA_TEST_FP_FLAGS, spikes S-F1..S-F3 not recorded; the docs branch is unmerged, expected)"
+    },
+    {
+      "id": "linux-x86_64-verify-quick",
+      "toolchain": "tools/verify.py quick in WSL",
+      "compiler": "g++ 15.2.0",
+      "built": true,
+      "ran": true,
+      "where": "WSL Ubuntu-26.04",
+      "format_selftest_pass": true,
+      "refgen_sha256": null,
+      "identical_to_linux_x86_64": null,
+      "fallbacks_needed": [],
+      "imports_check": "n/a",
+      "not_tested_reason": null,
+      "verify_quick": "14 passed, 1 failed (std, vectors of both Linux UIs, cli validate, corpus, ui project, format-files PASS); the same records failure"
+    },
+    {
+      "id": "windows-2000-vm",
+      "toolchain": "MinGW win2000 i686",
+      "compiler": null,
+      "built": false,
+      "ran": false,
+      "where": "-",
+      "format_selftest_pass": null,
+      "refgen_sha256": null,
+      "identical_to_linux_x86_64": null,
+      "fallbacks_needed": [],
+      "imports_check": "n/a",
+      "not_tested_reason": "no Windows 2000 VM used in this task"
+    },
+    {
+      "id": "android-ndk-r15c",
+      "toolchain": "cmake/toolchains/android-ndk-r15c.cmake",
+      "compiler": null,
+      "built": false,
+      "ran": false,
+      "where": "-",
+      "format_selftest_pass": null,
+      "refgen_sha256": null,
+      "identical_to_linux_x86_64": null,
+      "fallbacks_needed": [],
+      "imports_check": "n/a",
+      "not_tested_reason": "Android NDK r15c, emulator and device are not installed on this machine"
+    },
+    {
+      "id": "web-emscripten-fastcomp-and-wasm",
+      "toolchain": "emscripten-js-fastcomp.cmake, emscripten-wasm.cmake (Node)",
+      "compiler": null,
+      "built": false,
+      "ran": false,
+      "where": "-",
+      "format_selftest_pass": null,
+      "refgen_sha256": null,
+      "identical_to_linux_x86_64": null,
+      "fallbacks_needed": [],
+      "imports_check": "n/a",
+      "not_tested_reason": "emscripten is not installed (node is, but there is no module to run)"
+    },
+    {
+      "id": "big-endian-qemu-ppc",
+      "toolchain": "QEMU user mode PowerPC",
+      "compiler": null,
+      "built": false,
+      "ran": false,
+      "where": "-",
+      "format_selftest_pass": null,
+      "refgen_sha256": null,
+      "identical_to_linux_x86_64": null,
+      "fallbacks_needed": [],
+      "imports_check": "n/a",
+      "not_tested_reason": "qemu is not installed"
+    }
+  ],
+  "code_fixes": [
+    "tools/check_imports.py: the parser read 0 functions with the objdump layout of binutils 2.39 and later (header 'Ordinal Hint Member-Name', rows '<none>'), so every executable passed with 0 imports; both layouts parsed, a DLL with no parsed function now fails, self-test extended",
+    "tools/win2000_imports.json: imports of the format module and the C runtime that exist on Windows 2000 / XP x64 added (documented: DeleteFileW, FlushFileBuffers, GetFileAttributesW, GetFileInformationByHandle, GetFileType, GetFullPathNameW, GetSystemTimeAsFileTime, MoveFileExW, ReadFile, SetFilePointer, SetFilePointerEx (x64), atexit, strtol, tolower; verify: msvcrt __p___initenv, __p___mb_cur_max, __p__iob, _lock, _unlock)",
+    "ui/legacy/windows-win32/getthreadid_shim.cpp: shim for the 4 Vista-only condition variable imports of libgcc gthr-win32-cond.o (InitializeConditionVariable, SleepConditionVariableCS, WakeConditionVariable, WakeAllConditionVariable): the real function when kernel32 has it, otherwise a polling wait; linked on win2000 i686 and XP x64 (LOOMORA_TARGET_WINXP64 set by the x86_64 toolchain)",
+    "core/tests/CMakeLists.txt: loomora_refgen also built for the MinGW and Linux toolchains and linked with the shim; the spike target gets the shim; loomora_test_fp() applies LOOMORA_TEST_FP_FLAGS",
+    "cmake/toolchains/linux-gcc-i686.cmake and mingw-w64-win2000-i686.cmake: LOOMORA_TEST_FP_FLAGS -msse2 -mfpmath=sse"
+  ],
+  "findings": [
+    "the toolchain of Ubuntu 26.04 (mingw-w64, GCC 13.2) differs from the one of the Windows 2000 VM trial: crt2.o now imports msvcrt!__p___initenv instead of __initenv, the stdio macros use __p__iob, MB_CUR_MAX uses __p___mb_cur_max; their presence in the msvcrt.dll of Windows 2000 is NOT confirmed (entries marked verify); check_imports.py had silently passed everything before the parser fix",
+    "the Windows 2000 and XP x64 builds imported 4 Vista-only condition variable functions through libstdc++ guard.o -> libgcc gthr-win32-cond.o: fixed with the shim, to confirm on the Windows 2000 VM",
+    "fallbacks.json (docs/implementation, not edited here) to declare: x87-double-fixtures (platforms linux-legacy-i686 and windows-2000-x86, macro LOOMORA_TEST_FP_FLAGS), and the condition variable shim for windows-2000-x86 and windows-xp-x64; validate_records.py lists LOOMORA_FMT_LSEEK64, LOOMORA_FMT_NO_LARGE_FILES, LOOMORA_FMT_WIN2000_SEEK and LOOMORA_TEST_FP_FLAGS as undeclared in fallbacks.json"
+  ]
+}
