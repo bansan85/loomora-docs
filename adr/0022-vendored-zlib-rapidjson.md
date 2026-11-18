@@ -68,9 +68,9 @@ Documents read for the draft (2026-11-17, no external source was fetched):
 
 Documents read for the acceptance (2026-11-17):
 
-- `core/tests/cross_arch_results.json` and `cross_arch_results.md` of the main repository (branch `feat/loomora-format`): per target built / ran / hashes, fallbacks needed, import checks, `blocked_by_antivirus`, `not_tested`
-- `core/tests/spike_results_sf.md`: S-F1 and S-F3 results, including the raw output of the Windows 11 run (the probe source `tools/guest/fileio_probe.c` itself was not re-read for this record)
-- `core/tests/android_results.md` and `android_results.json`, `core/tests/web_results.md` and `web_results.json` (added 2026-11-18, branches `feat/fmt-android` and `feat/fmt-web` of the main repository): the S-F1 outcome per Android and Web target; the raw output of those runs was not available as a file and the three lines are quoted from the result files, not re-read from a run
-- `core/tests/fuzz_run_sc004.md` (SC-004 fuzz run) and `core/tests/perf_sc005.md` (SC-005 numbers)
+- `validation/results/spec-002/cross_arch_results.json` and `cross_arch_results.md`: per target built / ran / hashes, fallbacks needed, import checks, `blocked_by_antivirus`, `not_tested`
+- `validation/results/spec-002/spike_results_sf.md`: S-F1 and S-F3 results, including the raw output of the Windows 11 run (the probe source `tools/guest/fileio_probe.c` itself was not re-read for this record)
+- `validation/results/spec-002/android_results.md` and `android_results.json`, `validation/results/spec-002/web_results.md` and `web_results.json` (added 2026-11-18, runs made on the branches `feat/fmt-android` and `feat/fmt-web` of the main repository): the S-F1 outcome per Android and Web target; the raw output of those runs was not available as a file and the three lines are quoted from the result files, not re-read from a run
+- `validation/results/spec-002/fuzz_run_sc004.md` (SC-004 fuzz run) and `validation/results/spec-002/perf_sc005.md` (SC-005 numbers)
 - the raw reference files of each target (`$HOME/loomora-build/xtarget-refs/<target>/` in WSL), re-hashed on 2026-11-17 and compared with `python tools/check_loomora.py --compare`
 - **Not read** (listed by `research.md`, no external document was fetched or read for this record; the results above rest on measurements, not on these texts): the zlib manual and FAQ, the RapidJSON documentation (parse flags, `dtoa`), the licences of both libraries. A claim in this record that comes from one of them is the claim of `research.md`, not checked here.

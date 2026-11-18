@@ -80,7 +80,7 @@ No Web-specific or Android-specific switch changes a byte: Clang for x86 uses SS
 
 All under `validation/evidence/adr-0021/`, stored once (ADR 0014; no image):
 
-- `windows-11-x64/`: the six reference files (written by the MinGW-w64 x86_64 `loomora_refgen.exe` on Windows 11), `hashes.json` (the hashes of the Windows MinGW and clang runs), `s-f1-fmt-deps-output.txt` and `s-f3-fileio-probe-output.txt` (raw output, copied from `core/tests/spike_results_sf.md` of the main repository).
+- `windows-11-x64/`: the six reference files (written by the MinGW-w64 x86_64 `loomora_refgen.exe` on Windows 11), `hashes.json` (the hashes of the Windows MinGW and clang runs), `s-f1-fmt-deps-output.txt` and `s-f3-fileio-probe-output.txt` (raw output, copied from `validation/results/spec-002/spike_results_sf.md`).
 - `linux-i686/`: `hashes.json` and the two files written without the SSE2 switch (`x87-float-store-multi.loomora`, `x87-float-store-multi-light.loomora`), the proof that the fallback is needed.
 - `linux-ubuntu-26.04-x86_64/` and `windows-2000-x86/`: `hashes.json` only (identical to the reference, not stored again). The first one is the Ubuntu 26.04 distribution that ran the Linux work: no platform record exists for it. The second records a Windows 2000 build run on Windows 11, not on the VM.
 - `android-4.1.2-x86/`, `android-7.0-x86_64/`, `web-chrome-157-windows-11-x64/` and `web-firefox-10-windows-2000-x86/`: `hashes.json` only (identical to the reference, not stored again; no APK, no binary, no image). `android-7.0-x86_64/` also holds, as a separate run with its caveat, the Android 15 (API 35) emulator, for which no platform record exists. The Web files were written under node, not in the browsers the platform records name.
@@ -97,10 +97,10 @@ Documents read for the draft (2026-11-17, no external source was fetched):
 
 Documents read for the acceptance (2026-11-17):
 
-- `core/tests/cross_arch_results.json` and `cross_arch_results.md` of the main repository (branch `feat/loomora-format`): per target built / ran / hashes, fallbacks needed, import checks, `blocked_by_antivirus`, `not_tested`
-- `core/tests/spike_results_sf.md`: S-F1 and S-F3 results, including the raw output of the Windows 11 run (the probe source `tools/guest/fileio_probe.c` itself was not re-read for this record)
-- `core/tests/android_results.md` and `android_results.json`, `core/tests/web_results.md` and `web_results.json` (added 2026-11-18, branches `feat/fmt-android` and `feat/fmt-web` of the main repository): the Android and Web builds, runs, hashes, code fixes and `not_tested` lines. The reference files of these runs and `file_posix.cpp` were not re-hashed or re-read for this record: the hashes are those the result files state
-- `core/tests/fuzz_run_sc004.md` (SC-004 fuzz run) and `core/tests/perf_sc005.md` (SC-005 numbers)
+- `validation/results/spec-002/cross_arch_results.json` and `cross_arch_results.md`: per target built / ran / hashes, fallbacks needed, import checks, `blocked_by_antivirus`, `not_tested`
+- `validation/results/spec-002/spike_results_sf.md`: S-F1 and S-F3 results, including the raw output of the Windows 11 run (the probe source `tools/guest/fileio_probe.c` itself was not re-read for this record)
+- `validation/results/spec-002/android_results.md` and `android_results.json`, `validation/results/spec-002/web_results.md` and `web_results.json` (added 2026-11-18, runs made on the branches `feat/fmt-android` and `feat/fmt-web` of the main repository): the Android and Web builds, runs, hashes, code fixes and `not_tested` lines. The reference files of these runs and `file_posix.cpp` were not re-hashed or re-read for this record: the hashes are those the result files state
+- `validation/results/spec-002/fuzz_run_sc004.md` (SC-004 fuzz run) and `validation/results/spec-002/perf_sc005.md` (SC-005 numbers)
 - `validation/bug-reports/format-review-2026-11-17.md` (T101 review)
 - the raw reference files of each target (`$HOME/loomora-build/xtarget-refs/<target>/` in WSL), re-hashed on 2026-11-17 and compared with `python tools/check_loomora.py --compare`
 - the logs of the last `tools/verify.py quick` runs (`ui-project-*` logs of the Windows and Linux hosts)
