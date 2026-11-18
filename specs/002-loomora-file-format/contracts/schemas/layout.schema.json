@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "loomora layout.json and nails.json",
+  "definitions": {
+    "layout": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "frame",
+        "nail_count"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "frame": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "nail_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "nails": {
+      "type": "object",
+      "required": [
+        "nails"
+      ],
+      "properties": {
+        "nails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "x",
+              "y",
+              "diameter",
+              "kind"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              },
+              "z": {
+                "type": "number"
+              },
+              "diameter": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "kind": {
+                "enum": [
+                  "boundary",
+                  "exclusion_boundary",
+                  "interior"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 64
+              },
+              "axis": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "length": {
+                "type": "number",
+                "minimum": 0
+              },
+              "side": {
+                "enum": [
+                  "exterior",
+                  "interior"
+                ]
+              },
+              "face": {
+                "type": "object",
+                "required": [
+                  "triangle",
+                  "u",
+                  "v"
+                ],
+                "properties": {
+                  "triangle": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "u": {
+                    "type": "number"
+                  },
+                  "v": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/definitions/layout"
+    },
+    {
+      "$ref": "#/definitions/nails"
+    }
+  ]
+}

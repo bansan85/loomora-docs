@@ -1,0 +1,189 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "loomora result.json",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "created_at",
+    "frame",
+    "layout",
+    "images",
+    "spools",
+    "steps",
+    "levels",
+    "thumbnail"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "created_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+    },
+    "frame": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "layout": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "images": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "properties": {
+          "image": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "view": {
+            "type": "object",
+            "required": [
+              "position",
+              "target",
+              "up",
+              "projection",
+              "weight"
+            ],
+            "properties": {
+              "position": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "target": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "up": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "projection": {
+                "enum": [
+                  "orthographic",
+                  "perspective"
+                ]
+              },
+              "size": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "fov_deg": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "exclusiveMaximum": 180
+              },
+              "weight": {
+                "type": "number",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "spools": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "spool",
+          "length_mm"
+        ],
+        "properties": {
+          "spool": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "length_mm": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "levels": {
+      "type": "boolean"
+    },
+    "thumbnail": {
+      "type": "object",
+      "required": [
+        "entry"
+      ],
+      "properties": {
+        "entry": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "format": {
+          "enum": [
+            "png",
+            "jpeg",
+            "webp"
+          ]
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "settings": {
+      "type": "object",
+      "required": [
+        "entry"
+      ],
+      "properties": {
+        "entry": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "format": {
+          "enum": [
+            "png",
+            "jpeg",
+            "webp"
+          ]
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

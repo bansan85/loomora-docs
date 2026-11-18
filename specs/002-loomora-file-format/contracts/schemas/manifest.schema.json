@@ -1,0 +1,259 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "loomora manifest.json",
+  "type": "object",
+  "required": [
+    "format",
+    "min_reader",
+    "project_id",
+    "title",
+    "created_at",
+    "modified_at",
+    "generator",
+    "profile",
+    "editable",
+    "counts",
+    "next_id",
+    "order",
+    "required_features",
+    "entries"
+  ],
+  "properties": {
+    "format": {
+      "type": "object",
+      "required": [
+        "name",
+        "major",
+        "minor"
+      ],
+      "properties": {
+        "name": {
+          "const": "loomora"
+        },
+        "major": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minor": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "min_reader": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "project_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "created_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+    },
+    "modified_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+    },
+    "generator": {
+      "type": "object",
+      "required": [
+        "application",
+        "version",
+        "platform",
+        "architecture"
+      ],
+      "properties": {
+        "application": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "architecture": {
+          "type": "string"
+        }
+      }
+    },
+    "profile": {
+      "enum": [
+        "full",
+        "light"
+      ]
+    },
+    "editable": {
+      "type": "boolean"
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "frames",
+        "layouts",
+        "images",
+        "spools",
+        "results"
+      ],
+      "properties": {
+        "frames": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "layouts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "images": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "spools": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "results": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "next_id": {
+      "type": "object",
+      "required": [
+        "frame",
+        "layout",
+        "image",
+        "spool",
+        "result"
+      ],
+      "properties": {
+        "frame": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967296
+        },
+        "layout": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967296
+        },
+        "image": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967296
+        },
+        "spool": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967296
+        },
+        "result": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967296
+        }
+      }
+    },
+    "order": {
+      "type": "object",
+      "required": [
+        "frames",
+        "layouts",
+        "images",
+        "spools",
+        "results"
+      ],
+      "properties": {
+        "frames": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "uniqueItems": true
+        },
+        "layouts": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "uniqueItems": true
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "uniqueItems": true
+        },
+        "spools": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "uniqueItems": true
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "required_features": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "surface_mesh",
+          "string_levels",
+          "multi_view_target"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "entries": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "size",
+          "sha256"
+        ],
+        "properties": {
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9_-]+\\.[A-Za-z0-9_.-]+$"
+      }
+    }
+  }
+}
