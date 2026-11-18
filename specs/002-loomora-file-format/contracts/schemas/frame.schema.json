@@ -1,0 +1,247 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "loomora frame.json",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "kind",
+    "dimensions",
+    "background",
+    "outline",
+    "exclusions",
+    "surface"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "kind": {
+      "enum": [
+        "2d",
+        "3d"
+      ]
+    },
+    "dimensions": {
+      "type": "object",
+      "required": [
+        "width_mm",
+        "height_mm"
+      ],
+      "properties": {
+        "width_mm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height_mm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "depth_mm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "background": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+    "outline": {
+      "type": "object",
+      "required": [
+        "type",
+        "polyline"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "circle",
+            "ellipse",
+            "rectangle",
+            "heart",
+            "star",
+            "svg",
+            "polygon"
+          ]
+        },
+        "params": {
+          "type": "object"
+        },
+        "polyline": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      }
+    },
+    "exclusions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "polyline"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "circle",
+              "ellipse",
+              "rectangle",
+              "heart",
+              "star",
+              "svg",
+              "polygon"
+            ]
+          },
+          "params": {
+            "type": "object"
+          },
+          "polyline": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        }
+      }
+    },
+    "surface": {
+      "enum": [
+        "plane",
+        "mesh",
+        "primitive",
+        "extrusion",
+        "revolution",
+        "csg"
+      ]
+    },
+    "body": {
+      "enum": [
+        "solid",
+        "shell",
+        "guide"
+      ]
+    },
+    "mesh": {
+      "type": "object",
+      "required": [
+        "vertices",
+        "triangles",
+        "watertight",
+        "manifold",
+        "has_normals"
+      ],
+      "properties": {
+        "vertices": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "triangles": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "watertight": {
+          "type": "boolean"
+        },
+        "manifold": {
+          "type": "boolean"
+        },
+        "has_uvs": {
+          "type": "boolean"
+        },
+        "has_normals": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "construction": {
+          "type": "object"
+        },
+        "attached_source": {
+          "type": "string",
+          "maxLength": 512
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "2d"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "surface": {
+            "const": "plane"
+          }
+        },
+        "not": {
+          "required": [
+            "mesh"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "3d"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "body"
+        ],
+        "properties": {
+          "surface": {
+            "enum": [
+              "mesh",
+              "primitive",
+              "extrusion",
+              "revolution",
+              "csg"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
