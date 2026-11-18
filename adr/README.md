@@ -22,6 +22,7 @@ This page describes how Loomora is built: the engine (the backend), the code lay
 | `specs/001-loomora-cross-platform/` | specification, plan, research, tasks, quickstart, contracts |
 | `docs/implementation/` | this git submodule (`../loomora-docs`): the ADRs and `validation/` (platforms, verdicts, deliverables, fallbacks, evidence, procedures, report) |
 | `third_party/catch2/` | git submodule, Catch2 (tests only) |
+| `third_party/zlib/`, `third_party/rapidjson/` | git submodules, zlib v1.3.1 and RapidJSON 297637bc (ADR 0022); only the zlib sources needed are built, through `cmake/loomora_zlib.cmake` |
 
 ## Interfaces
 
@@ -62,3 +63,7 @@ The complete rules are in `CLAUDE.md` at the root of the repository. Building an
 | 0017 | Web: WebAssembly path with the current Emscripten, JavaScript path with Emscripten 1.39.20 fastcomp, Internet Explorer up to 9 dropped |
 | 0018 | continuous integration on GitHub-hosted runners only; what they cannot run is a local run |
 | 0019 | Apple trials in macOS virtual machines: QEMU/KVM in WSL2 on the owner's PC, prepared and not yet run |
+| 0020 | Apple cross toolchain per target: Xcode 26 on the hosted runner, osxcross and Xcode 5.1.1 only for real hardware |
+| 0021 | `.loomora` project file: ZIP container, deterministic writer, entry layout and identifiers (accepted) |
+| 0022 | zlib and RapidJSON as pinned git submodules (accepted) |
+| 0023 | opaque handles extend rule 3 of ADR 0001; additive project API, `LOOMORA_ABI_VERSION` stays 1 (accepted) |

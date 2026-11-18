@@ -1,0 +1,105 @@
+{
+  "spec": "002-loomora-file-format",
+  "tasks": ["T009 (Android old toolchain)", "T060 (Android emulator)", "T091 (Android project probe modes)"],
+  "date": "2026-11-17",
+  "branch": "feat/fmt-android",
+  "host": "Windows 11 x64 (10.0.26300), WHPX accelerator (Windows hypervisor left on), Android emulator 37.2.13.0, headless (-no-window -no-audio -no-snapshot -gpu swiftshader_indirect)",
+  "installed": {
+    "ndk_r15c": {
+      "source": "https://dl.google.com/android/repository/android-ndk-r15c-windows-x86_64.zip (sdkmanager has no r15c: the oldest NDK it lists is 16.1.4479499)",
+      "zip_bytes": 849733996,
+      "zip_sha1": "970bb2496de0eada74674bb1b06d79165f725696",
+      "zip_sha256": "6f3785cbe7bd90dd0383e88c20aaa656b5a5e38a6cdc389e667e3b2c636bcd8d",
+      "checksum_published": "none found: the documentation gives none and the Google repository XML files (repository-12, repository2-1..3) do not list r15c; the hashes above are the ones measured, the archive extracted without error and source.properties says Pkg.Revision = 15.2.4203891, clang 5.0.300080",
+      "location": "C:\\Users\\v.legarrec\\AppData\\Local\\Android\\ndk-r15c-extract\\android-ndk-r15c (the rename of the extracted folder to ...\\Android\\android-ndk-r15c was refused: Permission denied, not retried, the folder is used where it is); zip kept in ...\\Android\\_dl",
+      "environment": "LOOMORA_ANDROID_NDK"
+    },
+    "system_images": [
+      {"avd": "API16", "package": "system-images;android-16;default;x86", "revision": 7, "android": "4.1.2", "abi": "x86", "ram_mb": 1024, "source": "sdkmanager (it still lists it: no manual download was needed)"},
+      {"avd": "API24", "package": "system-images;android-24;default;x86_64", "revision": 8, "android": "7.0", "abi": "x86_64 (abilist x86_64,x86)", "ram_mb": 1536, "sd_card": false, "source": "sdkmanager"},
+      {"avd": "API35", "package": "system-images;android-35;default;x86_64", "revision": 2, "android": "15", "abi": "x86_64 only (abilist x86_64: no 32-bit ABI)", "ram_mb": 2048, "sd_card": false, "source": "sdkmanager (plain AOSP image, not Google APIs)"}
+    ],
+    "avd_location": "C:\\Users\\v.legarrec\\.android\\avd (default), device profile pixel, created with avdmanager",
+    "ports": {"API16": 5554, "API24": 5556, "API35": 5558}
+  },
+  "reference_sha256": {
+    "basic": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+    "empty": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+    "escape40": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+    "multi": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+    "multi-light": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+    "one": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5"
+  },
+  "targets": [
+    {
+      "id": "android-api9-x86", "abi": "x86", "built_for_api": 9, "pie": false,
+      "built": true, "ran_on": "API16 (Android 4.1.2, x86)",
+      "selftest": "all passed", "format_selftest": "pass", "spike_s_f1": "S-F1: ok, three hashes equal to spike_results_sf.md",
+      "refgen_sha256_identical": true, "refgen_files": 6,
+      "note": "the pread64 system call path (API < 12) and the fstat() path (API < 21) are the ones compiled and run here"
+    },
+    {
+      "id": "android-api16-x86-pie", "abi": "x86", "built_for_api": 16, "pie": true,
+      "built": true, "ran_on": "API24 (Android 7.0, 32-bit x86 process on the x86_64 image)",
+      "selftest": "all passed", "format_selftest": "pass", "spike_s_f1": "S-F1: ok (sizeof(void*)=4)",
+      "refgen_sha256_identical": true, "refgen_files": 6
+    },
+    {
+      "id": "android-api21-x86_64-pie", "abi": "x86_64", "built_for_api": 21, "pie": true,
+      "built": true, "ran_on": "API24 (Android 7.0) and API35 (Android 15)",
+      "selftest": "all passed (both)", "format_selftest": "pass (both)", "spike_s_f1": "S-F1: ok (both, sizeof(void*)=8)",
+      "refgen_sha256_identical": true, "refgen_files": 6,
+      "note": "LOOMORA_FMT_LSEEK64 is off here (API >= 21): the plain 64-bit calls"
+    },
+    {"id": "android-api9-armeabi", "abi": "armeabi", "built": true, "ran": false, "checked": "ELF32 ARM, NEEDED libc libm only (selftest, format_selftest, refgen, spike); the four test programs and the JNI library link", "not_tested_reason": "no ARM system: the emulator of this machine runs x86 only, no ARM emulation"},
+    {"id": "android-api9-armeabi-v7a", "abi": "armeabi-v7a", "built": true, "ran": false, "checked": "same as armeabi", "not_tested_reason": "no ARM system"},
+    {"id": "android-api21-arm64-v8a", "abi": "arm64-v8a", "built": true, "ran": false, "checked": "ELF64 AArch64, NEEDED libc libm libdl", "not_tested_reason": "no ARM system"}
+  ],
+  "ui": {
+    "apk": {
+      "legacy": {"bytes": 1472418, "sha256": "2b008181afd19b25ebf2b742b24ba09712159a0cb0cbce1d5255d32327aade8a", "abis": ["armeabi", "armeabi-v7a", "x86", "arm64-v8a"], "built_by": "python tools/build.py android legacy (NDK r15c, API 9)"},
+      "modern": {"bytes": 3388002, "sha256": "20f83ee1fa53759aae91ce64c769c66206640487d70a9fcef14b3e8872b06cd8", "abis": ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"], "built_by": "python tools/build.py android modern (Gradle 9.9.1 wrapper, AGP 9.5.1, NDK r30, API 24)"}
+    },
+    "vectors_15": [
+      {"ui": "legacy", "api": 16, "platform": "android-4.1.2-x86", "result": "15 passed, 16 skipped, 49.8 s"},
+      {"ui": "legacy", "api": 24, "platform": "android-7.0-x86_64 --ui-abi x86", "result": "15 passed, 16 skipped, 42.6 s"},
+      {"ui": "modern", "api": 24, "platform": "android-7.0-x86_64", "result": "15 passed, 16 skipped, 44.7 s"},
+      {"ui": "modern", "api": 35, "platform": "android-15-x86_64", "result": "15 passed, 16 skipped, 50.5 s"}
+    ],
+    "project_modes": {
+      "compared_with": "loomora validate --quiet (g++ build in WSL Ubuntu-26.04 of this branch, run from a .cmd shim)",
+      "reference_set": "6 references written by loomora_refgen on the emulator + 9 valid-* corpus files + invalid-entry.sha256 + a missing path, validate_project and roundtrip_project each (34 runs) + 3 usage rows",
+      "results": [
+        {"ui": "legacy", "api": 16, "result": "37 of 37 passed, 80.6 s"},
+        {"ui": "legacy", "api": 24, "ui_abi": "x86", "result": "37 of 37 passed, 68.5 s"},
+        {"ui": "modern", "api": 24, "result": "37 of 37 passed, 75.0 s"},
+        {"ui": "modern", "api": 35, "result": "37 of 37 passed, 79.7 s"}
+      ],
+      "whole_corpus_validate_only": [
+        {"ui": "legacy", "api": 16, "files": 113, "result": "116 of 116 passed (113 corpus files incl. hostile and large, 3 usage rows), 238 s"},
+        {"ui": "modern", "api": 24, "files": 113, "result": "116 of 116 passed, 260.8 s"}
+      ],
+      "defects_found_in_t091_code": "none: the Java (Legacy) and Kotlin (Modern) ProjectProbe, MainActivity and the JNI project functions compiled and gave the command's line on the first run; the defects found were in the launcher (see fixes)"
+    }
+  },
+  "fixes": [
+    {"file": "core/src/format/io/file_posix.cpp", "problem": "LOOMORA_FMT_LSEEK64 (API < 21) called pread64, pwrite64, fstat64 and used struct stat64: undeclared with the r15c unified headers (pread64 and pwrite64 from API 12, fstat64 from API 21), and absent from the libc of API 9 to 11", "fix": "API < 12: the pread64 / pwrite64 system calls through syscall() (ARM EABI: one padding argument before the 64-bit offset); API < 21: fstat() and struct stat, whose st_size is already 64 bits in these headers; API 12 to 20: pread64 / pwrite64. Only the Android API < 21 branches changed"},
+    {"file": "core/src/format/codec/image_meta.cpp, core/tests/basic_project.hpp, core/tests/spike_fmt_deps.cpp", "problem": "the gnustl of the NDK has neither std::to_string nor std::snprintf (_GLIBCXX_USE_C99 undefined)", "fix": "a local dec() helper and the global snprintf; same messages on every target"},
+    {"file": "core/tests/CMakeLists.txt, tools/build.py", "problem": "loomora_refgen was not built for Android; the Android build did not copy the format self-test", "fix": "loomora_refgen is built for the NDK toolchain; tools/build.py copies loomora_format_selftest and loomora_refgen into out/android-legacy/selftest/<abi>/"},
+    {"file": "cmake/toolchains/android-ndk-r15c.cmake", "problem": "Android 5.0+ refuses a non-PIE executable (error: only position independent executables (PIE) are supported); no x86_64 ABI", "fix": "parameter LOOMORA_ANDROID_PIE (ON adds -fPIE and -pie, needs API >= 16) and ABI x86_64 (API 21 sysroot); default unchanged, so the API 9 test programs and the APK libraries are built as before. Only the test programs of API >= 21 devices use it (a toolchain parameter, not a code fallback)"},
+    {"file": "ui/modern/android-compose/app/CMakeLists.txt, core/CMakeLists.txt, cmake/loomora_zlib.cmake", "problem": "the Gradle build of the Modern UI could not find rapidjson/document.h or build zlib: its source directory is not the repository root", "fix": "the Modern CMakeLists sets LOOMORA_ZLIB_DIR and LOOMORA_RAPIDJSON_DIR and includes cmake/loomora_zlib.cmake; the two files take the variables when they are already set (default unchanged)"},
+    {"file": "tools/run_vectors.py", "problem": "the Android launchers had no project modes ('this launcher has no project modes')", "fix": "AndroidLegacyLauncher.run_project (the Modern launcher inherits it): pushes the file to /data/local/tmp, starts the activity without -W (a project mode finishes its activity at once, `am start -W` then never returns), reads the LOOMORA_VALIDATE line, removes the device directory from the file name in the line, infers the exit status from the line (android_project_status: an activity has no exit status), and waits for the activity to end for the usage rows; self-tested"}
+  ],
+  "determinism": "no difference: the six SHA-256 are identical to the reference on every Android run. Android x86 Clang defaults to SSE2, so LOOMORA_TEST_FP_FLAGS (the x87 switch of the i686 GCC targets) is not needed",
+  "antivirus": "blocked_by_antivirus: nothing. adb, the emulator, the NDK r15c Clang, and every test executable ran. One refusal: moving the extracted NDK folder to its final name gave Permission denied (possibly the scanner); not retried or worked around",
+  "not_tested": [
+    {"item": "armeabi, armeabi-v7a, arm64-v8a: any run", "reason": "no ARM system and no ARM emulation on this machine; built, linked and ELF-checked only. The ARM EABI padding argument of the pread64 system call (API < 12) is therefore untested, and armeabi still shows VFP in readelf -A (ADR 0016, not investigated)"},
+    {"item": "Android 2.3 to 4.0 (API 9 to 15)", "reason": "the emulator does not start below API 16 (owner decision, ADR 0016); the x86 build is built for API 9 and run on API 16 and 24 only"},
+    {"item": "files above 2 GiB on Android", "reason": "declared, not run: fallback android-api9-lseek64 (LOOMORA_FMT_LSEEK64, on for __ANDROID_API__ < 21). The offset split of the pread64 system call and the fstat() size were never exercised with an offset above 2 GiB on Android; the 5 GiB tests are host (Catch2) only"},
+    {"item": "Legacy UI on API 35", "reason": "outside its range (API 9 to 23), and the API 35 image has no 32-bit ABI while the Legacy APK has no x86_64 library"},
+    {"item": "Modern UI below API 24", "reason": "below its floor"},
+    {"item": "API 17 to 23 and 25 to 34", "reason": "no image installed (only the three required)"},
+    {"item": "Google APIs images, real phones, screenshots, rotation, dark theme", "reason": "not part of this task"},
+    {"item": "docs repository records (fallbacks.json android-api9-lseek64 text, platform and verdict records, spikes.json S-F1)", "reason": "a later task: not edited here"}
+  ]
+}

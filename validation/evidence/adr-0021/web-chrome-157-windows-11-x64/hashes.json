@@ -1,0 +1,54 @@
+{
+  "adr": "adr/0021-project-file-container.md",
+  "spec": "002-loomora-file-format",
+  "date": "2026-11-17",
+  "what": "SHA-256 of the six reference files written by loomora_refgen (basic, empty, escape40, multi, multi-light, one). Reference = the six hashes of the golden constants of core/tests/format_selftest.cpp, held once in the files stored under validation/evidence/adr-0021/windows-11-x64/. Files byte-identical to the reference are not stored again (ADR 0014); only their hash is recorded here.",
+  "platform_id": "web-chrome-157-windows-11-x64",
+  "platform_note": "THE SIX FILES WERE WRITTEN UNDER NODE, NOT IN CHROME. loomora_refgen of the web-wasm build ran under node in the WSL distribution Ubuntu 26.04 (build and run in $HOME/loomora-build/web-wasm); Chrome 157.0.8103.39 on the Windows host ran only the T093 page modes of the Modern page (see the verdict notes), which produce no reference file. This proves the bytes and logic of the WebAssembly module, not the browser. The sizes are those of the reference files: the run recorded the six SHA-256 (validation/results/spec-002/android_results.json / web_results.json), not the sizes, and an equal SHA-256 means equal bytes.",
+  "runs": [
+    {
+      "target": "web-wasm",
+      "toolchain": "cmake/toolchains/emscripten-wasm.cmake, Emscripten 7.0.0 (777e6e5d), clang 24, WebAssembly (loomora.js 72,147 bytes, loomora.wasm 696,734 bytes)",
+      "ran": "ctest 2 of 2 (selftest, format_selftest) under the node 24.19.0 of the emsdk; loomora_refgen (link flags -sNODERAWFS=1 -sENVIRONMENT=node) and loomora_spike_fmt_deps (S-F1: ok, sizeof(void*)=4 sizeof(long)=4, the three lines equal to the hosts') under the system node 24.22.3",
+      "files": {
+        "basic.loomora": {
+          "sha256": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+          "size": 17217,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "empty.loomora": {
+          "sha256": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+          "size": 750,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "escape40.loomora": {
+          "sha256": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+          "size": 6936,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi.loomora": {
+          "sha256": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+          "size": 21258,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi-light.loomora": {
+          "sha256": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+          "size": 17744,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "one.loomora": {
+          "sha256": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5",
+          "size": 5003,
+          "identical_to_reference": true,
+          "stored_as": null
+        }
+      },
+      "note": "Not stored: byte-identical to the files of windows-11-x64/. No Web-specific switch and no fallback was needed."
+    }
+  ]
+}

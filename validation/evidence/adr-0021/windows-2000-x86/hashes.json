@@ -1,0 +1,55 @@
+{
+  "adr": "adr/0021-project-file-container.md",
+  "spec": "002-loomora-file-format",
+  "date": "2026-11-17",
+  "what": "SHA-256 of the six reference files written by loomora_refgen (basic, empty, escape40, multi, multi-light, one). Reference = the six hashes of the golden constants of core/tests/format_selftest.cpp, held once in the files stored under validation/evidence/adr-0021/windows-11-x64/. Files byte-identical to the reference are not stored again (ADR 0014); only their hash is recorded here.",
+  "platform_id": "windows-2000-x86",
+  "platform_note": "NOT RUN ON WINDOWS 2000. The programs are built for the Windows 2000 target (cmake/toolchains/mingw-w64-win2000-i686.cmake, _WIN32_WINNT=0x0500) and were run as 32-bit processes on Windows 11 x64. The VirtualBox VM of validation/platforms/windows-2000-x86.json was not started for spec 002 (not_tested): this proves bytes and logic, not the Windows 2000 loader, kernel32 or msvcrt.",
+  "runs": [
+    {
+      "target": "windows-2000-x86-mingw",
+      "toolchain": "cmake/toolchains/mingw-w64-win2000-i686.cmake (_WIN32_WINNT=0x0500, LOOMORA_TARGET_WIN2000, msvcrt, static libgcc and libstdc++, GetThreadId and condition variable shim linked in), LOOMORA_TEST_FP_FLAGS = -msse2 -mfpmath=sse",
+      "compiler": "i686-w64-mingw32-g++ 13-win32 (GCC 13.2.0, mingw-w64)",
+      "ran": "on Windows 11 x64 (32-bit processes): loomora_refgen.exe, loomora_format_selftest.exe (pass), loomora_selftest.exe (all passed), loomora_spike_fmt_deps.exe (S-F1 ok)",
+      "files": {
+        "basic.loomora": {
+          "sha256": "fcdf97f0257076ba1c3ecae1867e57ebdc397440286a278f2cbe34eff8ce5f96",
+          "size": 17217,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "empty.loomora": {
+          "sha256": "8ca4dc6a2139539feb87f92b11cc0d5685fdff051fa044b692a7be5d984d7913",
+          "size": 750,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "escape40.loomora": {
+          "sha256": "b17920aabf9cc165a5c3b9290ba15f22e99903592426a8e55c96dc67ae570e2a",
+          "size": 6936,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi.loomora": {
+          "sha256": "8bcd3ae91876dcf6048c3a5dc689754a8eab90367faed373942b819a7c3f8607",
+          "size": 21258,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "multi-light.loomora": {
+          "sha256": "b32c8a390657d4f56ec9bd448e6c291e9781dfbb3b34b8164d049af67a7c4a8d",
+          "size": 17744,
+          "identical_to_reference": true,
+          "stored_as": null
+        },
+        "one.loomora": {
+          "sha256": "fc3fb5ebd929689bd7ee32da020b279ca81b3412c6c947eda8c9e7e3ddb846c5",
+          "size": 5003,
+          "identical_to_reference": true,
+          "stored_as": null
+        }
+      },
+      "note": "Not stored: byte-identical to the files of windows-11-x64/. The first run without the SSE2 switch failed in loomora_format_selftest with multi sha256 b1f56507a80d99fef862f0f889b253881ffd69079b3f87977b45ff8913a86333, the same hash as the x87 file stored under linux-i686/. Fallback taken: x87-double-fixtures."
+    }
+  ]
+}
