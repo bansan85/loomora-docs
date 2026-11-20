@@ -18,12 +18,12 @@ Success criteria evaluated from the records at generation time (`python tools/re
 
 **SC-002 detail**
 
-- Windows: windows-2000-x86, 2000-02-17, 26.7 years old, OK with restrictions, evidence: 41 file(s), 7 screenshot(s)
+- Windows: windows-2000-x86, 2000-02-17, 26.7 years old, OK with restrictions, evidence: 42 file(s), 7 screenshot(s)
 - macOS: not tested
 - Linux: linux-centos-5.11-x86_64, 2014-09-29, 12.13 years old, OK with restrictions, evidence: 14 file(s)
-- Android: android-4.1.2-x86, 2012-10-09, 14.1 years old, OK with restrictions, evidence: 9 file(s), 2 screenshot(s)
+- Android: android-4.1.2-x86, 2012-10-09, 14.1 years old, OK with restrictions, evidence: 10 file(s), 2 screenshot(s)
 - iOS / iPadOS: not tested
-- Web: web-firefox-10-windows-2000-x86, 2012-01-31, 14.8 years old, OK with restrictions, evidence: 17 file(s), 2 screenshot(s)
+- Web: web-firefox-10-windows-2000-x86, 2012-01-31, 14.8 years old, OK with restrictions, evidence: 18 file(s), 2 screenshot(s)
 
 **SC-009 detail**
 
@@ -109,9 +109,9 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 
 | Platform | System | Variant | Verdict | Decision | Evidence | Reproduction | Notes |
 |---|---|---|---|---|---|---|---|
-| windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | legacy | OK with restrictions | keep | 41 file(s), 7 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 2 disabled feature(s) |
+| windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | legacy | OK with restrictions | keep | 42 file(s), 7 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 2 disabled feature(s) |
 | windows-2000-x86 | Windows 2000 Professional 5.00.2195 (build 2195, Uniprocessor Free), NO service ... | modern | not tested | - | - | - | not attempted, justified: Not attempted, because no Modern UI can exist for this system, not because of a failure. The Windows Modern UI is WinUI 3 on the Windows App SDK with TargetPlatformMinVersion 10.0.17763.0, that is Windows 10 version 1809 as the lowest system (validation/deliverables/windows-11-x64-modern.json ... (full text in section 12) |
-| windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | legacy | OK with restrictions | keep | 37 file(s), 12 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 0 disabled feature(s) |
+| windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | legacy | OK with restrictions | keep | 46 file(s), 12 screenshot(s) | validation/procedures/windows.md | 10 restriction(s), 0 disabled feature(s) |
 | windows-11-x64 | Windows 11 Pro 10.0.26300.9974 (version 26H2, build 26300, UBR 9974) ... | modern | OK with restrictions | keep | 19 file(s), 2 screenshot(s) | validation/procedures/windows.md | 9 restriction(s), 0 disabled feature(s) |
 | windows-arm64 | Windows 11 (ARM64) 11, 64-bit ARM (arm64); NOT RUN, no build number: no ... | legacy | not tested | - | - | - | not attempted, justified: Not attempted, by choice of scope and not by a failure. tools/build.py builds the Windows Legacy UI for x86 (Windows 2000 and later) and x64 (XP x64 and later) only, with no ARM64 build, and no ARM64 Windows system was available, so whether the x86 or x64 executable runs under the emulation of Windows 11 ARM64 was not tried and ... (full text in section 12) |
 | windows-arm64 | Windows 11 (ARM64) 11, 64-bit ARM (arm64); NOT RUN, no build number: no ... | modern | not tested | - | - | - | not attempted, justified: Built, never run, by choice of scope and not by a failure. The ARM64 build exists (loomora.dll built by MSVC for ARM64, WinUI 3 folders for net8 and net10, machine type 0xAA64 checked, see validation/deliverables/windows-arm64-modern.json), but no ARM64 Windows machine, virtual machine or image was available, so it was never ... (full text in section 12) |
@@ -121,24 +121,24 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 | linux-centos-5.11-x86_64 | CentOS 5.11 (Final), userland of the PyPA image ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The owner's request of 2026-11-15 asks only for the Linux Legacy UI on an older Linux userland. The Linux Modern UI needs gtkmm and GTK 3.10 or later (ui/modern/linux-gtk3), which are not part of CentOS 5 (it ships GTK 2.10; the packages were not queried in ... (full text in section 12) |
 | linux-centos-6.10-x86_64 | CentOS 6.10 (Final), userland of the PyPA image ... | legacy | OK with restrictions | keep | 10 file(s) | validation/procedures/linux.md | 10 restriction(s), 2 disabled feature(s) |
 | linux-centos-6.10-x86_64 | CentOS 6.10 (Final), userland of the PyPA image ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The PoC scope rule of 2026-11-15 asks only for the Linux Legacy UI on the lowest testable system. The Linux Modern UI needs gtkmm and GTK 3.10 or later (ui/modern/linux-gtk3), which are not part of CentOS 6 (it ships GTK 2; the packages were not queried in ... (full text in section 12) |
-| linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | legacy | OK with restrictions | keep | 3 file(s) | validation/procedures/linux.md | 6 restriction(s), 3 disabled feature(s) |
+| linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | legacy | OK with restrictions | keep | 6 file(s) | validation/procedures/linux.md | 6 restriction(s), 3 disabled feature(s) |
 | linux-i686 | Ubuntu 24.04.5 LTS (Noble Numbat) with a 64-bit (x86_64) ... | modern | not tested | - | - | - | not attempted, justified: Not attempted on this platform, by choice of scope, not by a failure. The Linux Modern UI (gtkmm on GTK 3, ui/modern/linux-gtk3) was built and judged for the 64-bit platform only (validation/verdicts/linux-ubuntu-24.04-x86_64-modern.json). For the 32-bit build the machine (validation/platforms/linux-i686.json, a 64-bit WSL2 ... (full text in section 12) |
-| linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | legacy | OK with restrictions | keep | 19 file(s), 2 screenshot(s) | validation/procedures/linux.md | 10 restriction(s), 3 disabled feature(s) |
+| linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | legacy | OK with restrictions | keep | 20 file(s), 2 screenshot(s) | validation/procedures/linux.md | 10 restriction(s), 3 disabled feature(s) |
 | linux-ubuntu-24.04-x86_64 | Ubuntu 24.04.5 LTS (Noble Numbat) | modern | OK with restrictions | keep | 101 file(s), 63 screenshot(s) | validation/procedures/linux.md | 16 restriction(s), 0 disabled feature(s) |
 | android-2.3-arm | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and ... | legacy | not tested | - | - | - | not attempted, justified: Built, not run. The armeabi (ARMv5TE, -latomic) and armeabi-v7a libraries of the Android Legacy APK are compiled against the API 9 sysroot with NDK r15c and linked with --no-undefined against the API 9 libc (DT_NEEDED: libc.so only; 6 exported JNI functions each; validation/deliverables/android-2.3-arm-legacy.json), but nothing ... (full text in section 12) |
 | android-2.3-arm | Android (Gingerbread) 2.3 (API 9), 32-bit ARM: armeabi (ARMv5TE) and ... | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because ... (full text in section 12) |
-| android-4.1.2-x86 | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image ... | legacy | OK with restrictions | keep | 9 file(s), 2 screenshot(s) | validation/procedures/android.md | 8 restriction(s), 0 disabled feature(s) |
+| android-4.1.2-x86 | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image ... | legacy | OK with restrictions | keep | 10 file(s), 2 screenshot(s) | validation/procedures/android.md | 8 restriction(s), 0 disabled feature(s) |
 | android-4.1.2-x86 | Android (AOSP emulator image, Jelly Bean) 4.1.2 (API 16), x86, system image ... | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because ... (full text in section 12) |
 | android-5.0-arm64 | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | legacy | not tested | - | - | - | not attempted, justified: Built, not run. The arm64-v8a library of the Android Legacy APK (android-21 sysroot, 141,152 bytes in the APK, DT_NEEDED libdl.so and libc.so, 6 exported JNI functions; validation/deliverables/android-5.0-arm64-legacy.json) was compiled and linked with NDK r15c but never executed: no ARM64 system image or device is available. ... (full text in section 12) |
 | android-5.0-arm64 | Android (Lollipop) 5.0 (API 21), 64-bit ARM (arm64-v8a); NOT RUN | modern | not tested | - | - | - | not attempted, justified: Below the floor of the Android Modern UI (Kotlin and Jetpack Compose, minSdk 24 = Android 7.0, owner decision): this platform is served by the Legacy UI (spec SC-001). Spike S8 (Android half, 2026-11-15): the same project built with minSdk 21 is refused by the manifest merger because ... (full text in section 12) |
 | android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | legacy | not tested | - | - | - | not attempted, justified: Above the range of the Android Legacy UI (API 9 to 23, owner decision): this platform is served by the Modern UI (verdict android-7.0-x86_64-modern.json) and no Legacy deliverable record names it. For the record, on 2026-11-15 the Legacy APK (renamed to the package id fr.bansan.loomora.probe) was installed on this emulator to ... (full text in section 12) |
-| android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | modern | OK with restrictions | keep | 9 file(s), 2 screenshot(s) | validation/procedures/android.md | 10 restriction(s), 1 disabled feature(s) |
+| android-7.0-x86_64 | Android (AOSP emulator image, Nougat) 7.0 (API 24), x86_64, system image build 4174735 ... | modern | OK with restrictions | keep | 10 file(s), 2 screenshot(s) | validation/procedures/android.md | 10 restriction(s), 1 disabled feature(s) |
 | ios-26-arm64-simulator | iOS 26 simulator (iPhone) 26, arm64 simulator of Xcode on the macos-26 runner ... | legacy | not tested | - | - | - | not attempted, justified: Compile-only by decision, and not compiled yet. The Legacy iOS UI (Objective-C, UIKit, no ARC, written with the iOS 5 APIs) is built by the ios-legacy job (T126, tools/build.py ios legacy) for arm64 at an iOS 12 deployment target, an override of the project's iOS 5.0 (fallback ios-legacy-deployment-override), and the result ... (full text in section 12) |
 | ios-26-arm64-simulator | iOS 26 simulator (iPhone) 26, arm64 simulator of Xcode on the macos-26 runner ... | modern | not tested | - | - | - | not attempted, justified: Not run yet: nothing was compiled or started. The Modern iOS UI (SwiftUI, deployment target iOS 15) is meant to be built for the simulator, installed in an iOS 26 simulator with xcrun simctl and its probe line read from the console by the ios-modern-simulator job of .github/workflows/apple.yml (T126), but that job has not run ... (full text in section 12) |
-| web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | legacy (js) | OK with restrictions | keep | 17 file(s), 2 screenshot(s) | validation/procedures/web.md | 10 restriction(s), 1 disabled feature(s) |
+| web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | legacy (js) | OK with restrictions | keep | 18 file(s), 2 screenshot(s) | validation/procedures/web.md | 10 restriction(s), 1 disabled feature(s) |
 | web-firefox-10-windows-2000-x86 | Mozilla Firefox on Windows 2000 Professional Firefox 10.0 (Gecko 10.0, build ID 20120129021758 ... | modern | not tested | - | - | - | not attempted, justified: The Web Modern UI (ui/modern/web-ts) exists and is validated on Chrome 157 on Windows 11 (PoC rule: one current browser); it is not run on Firefox 10, the Legacy floor browser of the JavaScript path, which is not a target of a modern TypeScript UI (the Modern UI uses the WebAssembly path of a current browser). (full text in section 12) |
 | web-chrome-157-windows-11-x64 | Google Chrome on Windows 11 Pro Chrome 157.0.8103.51 (official build, stable channel ... | legacy | not tested | - | - | - | not attempted, justified: Not run on purpose (owner decision 2026-11-15, PoC rule): the Web Legacy page (ui/legacy/web) is validated on ONE lowest testable browser, Firefox 10 on Windows 2000 (validation/verdicts/web-firefox-10-windows-2000-x86-legacy.json, JavaScript path), and success there stands for newer browsers; Chrome does not run on Windows ... (full text in section 12) |
-| web-chrome-157-windows-11-x64 | Google Chrome on Windows 11 Pro Chrome 157.0.8103.51 (official build, stable channel ... | modern (wasm) | OK with restrictions | keep | 11 file(s), 2 screenshot(s) | validation/procedures/web.md | 7 restriction(s), 0 disabled feature(s) |
+| web-chrome-157-windows-11-x64 | Google Chrome on Windows 11 Pro Chrome 157.0.8103.51 (official build, stable channel ... | modern (wasm) | OK with restrictions | keep | 12 file(s), 2 screenshot(s) | validation/procedures/web.md | 7 restriction(s), 0 disabled feature(s) |
 
 `web_path` (`wasm` or `js`) is shown for web verdicts; no web platform was tried. Other systems named by the requirements document or the spec floors with no record here are not tested: Windows XP, Windows 10, Windows 11 ARM64 and every Windows Modern UI, macOS, iOS, Android and the Web.
 
@@ -146,19 +146,19 @@ Environment details are in the platform records. A `vm` is an emulated machine: 
 
 | Family | Variant | Oldest platform that works | Released | Age (years) | Verdict | Evidence |
 |---|---|---|---|---|---|---|
-| Windows | legacy | windows-2000-x86 | 2000-02-17 | 26.7 | OK with restrictions | 41 file(s), 7 screenshot(s) |
+| Windows | legacy | windows-2000-x86 | 2000-02-17 | 26.7 | OK with restrictions | 42 file(s), 7 screenshot(s) |
 | Windows | modern | windows-11-x64 | 2021-10-05 | 5.1 | OK with restrictions | 19 file(s), 2 screenshot(s) |
 | macOS | legacy | not tested | - | - | - | - |
 | macOS | modern | not tested | - | - | - | - |
 | Linux | legacy | linux-centos-5.11-x86_64 | 2014-09-29 | 12.13 | OK with restrictions | 14 file(s) |
 | Linux | modern | linux-ubuntu-24.04-x86_64 | 2024-04-25 | 2.55 | OK with restrictions | 101 file(s), 63 screenshot(s) |
-| Android | legacy | android-4.1.2-x86 | 2012-10-09 | 14.1 | OK with restrictions | 9 file(s), 2 screenshot(s) |
-| Android | modern | android-7.0-x86_64 | 2016-08-22 | 10.2 | OK with restrictions | 9 file(s), 2 screenshot(s) |
+| Android | legacy | android-4.1.2-x86 | 2012-10-09 | 14.1 | OK with restrictions | 10 file(s), 2 screenshot(s) |
+| Android | modern | android-7.0-x86_64 | 2016-08-22 | 10.2 | OK with restrictions | 10 file(s), 2 screenshot(s) |
 | iOS / iPadOS | legacy | not tested | - | - | - | - |
 | iOS / iPadOS | modern | not tested | - | - | - | - |
 | Web (wasm path) | legacy | not tested | - | - | - | - |
-| Web (js path) | legacy | web-firefox-10-windows-2000-x86 | 2012-01-31 | 14.8 | OK with restrictions | 17 file(s), 2 screenshot(s) |
-| Web (wasm path) | modern | web-chrome-157-windows-11-x64 | 2026-11-07 | 0.0 | OK with restrictions | 11 file(s), 2 screenshot(s) |
+| Web (js path) | legacy | web-firefox-10-windows-2000-x86 | 2012-01-31 | 14.8 | OK with restrictions | 18 file(s), 2 screenshot(s) |
+| Web (wasm path) | modern | web-chrome-157-windows-11-x64 | 2026-11-07 | 0.0 | OK with restrictions | 12 file(s), 2 screenshot(s) |
 | Web (js path) | modern | not tested | - | - | - | - |
 
 Several ids in one cell are platform records of the same release date (for example the 32-bit build run on a 64-bit system of the same distribution): none is older than the other, and the verdict and evidence shown are those with the most evidence.
@@ -171,8 +171,8 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 |---|---|---|---|---|
 | windows-2000-x86 | legacy | loomora.exe: 696,127 bytes | 2 to 15 ms | 1,084 to 1,160 kB |
 | windows-11-x64 | legacy | loomora.exe: 703,383 bytes | 42 to 127 (median 50) ms | 11,548 to 14,420 kB |
-| windows-11-x64 | modern | loomora-winui-net10-x64.zip: 9,930,841 bytes | 365 to 2,053 ms | 112,696 to 112,952 kB |
-| windows-arm64 | modern | loomora-winui-net10-arm64.zip: 9,909,684 bytes | not measured: no verdict, no trial run recorded | not measured: no verdict, no trial run recorded |
+| windows-11-x64 | modern | loomora-winui-net10-x64.zip: 9,930,828 bytes | 365 to 2,053 ms | 112,696 to 112,952 kB |
+| windows-arm64 | modern | loomora-winui-net10-arm64.zip: 9,909,672 bytes | not measured: no verdict, no trial run recorded | not measured: no verdict, no trial run recorded |
 | linux-centos-5.11-x86_64 | legacy | loomora-xlib: 66,208 bytes | 20 to 67 ms | 5,448 to 5,540 kB |
 | linux-centos-6.10-x86_64 | legacy | loomora-xlib: 131,712 bytes | 20 to 38 ms | 6,340 to 6,404 kB |
 | linux-i686 | legacy | loomora-xlib: 73,348 bytes | 22 to 26 ms | 8,032 to 11,728 kB |
@@ -226,6 +226,13 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 | macos-legacy-x86_64-only | LOOMORA_MACOS_LEGACY_ARCHS | Architectures of the Legacy macOS build (tools/build.py MACOS_LEGACY_ARCHS): one x86_64 slice. The macOS 10.6 floor ran on 32-bit (i386) and 64-bit ... | macos-26-arm64 | - |
 | macos-version-query | LOOMORA_LOOKUP_KERN_OSPRODUCTVERSION | macOS version read by the Legacy macOS UI (ui/legacy/macos-appkit/Probe.m, LMSystemVersion) for the platform id (macos-<major>-<arch>, or ... | no platform takes it | - |
 | apple-legacy-resident-size | LOOMORA_FEATURE_TASK_INFO_RESIDENT | Resident size of the process in the probe line of the Legacy macOS and iOS UIs (ui/legacy/macos-appkit/Probe.m ResidentSizeKb ... | no platform takes it | - |
+| win2000-setfilepointer | LOOMORA_FMT_WIN2000_SEEK | File offsets above 4 GiB on Windows 2000 through SetFilePointer with the high-order word (SetFilePointerEx and ReplaceFile do not exist there). | windows-2000-x86 | - |
+| android-api9-lseek64 | LOOMORA_FMT_LSEEK64 | 64-bit file offsets on Android API 9 to 20 (off_t is 32 bits there): explicit pread64 / pwrite64 calls, the pread64 / pwrite64 system calls below API ... | android-2.3-arm, android-4.1.2-x86 | - |
+| fmt-no-large-files | LOOMORA_FMT_NO_LARGE_FILES | Files above 2 GiB are rejected with LOOMORA_ERR_TOO_LARGE_FOR_PLATFORM on a platform whose file layer cannot address them. | no platform takes it | - |
+| win-replace-open-file | LOOMORA_LOOKUP_SETFILEINFORMATIONBYHANDLE | Atomic replace of a project file that a reader holds open: MoveFileExW first, then a rename with POSIX semantics, then a rename-aside sequence (old ... | windows-11-x64 | - |
+| x87-double-fixtures | LOOMORA_TEST_FP_FLAGS | The test programs of the format module (loomora_format_selftest, loomora_refgen and the Catch2 loomora_tests) are compiled for the SSE2 unit on ... | linux-i686, windows-2000-x86 | - |
+| win2000-condvar-shim | LOOMORA_TARGET_WIN2000 | Link-time shim of the four Vista-only condition variable imports (InitializeConditionVariable, SleepConditionVariableCS, WakeConditionVariable ... | windows-2000-x86 | - |
+| apple-system-zlib | LOOMORA_USE_SYSTEM_ZLIB | zlib of the SDK instead of the pinned third_party/zlib, for the macOS modern and iOS modern builds: the option LOOMORA_USE_SYSTEM_ZLIB ... | macos-26-arm64, ios-26-arm64-simulator | - |
 
 ### Disabled features (FR-025)
 
@@ -261,8 +268,11 @@ Artifact size comes from the deliverable record; display time and peak memory fr
 - **S7** (open): Can the 10.6 SDK and Xcode 5.1.1 be obtained legitimately? Result: open, no result recorded
 - **S8** (confirmed): Can WinUI 3 call a C++11 loomora.dll, and what is the lowest minSdk at which Jetpack Compose with the pinned AndroidX versions builds? HISTORY: the first wording asked "does Compose accept minSdk ... Result: Confirmed on 2026-11-15 for the rewritten question. HISTORY: recorded `refuted` on 2026-11-15 for the first wording (Compose accepts minSdk 21), then rewritten and recorded `confirmed` at the owner's request, keeping this trace. WinUI half, CONFIRMED: WinUI 3 (C#, Windows App SDK 2.6.5, unpackaged and framework-dependent, .NET SDK 10.0.404) calls the C++11 loomora.dll through LibraryImport (no C++/CLI, no C++/WinRT) on Windows 11 x64: loomora.dll is built by MSVC 14.52.37025 (cl.exe 19.52.37029, /MT, cl.exe's default /std:c++14 since MSVC has no /std:c++11, the sources stay C++11), exports exactly the six loomora_* functions and imports KERNEL32.dll only (x64 and ARM64 built; ARM64 not ...
 - **S9** (open): Do Windows 7 -> 11 accept the Windows 2000-targeted Win32 executable (all versions)? Result: open, no result recorded
-- **S10** (open): What do GitHub-hosted runners provide for the continuous integration (runner images, KVM, Docker, ARM64, submodule checkout, caching), and what has to stay a local run? Result: open, no result recorded Decision: `adr/0018-ci-github-hosted-runners.md`.
+- **S10** (confirmed): What do GitHub-hosted runners provide for the continuous integration (runner images, KVM, Docker, ARM64, submodule checkout, caching), and what has to stay a local run? Result: OPEN. ANSWERED by reading GitHub's documentation and the runner-images readmes on 2026-11-15 (URLs and dates in ADR 0018): the hosted runner labels and sizes (ubuntu-22.04, ubuntu-24.04, ubuntu-24.04-arm, windows-latest = Windows Server 2025, windows-11-arm, macos-26 arm64, macos-15-intel: 4 vCPU / 16 GB for Linux and Windows on public repositories, 3 vCPU / 7 GB for macOS arm64); standard hosted runners, arm64 ones included, are free and unlimited on public repositories; the image contents (Ubuntu 24.04: Docker 28.0.4, CMake 3.31.6, GCC 12 to 14, Clang 16 to 18, Python 3.12, Xvfb, NDK 27, 29 and 30, no gtkmm and no libx11-dev so the jobs apt-get them; Windows 2025: Visual Studio 2022 ... Decision: `adr/0018-ci-github-hosted-runners.md`.
 - **S11** (confirmed): On the macos-26 runner, can the Xcode 26 Clang build an Objective-C + C++11 program with -mmacosx-version-min=10.6 for x86_64, is libc++ linked statically, and does -Werror=partial-availability flag ... Result: ANSWERED BY A REAL RUN, 2026-11-16, push of branch feat/apple-spike (commit 6653424): https://github.com/bansan85/loomora/actions/runs/43883060298 (job green; macos-26 arm64, Xcode 26.6, clang 21.0.0, macOS 26.7.2, SDK 26.5). (1) Compile (probe.m, probe_cpp.cpp with -std=c++11 -stdlib=libc++) and link SUCCEED for x86_64 with -mmacosx-version-min=10.6. (2) otool -l shows LC_VERSION_MIN_MACOSX version 10.6, sdk 26.5, on the executable and on both objects (not LC_BUILD_VERSION). (3) libc++ is linked DYNAMICALLY: otool -L lists /usr/lib/libc++.1.dylib (current version 2100.43.0) next to libSystem, Foundation, AppKit, CoreFoundation and libobjc. Consequence: the executable declares 10.6 but ... Decision: `adr/0018-ci-github-hosted-runners.md`.
+- **S-F1** (confirmed): Do the pinned zlib v1.3.1 sources (git submodule, only the needed files built through cmake/loomora_zlib.cmake, C) and the RapidJSON headers (git submodule) build and give a correct deflate/inflate ... Result: CONFIRMED for every toolchain named by the question (run 2026-11-17, recorded 2026-11-18); the targets and systems that did not run are listed below and are not covered by this status. core/tests/spike_fmt_deps.cpp (target loomora_spike_fmt_deps) deflates (raw, levels 6 and 1) and inflates a 1 MiB buffer through the vendored zlib 1.3.1, writes and parses 2000 doubles through RapidJSON (kParseFullPrecisionFlag | kParseIterativeFlag, every double compared bit for bit, the written text compared) and prints the SHA-256 of the deflated streams and of the JSON text. It builds and prints 'S-F1: ok' with (1) Windows 11 x64, clang (Visual Studio 18 LLVM) + Ninja, (2) WSL Ubuntu 26.04, g++ 15.2 ... Decision: `adr/0022-vendored-zlib-rapidjson.md`.
+- **S-F2** (confirmed): Does the .loomora writer produce byte-identical files on Linux i686, Linux x86_64, Windows x86_64 and Windows 2000 i686 (x87 extended precision against SSE2), and on a big-endian system when one is ... Result: CONFIRMED on the targets that could run (2026-11-17), with one fallback. loomora_refgen wrote the six reference files (basic, empty, escape40, multi, multi-light, one) on Linux x86_64 (g++ 15.2.0), Linux i686 (cmake/toolchains/linux-gcc-i686.cmake, g++ -m32, run as a 32-bit process on a 64-bit kernel), Windows x86_64 (MinGW-w64, loomora_refgen.exe only), Windows 2000 i686 (MinGW-w64 win2000 toolchain, run as a 32-bit process on Windows 11, NOT on a Windows 2000 system) and Windows 11 x64 (clang 22.1.3): the SHA-256 of the six files are identical on all, and python tools/check_loomora.py --compare reports same for the six (basic fcdf97f0..., empty 8ca4dc6a..., escape40 b17920aa..., multi ... Decision: `adr/0021-project-file-container.md`.
+- **S-F3** (open): On the Windows 2000 VM (NTFS and FAT32 if available) and on Windows 11, do the file calls of the format layer work: replace a file held open for reading with MoveFileExW(MOVEFILE_REPLACE_EXISTING | ... Result: open, no result recorded Decision: `adr/0021-project-file-container.md`.
 
 S4 was removed on 2026-11-14 (ADR 0007: Linux binaries are built on the machine that runs them).
 
@@ -301,7 +311,7 @@ Status: 13 not covered by this probe, 7 OK with restrictions.
 |---|---|---|---|---|---|
 | Windows legacy | Windows XP SP3 minimum, MFC UI (sections 2.1 and 2.1.2) | Windows 2000, plain Win32 UI | windows-11-x64 legacy: OK with restrictions; windows-2000-x86 legacy: OK with restrictions | contradicted: windows-2000-x86 works (OK with restrictions) | lower the floor of the requirements document to Windows 2000 Professional, as decided (Windows 2000, plain Win32 UI); the verdict is OK with restrictions: read its restrictions (section 12) before G0 |
 | Windows modern | Windows 10+, WinUI 3 (section 2.1) | WinUI 3 needs Windows 10 1809 (research R6; source winappsdk-support) | windows-11-x64 modern: OK with restrictions | not contradicted: only newer systems tried (oldest working: windows-11-x64) | reword the floor as decided (WinUI 3 needs Windows 10 1809 (research R6; source winappsdk-support)); older systems are not tried |
-| macOS legacy | macOS 11+ (section 2.1) | macOS 10.6 Snow Leopard | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
+| macOS legacy | macOS 11+ (section 2.1) | macOS 10.7 Lion | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
 | Linux legacy | Ubuntu 20.04+ / Debian 11+, AppImage and Flatpak (section 2.1) | any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007) | linux-centos-5.11-x86_64 legacy: OK with restrictions; linux-centos-6.10-x86_64 legacy: OK with restrictions; linux-i686 legacy: OK with restrictions; linux-ubuntu-24.04-x86_64 legacy: OK with restrictions | contradicted: linux-centos-5.11-x86_64 works (OK with restrictions) | lower the floor of the requirements document to CentOS, as decided (any distribution with a C++11 compiler, CMake and the libX11 development files; built on the machine that runs it (ADR 0007)); the verdict is OK with restrictions: read its restrictions (section 12) before G0 |
 | Android legacy | minSdk API 21 (Android 5.0) (section 2.1) | Android 2.3 (API 9) | android-4.1.2-x86 legacy: OK with restrictions | contradicted: android-4.1.2-x86 works (OK with restrictions) | lower the floor of the requirements document to Android (AOSP emulator image, Jelly Bean), as decided (Android 2.3 (API 9)); the verdict is OK with restrictions: read its restrictions (section 12) before G0 |
 | iOS / iPadOS legacy | iOS 15.0 (section 2.1) | iOS 5 | not tested | neither confirmed nor contradicted | keep the floor wording open until a trial; no change proposed |
@@ -366,8 +376,8 @@ The disabled features listed for XP in section 2.1.2 (GPU, BLE, TLS, simplified 
 | Linux delivery: Ubuntu 20.04+ / Debian 11+, AppImage and Flatpak (section 2.1) | A plain executable built on the machine that runs it (a C++11 compiler, CMake and the libX11 development files are needed there); no Flatpak, no AppImage, no glibc baseline. | Spec Clarifications; ADR 0007 |
 | Two UIs only on Windows (section 16.1, no. 8) | Every platform has two UIs on the same backend: a Legacy UI (very old systems, features may be disabled) and a Modern UI (FR-024). Linux Legacy is a C++ Xlib UI with Xft text. | Spec Clarifications (first session), FR-024 |
 | Build system: Cargo workspace (section 14) | CMake with one toolchain file per cross target; Meson (first Linux Modern UI) dropped; each native UI keeps its own project where its platform needs one. | Research R9; ADR 0006 |
-| Floors: macOS 11, iOS 15, Android API 21, Windows 10 (section 2.1) | Floors decided without Rust: macOS 10.6, iOS 5, Android 2.3 (API 9), Windows 2000, browsers of November 2011 through the JavaScript build. What was tried is in section 5. | Spec Clarifications (second session) |
-| Architectures and tiers by Rust target availability (section 2.1.1) | x86 and x64 on Windows, Linux and macOS 10.6; ARMv6/ARMv7 and x86 on Android 2.3; ARMv7 and arm64 on iOS; PowerPC, MIPS and Itanium are out of scope. A tier no longer depends on a Rust toolchain. | Spec Clarifications (second session) |
+| Floors: macOS 11, iOS 15, Android API 21, Windows 10 (section 2.1) | Floors decided without Rust: macOS 10.7, iOS 5, Android 2.3 (API 9), Windows 2000, browsers of November 2011 through the JavaScript build. What was tried is in section 5. | Spec Clarifications (second session) |
+| Architectures and tiers by Rust target availability (section 2.1.1) | x86 and x64 on Windows, Linux and macOS 10.7; ARMv6/ARMv7 and x86 on Android 2.3; ARMv7 and arm64 on iOS; PowerPC, MIPS and Itanium are out of scope. A tier no longer depends on a Rust toolchain. | Spec Clarifications (second session) |
 | PoC `Hello Loomora`: nine steps, greedy path, `.loomora`, SQLite, voice, printing (section 15.1.3) | A deliberately minimal probe: a text field pre-filled with `Coucou` and the greeting `Bonjour ` + text returned by the backend. Hypotheses that need more are `not_covered`. | Spec Assumptions and FR-001, FR-028 |
 | Web: `wasm32-unknown-unknown`, TypeScript UI (section 2.1) | The C++11 backend as WebAssembly, and the same C++ compiled to JavaScript (Emscripten, WebAssembly off) for the November 2011 browsers (FR-023). Not tried. | Spec Clarifications, FR-023 |
 
@@ -375,7 +385,7 @@ The disabled features listed for XP in section 2.1.2 (GPU, BLE, TLS, simplified 
 
 ### android-2.3-arm legacy: not tested (not attempted)
 
-Justification recorded in the verdict: Built, not run. The armeabi (ARMv5TE, -latomic) and armeabi-v7a libraries of the Android Legacy APK are compiled against the API 9 sysroot with NDK r15c and linked with --no-undefined against the API 9 libc (DT_NEEDED: libc.so only; 6 exported JNI functions each; validation/deliverables/android-2.3-arm-legacy.json), but nothing was executed: the project owner's emulator cannot run below API 16 and no ARM system image or device is available, so the loomora_selftest of these two ABIs (built, 3.7 MB each) never ran. The floor (Android 2.3) is therefore neither confirmed nor refuted. The only run of the same sources is the x86 build on API 16 (validation/verdicts/android-4.1.2-x86-legacy.json). Known open point: readelf -A shows Tag_FP_arch VFPv2 in the armeabi library although it is built soft-float ARMv5TE; not investigated. Since 2026-11-15 the deliverable record names the APK rebuilt after the package rename to fr.bansan.loomora (228,663 bytes, sha256 7eb8d186...; the armeabi and armeabi-v7a libraries have the same sizes); this verdict is still not_tested: no ARM system ran it.
+Justification recorded in the verdict: Built, not run. The armeabi (ARMv5TE, -latomic) and armeabi-v7a libraries of the Android Legacy APK are compiled against the API 9 sysroot with NDK r15c and linked with --no-undefined against the API 9 libc (DT_NEEDED: libc.so only; 6 exported JNI functions each; validation/deliverables/android-2.3-arm-legacy.json), but nothing was executed: the project owner's emulator cannot run below API 16 and no ARM system image or device is available, so the loomora_selftest of these two ABIs (built, 3.7 MB each) never ran. The floor (Android 2.3) is therefore neither confirmed nor refuted. The only run of the same sources is the x86 build on API 16 (validation/verdicts/android-4.1.2-x86-legacy.json). Known open point: readelf -A shows Tag_FP_arch VFPv2 in the armeabi library although it is built soft-float ARMv5TE; not investigated. Since 2026-11-15 the deliverable record names the APK rebuilt after the package rename to fr.bansan.loomora (228,663 bytes, sha256 7eb8d186...; the armeabi and armeabi-v7a libraries have the same sizes); this verdict is still not_tested: no ARM system ran it. SPEC 002 (2026-11-17, recorded 2026-11-18): the format code, loomora_selftest, loomora_format_selftest, loomora_refgen and the S-F1 spike were also built for armeabi and armeabi-v7a with NDK r15c and ELF-checked (ELF32 ARM, DT_NEEDED libc and libm only) and the JNI library links; none was run, there is no ARM system or ARM emulation on the machine. The ARM EABI padding argument of the pread64 system call used below API 12 (fallback android-api9-lseek64) is therefore never executed, and armeabi still shows VFP in readelf -A (not investigated). Still not_tested.
 
 ### android-2.3-arm modern: not tested (not attempted)
 
@@ -383,7 +393,7 @@ Justification recorded in the verdict: Below the floor of the Android Modern UI 
 
 ### android-4.1.2-x86 legacy: OK with restrictions (decision: keep)
 
-Evidence: 9 file(s), 2 screenshot(s). Reproduction: validation/procedures/android.md.
+Evidence: 10 file(s), 2 screenshot(s). Reproduction: validation/procedures/android.md.
 
 - BUILT FOR API 9, RUN ON API 16: the APK (minSdkVersion 9, libraries compiled and linked against the android-9 sysroot) was run only on an Android 4.1.2 (API 16) x86 emulator, the oldest system the project owner's emulator can run. This verdict says nothing about Android 2.3 (API 9) to 4.0 (API 15) ...
 - ONE EMULATED SYSTEM: Android emulator 37.2.13.0 with the AOSP image android-16 default x86 (4.1.2, build eng.wdu.20191218.182616, 2 vCPUs, 1,024 MB, WHPX) started headless with swiftshader_indirect: not a phone, no real GPU, touch screen, vendor skin, vendor fonts or input method. display_ms (123 ...
@@ -400,7 +410,7 @@ Justification recorded in the verdict: Below the floor of the Android Modern UI 
 
 ### android-5.0-arm64 legacy: not tested (not attempted)
 
-Justification recorded in the verdict: Built, not run. The arm64-v8a library of the Android Legacy APK (android-21 sysroot, 141,152 bytes in the APK, DT_NEEDED libdl.so and libc.so, 6 exported JNI functions; validation/deliverables/android-5.0-arm64-legacy.json) was compiled and linked with NDK r15c but never executed: no ARM64 system image or device is available. Its selftest was built (out/android-legacy/selftest/arm64-v8a) and not run. Since 2026-11-15 the deliverable record names the APK rebuilt after the package rename to fr.bansan.loomora (228,663 bytes, sha256 7eb8d186...; the arm64-v8a library has the same size); this verdict is still not_tested: no ARM64 system ran it.
+Justification recorded in the verdict: Built, not run. The arm64-v8a library of the Android Legacy APK (android-21 sysroot, 141,152 bytes in the APK, DT_NEEDED libdl.so and libc.so, 6 exported JNI functions; validation/deliverables/android-5.0-arm64-legacy.json) was compiled and linked with NDK r15c but never executed: no ARM64 system image or device is available. Its selftest was built (out/android-legacy/selftest/arm64-v8a) and not run. Since 2026-11-15 the deliverable record names the APK rebuilt after the package rename to fr.bansan.loomora (228,663 bytes, sha256 7eb8d186...; the arm64-v8a library has the same size); this verdict is still not_tested: no ARM64 system ran it. SPEC 002 (2026-11-17, recorded 2026-11-18): the format code and the four test programs (loomora_selftest, loomora_format_selftest, loomora_refgen, S-F1 spike) were also built for arm64-v8a with NDK r15c (android-21 sysroot) and ELF-checked (ELF64 AArch64, DT_NEEDED libc, libm and libdl); none was run, there is no ARM64 system. Still not_tested.
 
 ### android-5.0-arm64 modern: not tested (not attempted)
 
@@ -408,11 +418,11 @@ Justification recorded in the verdict: Below the floor of the Android Modern UI 
 
 ### android-7.0-x86_64 legacy: not tested (not attempted)
 
-Justification recorded in the verdict: Above the range of the Android Legacy UI (API 9 to 23, owner decision): this platform is served by the Modern UI (verdict android-7.0-x86_64-modern.json) and no Legacy deliverable record names it. For the record, on 2026-11-15 the Legacy APK (renamed to the package id fr.bansan.loomora.probe) was installed on this emulator to prove the rename and its 15 reference vectors passed (the x86 library ran as a 32-bit process, so its probe lines read platform_id android-7.0-x86); that run is not stored as evidence because it proves nothing about the Legacy range. Rerun on 2026-11-15 on the APK rebuilt by tools/build.py (sha256 7eb8d186..., AVD API24, headless, port 5556): python tools/run_vectors.py android-7.0-x86_64 legacy --ui-abi x86 passed 15 of 15 vectors (16 skipped, 46.7 s); without --ui-abi it fails 15 of 15 on platform_id alone (android-7.0-x86, expected android-7.0-x86_64), which is the intended behaviour: the launcher takes --ui-abi (see validation/procedures/android.md, part C) to say that this device runs the UI as a 32-bit x86 process, and it refuses any ABI that is not a 32-bit companion of the device's.
+Justification recorded in the verdict: Above the range of the Android Legacy UI (API 9 to 23, owner decision): this platform is served by the Modern UI (verdict android-7.0-x86_64-modern.json) and no Legacy deliverable record names it. For the record, on 2026-11-15 the Legacy APK (renamed to the package id fr.bansan.loomora.probe) was installed on this emulator to prove the rename and its 15 reference vectors passed (the x86 library ran as a 32-bit process, so its probe lines read platform_id android-7.0-x86); that run is not stored as evidence because it proves nothing about the Legacy range. Rerun on 2026-11-15 on the APK rebuilt by tools/build.py (sha256 7eb8d186..., AVD API24, headless, port 5556): python tools/run_vectors.py android-7.0-x86_64 legacy --ui-abi x86 passed 15 of 15 vectors (16 skipped, 46.7 s); without --ui-abi it fails 15 of 15 on platform_id alone (android-7.0-x86, expected android-7.0-x86_64), which is the intended behaviour: the launcher takes --ui-abi (see validation/procedures/android.md, part C) to say that this device runs the UI as a 32-bit x86 process, and it refuses any ABI that is not a 32-bit companion of the device's. SPEC 002 (2026-11-17, recorded 2026-11-18): the same Legacy UI (APK of 2026-11-17, x86 library as a 32-bit process, --ui-abi x86) also matched `loomora validate --quiet` in 37 of 37 project-mode runs and passed 15 reference vectors on this emulator (AVD API24, 15 passed, 16 skipped, 42.6 s); the results are in android-7.0-x86_64-modern.json and android-4.1.2-x86-legacy.json. They prove nothing about the Legacy range (API 9 to 23, this platform is above it), so the verdict stays not_tested.
 
 ### android-7.0-x86_64 modern: OK with restrictions (decision: keep)
 
-Evidence: 9 file(s), 2 screenshot(s). Reproduction: validation/procedures/android.md.
+Evidence: 10 file(s), 2 screenshot(s). Reproduction: validation/procedures/android.md.
 
 - ONE EMULATED SYSTEM, ONE ABI: the APK (minSdk 24, targetSdk 37) was run only on an Android 7.0 (API 24) x86_64 emulator (Android emulator 37.2.13.0, AVD API24, system image android-24 default x86_64 revision 8, 1,536 MB, WHPX, headless with swiftshader_indirect): not a phone, no real GPU, touch ...
 - ONLY THE x86_64 LIBRARY WAS EXECUTED: the same APK holds armeabi-v7a, arm64-v8a and x86 libraries, built and statically checked by tools/build.py (needed libraries libc, libm, libdl only; only the 6 Java_fr_bansan_loomora_probe_Native_* functions exported; LOAD segments aligned to 16 KB; the ...
@@ -474,7 +484,7 @@ Justification recorded in the verdict: Not attempted on this platform, by choice
 
 ### linux-i686 legacy: OK with restrictions (decision: keep)
 
-Evidence: 3 file(s). Reproduction: validation/procedures/linux.md.
+Evidence: 6 file(s). Reproduction: validation/procedures/linux.md.
 
 - SCOPE: NOT A NATIVE 32-BIT SYSTEM. The 32-bit (i686, gcc -m32) executable was built and run only inside the Ubuntu 24.04.5 WSL2 distribution with WSLg on a Windows 11 laptop (validation/platforms/linux-i686.json): a 64-bit (x86_64) kernel 6.18.58.1-microsoft-standard-WSL2 runs it in compatibility ...
 - SAME SOURCE, SAME LIMITS AS THE x86_64 BUILD: the UI sources are those of validation/verdicts/linux-ubuntu-24.04-x86_64-legacy.json, built with -m32. By decision (accepted by the owner) there is no text shaping and no bidirectional layout (logical order, left to right); the stored screenshot of ...
@@ -489,7 +499,7 @@ Justification recorded in the verdict: Not attempted on this platform, by choice
 
 ### linux-ubuntu-24.04-x86_64 legacy: OK with restrictions (decision: keep)
 
-Evidence: 19 file(s), 2 screenshot(s). Reproduction: validation/procedures/linux.md.
+Evidence: 20 file(s), 2 screenshot(s). Reproduction: validation/procedures/linux.md.
 
 - SCOPE: one machine and one environment. The Linux Legacy UI was built and run only on Ubuntu 24.04.5 inside WSL2 with WSLg on a Windows 11 laptop (validation/platforms/linux-ubuntu-24.04-x86_64.json), against the XWayland server of WSLg, as x86_64 here (the i686 build is another platform record ...
 - NO TEXT SHAPING AND NO BIDIRECTIONAL LAYOUT, by decision (accepted by the owner, see the fallback record xlib-core-font-glyphs): Xft draws the code points one after the other in logical order, left to right. Arabic letters appear in their isolated forms and left to right, Hebrew and Arabic words ...
@@ -537,7 +547,7 @@ Justification recorded in the verdict: Not run on purpose (owner decision 2026-1
 
 ### web-chrome-157-windows-11-x64 modern: OK with restrictions (decision: keep)
 
-Evidence: 11 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.md.
+Evidence: 12 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.md.
 
 - ONE BROWSER, ONE MACHINE, ONE DAY: Chrome 157.0.8103.51 (stable, installed by the owner) on the physical Windows 11 Pro 26H2 x64 laptop of validation/platforms/windows-11-x64.json, runs of 2026-11-15, one run set of the 15 vectors and one series of 10 default runs. Under the PoC rule (owner ...
 - HEADLESS, LOOPBACK: Chrome was run with --headless=new --disable-gpu, a new throw-away --user-data-dir per run (under the system temp folder, deleted afterwards; the owner's profile was never opened), no extension, component update or sync. The page was loaded over HTTP from 127.0.0.1 (a Python ...
@@ -549,7 +559,7 @@ Evidence: 11 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.m
 
 ### web-firefox-10-windows-2000-x86 legacy: OK with restrictions (decision: keep)
 
-Evidence: 17 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.md.
+Evidence: 18 file(s), 2 screenshot(s). Reproduction: validation/procedures/web.md.
 
 - One browser, one machine, one configuration: Firefox 10.0 (build 20120129021758) on Windows 2000 build 2195 without service pack, in a VirtualBox VM with 168 MB of RAM, a new profile and the preferences of validation/procedures/web.md. Under the PoC rule this stands for newer browsers; no other ...
 - History of the field: in the first series of 2026-11-15 (page with an <input type="text">) 14 of the 15 vectors passed and control_characters failed on its line feed, which a single-line field removes from its value in every browser (a current Chrome 157 does the same). By the owner's decision the ...
@@ -568,7 +578,7 @@ Justification recorded in the verdict: The Web Modern UI (ui/modern/web-ts) exis
 
 ### windows-11-x64 legacy: OK with restrictions (decision: keep)
 
-Evidence: 37 file(s), 12 screenshot(s). Reproduction: validation/procedures/windows.md.
+Evidence: 46 file(s), 12 screenshot(s). Reproduction: validation/procedures/windows.md.
 
 - Typing was exercised with Win32 messages, not by a person with a real keyboard: the Edit control received EM_SETSEL then the WM_CHAR messages M, a, r, i, e (SendMessageW from another process) and the Static control was read back with WM_GETTEXT ("Bonjour Marie", 16.3 ms after the first message on ...
 - The end-of-life warning (FR-013, ui-contract item 3) was not exercised: Windows 11 26H2 is in support (validation/sources.json eol-windows-11), so eol_warning_shown was false in all 40 probe runs and no banner exists in the window (one Static only). The check 'warning on every end-of-life system' ...
@@ -597,7 +607,7 @@ Evidence: 19 file(s), 2 screenshot(s). Reproduction: validation/procedures/windo
 
 ### windows-2000-x86 legacy: OK with restrictions (decision: keep)
 
-Evidence: 41 file(s), 7 screenshot(s). Reproduction: validation/procedures/windows.md.
+Evidence: 42 file(s), 7 screenshot(s). Reproduction: validation/procedures/windows.md.
 
 - The system is Windows 2000 build 2195 RTM with NO service pack, not Windows 2000 SP4: this verdict says nothing about SP4 (the plan, research R6, spike S1 and task T066 name SP4). The system DLLs read here are the RTM ones (kernel32.dll 5.0.2191.1, user32.dll 5.0.2180.1, msvcrt.dll 6.1.8637.0 ...
 - Only one machine and one configuration, and an emulated one: VirtualBox 7.2.22 on a Windows 11 host, 1 vCPU, 168 MB RAM, VirtualBox Graphics Adapter 800x600x32 at 96 DPI, English (US) system with a French AZERTY keyboard layout for the user. No real hardware (physical chipset, display driver, input ...
@@ -672,7 +682,7 @@ Every file counted as platform-specific, with its line count from the stored lis
 | ui/legacy/windows-win32/dynfeatures.cpp | 197 | named by fallback record(s) `dark-mode`, `message-font`, besides the native UI code | windows-11-x64, windows-2000-x86 |
 | ui/legacy/windows-win32/dynfeatures.h | 21 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
 | ui/legacy/windows-win32/dynload.h | 22 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
-| ui/legacy/windows-win32/getthreadid_shim.cpp | 39 | named by fallback record(s) `win2000-getthreadid-shim`, besides the native UI code | windows-11-x64, windows-2000-x86 |
+| ui/legacy/windows-win32/getthreadid_shim.cpp | 39 | named by fallback record(s) `win2000-getthreadid-shim`, `win2000-condvar-shim`, besides the native UI code | windows-11-x64, windows-2000-x86 |
 | ui/legacy/windows-win32/main.cpp | 200 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
 | ui/legacy/windows-win32/probe.cpp | 208 | named by fallback record(s) `probe-tick-clock`, besides the native UI code | windows-11-x64, windows-2000-x86 |
 | ui/legacy/windows-win32/probe.h | 21 | native UI of the platform (FR-001, FR-010, FR-020); the text of no fallback record names this file | windows-11-x64, windows-2000-x86 |
