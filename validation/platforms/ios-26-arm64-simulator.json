@@ -13,5 +13,5 @@
   "eol": false,
   "eol_source": "validation/sources.json eol-apple-security: Apple patches iOS 18, 26 and 27 (entries of 2026-11-09 read on 2026-11-12); the backend (loomora_is_eol) treats iOS 17 and below as end of life, so 26 is not.",
   "release_date_source": "General availability of iOS 26 (2025-09-15), taken from the author's knowledge, not from a page re-read for this record; age_years = days from 2025-09-15 to 2026-11-16 divided by 365.25, rounded to 0.1.",
-  "floor_note": "Not the floor of the iOS family (iOS 5, spec Clarifications, floors; the Modern floor is iOS 15). It is the only iOS system that can be run under the fifth-session rule (the iOS 26 simulator of the macos-26 runner); iOS 5 waits for a real machine and Xcode 5.1.1 (spike S2, T067)."
+  "floor_note": "Not the floor of the iOS family (iOS 5, spec Clarifications, floors; the Modern floor is iOS 14.4). It is the only iOS system that can be run under the fifth-session rule (the iOS 26 simulator of the macos-26 runner); iOS 5 waits for a real machine and Xcode 5.1.1 (spike S2, T067)."
 }

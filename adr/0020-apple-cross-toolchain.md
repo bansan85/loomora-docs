@@ -23,7 +23,7 @@ Each Apple target is built with the newest toolchain that can produce its floor,
 | Target | Toolchain | Floor compiled | Floor run |
 |---|---|---|---|
 | Modern macOS | Xcode 26 (native) | macOS 11, Universal 2 | macOS 26 (CI) |
-| Modern iOS | Xcode 26, `iphonesimulator` and `iphoneos` | iOS 15 | iOS 26 simulator (CI) |
+| Modern iOS | Xcode 26, `iphonesimulator` and `iphoneos` | iOS 14.4 | iOS 26 simulator (CI) |
 | Legacy macOS | Xcode 26 Clang, `-mmacosx-version-min=10.6`, `x86_64`, `-Werror=partial-availability` | 10.6 | not run (compiled only) |
 | Legacy iOS | Xcode 26, `arm64`, `IPHONEOS_DEPLOYMENT_TARGET=12.0` | iOS 12 (override of 5.0) | not run (compiled only) |
 
