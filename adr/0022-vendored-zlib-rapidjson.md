@@ -42,7 +42,7 @@ The raw output of these runs was not stored (ADR 0014: the same three lines as a
 
 ## Rejected alternatives
 
-- **The system zlib**: output differs by platform and version, and it is absent or old on some floors; it would break byte identity (FR-004).
+- **The system zlib**: output differs by platform and version, and it is absent or old on some floors; the compressed bytes would differ between builds. FR-004 requires the same decompressed content on every platform, so the pinned zlib is used on every build except the macOS and iOS modern builds, which link the SDK zlib (decided 2026-11-20).
 - **minizip**: it wraps zlib in a file-oriented ZIP API with timestamps and extra fields (ADR 0021); only the zlib core is needed.
 - **miniz**: it carries its own deflate, whose output is not zlib's and is less documented across versions.
 - **nlohmann/json**: C++11, but number output went through `snprintf` in older versions (locale and C library dependent), and its DOM is heavy for 100,000 nails.
@@ -55,7 +55,7 @@ The raw output of these runs was not stored (ADR 0014: the same three lines as a
 
 - Two third-party sources are pinned as git submodules (zlib v1.3.1, RapidJSON 297637bc), each with its own licence in its tree; a clone needs `git submodule update --init` for them, and they are not compiled under `-pedantic-errors`.
 - A later zlib upgrade (a new pinned commit) changes the compressed bytes: the reference hashes (self-test constants, `validation/evidence/adr-0021/`) change with it, in a visible commit. Stored entries are unaffected.
-- This is the deviation "two third-party libraries" (named "two vendored libraries" in the Complexity Tracking of spec 002); the simpler routes (own code, or system libraries) cost more code and risk, or lose byte identity.
+- This is the deviation "two third-party libraries" (named "two vendored libraries" in the Complexity Tracking of spec 002); the simpler routes (own code, or system libraries) cost more code and risk, or make the compressed bytes differ between builds (FR-004 needs only the same decompressed content).
 - The build and run results on the Android NDK r15c (x86 and x86_64 emulators) and Emscripten (node) toolchains are known (S-F1 above); on the Windows 2000 VM, the ARM ABIs and in browsers they are not (`not_tested`).
 
 ## Sources

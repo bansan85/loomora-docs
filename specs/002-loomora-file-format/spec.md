@@ -62,7 +62,7 @@ A person who has a project saves it to a `.loomora` file and, later or on anothe
 1. **Given** a project with one 2D frame, one layout, one image and one result, **When** it is saved then opened, **Then** the reopened project is identical to the saved one, with no recomputation.
 2. **Given** a project saved with the `full` profile, **When** it is opened, **Then** the source image, the processed target image and the thumbnail of every image are available.
 3. **Given** a result using more than 31 spools, **When** it is saved and reopened, **Then** each step still refers to the right spool.
-4. **Given** the same project content, **When** it is saved twice (and on two different architectures), **Then** the two files are byte-identical.
+4. **Given** the same project content, **When** it is saved twice on one platform, **Then** the two files are byte-identical; **When** it is saved on two different platforms or architectures, **Then** the two files have the same entries in the same order and the same decompressed content (their compressed bytes may differ).
 5. **Given** a saving interrupted by a crash or a power cut, **When** the person looks for their project, **Then** the previous file is intact (a partial file never replaces a good one).
 
 ---
@@ -206,7 +206,7 @@ A person exports a `light` copy (no image pixels, no computation parameters) for
 - **FR-001**: The writer MUST produce a single archive with extension `.loomora` whose first entry is `mimetype`, stored uncompressed, containing `application/vnd.loomora+zip`.
 - **FR-002**: The writer MUST store each frame, nail layout, image and result as its own set of entries, so that adding, removing or replacing one of them does not rewrite the others' content. The exact entry layout is fixed by the plan and written into §9.1.
 - **FR-003**: The reader MUST accept entries stored uncompressed or compressed, and the writer MUST be able to produce either.
-- **FR-004**: Writing the same project content with the same options MUST produce byte-identical files, whatever the platform, architecture, byte order or time of saving.
+- **FR-004**: Writing the same project content with the same options MUST produce the same file structure (entries, names, order, compression method of each entry) and the same decompressed content of every entry, whatever the platform, architecture, byte order or time of saving. The compressed bytes of a deflated entry MAY differ between platforms (they depend on the zlib build); on one platform, the same content and options MUST give byte-identical files.
 - **FR-005**: All text MUST be UTF-8 and all binary numbers explicit little-endian; no part of the file may depend on the memory layout of the machine.
 
 **Project, frames, layouts, images, results**
@@ -307,7 +307,7 @@ A person exports a `light` copy (no image pixels, no computation parameters) for
 - Frames, layouts, images and results are produced by other features (shape and nail generation, image processing, path computation). This feature stores and reads them; it does not compute them.
 - Each UI asks the person where to save and open; the backend writes and reads through a file path or a memory buffer. The atomic write guarantee (FR-028) applies to the file path case.
 - Writing is deterministic: the creation and modification times come from the project, not from a clock read inside the format code.
-- Compression, when used, is the standard ZIP deflate; the writer's choice (stored or deflate) is an option, and byte-identity (FR-004) holds for a given option.
+- Compression, when used, is the standard ZIP deflate; the writer's choice (stored or deflate) is an option, and FR-004 holds for a given option: the same decompressed content on every platform, byte-identical files on one platform.
 - Embedded images are PNG, JPEG or WebP (§4); removing location and camera metadata does not change the pixels.
 - Warning thresholds start at the old limits of §9.1 (100,000 nails per layout, 5,000,000 steps per result, 5,000,000 triangles per mesh, 256 MB decompressed) and may be tuned from measurements. A warning never blocks.
 - The compact weaving sequence refers to spools through the position in the result's spool selection, which keeps it near 3 bytes per step whatever the project's spool identifiers; the plan fixes the exact encoding and §9.1 is updated.

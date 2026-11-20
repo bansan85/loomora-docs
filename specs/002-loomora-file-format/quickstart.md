@@ -30,7 +30,7 @@ cmake --build <build-dir> --target loomora_format_selftest
 <build-dir>/core/tests/loomora_format_selftest
 ```
 
-Expected: the self-test builds the six reference projects (`basic`, `empty`, `escape40`, `multi`, `multi-light`, `one`) in memory through the public C API, saves each one (twice, same bytes), compares the SHA-256 of the archive with the golden constants of `format_selftest.cpp`, reads it back and compares its content, and checks that sampled truncations are rejected. It prints `format selftest: ok` and exits with status 0; on a failure it prints one `FAIL: <check>` line per failed check (and `<name> sha256 = <hex>` after a hash mismatch), then `format selftest: FAILED`, and exits with status 1. Run the same executable on every target that can run code (Windows 2000 VM, Linux i686 and x86_64, Android, Web through Node or a browser): every one prints `format selftest: ok`, which means the same six hashes.
+Expected: the self-test builds the six reference projects (`basic`, `empty`, `escape40`, `multi`, `multi-light`, `one`) in memory through the public C API, saves each one (twice, same bytes), compares the digest of the decompressed content of the archive (research R15) with the golden constants of `format_selftest.cpp`, reads it back and compares its content, and checks that sampled truncations are rejected. It prints `format selftest: ok` and exits with status 0; on a failure it prints one `FAIL: <check>` line per failed check (and `<name> content digest = <hex>` after a mismatch), then `format selftest: FAILED`, and exits with status 1. Run the same executable on every target that can run code (Windows 2000 VM, Linux i686 and x86_64, Android, Web through Node or a browser): every one prints `format selftest: ok`, which means the same six content digests.
 
 Outcomes:
 
@@ -156,7 +156,7 @@ Run step 3 on each architecture the project can run (x86_64, i686, a big-endian 
 python tools/check_loomora.py --compare <dirA> <dirB>
 ```
 
-Expected: every file of the same name is byte-identical; the only stored evidence is the first set of files and the hash table, under `docs/implementation/validation/evidence/adr-0021/<platform-id>/` (CLAUDE.md: store only what proves something new).
+Expected: every file of the same name has the same entries, order and decompressed content (the compressed bytes of deflated entries are identical when the platforms use the same zlib, and may differ on the macOS and iOS modern builds); the only stored evidence is the first set of files and the hash table, under `docs/implementation/validation/evidence/adr-0021/<platform-id>/` (CLAUDE.md: store only what proves something new).
 
 Outcomes:
 

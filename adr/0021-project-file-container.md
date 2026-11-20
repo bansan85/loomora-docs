@@ -6,7 +6,7 @@
 
 ## Context
 
-Spec 002 defines the `.loomora` project file: frames, nail layouts, images, spools and results in one file, readable without Loomora, never rewritten as a whole for a small edit (FR-002), byte-identical when the same project is written again with the same options, on any platform, architecture, byte order and date (FR-004), and safe to open when the file is hostile (FR-026). The floors are old (Windows 2000, 32-bit devices with 1 to 2 GB of memory). The detail of the format is the contract `contracts/project-format.md` of spec 002; this record keeps the reasons.
+Spec 002 defines the `.loomora` project file: frames, nail layouts, images, spools and results in one file, readable without Loomora, never rewritten as a whole for a small edit (FR-002), byte-identical when the same project is written again with the same options on one platform, and the same decompressed content and file structure on any platform, architecture, byte order and date (FR-004; the compressed bytes may differ between platforms, see ADR 0022), and safe to open when the file is hostile (FR-026). The floors are old (Windows 2000, 32-bit devices with 1 to 2 GB of memory). The detail of the format is the contract `contracts/project-format.md` of spec 002; this record keeps the reasons.
 
 ## Decision
 

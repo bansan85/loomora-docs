@@ -398,5 +398,16 @@
       "windows-2000-x86"
     ],
     "reason": "Windows 2000 (and Windows XP x64) export none of the four functions (Vista and later), so their loader would refuse a program whose import table names them. tools/check_imports.py had silently passed every executable with 0 imports (it did not read the objdump layout of binutils 2.39 and later; fixed, self-test extended); with the real tables the format programs (loomora_refgen, loomora_format_selftest, the format tests, the spike) were found to import the four functions through guard.o. With the shim, the four programs of the x86 build pass the Windows 2000 SP4 allowlist (66 to 85 imports) and the four of the x86-64 build pass the XP x64 allowlist (70 to 89 imports); none imports GetThreadId or a condition variable function. The Windows XP x64 platform has no record in validation/platforms/, so only windows-2000-x86 is listed (the x86-64 MinGW build that takes it is the deliverable of windows-11-x64 through LOOMORA_TARGET_WINXP64). This is a static check of the import tables on Windows 11: NOT run on a Windows 2000 system, where the loader, the polling wait and the msvcrt names marked verify in tools/win2000_imports.json (__p___initenv, __p___mb_cur_max, __p__iob, _lock, _unlock) remain to be confirmed with check_imports.py --verify-dlls."
+  },
+  {
+    "id": "apple-system-zlib",
+    "description": "zlib of the SDK instead of the pinned third_party/zlib, for the macOS modern and iOS modern builds: the option LOOMORA_USE_SYSTEM_ZLIB (cmake/loomora_zlib.cmake) is set by tools/build.py for these two builds only; the Legacy Apple builds keep the pinned source.",
+    "macro": "LOOMORA_USE_SYSTEM_ZLIB",
+    "min_compiler": "not a compiler feature: a CMake option; the SDK zlib of Xcode 12.4 (zlib 1.2.11) is used on the build host",
+    "platform_ids": [
+      "macos-26-arm64",
+      "ios-26-arm64-simulator"
+    ],
+    "reason": "The pinned zlib 1.3.1 is not linked into libloomora.a on Apple: the app links the zlib of the SDK (-lz in the Xcode projects of ui/modern/macos-swiftui and ui/modern/ios-swiftui). The compressed bytes can differ from the pinned source; the decompressed content is the cross-platform rule (FR-004, spec 002). Taken only by the two modern Apple builds."
   }
 ]
