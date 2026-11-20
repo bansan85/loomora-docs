@@ -156,7 +156,7 @@ Run step 3 on each architecture the project can run (x86_64, i686, a big-endian 
 python tools/check_loomora.py --compare <dirA> <dirB>
 ```
 
-Expected: every file of the same name is byte-identical; the only stored evidence is the first set of files and the hash table, under `docs/implementation/validation/evidence/adr-0021/<platform-id>/` (CLAUDE.md: store only what proves something new).
+Expected: every file of the same name has the same entries, order and decompressed content (the compressed bytes of deflated entries are identical when the platforms use the same zlib, and may differ on the macOS and iOS modern builds); the only stored evidence is the first set of files and the hash table, under `docs/implementation/validation/evidence/adr-0021/<platform-id>/` (CLAUDE.md: store only what proves something new).
 
 Outcomes:
 
